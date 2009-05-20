@@ -98,4 +98,26 @@ public class UniformCriterion extends CardinalCriterion {
 	public String measurementsToString() {
 		return intervals.toString();
 	}
+	
+	@Override
+	public boolean deepEquals(Criterion other) {
+		if (other instanceof UniformCriterion){ 
+			UniformCriterion uc = (UniformCriterion) other;
+			if (intervals.size() != uc.intervals.size()) {
+				return false;
+			}
+			if (!intervals.keySet().containsAll(uc.intervals.keySet())) {
+				return false;
+			}
+			for (Alternative a : intervals.keySet()){ 
+				Interval gm = intervals.get(a);
+				Interval om = uc.intervals.get(a);
+				if (!gm.equals(om)) {
+					return false;
+				}
+			}
+		}
+		
+		return super.deepEquals(other);
+	}
 }

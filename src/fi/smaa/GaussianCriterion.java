@@ -27,8 +27,6 @@ import fi.smaa.common.RandomUtil;
 
 public class GaussianCriterion extends CardinalCriterion {
 	
-	public static final String PROPERTY_MEANS = "means";
-	public static final String PROPERTY_STDEVS = "stDevs";
 	public static final String PROPERTY_MEASUREMENTS = "measurements";
 	
 	private Map<Alternative, GaussianMeasurement> measurements = new HashMap<Alternative, GaussianMeasurement>();
@@ -133,5 +131,26 @@ public class GaussianCriterion extends CardinalCriterion {
 	@Override
 	public String measurementsToString() {
 		return measurements.toString();
+	}
+	
+	@Override
+	public boolean deepEquals(Criterion other) {
+		if (other instanceof GaussianCriterion) {
+			GaussianCriterion gc = (GaussianCriterion) other;
+			if (measurements.size() != gc.measurements.size()) {
+				return false;
+			}
+			if (!measurements.keySet().containsAll(gc.measurements.keySet())) {
+				return false;
+			}
+			for (Alternative a : measurements.keySet()){ 
+				GaussianMeasurement gm = measurements.get(a);
+				GaussianMeasurement om = gc.measurements.get(a);
+				if (!gm.equals(om)) {
+					return false;
+				}
+			}
+		}
+		return super.deepEquals(other);
 	}
 }

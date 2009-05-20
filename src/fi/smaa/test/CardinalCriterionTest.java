@@ -18,6 +18,7 @@
 
 package fi.smaa.test;
 
+import static org.junit.Assert.*;
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
@@ -32,7 +33,11 @@ public class CardinalCriterionTest {
 	
 	@Before
 	public void setUp() {
-		criterion = new CardinalCriterion() {
+		criterion = getInstance();
+	}
+
+	private CardinalCriterion getInstance() {
+		return new CardinalCriterion("name") {
 			public void sample(double[] target) {
 			}
 			public String getTypeLabel() {
@@ -47,12 +52,20 @@ public class CardinalCriterionTest {
 				return null;
 			}
 		};
-		criterion.setName("name");
 	}	
 
 	@Test
 	public void testSetAscending() {
 		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_ASCENDING, true, false);
+	}
+	
+	@Test
+	public void testDeepEquals() {
+		CardinalCriterion c2 = getInstance();
+		c2.setAscending(false);
+		assertFalse(criterion.deepEquals(c2));
+		c2.setAscending(true);
+		assertTrue(criterion.deepEquals(c2));
 	}
 
 }

@@ -18,7 +18,9 @@
 
 package fi.smaa.test;
 
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -29,7 +31,6 @@ import java.util.Map;
 
 import nl.rug.escher.common.JUnitUtil;
 
-import static org.easymock.EasyMock.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,6 +55,13 @@ public class UniformCriterionTest {
 		meas = new HashMap<Alternative, Interval>();
 		meas.put(alts.get(0), new Interval(0.0, 0.5));
 		meas.put(alts.get(1), new Interval(0.5, 1.0));
+	}
+	
+	private Map<Alternative, Interval> genMap2() {
+		Map<Alternative, Interval> meas = new HashMap<Alternative, Interval>();
+		meas.put(alts.get(0), new Interval(0.0, 0.5));
+		meas.put(alts.get(1), new Interval(0.5, 1.5));
+		return meas;
 	}
 
 	@Test
@@ -121,5 +129,19 @@ public class UniformCriterionTest {
 		assertEquals(new Interval(), criterion.getIntervals().get(alts.get(0)));
 		assertEquals(new Interval(), criterion.getIntervals().get(alts.get(1)));
 	}
+	
+	@Test
+	public void testDeepEquals() {
+		UniformCriterion c2 = new UniformCriterion("crit");
+		criterion.setAlternatives(alts);
+		c2.setAlternatives(alts);
+		
+		criterion.setIntervals(meas);
+		c2.setIntervals(meas);
+		assertTrue(criterion.deepEquals(c2));
+		
+		c2.setIntervals(genMap2());
+		assertFalse(criterion.deepEquals(c2));
+	}	
 	
 }

@@ -19,6 +19,8 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class CriterionTest {
 	private Criterion criterion;
 	
 	private Criterion createInstance() {
-		return  new Criterion() {
+		return new Criterion("name") {
 			public void sample(double[] target) {
 			}
 			public String getTypeLabel() {
@@ -54,7 +56,6 @@ public class CriterionTest {
 	@Before
 	public void setUp() {
 		criterion = createInstance();
-		criterion.setName("nameCrit");
 	}
 	
 	@Test
@@ -66,7 +67,7 @@ public class CriterionTest {
 	
 	@Test
 	public void testSetName() {
-		JUnitUtil.testSetter(criterion, Criterion.PROPERTY_NAME, "nameCrit", "name");
+		JUnitUtil.testSetter(criterion, Criterion.PROPERTY_NAME, "name", "nameCrit");
 	}
 
 	
@@ -81,6 +82,18 @@ public class CriterionTest {
 		List<Alternative> list = new ArrayList<Alternative>();
 		list.add(new Alternative("alt"));
 		JUnitUtil.testSetter(criterion, Criterion.PROPERTY_ALTERNATIVES, new ArrayList<Alternative>(), list);
+	}
+	
+	@Test
+	public void testDeepEquals() {
+		Criterion c2 = createInstance();
+		List<Alternative> list = new ArrayList<Alternative>();
+		list.add(new Alternative("alt"));
+		criterion.setAlternatives(list);
+		c2.setAlternatives(list);
+		assertTrue(criterion.deepEquals(c2));
+		c2.setAlternatives(new ArrayList<Alternative>());
+		assertFalse(criterion.deepEquals(c2));
 	}
 
 }

@@ -36,15 +36,15 @@ public class SMAASimulator {
 	private double[] utilities;
 	private Integer[] ranks;
 	
-	List<Criterion> criteria;
-	List<Alternative> alternatives;
+	private List<Criterion> criteria;
+	private List<Alternative> alternatives;
 	
 	public SMAASimulator(SMAAModel model, Integer iterations) {
 		criteria = new ArrayList<Criterion>(model.getCriteria());
 		alternatives = new ArrayList<Alternative>(model.getAlternatives());
 		this.iterations = iterations;
+		results = new SMAAResults(criteria, alternatives, 10);		
 		init();
-		results = new SMAAResults(criteria, alternatives, 10);
 	}
 	
 	public Integer getTotalIterations() {
@@ -55,7 +55,7 @@ public class SMAASimulator {
 		return results;
 	}
 	
-	public void stop() {
+	synchronized public void stop() {
 		if (simulationThread != null) {
 			simulationThread.stopSimulation();
 			try {
@@ -63,12 +63,16 @@ public class SMAASimulator {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			simulationThread = null;
 		}		
 	}
 			
-	public void restart() {
+	synchronized public void restart() {
 		stop();
 		resetValues();
+		if (alternatives.size() == 0 || criteria.size() == 0) {
+			return;
+		}
 		simulationThread = createSimulationThread();
 		simulationThread.start();
 	}

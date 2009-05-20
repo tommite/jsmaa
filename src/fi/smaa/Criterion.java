@@ -32,9 +32,6 @@ public abstract class Criterion extends Model {
 	private String name;
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
 
-	protected Criterion() {		
-	}
-	
 	protected Criterion(String name) {
 		this.name = name;
 	}
@@ -81,4 +78,19 @@ public abstract class Criterion extends Model {
 	public abstract String getTypeLabel();
 	
 	public abstract String measurementsToString();
+	
+	public boolean deepEquals(Criterion other) {
+		if (!name.equals(other.name)) {
+			return false;
+		}
+		if (alternatives.size() != other.alternatives.size()) {
+			return false;
+		}
+		for (int i=0;i<alternatives.size();i++) {
+			if (!alternatives.get(i).deepEquals(other.alternatives.get(i))) {
+				return false;
+			}
+		}
+		return true;	
+	}
 }

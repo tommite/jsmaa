@@ -18,12 +18,9 @@
 
 package fi.smaa.gui;
 
-import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -32,7 +29,6 @@ import nl.rug.escher.common.gui.ViewBuilder;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.forms.builder.ButtonBarBuilder2;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -44,8 +40,6 @@ import fi.smaa.SMAAResults;
 
 public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
-	private JButton simulateButton;
-	private JLabel iterationsLabel;
 	private JLabel[][] valCells;
 
 	public CentralWeightsView(SMAAResults results, MainApp main) {
@@ -58,7 +52,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p, 3dlu, p");
+				"p, 3dlu, p");
 		
 		int[] groupCol = new int[numCrit];
 		
@@ -84,19 +78,6 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		buildCriteriaLabels(builder);
 		buildAlternativeLabels(builder, 5, 1, true);
 		buildCentralWeightPart(builder);
-
-		iterationsLabel = new JLabel("0");
-		builder.add(iterationsLabel, cc.xy(3, numAlts*2 + 5));
-		
-		ButtonBarBuilder2 bbuilder = new ButtonBarBuilder2();
-		simulateButton = new JButton("simulate");
-		bbuilder.addButton(simulateButton);
-		simulateButton.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent arg0) {
-				main.startSimulation();
-			}			
-		});
-		builder.add(bbuilder.getPanel(), cc.xy(1, numAlts*2 + 5));
 		
 		fireResultsChanged();		
 		return builder.getPanel();
@@ -132,8 +113,6 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 
 	
 	public void fireResultsChanged() {
-		iterationsLabel.setText(results.getIteration().toString());
-		
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 		
 		

@@ -24,9 +24,6 @@ public class Alternative extends Model {
 	private String name;
 	
 	public final static String PROPERTY_NAME = "name";
-
-	public Alternative() {
-	}
 	
 	public Alternative(String name) {
 		this.name = name;
@@ -45,6 +42,10 @@ public class Alternative extends Model {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public boolean deepEquals(Alternative other) {
+		return name.equals(other.name);
 	}
 
 }

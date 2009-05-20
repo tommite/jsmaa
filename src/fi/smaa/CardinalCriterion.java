@@ -32,11 +32,6 @@ public abstract class CardinalCriterion extends Criterion {
 	protected Boolean ascending;
 	protected MeasurementListener measurementListener = new MeasurementListener();
 	
-	protected CardinalCriterion() {
-		ascending = true;
-	}
-	
-
 	protected CardinalCriterion(String name) {
 		super(name);
 		ascending = true;
@@ -68,4 +63,15 @@ public abstract class CardinalCriterion extends Criterion {
 			firePropertyChange(PROPERTY_SCALE, null, getScale());
 		}		
 	}	
+	
+	@Override
+	public boolean deepEquals(Criterion crit) {
+		if (crit instanceof CardinalCriterion) {
+			CardinalCriterion cc = (CardinalCriterion) crit;
+			if (cc.ascending != this.ascending) {
+				return false;
+			}
+		}
+		return super.deepEquals(crit);
+	}
 }

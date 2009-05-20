@@ -27,11 +27,14 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
@@ -50,6 +53,7 @@ import fi.smaa.GaussianCriterion;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.SMAAModel;
 import fi.smaa.SMAAResults;
+import fi.smaa.SMAAResultsListener;
 import fi.smaa.SMAASimulator;
 import fi.smaa.UniformCriterion;
 
@@ -63,6 +67,7 @@ public class MainApp {
 	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private LeftTreeModel leftTreeModel;
+	private JProgressBar simulationProgress;
 
 	/**
 	 * @param args
@@ -109,9 +114,19 @@ public class MainApp {
 	   
 	   frame.getContentPane().setLayout(new BorderLayout());
 	   frame.getContentPane().add("Center", splitPane);
+	   frame.getContentPane().add("South", createToolBar());
 	   frame.setJMenuBar(createMenuBar());
 	}
 	
+	private JComponent createToolBar() {
+		simulationProgress = new JProgressBar();		
+		JToolBar bar = new JToolBar();
+		bar.add(simulationProgress);
+		bar.setFloatable(false);
+		return bar;
+	}
+
+
 	private void setRightViewToCentralWeights() {		
 		rightViewBuilder = new CentralWeightsView(results, this);		
 		rebuildRightPanel();
@@ -156,13 +171,13 @@ public class MainApp {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
-		JButton toolBarAddAltButton = new JButton("New alternative");
-		JMenu toolBarAddCritMenu = new JMenu("New criterion");
+		JButton addAltButton = new JButton("New alternative");
+		JMenu addCritMenu = new JMenu("New criterion");
 		JMenuItem addUnifButton = new JMenuItem("Uniform");
 		JMenuItem addGaussianButton = new JMenuItem("Gaussian");
 		JMenuItem addOrdinalButton = new JMenuItem("Ordinal");
 				
-		toolBarAddAltButton.addActionListener(new AbstractAction() {
+		addAltButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative();
 			}
@@ -184,11 +199,11 @@ public class MainApp {
 		});
 
 		
-		toolBarAddCritMenu.add(addUnifButton);
-		toolBarAddCritMenu.add(addGaussianButton);
+		addCritMenu.add(addUnifButton);
+		addCritMenu.add(addGaussianButton);
 		//toolBarAddCritMenu.add(addOrdinalButton);
-		menuBar.add(toolBarAddAltButton);
-		menuBar.add(toolBarAddCritMenu);
+		menuBar.add(addAltButton);
+		menuBar.add(addCritMenu);
 		
 		return menuBar;
 	}
@@ -281,16 +296,24 @@ public class MainApp {
 		}
 	}
 
-	public void startSimulation() {
-		simulator.restart();		
-	}
-
 	private void buildNewSimulator() {
+		if (simulator != null) {
+			simulator.stop();
+		}
 		simulator = new SMAASimulator(model, 10000);
 		results = simulator.getResults();
+		results.addResultsListener(new SimulationProgressListener());
 		if (rightViewBuilder instanceof ResultsView) {
 			((ResultsView)rightViewBuilder).setResults(results);
 		} 
+		simulationProgress.setValue(0);
+		simulator.restart();	
+	}
+	
+	private class SimulationProgressListener implements SMAAResultsListener {
+		public void resultsChanged() {
+			simulationProgress.setValue(results.getIteration() * 100 / simulator.getTotalIterations());
+		}
 	}
 
 }

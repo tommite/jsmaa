@@ -115,5 +115,4 @@ public class OrdinalCriterion extends Criterion {
 	public String measurementsToString() {
 		return ranks.toString();
 	}
-	
 }

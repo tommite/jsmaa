@@ -19,6 +19,7 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class AlternativeTest {
 	
 	@Test
 	public void testSetName() {
-		JUnitUtil.testSetter(new Alternative(), Alternative.PROPERTY_NAME, null, "hello");
+		JUnitUtil.testSetter(new Alternative("alt"), Alternative.PROPERTY_NAME, "alt", "hello");
 	}
 	
 	@Test
@@ -42,6 +43,14 @@ public class AlternativeTest {
 	public void testToString() {
 		Alternative a = new Alternative("alt");
 		assertEquals("alt", a.toString());
+	}
+	
+	@Test
+	public void testDeepEquals() {
+		Alternative a1 = new Alternative("a1");
+		Alternative a2 = new Alternative("a1");
+		
+		assertTrue(a1.deepEquals(a2));
 	}
 
 }

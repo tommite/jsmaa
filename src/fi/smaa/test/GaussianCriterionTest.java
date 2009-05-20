@@ -20,6 +20,8 @@ package fi.smaa.test;
 
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -118,6 +120,20 @@ public class GaussianCriterionTest {
 		crit.addPropertyChangeListener(mock);
 		crit.setMeasurements(generateMeas2Alts());
 		verify(mock);
+	}
+	
+	@Test
+	public void testDeepEquals() {
+		GaussianCriterion c2 = new GaussianCriterion("crit");
+		crit.setAlternatives(alts);
+		c2.setAlternatives(alts);
+		
+		crit.setMeasurements(generateMeas2Alts());
+		c2.setMeasurements(generateMeas2Alts());
+		assertTrue(crit.deepEquals(c2));
+		
+		c2.setMeasurements(generateMeas2Alts2());
+		assertFalse(crit.deepEquals(c2));
 	}
 	
 }

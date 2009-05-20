@@ -19,6 +19,7 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,5 +89,21 @@ public class SMAAModelTest {
 	public void testDeleteAlternative() throws Exception {
 		Alternative a = new Alternative("altToDelete");
 		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_ALTERNATIVES, "deleteAlternative", a);
+	}
+	
+	@Test
+	public void testDeepCopy() {
+		TestData td = new TestData();
+		td.crit1.setRanks(td.ranks);
+		td.crit2.setIntervals(td.intervals);
+		td.crit3.setMeasurements(td.gaussianMeasurements);
+		
+		SMAAModel model = td.model.deepCopy();
+		assertEquals(model.getName(), td.model.getName());
+		assertTrue(td.alt1.deepEquals(model.getAlternatives().get(0)));
+		assertTrue(td.alt2.deepEquals(model.getAlternatives().get(1)));
+		assertTrue(td.crit1.deepEquals(model.getCriteria().get(0)));
+		assertTrue(td.crit2.deepEquals(model.getCriteria().get(1)));
+		assertTrue(td.crit3.deepEquals(model.getCriteria().get(2)));
 	}
 }

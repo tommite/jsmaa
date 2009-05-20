@@ -127,4 +127,12 @@ public class SMAAModel extends Model {
 		}
 	}
 	
+	public SMAAModel deepCopy() {
+		SMAAModel model = new SMAAModel(name);
+		model.alternatives = new ArrayList<Alternative>();
+		model.criteria = new ArrayList<Criterion>();
+		
+		return model;
+	}
+	
 }
