@@ -19,8 +19,6 @@
 package fi.smaa.gui;
 
 import java.awt.event.ActionEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -37,44 +35,43 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.ButtonBarBuilder2;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.SMAAResults;
-import fi.smaa.SMAAResultsListener;
 
-public class CentralWeightsView implements ViewBuilder {
+public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
-	private SMAAResults results;
-	private MainApp main;
 	private JButton simulateButton;
 	private JLabel iterationsLabel;
-	private JLabel[][] valCells;	
+	private JLabel[][] valCells;
 
 	public CentralWeightsView(SMAAResults results, MainApp main) {
-		this.results = results;
-		this.main = main;
+		super(results, main);
 	}
 	
-	public void setResults(SMAAResults results) {
-		this.results = results;
-	}
-
 	public JComponent buildPanel() {
-		int numAlts = results.getAlternatives().size();
-		int numCrit = results.getCriteria().size();
+		int numAlts = getNumAlternatives();
+		int numCrit = getNumCriteria();
 		
 		FormLayout layout = new FormLayout(
 				"pref",
 				"p, 3dlu, p, 3dlu, p");
 		
+		int[] groupCol = new int[numCrit];
+		
 		for (int i=0;i<numAlts;i++) {
 			LayoutUtil.addRow(layout);
 		}
 		for (int i=0;i<numCrit;i++) {
-			LayoutUtil.addColumn(layout);
+			layout.appendColumn(ColumnSpec.decode("5dlu"));
+			layout.appendColumn(ColumnSpec.decode("center:pref"));
+			groupCol[i] = 3 + 2*i;			
 		}
+		
+		layout.setColumnGroups(new int[][]{groupCol});		
 		
 		int fullWidth = 1 + numCrit * 2;;
 
@@ -85,7 +82,7 @@ public class CentralWeightsView implements ViewBuilder {
 		builder.addSeparator("Central weight vectors", cc.xyw(1, 1, fullWidth));
 		
 		buildCriteriaLabels(builder);
-		buildAlternativeLabels(builder);
+		buildAlternativeLabels(builder, 5, 1, true);
 		buildCentralWeightPart(builder);
 
 		iterationsLabel = new JLabel("0");
@@ -101,17 +98,14 @@ public class CentralWeightsView implements ViewBuilder {
 		});
 		builder.add(bbuilder.getPanel(), cc.xy(1, numAlts*2 + 5));
 		
-		results.addResultsListener(new MyResultsListener());
-		
 		fireResultsChanged();		
 		return builder.getPanel();
 	}
-	
-	
+
 	private void buildCentralWeightPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
-		int numAlternatives = results.getAlternatives().size();
-		int numCriteria = results.getCriteria().size();
+		int numAlternatives = getNumAlternatives();
+		int numCriteria = getNumCriteria();
 		valCells = new JLabel[numAlternatives][numCriteria];
 		int startRow = 5;
 		int startCol = 3;
@@ -121,18 +115,6 @@ public class CentralWeightsView implements ViewBuilder {
 				valCells[altIndex][critIndex] = label;
 				builder.add(label, cc.xy(startCol + critIndex * 2, startRow + altIndex * 2));
 			}
-		}
-	}
-
-	private void buildAlternativeLabels(PanelBuilder builder) {
-		CellConstraints cc = new CellConstraints();
-		int col = 1;
-		int row = 5;
-		for (Alternative alt : results.getAlternatives()) {
-			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Alternative>(alt).getModel(Alternative.PROPERTY_NAME)),
-					cc.xy(col, row));
-			row += 2;
 		}
 	}
 
@@ -148,28 +130,17 @@ public class CentralWeightsView implements ViewBuilder {
 		}
 	}
 
-
-	private class MyResultsListener implements SMAAResultsListener {
-		public void resultsChanged() {
-			fireResultsChanged();
-		}
-	}
 	
 	public void fireResultsChanged() {
 		iterationsLabel.setText(results.getIteration().toString());
 		
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 		
-		NumberFormat format = DecimalFormat.getInstance();
-		format.setMaximumFractionDigits(2);
 		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {
-			Alternative alt = results.getAlternatives().get(altIndex);
-			List<Double> cw = cws.get(alt);
+			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
 			for (int critIndex=0;critIndex<results.getCriteria().size();critIndex++) {
-				Double val = cw.get(critIndex);
-				String stringVal = val == null ? "NA" : val.equals(Double.NaN) ? "NA " : format.format(val);
-				valCells[altIndex][critIndex].setText(stringVal);
+				valCells[altIndex][critIndex].setText(formatDouble(cw.get(critIndex)));
 			}
 		}
 	}

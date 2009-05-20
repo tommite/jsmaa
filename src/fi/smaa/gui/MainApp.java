@@ -117,6 +117,11 @@ public class MainApp {
 		rebuildRightPanel();
 	}
 	
+	private void setRightViewToRankAcceptabilities() {
+		rightViewBuilder = new RankAcceptabilitiesView(results, this);
+		rebuildRightPanel();
+	}
+	
 	private void setRightViewToCriteria() {
 		rightViewBuilder = new CriteriaListView(model);
 		rebuildRightPanel();
@@ -259,6 +264,8 @@ public class MainApp {
 				// do something? maybe not
 			} else if (node == leftTreeModel.getCentralWeightsNode()) {
 				setRightViewToCentralWeights();
+			} else if (node == leftTreeModel.getRankAcceptabilitiesNode()) {
+				setRightViewToRankAcceptabilities();
 			}
 		}		
 	}
@@ -281,9 +288,9 @@ public class MainApp {
 	private void buildNewSimulator() {
 		simulator = new SMAASimulator(model, 10000);
 		results = simulator.getResults();
-		if (rightViewBuilder instanceof CentralWeightsView) {
-			((CentralWeightsView)rightViewBuilder).setResults(results);
-		}
+		if (rightViewBuilder instanceof ResultsView) {
+			((ResultsView)rightViewBuilder).setResults(results);
+		} 
 	}
 
 }

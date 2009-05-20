@@ -70,6 +70,10 @@ public class LeftTreeModel implements TreeModel{
 		return centralWeightsNode;
 	}
 	
+	public Object getRankAcceptabilitiesNode() {
+		return rankAccNode;
+	}
+	
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName() == SMAAModel.PROPERTY_ALTERNATIVES) {
