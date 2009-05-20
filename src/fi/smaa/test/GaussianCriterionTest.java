@@ -1,0 +1,105 @@
+package fi.smaa.test;
+
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import nl.rug.escher.common.JUnitUtil;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import fi.smaa.Alternative;
+import fi.smaa.CardinalCriterion;
+import fi.smaa.GaussianCriterion;
+import fi.smaa.GaussianMeasurement;
+import fi.smaa.common.Interval;
+
+public class GaussianCriterionTest {
+	
+	private GaussianCriterion crit;
+	private List<Alternative> alts;
+	
+	@Before
+	public void setUp() {
+		crit = new GaussianCriterion("crit");
+		alts = new ArrayList<Alternative>();
+		alts.add(new Alternative("alt1"));
+		alts.add(new Alternative("alt2"));
+	} 
+	
+	@Test
+	public void testSetMeasurements() {
+		crit.setAlternatives(alts);
+		HashMap<Alternative, GaussianMeasurement> oldVal 
+			= new HashMap<Alternative, GaussianMeasurement>();
+		oldVal.put(alts.get(0), new GaussianMeasurement());
+		oldVal.put(alts.get(1), new GaussianMeasurement());
+		HashMap<Alternative, GaussianMeasurement> newVal = generateMeas2Alts();
+		JUnitUtil.testSetter(crit, GaussianCriterion.PROPERTY_MEASUREMENTS, oldVal, newVal);
+	}
+
+	@Test
+	public void testSample() {
+		crit.setAlternatives(alts);
+		HashMap<Alternative, GaussianMeasurement> meas = generateMeas2Alts();		
+		crit.setMeasurements(meas);
+		double[] tgt = new double[2];
+		crit.sample(tgt);
+		// something goes in there
+		assertEquals(1.0, tgt[1], 0.001);
+	}
+	
+	private HashMap<Alternative, GaussianMeasurement> generateMeas2Alts2() {
+		HashMap<Alternative, GaussianMeasurement> meas
+			= new HashMap<Alternative, GaussianMeasurement>();
+		meas.put(alts.get(0), new GaussianMeasurement(0.0, 0.0));
+		meas.put(alts.get(1), new GaussianMeasurement(0.5, 0.0));
+		return meas;
+	}	
+
+	private HashMap<Alternative, GaussianMeasurement> generateMeas2Alts() {
+		HashMap<Alternative, GaussianMeasurement> meas
+			= new HashMap<Alternative, GaussianMeasurement>();
+		meas.put(alts.get(0), new GaussianMeasurement(0.0, 1.0));
+		meas.put(alts.get(1), new GaussianMeasurement(1.0, 0.0));
+		return meas;
+	}
+	
+	@Test
+	public void testGetTypeLabel() {
+		assertEquals("Gaussian", crit.getTypeLabel());
+	}
+	
+	@Test
+	public void testGetScale() {
+		crit.setAlternatives(alts);
+		crit.setMeasurements(generateMeas2Alts());
+		assertEquals(new Interval(-1.96, 1.96), crit.getScale());
+	}
+	
+	@Test
+	public void testGetNullScale() {
+		Interval scale = crit.getScale();
+		assertEquals(new Interval(0.0, 0.0), scale);
+	}
+	
+
+	@Test
+	public void testSetMeasurementsFiresScaleChange() {		
+		crit.setAlternatives(alts);
+		crit.setMeasurements(generateMeas2Alts());
+		Interval expVal = crit.getScale();
+		crit.setMeasurements(generateMeas2Alts2());		
+		Interval oldVal = crit.getScale();
+		PropertyChangeListener mock = JUnitUtil.mockListener(crit, CardinalCriterion.PROPERTY_SCALE, oldVal, expVal);
+		crit.addPropertyChangeListener(mock);
+		crit.setMeasurements(generateMeas2Alts());
+		verify(mock);
+	}
+	
+}
