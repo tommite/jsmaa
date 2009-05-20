@@ -115,4 +115,25 @@ public class OrdinalCriterion extends Criterion {
 	public String measurementsToString() {
 		return ranks.toString();
 	}
+	
+	@Override
+	public boolean deepEquals(Criterion other) {
+		if (other instanceof OrdinalCriterion){ 
+			OrdinalCriterion uc = (OrdinalCriterion) other;
+			if (ranks.size() != uc.ranks.size()) {
+				return false;
+			}
+			if (!ranks.keySet().containsAll(uc.ranks.keySet())) {
+				return false;
+			}
+			for (Alternative a : ranks.keySet()){ 
+				Rank gm = ranks.get(a);
+				Rank om = uc.ranks.get(a);
+				if (!gm.equals(om)) {
+					return false;
+				}
+			}
+		}		
+		return super.deepEquals(other);
+	}
 }

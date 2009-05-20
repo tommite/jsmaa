@@ -19,6 +19,7 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -51,6 +52,13 @@ public class OrdinalCriterionTest {
 		rankMap = new HashMap<Alternative, Rank>();
 		rankMap.put(alts.get(0), new Rank(2));
 		rankMap.put(alts.get(1), new Rank(1));
+	}
+	
+	private Map<Alternative, Rank> createRankMap2() { 
+		Map<Alternative, Rank> rankMap = new HashMap<Alternative, Rank>();
+		rankMap.put(alts.get(0), new Rank(1));
+		rankMap.put(alts.get(1), new Rank(2));
+		return rankMap;
 	}
 	
 	@Test
@@ -95,7 +103,17 @@ public class OrdinalCriterionTest {
 		assertEquals(2, ranks.size());
 		assertEquals(new Rank(1), ranks.get(alts.get(0)));
 		assertEquals(new Rank(2), ranks.get(newAlt));
-		
-		
+	}
+	
+	@Test
+	public void testDeepEquals() {
+		OrdinalCriterion c2 = new OrdinalCriterion("Crit");
+		crit.setAlternatives(alts);
+		c2.setAlternatives(alts);
+		crit.setRanks(rankMap);
+		c2.setRanks(rankMap);		
+		assertTrue(crit.deepEquals(c2));
+		c2.setRanks(createRankMap2());
+		assertFalse(crit.deepEquals(c2));
 	}
 }
