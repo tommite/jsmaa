@@ -29,7 +29,7 @@ public abstract class Criterion extends Model {
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";
 	
-	private String name;
+	protected String name;
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
 
 	protected Criterion(String name) {
@@ -93,4 +93,5 @@ public abstract class Criterion extends Model {
 		}
 		return true;	
 	}
+	
 }

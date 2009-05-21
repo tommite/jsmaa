@@ -28,7 +28,7 @@ public class Alternative extends Model {
 	public Alternative(String name) {
 		this.name = name;
 	}
-		
+	
 	public String getName() {
 		return name;
 	}
@@ -46,6 +46,10 @@ public class Alternative extends Model {
 	
 	public boolean deepEquals(Alternative other) {
 		return name.equals(other.name);
+	}
+	
+	public Alternative deepCopy() {
+		return new Alternative(name);
 	}
 
 }

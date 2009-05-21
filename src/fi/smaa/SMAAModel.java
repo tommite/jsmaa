@@ -131,7 +131,12 @@ public class SMAAModel extends Model {
 		SMAAModel model = new SMAAModel(name);
 		model.alternatives = new ArrayList<Alternative>();
 		model.criteria = new ArrayList<Criterion>();
-		
+		for (Alternative a : alternatives) {
+			model.alternatives.add(a.deepCopy());
+		}
+		for (Criterion c : criteria) {
+			// TODO finish
+		}
 		return model;
 	}
 	
