@@ -35,15 +35,14 @@ public class SMAASimulator {
 	private double[][] measurements;
 	private double[] utilities;
 	private Integer[] ranks;
-	
-	private List<Criterion> criteria;
 	private List<Alternative> alternatives;
+	private List<Criterion> criteria;
 	
 	public SMAASimulator(SMAAModel model, Integer iterations) {
-		criteria = new ArrayList<Criterion>(model.getCriteria());
-		alternatives = new ArrayList<Alternative>(model.getAlternatives());
+		this.criteria = new ArrayList<Criterion>(model.getCriteria());
+		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
 		this.iterations = iterations;
-		results = new SMAAResults(criteria, alternatives, 10);		
+		results = new SMAAResults(alternatives, criteria, 10);		
 		init();
 	}
 	

@@ -39,24 +39,26 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 	
 	private JLabel[][] valCells;
 	
-	public RankAcceptabilitiesView(SMAAResults results, MainApp main) {
-		super(results, main);
+	public RankAcceptabilitiesView(SMAAResults results) {
+		super(results);
 	}
 
 	@Override
-	protected void fireResultsChanged() {
+	synchronized protected void fireResultsChanged() {
 		Map<Alternative, List<Double>> cws = results.getRankAcceptabilities();
 		
 		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
 			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
 			for (int rank=0;rank<getNumAlternatives();rank++) {
-				valCells[altIndex][rank].setText(formatDouble(cw.get(rank)));
+				if (valCells[altIndex][rank] != null) {
+					valCells[altIndex][rank].setText(formatDouble(cw.get(rank)));
+				}
 			}
 		}
 		
 	}
 
-	public JComponent buildPanel() {
+	synchronized public JComponent buildPanel() {
 		int numAlts = getNumAlternatives();
 		
 		FormLayout layout = new FormLayout(

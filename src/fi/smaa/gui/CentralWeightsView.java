@@ -43,11 +43,11 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
 	private JLabel[][] valCells;
 
-	public CentralWeightsView(SMAAResults results, MainApp main) {
-		super(results, main);
+	public CentralWeightsView(SMAAResults results) {
+		super(results);
 	}
 	
-	public JComponent buildPanel() {
+	synchronized public JComponent buildPanel() {
 		int numAlts = getNumAlternatives();
 		int numCrit = getNumCriteria();
 		
@@ -113,7 +113,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	}
 
 	
-	public void fireResultsChanged() {
+	synchronized public void fireResultsChanged() {
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {

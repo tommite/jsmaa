@@ -130,12 +130,12 @@ public class MainApp {
 
 
 	private void setRightViewToCentralWeights() {		
-		rightViewBuilder = new CentralWeightsView(results, this);		
+		rightViewBuilder = new CentralWeightsView(results);		
 		rebuildRightPanel();
 	}
 	
 	private void setRightViewToRankAcceptabilities() {
-		rightViewBuilder = new RankAcceptabilitiesView(results, this);
+		rightViewBuilder = new RankAcceptabilitiesView(results);
 		rebuildRightPanel();
 	}
 	
@@ -309,9 +309,11 @@ public class MainApp {
 		simulator = new SMAASimulator(model, 10000);
 		results = simulator.getResults();
 		results.addResultsListener(new SimulationProgressListener());
-		if (rightViewBuilder instanceof ResultsView) {
-			((ResultsView)rightViewBuilder).setResults(results);
-		} 
+		if (rightViewBuilder instanceof CentralWeightsView) {
+			setRightViewToCentralWeights();
+		} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
+			setRightViewToRankAcceptabilities();
+		}
 		simulationProgress.setValue(0);
 		simulator.restart();	
 	}

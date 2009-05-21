@@ -42,7 +42,7 @@ public class SMAAModel extends Model {
 		this.name = name;
 		init();
 	}
-
+	
 	private void init() {
 		alternatives = new ArrayList<Alternative>();
 		criteria = new ArrayList<Criterion>();

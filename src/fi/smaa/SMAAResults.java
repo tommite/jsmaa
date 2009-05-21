@@ -33,14 +33,14 @@ public class SMAAResults {
 	private Map<Integer, List<Double>> rankAcceptabilities;
 	private static final int FIRSTRANK = 0;
 	private List<SMAAResultsListener> listeners = new ArrayList<SMAAResultsListener>();
-	private List<Criterion> criteria;
-	private List<Alternative> alternatives;
 	private int updateInterval;
+	private List<Alternative> alternatives;
+	private List<Criterion> criteria;
 	
-	public SMAAResults(List<Criterion> criteria, List<Alternative> alternatives, int updateInterval) {
-		this.updateInterval = updateInterval;
-		this.criteria = criteria;
+	public SMAAResults(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
 		this.alternatives = alternatives;
+		this.criteria = criteria;
+		this.updateInterval = updateInterval;
 		initializeCentralWeightVectors();
 		initializeRankAcceptabilities();
 		initializeArrays();

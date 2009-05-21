@@ -56,7 +56,7 @@ public class SMAAResultsTest {
 		secondFirst = new Integer[]{1, 0};		
 		testData = new TestData();
 		model = testData.model;
-		results = new SMAAResults(model.getCriteria(), model.getAlternatives(), 10);
+		results = new SMAAResults(model.getAlternatives(), model.getCriteria(), 10);
 	}
 	
 	@Test

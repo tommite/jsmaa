@@ -33,12 +33,10 @@ import fi.smaa.SMAAResultsListener;
 public abstract class ResultsView {
 
 	protected SMAAResults results;
-	protected MainApp main;
 	protected NumberFormat format;	
 	
-	public ResultsView(SMAAResults results, MainApp main) {
+	public ResultsView(SMAAResults results) {
 		this.results = results;
-		this.main = main;
 		setupFormat();
 		results.addResultsListener(new MyResultsListener());		
 	}
