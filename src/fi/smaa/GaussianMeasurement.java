@@ -18,9 +18,8 @@
 
 package fi.smaa;
 
-import com.jgoodies.binding.beans.Model;
 
-public class GaussianMeasurement extends Model{
+public class GaussianMeasurement extends Measurement {
 	
 	public final static String PROPERTY_MEAN = "mean";
 	public final static String PROPERTY_STDEV = "stDev";

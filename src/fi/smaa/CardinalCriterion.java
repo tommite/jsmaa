@@ -18,20 +18,17 @@
 
 package fi.smaa;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 import fi.smaa.common.Interval;
 
 
-public abstract class CardinalCriterion extends Criterion {
+public abstract class CardinalCriterion<T extends Measurement> extends Criterion<T> {
 	
 	public final static String PROPERTY_SCALE = "scale";
 	public final static String PROPERTY_ASCENDING = "ascending";
 
 	protected Boolean ascending;
-	protected MeasurementListener measurementListener = new MeasurementListener();
-	
 	protected CardinalCriterion(String name) {
 		super(name);
 		ascending = true;
@@ -42,7 +39,9 @@ public abstract class CardinalCriterion extends Criterion {
 		this.ascending = ascending;
 	}
 
-	public abstract Interval getScale();
+	public Interval getScale() {
+		return createScale(getMeasurements());
+	}
 	
 	public Boolean getAscending() {
 		return ascending;
@@ -58,20 +57,22 @@ public abstract class CardinalCriterion extends Criterion {
 		return getScale().toString();
 	}
 	
-	protected class MeasurementListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			firePropertyChange(PROPERTY_SCALE, null, getScale());
-		}		
-	}	
-	
 	@Override
-	public boolean deepEquals(Criterion crit) {
-		if (crit instanceof CardinalCriterion) {
-			CardinalCriterion cc = (CardinalCriterion) crit;
-			if (cc.ascending != this.ascending) {
+	protected void fireMeasurementChange() {
+		firePropertyChange(PROPERTY_SCALE, null, getScale());
+	}
+	
+	protected abstract Interval createScale(Map<Alternative, T> oldMeas);
+
+	@Override
+	public boolean deepEquals(Criterion<T> other) {
+		if (other instanceof CardinalCriterion) {
+			CardinalCriterion<T> co = (CardinalCriterion<T>) other;
+			if (!getAscending().equals(co.getAscending())) {
 				return false;
 			}
 		}
-		return super.deepEquals(crit);
+		return super.deepEquals(other);
 	}
+	
 }

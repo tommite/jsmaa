@@ -78,6 +78,7 @@ public class SMAASimulatorTest {
 		assertFalse(simulator.isRunning());
 	}	
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testEqualRanks() throws InterruptedException {
 		Alternative alt1 = new Alternative("a1");
@@ -95,7 +96,7 @@ public class SMAASimulatorTest {
 		Map<Alternative, Interval> unifMeas = new HashMap<Alternative, Interval>();
 		unifMeas.put(alt1, new Interval(0.0, 0.0));
 		unifMeas.put(alt2, new Interval(0.0, 0.0));
-		c1.setIntervals(unifMeas);
+		c1.setMeasurements(unifMeas);
 		
 		// set measurements for gaussian criterion
 		Map<Alternative, GaussianMeasurement> gausMeas = new HashMap<Alternative, GaussianMeasurement>();		
@@ -151,13 +152,13 @@ public class SMAASimulatorTest {
 		Map<Alternative, Rank> ranks = new HashMap<Alternative, Rank>();
 		ranks.put(data.alt1, new Rank(1));
 		ranks.put(data.alt2, new Rank(2));
-		data.crit1.setRanks(ranks);
+		data.crit1.setMeasurements(ranks);
 		
 		// set intervals for cardinal criterion
 		Map<Alternative, Interval> unifMeas = new HashMap<Alternative, Interval>();
 		unifMeas.put(data.alt1, new Interval(0.0, 0.0));
 		unifMeas.put(data.alt2, new Interval(1.0, 1.0));
-		data.crit2.setIntervals(unifMeas);
+		data.crit2.setMeasurements(unifMeas);
 		
 		// set measurements for gaussian criterion
 		Map<Alternative, GaussianMeasurement> gausMeas = new HashMap<Alternative, GaussianMeasurement>();

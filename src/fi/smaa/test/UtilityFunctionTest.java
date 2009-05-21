@@ -48,7 +48,7 @@ public class UtilityFunctionTest {
 		Map<Alternative, Interval> meas = new HashMap<Alternative, Interval>();
 		meas.put(alts.get(0), new Interval(1.0, 1.5));
 		meas.put(alts.get(1), new Interval(1.5, 2.0));
-		crit.setIntervals(meas);
+		crit.setMeasurements(meas);
 	}
 	
 	@Test

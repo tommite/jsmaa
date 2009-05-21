@@ -18,19 +18,26 @@
 
 package fi.smaa;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jgoodies.binding.beans.Model;
 
-public abstract class Criterion extends Model {
+public abstract class Criterion<T extends Measurement> extends Model {
 	
 	public final static String PROPERTY_NAME = "name";	
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";
+	public static final String PROPERTY_MEASUREMENTS = "measurements";
 	
 	protected String name;
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
+	protected Map<Alternative, T> measurements = new HashMap<Alternative, T>();
+	private MeasurementListener measurementListener = new MeasurementListener();
 
 	protected Criterion(String name) {
 		this.name = name;
@@ -73,13 +80,22 @@ public abstract class Criterion extends Model {
 		updateMeasurements();
 	}
 	
-	protected abstract void updateMeasurements();
-	
 	public abstract String getTypeLabel();
 	
-	public abstract String measurementsToString();
+	public Map<Alternative, T> getMeasurements() {
+		return measurements;
+	}
 	
-	public boolean deepEquals(Criterion other) {
+	protected abstract void fireMeasurementChange();
+	
+	protected abstract T createMeasurement();
+
+	public String measurementsToString() {
+		return getMeasurements().toString();
+	}
+
+	
+	public boolean deepEquals(Criterion<T> other) {
 		if (!name.equals(other.name)) {
 			return false;
 		}
@@ -91,7 +107,42 @@ public abstract class Criterion extends Model {
 				return false;
 			}
 		}
+		if (!getMeasurements().equals(other.getMeasurements())) {
+			return false;
+		}
 		return true;	
 	}
 	
+	
+	public void setMeasurements(Map<Alternative, T> measurements) {
+		for (T g : getMeasurements().values()) {
+			g.removePropertyChangeListener(PROPERTY_MEASUREMENTS, measurementListener);
+		}
+		Map<Alternative, T> oldVal = this.measurements;
+		this.measurements = measurements;
+		
+		for (T g : getMeasurements().values()) {
+			g.addPropertyChangeListener(measurementListener);
+		}
+		firePropertyChange(PROPERTY_MEASUREMENTS, oldVal, this.measurements);
+		fireMeasurementChange();
+	}
+
+	protected void updateMeasurements() {
+		Map<Alternative, T> newMap = new HashMap<Alternative, T>();
+		for (Alternative a : getAlternatives()) {
+			if (getMeasurements().containsKey(a)) {
+				newMap.put(a, measurements.get(a));
+			} else {
+				newMap.put(a, createMeasurement());
+			}
+		}
+		setMeasurements(newMap);
+	}
+
+	protected class MeasurementListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			fireMeasurementChange();
+		}
+	}	
 }

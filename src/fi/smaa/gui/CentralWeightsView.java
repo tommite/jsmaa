@@ -115,7 +115,6 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	public void fireResultsChanged() {
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 		
-		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {
 			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
 			for (int critIndex=0;critIndex<results.getCriteria().size();critIndex++) {

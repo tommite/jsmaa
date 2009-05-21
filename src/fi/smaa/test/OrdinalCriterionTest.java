@@ -19,7 +19,6 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -54,23 +53,11 @@ public class OrdinalCriterionTest {
 		rankMap.put(alts.get(1), new Rank(1));
 	}
 	
-	private Map<Alternative, Rank> createRankMap2() { 
-		Map<Alternative, Rank> rankMap = new HashMap<Alternative, Rank>();
-		rankMap.put(alts.get(0), new Rank(1));
-		rankMap.put(alts.get(1), new Rank(2));
-		return rankMap;
-	}
 	
-	@Test
-	public void testSetRanks() {
-		Map<Alternative, Rank> map = new HashMap<Alternative, Rank>();
-		JUnitUtil.testSetter(crit, OrdinalCriterion.PROPERTY_RANKS, map, rankMap);
-	}
-
 	@Test
 	public void testSample() {
 		crit.setAlternatives(alts);
-		crit.setRanks(rankMap);		
+		crit.setMeasurements(rankMap);		
 		double[] tgt = new double[2];
 		crit.sample(tgt);
 		assertTrue(tgt[0] < tgt[1]);
@@ -94,26 +81,15 @@ public class OrdinalCriterionTest {
 		alts.add(newAlt);
 		rankMap.put(newAlt, new Rank(3));
 		crit.setAlternatives(alts);
-		crit.setRanks(rankMap);
+		crit.setMeasurements(rankMap);
 		ArrayList<Alternative> nAlts = new ArrayList<Alternative>();
 		nAlts.add(alts.get(0));
 		nAlts.add(newAlt);
 		crit.setAlternatives(nAlts);
-		Map<Alternative, Rank> ranks = crit.getRanks();
+		Map<Alternative, Rank> ranks = crit.getMeasurements();
 		assertEquals(2, ranks.size());
+		System.out.println(ranks);
 		assertEquals(new Rank(1), ranks.get(alts.get(0)));
 		assertEquals(new Rank(2), ranks.get(newAlt));
-	}
-	
-	@Test
-	public void testDeepEquals() {
-		OrdinalCriterion c2 = new OrdinalCriterion("Crit");
-		crit.setAlternatives(alts);
-		c2.setAlternatives(alts);
-		crit.setRanks(rankMap);
-		c2.setRanks(rankMap);		
-		assertTrue(crit.deepEquals(c2));
-		c2.setRanks(createRankMap2());
-		assertFalse(crit.deepEquals(c2));
-	}
+	}	
 }

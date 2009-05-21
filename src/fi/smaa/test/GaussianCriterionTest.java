@@ -41,7 +41,7 @@ import fi.smaa.common.Interval;
 
 public class GaussianCriterionTest {
 	
-	private GaussianCriterion crit;
+	private CardinalCriterion<GaussianMeasurement> crit;
 	private List<Alternative> alts;
 	
 	@Before
@@ -114,9 +114,7 @@ public class GaussianCriterionTest {
 		crit.setAlternatives(alts);
 		crit.setMeasurements(generateMeas2Alts());
 		Interval expVal = crit.getScale();
-		crit.setMeasurements(generateMeas2Alts2());		
-		Interval oldVal = crit.getScale();
-		PropertyChangeListener mock = JUnitUtil.mockListener(crit, CardinalCriterion.PROPERTY_SCALE, oldVal, expVal);
+		PropertyChangeListener mock = JUnitUtil.mockListener(crit, CardinalCriterion.PROPERTY_SCALE, null, expVal);
 		crit.addPropertyChangeListener(mock);
 		crit.setMeasurements(generateMeas2Alts());
 		verify(mock);

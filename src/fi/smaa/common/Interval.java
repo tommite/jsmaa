@@ -21,9 +21,9 @@ package fi.smaa.common;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
-import com.jgoodies.binding.beans.Model;
+import fi.smaa.Measurement;
 
-public class Interval extends Model {
+public class Interval extends Measurement {
 	
 	public static final String PROPERTY_START = "start";
 	public static final String PROPERTY_END = "end";

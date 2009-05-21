@@ -18,18 +18,13 @@
 
 package fi.smaa;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import fi.smaa.common.Interval;
 import fi.smaa.common.RandomUtil;
 
 
-public class GaussianCriterion extends CardinalCriterion {
-	
-	public static final String PROPERTY_MEASUREMENTS = "measurements";
-	
-	private Map<Alternative, GaussianMeasurement> measurements = new HashMap<Alternative, GaussianMeasurement>();
+public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 	
 	public GaussianCriterion(String name) {
 		super(name);
@@ -38,6 +33,12 @@ public class GaussianCriterion extends CardinalCriterion {
 	public GaussianCriterion(String name, Boolean ascending) {
 		super(name, ascending);
 	}
+	
+	@Override
+	protected GaussianMeasurement createMeasurement() {
+		return new GaussianMeasurement();
+	}
+	
 
 	@Override
 	public void sample(double[] target) {
@@ -50,25 +51,6 @@ public class GaussianCriterion extends CardinalCriterion {
 		}
 	}		
 
-	public Map<Alternative, GaussianMeasurement> getMeasurements() {
-		return measurements;
-	}
-
-	public void setMeasurements(Map<Alternative, GaussianMeasurement> measurements) {
-		for (GaussianMeasurement g : this.measurements.values()) {
-			g.removePropertyChangeListener(measurementListener);
-		}
-		Interval oldScale = getScale();
-		Object oldVal = this.measurements;
-		this.measurements = measurements;
-		
-		for (GaussianMeasurement g : this.measurements.values()) {
-			g.addPropertyChangeListener(measurementListener);
-		}
-		firePropertyChange(PROPERTY_MEASUREMENTS, oldVal, this.measurements);
-		firePropertyChange(PROPERTY_SCALE, oldScale, getScale());
-	}
-	
 	/**
 	 * Derives max with 95% confidence interval
 	 * @param double1
@@ -95,27 +77,14 @@ public class GaussianCriterion extends CardinalCriterion {
 	}
 	
 	@Override
-	protected void updateMeasurements() {
-		Map<Alternative, GaussianMeasurement> newMap = new HashMap<Alternative, GaussianMeasurement>();
-		for (Alternative a : getAlternatives()) {
-			if (getMeasurements().containsKey(a)) {
-				newMap.put(a, getMeasurements().get(a));
-			} else {
-				newMap.put(a, new GaussianMeasurement());
-			}
-		}
-		setMeasurements(newMap);
-	}
-	
-	@Override
-	public Interval getScale() {
-		if (getMeasurements().values().size() == 0) {
+	public Interval createScale(Map<Alternative, GaussianMeasurement> map) {
+		if (map.values().size() == 0) {
 			return new Interval(0.0, 0.0);
 		}
 		Double min = Double.MAX_VALUE;
 		Double max = Double.MIN_VALUE;
 		
-		for (GaussianMeasurement m : getMeasurements().values()) {
+		for (GaussianMeasurement m : map.values()) {
 			Double tmin = deriveMin(m.getMean(), m.getStDev());
 			Double tmax = deriveMax(m.getMean(), m.getStDev());
 			if (tmin < min) {
@@ -126,31 +95,5 @@ public class GaussianCriterion extends CardinalCriterion {
 			}
 		}
 		return new Interval(min, max);
-	}
-	
-	@Override
-	public String measurementsToString() {
-		return measurements.toString();
-	}
-	
-	@Override
-	public boolean deepEquals(Criterion other) {
-		if (other instanceof GaussianCriterion) {
-			GaussianCriterion gc = (GaussianCriterion) other;
-			if (measurements.size() != gc.measurements.size()) {
-				return false;
-			}
-			if (!measurements.keySet().containsAll(gc.measurements.keySet())) {
-				return false;
-			}
-			for (Alternative a : measurements.keySet()){ 
-				GaussianMeasurement gm = measurements.get(a);
-				GaussianMeasurement om = gc.measurements.get(a);
-				if (!gm.equals(om)) {
-					return false;
-				}
-			}
-		}
-		return super.deepEquals(other);
 	}
 }

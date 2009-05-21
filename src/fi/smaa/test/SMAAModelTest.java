@@ -58,6 +58,7 @@ public class SMAAModelTest {
 		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_ALTERNATIVES, model.getAlternatives(), alts);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetCriteria() {
 		List<Criterion> crit = new ArrayList<Criterion>();
@@ -79,6 +80,7 @@ public class SMAAModelTest {
 		assertEquals("testModel", mod.toString());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testAddCriterion() {
 		Criterion c = new GaussianCriterion("gaus");
@@ -91,11 +93,12 @@ public class SMAAModelTest {
 		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_ALTERNATIVES, "deleteAlternative", a);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testDeepCopy() {
 		TestData td = new TestData();
-		td.crit1.setRanks(td.ranks);
-		td.crit2.setIntervals(td.intervals);
+		td.crit1.setMeasurements(td.ranks);
+		td.crit2.setMeasurements(td.intervals);
 		td.crit3.setMeasurements(td.gaussianMeasurements);
 		
 		SMAAModel model = td.model.deepCopy();

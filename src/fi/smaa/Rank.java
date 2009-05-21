@@ -18,9 +18,8 @@
 
 package fi.smaa;
 
-import com.jgoodies.binding.beans.Model;
 
-public class Rank extends Model {
+public class Rank extends Measurement {
 	private Integer rank;
 	
 	public final static String PROPERTY_RANK = "rank";

@@ -45,13 +45,16 @@ import fi.smaa.common.gui.IntervalFormat;
 
 public class CriterionView implements ViewBuilder {
 	private SMAAModel model;
+	@SuppressWarnings("unchecked")
 	private Criterion criterion;
 	
+	@SuppressWarnings("unchecked")
 	public CriterionView(Criterion crit, SMAAModel model) {
 		this.model = model;
 		this.criterion = crit;
 	}
 
+	@SuppressWarnings("unchecked")
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"right:pref, 3dlu, pref, 3dlu, pref",
@@ -82,6 +85,7 @@ public class CriterionView implements ViewBuilder {
 		return builder.getPanel();
 	}
 
+	@SuppressWarnings("unchecked")
 	private int buildScalePart(FormLayout layout, PanelBuilder builder,
 			CellConstraints cc, int row, int fullWidth) {
 		if (criterion instanceof CardinalCriterion) {
@@ -127,7 +131,7 @@ public class CriterionView implements ViewBuilder {
 					cc.xy(1, row));
 			if (criterion instanceof UniformCriterion) {
 				UniformCriterion cardCrit = (UniformCriterion) criterion;
-				Interval ival = cardCrit.getIntervals().get(a);
+				Interval ival = cardCrit.getMeasurements().get(a);
 				JComponent comp = ComponentBuilder.createIntervalPanel(
 						new PresentationModel<Interval>(ival));
 				builder.add(comp, cc.xy(3, row));

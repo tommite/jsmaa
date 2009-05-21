@@ -18,17 +18,24 @@
 
 package fi.smaa.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.CardinalCriterion;
+import fi.smaa.Measurement;
 import fi.smaa.common.Interval;
 
 public class CardinalCriterionTest {
 	
+	@SuppressWarnings("unchecked")
 	private CardinalCriterion criterion;
 	
 	@Before
@@ -36,19 +43,30 @@ public class CardinalCriterionTest {
 		criterion = getInstance();
 	}
 
+	@SuppressWarnings("unchecked")
 	private CardinalCriterion getInstance() {
 		return new CardinalCriterion("name") {
+			@Override
 			public void sample(double[] target) {
 			}
+			@Override
 			public String getTypeLabel() {
 				return null;
 			}
+			@Override
 			public Interval getScale() {
 				return new Interval(0.0, 1.0);
 			}
-			protected void updateMeasurements() {
+			@Override
+			protected Measurement createMeasurement() {
+				return null;
 			}
-			public String measurementsToString() {
+			@Override
+			public Map getMeasurements() {
+				return new HashMap();
+			}
+			@Override
+			protected Interval createScale(Map oldMeas) {
 				return null;
 			}
 		};
@@ -59,6 +77,7 @@ public class CardinalCriterionTest {
 		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_ASCENDING, true, false);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testDeepEquals() {
 		CardinalCriterion c2 = getInstance();

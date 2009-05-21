@@ -23,7 +23,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.rug.escher.common.JUnitUtil;
 
@@ -32,11 +34,14 @@ import org.junit.Test;
 
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
+import fi.smaa.Measurement;
 
 public class CriterionTest {
 	
+	@SuppressWarnings("unchecked")
 	private Criterion criterion;
 	
+	@SuppressWarnings("unchecked")
 	private Criterion createInstance() {
 		return new Criterion("name") {
 			public void sample(double[] target) {
@@ -48,6 +53,14 @@ public class CriterionTest {
 			}
 			public String measurementsToString() {
 				return null;
+			}
+			protected Measurement createMeasurement() {
+				return null;
+			}
+			protected void fireMeasurementChange() {
+			}
+			public Map getMeasurements() {
+				return new HashMap();
 			}			
 		};
 		
@@ -58,6 +71,7 @@ public class CriterionTest {
 		criterion = createInstance();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testConstructor() {
 		Criterion c = createInstance();
@@ -84,6 +98,7 @@ public class CriterionTest {
 		JUnitUtil.testSetter(criterion, Criterion.PROPERTY_ALTERNATIVES, new ArrayList<Alternative>(), list);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testDeepEquals() {
 		Criterion c2 = createInstance();

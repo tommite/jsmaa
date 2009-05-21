@@ -20,7 +20,6 @@ package fi.smaa.test;
 
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -57,30 +56,19 @@ public class UniformCriterionTest {
 		meas.put(alts.get(1), new Interval(0.5, 1.0));
 	}
 	
-	private Map<Alternative, Interval> genMap2() {
-		Map<Alternative, Interval> meas = new HashMap<Alternative, Interval>();
-		meas.put(alts.get(0), new Interval(0.0, 0.5));
-		meas.put(alts.get(1), new Interval(0.5, 1.5));
-		return meas;
-	}
-
 	@Test
 	public void testSample() {
 		criterion.setAlternatives(alts);
-		//criterion.set
-		double[] tgt = new double[1];
-	//	c.sample(tgt);
+		criterion.setMeasurements(meas);
+		double[] tgt = new double[2];
+		criterion.sample(tgt);
 		assertNotNull(tgt[0]);
 		assertTrue(tgt[0] >= 0.0);
-		assertTrue(tgt[0] <= 1.0);
+		assertTrue(tgt[0] <= 0.5);
+		assertTrue(tgt[1] >= 0.5);
+		assertTrue(tgt[1] <= 1.0);		
 	}
 	
-	@Test
-	public void testSetIntervals() {
-		criterion.setAlternatives(alts);
-		Object oldVal = criterion.getIntervals();
-		JUnitUtil.testSetter(criterion, UniformCriterion.PROPERTY_INTERVALS, oldVal, meas);
-	}
 		
 	@Test
 	public void testGetTypeLabel() {
@@ -90,27 +78,25 @@ public class UniformCriterionTest {
 	@Test
 	public void testGetScale() {
 		criterion.setAlternatives(alts);
-		criterion.setIntervals(meas);
+		criterion.setMeasurements(meas);
 		assertEquals(new Interval(0.0, 1.0), criterion.getScale());
 	}
 	
 	@Test
 	public void testSetIntervalsFiresScaleChange() {
 		criterion.setAlternatives(alts);
-		Interval oldVal = criterion.getScale();
 		Interval newVal = new Interval(0.0, 1.0);
 		PropertyChangeListener mock = JUnitUtil.mockListener(criterion, CardinalCriterion.PROPERTY_SCALE,
-				oldVal, newVal);
+				null, newVal);
 		criterion.addPropertyChangeListener(mock);
-		criterion.setIntervals(meas);		
-		
+		criterion.setMeasurements(meas);		
 		verify(mock);
 	}
 	
 	@Test
 	public void testIntervalChangeFiresScaleChange() {
 		criterion.setAlternatives(alts);
-		criterion.setIntervals(meas);
+		criterion.setMeasurements(meas);
 		Interval oldVal = null;
 		Interval newVal = new Interval(0.0, 5.0);
 
@@ -118,30 +104,9 @@ public class UniformCriterionTest {
 				oldVal, newVal);
 		criterion.addPropertyChangeListener(mock);
 		
-		criterion.getIntervals().get(alts.get(0)).setEnd(5.0);
+		criterion.getMeasurements().get(alts.get(0)).setEnd(5.0);
 		
 		verify(mock);		
 	}
-	
-	@Test
-	public void testUpdateMeasurements() {
-		criterion.setAlternatives(alts);
-		assertEquals(new Interval(), criterion.getIntervals().get(alts.get(0)));
-		assertEquals(new Interval(), criterion.getIntervals().get(alts.get(1)));
-	}
-	
-	@Test
-	public void testDeepEquals() {
-		UniformCriterion c2 = new UniformCriterion("crit");
-		criterion.setAlternatives(alts);
-		c2.setAlternatives(alts);
 		
-		criterion.setIntervals(meas);
-		c2.setIntervals(meas);
-		assertTrue(criterion.deepEquals(c2));
-		
-		c2.setIntervals(genMap2());
-		assertFalse(criterion.deepEquals(c2));
-	}	
-	
 }

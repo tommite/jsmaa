@@ -61,7 +61,7 @@ public class RankSelectorGroup {
 	}
 
 	private void createComponents() {
-		for (Rank r : crit.getRanks().values()){			
+		for (Rank r : crit.getMeasurements().values()){			
 			components.add(createComboBox(r));
 		}
 	}

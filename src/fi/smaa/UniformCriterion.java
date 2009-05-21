@@ -18,18 +18,13 @@
 
 package fi.smaa;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import fi.smaa.common.Interval;
 import fi.smaa.common.RandomUtil;
 
 
-public class UniformCriterion extends CardinalCriterion {
-	
-	public static final String PROPERTY_INTERVALS = "intervals";
-
-	private Map<Alternative, Interval> intervals = new HashMap<Alternative, Interval>();
+public class UniformCriterion extends CardinalCriterion<Interval> {
 	
 	public UniformCriterion(String name) {
 		super(name);
@@ -45,31 +40,13 @@ public class UniformCriterion extends CardinalCriterion {
 		
 		for (int i=0;i<getAlternatives().size();i++) {
 			Alternative a = getAlternatives().get(i);
-			double intMin = intervals.get(a).getStart();
-			double intMax = intervals.get(a).getEnd();
+			double intMin = measurements.get(a).getStart();
+			double intMax = measurements.get(a).getEnd();
 			double diff = intMax - intMin;
 			target[i] = intMin + (RandomUtil.createUnif01() * diff);
 		}
 	}
 
-	public Map<Alternative, Interval> getIntervals() {
-		return intervals;
-	}
-	
-	public void setIntervals(Map<Alternative, Interval> intervals) {
-		for (Interval i : this.intervals.values()) {
-			i.removePropertyChangeListener(measurementListener);
-		}
-		Interval oldScale = getScale();
-		Object oldVal = this.intervals;
-		this.intervals = intervals;
-		for (Interval i : intervals.values()) {
-			i.addPropertyChangeListener(measurementListener);
-		}
-		firePropertyChange(PROPERTY_INTERVALS, oldVal, this.intervals);
-		firePropertyChange(PROPERTY_SCALE, oldScale, getScale());		
-	}
-	
 
 	@Override
 	public String getTypeLabel() {
@@ -78,46 +55,16 @@ public class UniformCriterion extends CardinalCriterion {
 
 	@Override
 	public Interval getScale() {
-		return Interval.enclosingInterval(intervals.values());
+		return createScale(measurements);
+	}
+	
+	@Override
+	protected Interval createScale(Map<Alternative, Interval> measurements) {
+		return Interval.enclosingInterval(measurements.values());		
 	}
 
 	@Override
-	protected void updateMeasurements() {
-		Map<Alternative, Interval> newMap = new HashMap<Alternative, Interval>();
-		for (Alternative a : getAlternatives()) {
-			if (getIntervals().containsKey(a)) {
-				newMap.put(a, getIntervals().get(a));
-			} else {
-				newMap.put(a, new Interval());
-			}
-		}
-		setIntervals(newMap);				
-	}	
-	
-	@Override
-	public String measurementsToString() {
-		return intervals.toString();
-	}
-	
-	@Override
-	public boolean deepEquals(Criterion other) {
-		if (other instanceof UniformCriterion){ 
-			UniformCriterion uc = (UniformCriterion) other;
-			if (intervals.size() != uc.intervals.size()) {
-				return false;
-			}
-			if (!intervals.keySet().containsAll(uc.intervals.keySet())) {
-				return false;
-			}
-			for (Alternative a : intervals.keySet()){ 
-				Interval gm = intervals.get(a);
-				Interval om = uc.intervals.get(a);
-				if (!gm.equals(om)) {
-					return false;
-				}
-			}
-		}
-		
-		return super.deepEquals(other);
+	protected Interval createMeasurement() {
+		return new Interval();
 	}
 }
