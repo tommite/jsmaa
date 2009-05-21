@@ -18,6 +18,8 @@
 
 package fi.smaa;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +41,16 @@ public class SMAASimulator {
 	private List<Criterion> criteria;
 	private UtilitySampler sampler;
 	
+	private MeasurementChangeListener listener = new MeasurementChangeListener();
+	
+	private class MeasurementChangeListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
+				restart();
+			}
+		}		
+	}
+	
 	public SMAASimulator(SMAAModel model, Integer iterations) {
 		this.criteria = new ArrayList<Criterion>(model.getCriteria());
 		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
@@ -46,8 +58,15 @@ public class SMAASimulator {
 		results = new SMAAResults(alternatives, criteria, 10);
 		sampler = new UtilitySampler(this.alternatives.size());
 		init();
+		connectListeners();
 	}
 	
+	private void connectListeners() {
+		for (Criterion c : criteria) {
+			c.addPropertyChangeListener(listener);
+		}
+	}
+
 	public Integer getTotalIterations() {
 		return iterations;
 	}
