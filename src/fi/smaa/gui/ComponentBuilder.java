@@ -26,35 +26,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatter;
 
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 
 import fi.smaa.GaussianMeasurement;
-import fi.smaa.common.Interval;
 
 public class ComponentBuilder {
-
-	public static JComponent createIntervalPanel(PresentationModel<Interval> model) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());		
-
-		JTextField startField = BasicComponentFactory.createFormattedTextField(
-				model.getModel(Interval.PROPERTY_START), 
-				new DefaultFormatter());
-		JTextField endField = BasicComponentFactory.createFormattedTextField(
-				model.getModel(Interval.PROPERTY_END), 
-				new DefaultFormatter());
-				
-		startField.setHorizontalAlignment(JTextField.CENTER);
-		endField.setHorizontalAlignment(JTextField.CENTER);
-		startField.setColumns(5);
-		endField.setColumns(5);
-		panel.add(startField);
-		panel.add(endField);
-		
-		return panel;
-	}
 	
 	public static JComponent createGaussianMeasurementPanel(PresentationModel<GaussianMeasurement> model) {
 		JPanel panel = new JPanel();

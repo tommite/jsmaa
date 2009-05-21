@@ -130,8 +130,7 @@ public class CriterionView implements ViewBuilder {
 			if (criterion instanceof UniformCriterion) {
 				UniformCriterion cardCrit = (UniformCriterion) criterion;
 				Interval ival = cardCrit.getMeasurements().get(a);
-				JComponent comp = ComponentBuilder.createIntervalPanel(
-						new PresentationModel<Interval>(ival));
+				JComponent comp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
 				builder.add(comp, cc.xy(3, row));
 				builder.addLabel("Interval", cc.xy(5, row));
 			} else if (criterion instanceof GaussianCriterion) {
