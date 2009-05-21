@@ -33,6 +33,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -70,6 +71,7 @@ public class MainApp {
 	private ViewBuilder rightViewBuilder;
 	private LeftTreeModel leftTreeModel;
 	private JProgressBar simulationProgress;
+	private JScrollPane rightPane;
 
 	/**
 	 * @param args
@@ -101,15 +103,16 @@ public class MainApp {
 	}
 		
 	private void rebuildRightPanel() {
-		splitPane.setRightComponent(rightViewBuilder.buildPanel());
+		rightPane.setViewportView(rightViewBuilder.buildPanel());
 	}
 
 	private void initComponents(JFrame frame) {
 	   splitPane = new JSplitPane();
-	   
 	   splitPane.setResizeWeight(0.0);	   
-	   splitPane.setDividerSize(1);
+	   splitPane.setDividerSize(2);
 	   splitPane.setDividerLocation(-1);
+	   rightPane = new JScrollPane();
+	   splitPane.setRightComponent(rightPane);
 	   
 	   initLeftPanel();
 	   setRightViewToCriteria();
