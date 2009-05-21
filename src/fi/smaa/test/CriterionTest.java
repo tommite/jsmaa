@@ -46,8 +46,6 @@ public class CriterionTest {
 	@SuppressWarnings("unchecked")
 	private Criterion createInstance() {
 		return new Criterion("name") {
-			public void sample(double[] target) {
-			}
 			public String getTypeLabel() {
 				return null;
 			}

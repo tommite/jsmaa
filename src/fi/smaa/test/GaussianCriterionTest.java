@@ -61,17 +61,6 @@ public class GaussianCriterionTest {
 		JUnitUtil.testSetter(crit, GaussianCriterion.PROPERTY_MEASUREMENTS, oldVal, newVal);
 	}
 
-	@Test
-	public void testSample() {
-		crit.setAlternatives(alts);
-		HashMap<Alternative, GaussianMeasurement> meas = generateMeas2Alts();		
-		crit.setMeasurements(meas);
-		double[] tgt = new double[2];
-		crit.sample(tgt);
-		// something goes in there
-		assertEquals(1.0, tgt[1], 0.001);
-	}
-
 	private HashMap<Alternative, GaussianMeasurement> generateMeas2Alts() {
 		HashMap<Alternative, GaussianMeasurement> meas
 			= new HashMap<Alternative, GaussianMeasurement>();

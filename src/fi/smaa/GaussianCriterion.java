@@ -21,7 +21,6 @@ package fi.smaa;
 import java.util.Map;
 
 import fi.smaa.common.Interval;
-import fi.smaa.common.RandomUtil;
 
 
 public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
@@ -39,17 +38,6 @@ public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 		return new GaussianMeasurement();
 	}
 	
-
-	@Override
-	public void sample(double[] target) {
-		assert(target.length == getAlternatives().size());
-		
-		for (int i = 0 ; i < getAlternatives().size();i++) {
-			Alternative a = getAlternatives().get(i);			
-			target[i] = RandomUtil.createGaussian(measurements.get(a).getMean(),
-					measurements.get(a).getStDev());
-		}
-	}		
 
 	/**
 	 * Derives max with 95% confidence interval

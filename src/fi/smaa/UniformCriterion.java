@@ -21,7 +21,6 @@ package fi.smaa;
 import java.util.Map;
 
 import fi.smaa.common.Interval;
-import fi.smaa.common.RandomUtil;
 
 
 public class UniformCriterion extends CardinalCriterion<Interval> {
@@ -33,20 +32,6 @@ public class UniformCriterion extends CardinalCriterion<Interval> {
 	public UniformCriterion(String name, Boolean ascending) {
 		super(name, ascending);
 	}
-
-	@Override
-	public void sample(double[] target) {
-		assert(target.length == getAlternatives().size());
-		
-		for (int i=0;i<getAlternatives().size();i++) {
-			Alternative a = getAlternatives().get(i);
-			double intMin = measurements.get(a).getStart();
-			double intMax = measurements.get(a).getEnd();
-			double diff = intMax - intMin;
-			target[i] = intMin + (RandomUtil.createUnif01() * diff);
-		}
-	}
-
 
 	@Override
 	public String getTypeLabel() {

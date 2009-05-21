@@ -45,9 +45,6 @@ public class CardinalCriterionTest {
 	private CardinalCriterion getInstance() {
 		return new CardinalCriterion("name") {
 			@Override
-			public void sample(double[] target) {
-			}
-			@Override
 			public String getTypeLabel() {
 				return null;
 			}

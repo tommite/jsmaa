@@ -19,30 +19,15 @@
 package fi.smaa;
 
 import java.util.Collection;
-import java.util.List;
 
-import fi.smaa.common.RandomUtil;
 
 
 public class OrdinalCriterion extends Criterion<Rank> {
-	private double[] tmparr;
 	
 	public OrdinalCriterion(String name) {
 		super(name);
 	}
 
-	@Override
-	public void sample(double[] target) {
-		assert(getAlternatives().size() == target.length);
-		
-		RandomUtil.createSumToOneSorted(tmparr);
-		
-		for (int i=0;i<getAlternatives().size();i++) {
-			Rank rank = measurements.get(getAlternatives().get(i));
-			target[i] = tmparr[tmparr.length - rank.getRank()];
-		}
-	}
-		
 	private void ensureRanks() {
 		ensureDifferentRanks();
 		ensureNoRankGaps();		
@@ -84,13 +69,7 @@ public class OrdinalCriterion extends Criterion<Rank> {
 			}
 		}
 	}
-	
-	@Override
-	public void setAlternatives(List<Alternative> alternatives) throws NullPointerException {	
-		super.setAlternatives(alternatives);
-		tmparr = new double[alternatives.size()];
-	}
-	
+		
 	@Override
 	public String getTypeLabel() {
 		return "Ordinal";

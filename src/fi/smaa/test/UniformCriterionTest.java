@@ -20,8 +20,6 @@ package fi.smaa.test;
 
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -55,21 +53,7 @@ public class UniformCriterionTest {
 		meas.put(alts.get(0), new Interval(0.0, 0.5));
 		meas.put(alts.get(1), new Interval(0.5, 1.0));
 	}
-	
-	@Test
-	public void testSample() {
-		criterion.setAlternatives(alts);
-		criterion.setMeasurements(meas);
-		double[] tgt = new double[2];
-		criterion.sample(tgt);
-		assertNotNull(tgt[0]);
-		assertTrue(tgt[0] >= 0.0);
-		assertTrue(tgt[0] <= 0.5);
-		assertTrue(tgt[1] >= 0.5);
-		assertTrue(tgt[1] <= 1.0);		
-	}
-	
-		
+
 	@Test
 	public void testGetTypeLabel() {
 		assertEquals("Uniform", criterion.getTypeLabel());

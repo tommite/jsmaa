@@ -19,7 +19,6 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,17 +51,7 @@ public class OrdinalCriterionTest {
 		rankMap.put(alts.get(0), new Rank(2));
 		rankMap.put(alts.get(1), new Rank(1));
 	}
-	
-	
-	@Test
-	public void testSample() {
-		crit.setAlternatives(alts);
-		crit.setMeasurements(rankMap);		
-		double[] tgt = new double[2];
-		crit.sample(tgt);
-		assertTrue(tgt[0] < tgt[1]);
-	}
-	
+
 	@Test
 	public void testGetTypeLabel() {
 		assertEquals("Ordinal", crit.getTypeLabel());

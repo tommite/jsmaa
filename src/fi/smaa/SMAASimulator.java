@@ -37,12 +37,14 @@ public class SMAASimulator {
 	private Integer[] ranks;
 	private List<Alternative> alternatives;
 	private List<Criterion> criteria;
+	private UtilitySampler sampler;
 	
 	public SMAASimulator(SMAAModel model, Integer iterations) {
 		this.criteria = new ArrayList<Criterion>(model.getCriteria());
 		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
 		this.iterations = iterations;
-		results = new SMAAResults(alternatives, criteria, 10);		
+		results = new SMAAResults(alternatives, criteria, 10);
+		sampler = new UtilitySampler(this.alternatives.size());
 		init();
 	}
 	
@@ -149,7 +151,7 @@ public class SMAASimulator {
 
 	private void sampleCriteria() {
 		for (int i=0;i<criteria.size();i++) {
-			criteria.get(i).sample(measurements[i]);
+			sampler.sample(criteria.get(i), measurements[i]);
 		}
 	}
 

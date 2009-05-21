@@ -48,8 +48,6 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		return name;
 	}
 	
-	public abstract void sample(double[] target);
-	
 	public void setName(String name) {
 		Object oldVal = this.name;
 		this.name = name;
