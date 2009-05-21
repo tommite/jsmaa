@@ -63,16 +63,9 @@ public abstract class CardinalCriterion<T extends Measurement> extends Criterion
 	}
 	
 	protected abstract Interval createScale(Map<Alternative, T> oldMeas);
-
-	@Override
-	public boolean deepEquals(Criterion<T> other) {
-		if (other instanceof CardinalCriterion) {
-			CardinalCriterion<T> co = (CardinalCriterion<T>) other;
-			if (!getAscending().equals(co.getAscending())) {
-				return false;
-			}
-		}
-		return super.deepEquals(other);
+	
+	protected void deepCopyAscending(CardinalCriterion<T> target) {
+		target.setAscending(ascending);
 	}
 	
 }

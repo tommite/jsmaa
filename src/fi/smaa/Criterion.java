@@ -94,26 +94,17 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		return getMeasurements().toString();
 	}
 
-	
-	public boolean deepEquals(Criterion<T> other) {
-		if (!name.equals(other.name)) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Criterion)) {
 			return false;
 		}
-		if (alternatives.size() != other.alternatives.size()) {
-			return false;
-		}
-		for (int i=0;i<alternatives.size();i++) {
-			if (!alternatives.get(i).deepEquals(other.alternatives.get(i))) {
-				return false;
-			}
-		}
-		if (!getMeasurements().equals(other.getMeasurements())) {
-			return false;
-		}
-		return true;	
+		Criterion c = (Criterion) other;
+		return name.equals(c.name);
 	}
 	
-	
+
 	public void setMeasurements(Map<Alternative, T> measurements) {
 		for (T g : getMeasurements().values()) {
 			g.removePropertyChangeListener(PROPERTY_MEASUREMENTS, measurementListener);
@@ -145,4 +136,19 @@ public abstract class Criterion<T extends Measurement> extends Model {
 			fireMeasurementChange();
 		}
 	}	
+
+	public abstract Criterion<T> deepCopy();
+
+	@SuppressWarnings("unchecked")
+	protected void deepCopyAlternativesAndMeasurements(Criterion target) {
+		List<Alternative> list = new ArrayList<Alternative>();
+		Map<Alternative, T> meas = new HashMap<Alternative, T>();		
+		for (Alternative a : alternatives) {
+			Alternative newAlt = a.deepCopy();
+			list.add(newAlt);
+			meas.put(newAlt, (T) measurements.get(a).deepCopy());
+		}
+		target.setAlternatives(list);
+		target.setMeasurements(meas);
+	}
 }

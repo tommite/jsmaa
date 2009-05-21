@@ -24,7 +24,7 @@ import java.util.List;
 
 import fi.smaa.common.RandomUtil;
 
-
+@SuppressWarnings("unchecked")
 public class SMAASimulator {
 	
 	private SimulationThread simulationThread;

@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.jgoodies.binding.beans.Model;
 
+@SuppressWarnings("unchecked")
 public class SMAAModel extends Model {
 	
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";
@@ -30,7 +31,6 @@ public class SMAAModel extends Model {
 	public final static String PROPERTY_NAME = "name";
 		
 	private List<Alternative> alternatives;
-	@SuppressWarnings("unchecked")
 	private List<Criterion> criteria;	
 	private String name;
 
@@ -43,7 +43,6 @@ public class SMAAModel extends Model {
 		init();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void init() {
 		alternatives = new ArrayList<Alternative>();
 		criteria = new ArrayList<Criterion>();
@@ -70,13 +69,15 @@ public class SMAAModel extends Model {
 		return name;
 	}	
 	
-	public void addAlternative(Alternative alt) {
+	public void addAlternative(Alternative alt) throws AlternativeExistsException {
+		if (getAlternatives().contains(alt)) {
+			throw new AlternativeExistsException();
+		}
 		List<Alternative> alts = new ArrayList<Alternative>(getAlternatives());
 		alts.add(alt);
 		setAlternatives(alts);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Criterion> getCriteria() {
 		return criteria;
 	}
@@ -86,7 +87,6 @@ public class SMAAModel extends Model {
 	 * 
 	 * @param criteria
 	 */
-	@SuppressWarnings("unchecked")
 	public void setCriteria(List<Criterion> criteria) {
 		Object oldVal = this.criteria;
 		this.criteria = criteria;
@@ -94,14 +94,12 @@ public class SMAAModel extends Model {
 		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void updateCriteriaAlternatives() {
-		for (Criterion c : criteria) {
+		for (Criterion<Measurement> c : criteria) {
 			c.setAlternatives(alternatives);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void addCriterion(Criterion cri) {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		crit.addAll(getCriteria());
@@ -114,7 +112,6 @@ public class SMAAModel extends Model {
 		return name;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public String toStringDeep() {
 		String ret = name + " : " + alternatives.size() + " alternatives - " + criteria.size() + " criteria\n";
 		ret += "Alternatives: " + alternatives + "\n";
@@ -134,7 +131,6 @@ public class SMAAModel extends Model {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
 		model.alternatives = new ArrayList<Alternative>();
@@ -143,7 +139,7 @@ public class SMAAModel extends Model {
 			model.alternatives.add(a.deepCopy());
 		}
 		for (Criterion c : criteria) {
-			// TODO finish
+			model.criteria.add(c.deepCopy());
 		}
 		return model;
 	}

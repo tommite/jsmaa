@@ -46,11 +46,11 @@ public class AlternativeTest {
 	}
 	
 	@Test
-	public void testDeepEquals() {
+	public void testEquals() {
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a1");
 		
-		assertTrue(a1.deepEquals(a2));
+		assertTrue(a1.equals(a2));
 	}
 
 }

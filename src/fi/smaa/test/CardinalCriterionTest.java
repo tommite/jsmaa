@@ -18,9 +18,6 @@
 
 package fi.smaa.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.CardinalCriterion;
+import fi.smaa.Criterion;
 import fi.smaa.Measurement;
 import fi.smaa.common.Interval;
 
@@ -69,22 +67,16 @@ public class CardinalCriterionTest {
 			protected Interval createScale(Map oldMeas) {
 				return null;
 			}
+			@Override
+			public Criterion deepCopy() {
+				return null;
+			}
 		};
 	}	
 
 	@Test
 	public void testSetAscending() {
 		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_ASCENDING, true, false);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDeepEquals() {
-		CardinalCriterion c2 = getInstance();
-		c2.setAscending(false);
-		assertFalse(criterion.deepEquals(c2));
-		c2.setAscending(true);
-		assertTrue(criterion.deepEquals(c2));
 	}
 
 }

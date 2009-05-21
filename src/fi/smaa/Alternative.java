@@ -43,9 +43,14 @@ public class Alternative extends Model {
 	public String toString() {
 		return name;
 	}
-	
-	public boolean deepEquals(Alternative other) {
-		return name.equals(other.name);
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Alternative)) {
+			return false;
+		}
+		Alternative ao = (Alternative) other;
+		return name.equals(ao.name);
 	}
 	
 	public Alternative deepCopy() {

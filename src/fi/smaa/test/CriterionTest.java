@@ -41,17 +41,14 @@ public class CriterionTest {
 	@SuppressWarnings("unchecked")
 	private Criterion criterion;
 	
+	private List<Alternative> alts;
+	
 	@SuppressWarnings("unchecked")
 	private Criterion createInstance() {
 		return new Criterion("name") {
 			public void sample(double[] target) {
 			}
 			public String getTypeLabel() {
-				return null;
-			}
-			protected void updateMeasurements() {
-			}
-			public String measurementsToString() {
 				return null;
 			}
 			protected Measurement createMeasurement() {
@@ -61,6 +58,10 @@ public class CriterionTest {
 			}
 			public Map getMeasurements() {
 				return new HashMap();
+			}
+			@Override
+			public Criterion deepCopy() {
+				return null;
 			}			
 		};
 		
@@ -69,6 +70,8 @@ public class CriterionTest {
 	@Before
 	public void setUp() {
 		criterion = createInstance();
+		alts = new ArrayList<Alternative>();
+		alts.add(new Alternative("alt"));			
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -100,15 +103,11 @@ public class CriterionTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testDeepEquals() {
+	public void testequals() {
 		Criterion c2 = createInstance();
-		List<Alternative> list = new ArrayList<Alternative>();
-		list.add(new Alternative("alt"));
-		criterion.setAlternatives(list);
-		c2.setAlternatives(list);
-		assertTrue(criterion.deepEquals(c2));
-		c2.setAlternatives(new ArrayList<Alternative>());
-		assertFalse(criterion.deepEquals(c2));
+		assertTrue(criterion.equals(c2));
+		c2.setName("newname");
+		assertFalse(criterion.equals(c2));
 	}
-
+	
 }

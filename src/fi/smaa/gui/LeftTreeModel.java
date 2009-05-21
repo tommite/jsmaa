@@ -31,7 +31,7 @@ import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.SMAAModel;
 
-
+@SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
 	private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
 	private SMAAModel smaaModel;

@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fi.smaa.Alternative;
+import fi.smaa.AlternativeExistsException;
+import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
 import fi.smaa.OrdinalCriterion;
@@ -37,7 +39,7 @@ public class TestData {
 	public Alternative alt2;
 	public OrdinalCriterion crit1;	
 	public UniformCriterion crit2;	
-	public GaussianCriterion crit3;	
+	public Criterion<GaussianMeasurement> crit3;	
 	public Map<Alternative, Rank> ranks;
 	public Map<Alternative, Interval> intervals;
 	public Map<Alternative, GaussianMeasurement> gaussianMeasurements;
@@ -62,8 +64,13 @@ public class TestData {
 		gaussianMeasurements.put(alt1, new GaussianMeasurement(0.5, 3.0));
 		gaussianMeasurements.put(alt2, new GaussianMeasurement(1.5, 2.0));
 		
-		model.addAlternative(alt1);
-		model.addAlternative(alt2);
+		
+		try {
+			model.addAlternative(alt1);
+			model.addAlternative(alt2);			
+		} catch (AlternativeExistsException e) {
+			e.printStackTrace();
+		}
 		model.addCriterion(crit1);
 		model.addCriterion(crit2);
 		model.addCriterion(crit3);

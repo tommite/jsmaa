@@ -60,4 +60,9 @@ public class Rank extends Measurement {
 	public String toString() {
 		return rank.toString();
 	}
+
+	@Override
+	public Measurement deepCopy() {
+		return new Rank(rank);
+	}
 }

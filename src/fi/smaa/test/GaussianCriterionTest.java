@@ -20,8 +20,6 @@ package fi.smaa.test;
 
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -73,14 +71,6 @@ public class GaussianCriterionTest {
 		// something goes in there
 		assertEquals(1.0, tgt[1], 0.001);
 	}
-	
-	private HashMap<Alternative, GaussianMeasurement> generateMeas2Alts2() {
-		HashMap<Alternative, GaussianMeasurement> meas
-			= new HashMap<Alternative, GaussianMeasurement>();
-		meas.put(alts.get(0), new GaussianMeasurement(0.0, 0.0));
-		meas.put(alts.get(1), new GaussianMeasurement(0.5, 0.0));
-		return meas;
-	}	
 
 	private HashMap<Alternative, GaussianMeasurement> generateMeas2Alts() {
 		HashMap<Alternative, GaussianMeasurement> meas
@@ -119,19 +109,5 @@ public class GaussianCriterionTest {
 		crit.setMeasurements(generateMeas2Alts());
 		verify(mock);
 	}
-	
-	@Test
-	public void testDeepEquals() {
-		GaussianCriterion c2 = new GaussianCriterion("crit");
-		crit.setAlternatives(alts);
-		c2.setAlternatives(alts);
 		
-		crit.setMeasurements(generateMeas2Alts());
-		c2.setMeasurements(generateMeas2Alts());
-		assertTrue(crit.deepEquals(c2));
-		
-		c2.setMeasurements(generateMeas2Alts2());
-		assertFalse(crit.deepEquals(c2));
-	}
-	
 }

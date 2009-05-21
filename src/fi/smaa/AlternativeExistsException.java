@@ -18,12 +18,6 @@
 
 package fi.smaa;
 
-import com.jgoodies.binding.beans.Model;
+public class AlternativeExistsException extends Exception {
 
-/**
- * Marking abstract class
- */
-public abstract class Measurement extends Model {
-	
-	public abstract Measurement deepCopy();
 }

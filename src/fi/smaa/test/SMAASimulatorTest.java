@@ -84,7 +84,7 @@ public class SMAASimulatorTest {
 		Alternative alt1 = new Alternative("a1");
 		Alternative alt2 = new Alternative("a2");
 		UniformCriterion c1 = new UniformCriterion("c1");
-		GaussianCriterion c2 = new GaussianCriterion("c2");
+		Criterion<GaussianMeasurement> c2 = new GaussianCriterion("c2");
 		
 		ArrayList<Alternative> alts2 = new ArrayList<Alternative>();
 		alts2.add(alt1);

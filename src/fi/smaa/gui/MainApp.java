@@ -48,6 +48,7 @@ import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
 import fi.smaa.Alternative;
+import fi.smaa.AlternativeExistsException;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.OrdinalCriterion;
@@ -57,6 +58,7 @@ import fi.smaa.SMAAResultsListener;
 import fi.smaa.SMAASimulator;
 import fi.smaa.UniformCriterion;
 
+@SuppressWarnings("unchecked")
 public class MainApp {
 	
 	private JFrame frame;
@@ -258,8 +260,12 @@ public class MainApp {
 				}
 			}
 			if (!found) {
-				model.addAlternative(a);
-				expandLeftMenu();
+				try {
+					model.addAlternative(a);
+					expandLeftMenu();				
+				} catch (AlternativeExistsException e) {
+					throw new RuntimeException("Error: alternative with this name shouldn't exist");
+				}
 				return;
 			}
 			index++;

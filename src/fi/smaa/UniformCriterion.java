@@ -67,4 +67,13 @@ public class UniformCriterion extends CardinalCriterion<Interval> {
 	protected Interval createMeasurement() {
 		return new Interval();
 	}
+
+	@Override
+	public UniformCriterion deepCopy() {
+		UniformCriterion c = new UniformCriterion(name);
+		deepCopyAscending(c);
+		deepCopyAlternativesAndMeasurements(c);
+		return c;
+	}
+
 }

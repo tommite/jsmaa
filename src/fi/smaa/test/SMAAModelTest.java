@@ -19,6 +19,7 @@
 package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -93,7 +94,6 @@ public class SMAAModelTest {
 		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_ALTERNATIVES, "deleteAlternative", a);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testDeepCopy() {
 		TestData td = new TestData();
@@ -103,10 +103,20 @@ public class SMAAModelTest {
 		
 		SMAAModel model = td.model.deepCopy();
 		assertEquals(model.getName(), td.model.getName());
-		assertTrue(td.alt1.deepEquals(model.getAlternatives().get(0)));
-		assertTrue(td.alt2.deepEquals(model.getAlternatives().get(1)));
-		assertTrue(td.crit1.deepEquals(model.getCriteria().get(0)));
-		assertTrue(td.crit2.deepEquals(model.getCriteria().get(1)));
-		assertTrue(td.crit3.deepEquals(model.getCriteria().get(2)));
+		assertTrue(td.alt1.equals(model.getAlternatives().get(0)));
+		assertFalse(td.alt1 == model.getAlternatives().get(0));		
+		assertTrue(td.alt2.equals(model.getAlternatives().get(1)));
+		assertFalse(td.alt1 == model.getAlternatives().get(1));
+		System.out.println(td.crit1);
+		System.out.println(td.crit1.measurementsToString());
+		System.out.println(model.getCriteria().get(0));
+		System.out.println(model.getCriteria().get(0).measurementsToString());		
+		assertTrue(td.crit1.equals(model.getCriteria().get(0)));
+		assertFalse(td.crit1 == model.getCriteria().get(0));		
+		assertTrue(td.crit2.equals(model.getCriteria().get(1)));
+		assertFalse(td.crit2 == model.getCriteria().get(1));				
+		assertTrue(td.crit3.equals(model.getCriteria().get(2)));
+		assertFalse(td.crit3 == model.getCriteria().get(2));				
+		
 	}
 }

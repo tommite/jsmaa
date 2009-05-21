@@ -42,6 +42,7 @@ public class CriteriaListView implements ViewBuilder {
 		this.model = model;
 	}
 
+	@SuppressWarnings("unchecked")
 	public JComponent buildPanel() {
 		
 		FormLayout layout = new FormLayout(

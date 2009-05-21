@@ -18,13 +18,16 @@
 
 package fi.smaa.gui.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.Alternative;
-import fi.smaa.Criterion;
+import fi.smaa.AlternativeExistsException;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.SMAAModel;
 import fi.smaa.gui.LeftTreeModel;
@@ -35,7 +38,7 @@ public class LeftTreeModelTest {
 	private SMAAModel smaaModel;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private Criterion crit1 = new GaussianCriterion("crit1");
+	private GaussianCriterion crit1 = new GaussianCriterion("crit1");
 	
 	@Before
 	public void setUp() {
@@ -45,8 +48,12 @@ public class LeftTreeModelTest {
 	
 	private SMAAModel createSmaaModel() {
 		SMAAModel model = new SMAAModel();
-		model.addAlternative(alt1);
-		model.addAlternative(alt2);
+		try {
+			model.addAlternative(alt1);
+			model.addAlternative(alt2);
+		} catch (AlternativeExistsException e) {
+			
+		}
 		model.addCriterion(crit1);
 		return model;
 	}

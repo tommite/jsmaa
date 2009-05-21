@@ -115,4 +115,11 @@ public class OrdinalCriterion extends Criterion<Rank> {
 	protected void fireMeasurementChange() {
 		ensureRanks();
 	}
+
+	@Override
+	public OrdinalCriterion deepCopy() {
+		OrdinalCriterion crit = new OrdinalCriterion(name);
+		deepCopyAlternativesAndMeasurements(crit);
+		return crit;
+	}
 }

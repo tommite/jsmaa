@@ -68,4 +68,9 @@ public class GaussianMeasurement extends Measurement {
 		GaussianMeasurement mo = (GaussianMeasurement) other;
 		return mean.equals(mo.getMean()) && stDev.equals(mo.getStDev());
 	}
+	
+	@Override
+	public Measurement deepCopy() {
+		return new GaussianMeasurement(mean, stDev);
+	}
 }
