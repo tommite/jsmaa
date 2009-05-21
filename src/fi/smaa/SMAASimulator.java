@@ -45,13 +45,34 @@ public class SMAASimulator {
 	
 	private class MeasurementChangeListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
+			if (evt.getSource() instanceof Measurement ||
+					evt.getPropertyName().equals(CardinalCriterion.PROPERTY_ASCENDING)) {
 				restart();
 			}
 		}		
 	}
 	
-	public SMAASimulator(SMAAModel model, Integer iterations) {
+	private static SMAASimulator simulator;
+	
+	public static SMAASimulator initSimulator(SMAAModel model, Integer iterations) {
+		if (simulator != null) {
+			simulator.stop();
+			simulator.disconnectListeners();
+		}
+		simulator = new SMAASimulator(model, iterations);
+		return simulator;
+	}
+	
+	private void disconnectListeners() {
+		for (Criterion<Measurement> c : criteria) {
+			c.removePropertyChangeListener(listener);
+			for (Measurement m : c.getMeasurements().values()) {
+				m.removePropertyChangeListener(listener);
+			}
+		}		
+	}
+
+	private SMAASimulator(SMAAModel model, Integer iterations) {
 		this.criteria = new ArrayList<Criterion>(model.getCriteria());
 		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
 		this.iterations = iterations;
@@ -62,8 +83,11 @@ public class SMAASimulator {
 	}
 	
 	private void connectListeners() {
-		for (Criterion c : criteria) {
+		for (Criterion<Measurement> c : criteria) {
 			c.addPropertyChangeListener(listener);
+			for (Measurement m : c.getMeasurements().values()) {
+				m.addPropertyChangeListener(listener);
+			}
 		}
 	}
 
@@ -78,11 +102,6 @@ public class SMAASimulator {
 	synchronized public void stop() {
 		if (simulationThread != null) {
 			simulationThread.stopSimulation();
-			try {
-				simulationThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			simulationThread = null;
 		}		
 	}
@@ -107,13 +126,31 @@ public class SMAASimulator {
 	private SimulationThread createSimulationThread() {
 		return new SimulationThread(iterations) {
 			public void iterate() {
+				lockCriteria();
 				generateWeights();
 				sampleCriteria();
 				aggregate();
 				rankAlternatives();
 				updateHits();
-			}			
+				releaseCriteria();
+			}
 		};
+	}
+
+	protected void releaseCriteria() {
+		for (Criterion c : criteria) {
+			c.getChangeSemaphore().release();
+		}		
+	}
+
+	protected void lockCriteria() {
+		for (Criterion c : criteria) {
+			try {
+				c.getChangeSemaphore().acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void resetValues() {

@@ -26,7 +26,7 @@ public class UtilitySampler {
 	
 	public UtilitySampler(int numAlts) {
 		this.numAlts = numAlts;
-		tmparr = new double[numAlts];	
+		tmparr = new double[numAlts];			
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,8 +64,8 @@ public class UtilitySampler {
 	}
 
 	public void sample(UniformCriterion c, double[] target) {
-		assert(target.length == c.getAlternatives().size());
-		
+		assert(target.length == numAlts);
+
 		for (int i=0;i<numAlts;i++) {
 			Alternative a = c.getAlternatives().get(i);
 			double intMin = c.getMeasurements().get(a).getStart();

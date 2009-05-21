@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import com.jgoodies.binding.beans.Model;
 
@@ -38,9 +39,15 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
 	protected Map<Alternative, T> measurements = new HashMap<Alternative, T>();
 	private MeasurementListener measurementListener = new MeasurementListener();
+	
+	private Semaphore changeSemaphore = new Semaphore(1);
 
 	protected Criterion(String name) {
 		this.name = name;
+	}
+	
+	public Semaphore getChangeSemaphore() {
+		return changeSemaphore;
 	}
 	
 	@Override
@@ -71,11 +78,17 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	public void setAlternatives(List<Alternative> alternatives) throws NullPointerException {
 		if (alternatives == null) {
 			throw new NullPointerException();
+		}		
+		try {
+			changeSemaphore.acquire();		
+			Object oldVal = this.alternatives;
+			this.alternatives = alternatives;
+			firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);		
+			updateMeasurements();
+			changeSemaphore.release();				
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		Object oldVal = this.alternatives;
-		this.alternatives = alternatives;
-		firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);
-		updateMeasurements();
 	}
 	
 	public abstract String getTypeLabel();
@@ -109,7 +122,7 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		}
 		Map<Alternative, T> oldVal = this.measurements;
 		this.measurements = measurements;
-		
+
 		for (T g : getMeasurements().values()) {
 			g.addPropertyChangeListener(measurementListener);
 		}

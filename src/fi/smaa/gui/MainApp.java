@@ -297,7 +297,7 @@ public class MainApp {
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
-					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA)) {	
+					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA)) {
 				buildNewSimulator();
 				rebuildRightPanel();
 				expandLeftMenu();
@@ -306,10 +306,7 @@ public class MainApp {
 	}
 
 	private void buildNewSimulator() {
-		if (simulator != null) {
-			simulator.stop();
-		}
-		simulator = new SMAASimulator(model, 10000);
+		simulator = SMAASimulator.initSimulator(model, 10000);		
 		results = simulator.getResults();
 		results.addResultsListener(new SimulationProgressListener());
 		if (rightViewBuilder instanceof CentralWeightsView) {
