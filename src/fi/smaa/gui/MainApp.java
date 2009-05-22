@@ -71,6 +71,7 @@ public class MainApp {
 	private LeftTreeModel leftTreeModel;
 	private JProgressBar simulationProgress;
 	private JScrollPane rightPane;
+	private JMenuItem editRenameItem;
 
 	/**
 	 * @param args
@@ -177,16 +178,29 @@ public class MainApp {
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
 		JMenu fileMenu = createFileMenu();
+		JMenu editMenu = createEditMenu();
 		JMenu modelMenu = createModelMenu();
 		JMenu critMenu = createCriteriaMenu();	
 		JMenu altMenu = createAlternativeMenu();
 		
 		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
 		menuBar.add(modelMenu);
 		menuBar.add(critMenu);
 		menuBar.add(altMenu);
 		
 		return menuBar;
+	}
+
+
+	private JMenu createEditMenu() {
+		JMenu editMenu = new JMenu("Edit");
+		editMenu.setMnemonic('e');
+		editRenameItem = new JMenuItem("Rename");
+		editRenameItem.setMnemonic('r');
+		editRenameItem.setEnabled(false);
+		editMenu.add(editRenameItem);
+		return editMenu;
 	}
 
 
@@ -343,19 +357,34 @@ public class MainApp {
 	
 	private class LeftTreeSelectionListener implements TreeSelectionListener {
 		public void valueChanged(TreeSelectionEvent e) {
-			Object node = e.getPath().getLastPathComponent();
+			//Object node = e.getPath().getLastPathComponent();
+			if (e.getNewLeadSelectionPath() == null) {
+				editRenameItem.setEnabled(false);				
+				return;
+			}
+			Object node = e.getNewLeadSelectionPath().getLastPathComponent();
 			if (node == leftTreeModel.getAlternativesNode()) {
 				setRightViewToAlternatives();
+				editRenameItem.setEnabled(false);
 			} else if (node == leftTreeModel.getCriteriaNode()){
 				setRightViewToCriteria();
+				editRenameItem.setEnabled(false);				
 			} else if (node instanceof Criterion) {
 				setRightViewToCriterion((Criterion)node);
+				editRenameItem.setEnabled(true);				
 			} else if (node instanceof Alternative) {
 				// do something? maybe not
+				editRenameItem.setEnabled(true);				
 			} else if (node == leftTreeModel.getCentralWeightsNode()) {
 				setRightViewToCentralWeights();
+				editRenameItem.setEnabled(false);				
 			} else if (node == leftTreeModel.getRankAcceptabilitiesNode()) {
 				setRightViewToRankAcceptabilities();
+				editRenameItem.setEnabled(false);				
+			} else if (node == leftTreeModel.getModelNode()) {
+				editRenameItem.setEnabled(true);
+			} else {
+				editRenameItem.setEnabled(false);
 			}
 		}		
 	}
