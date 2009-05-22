@@ -514,7 +514,7 @@ public class MainApp {
 		public void valueChanged(TreeSelectionEvent e) {
 			//Object node = e.getPath().getLastPathComponent();
 			if (e.getNewLeadSelectionPath() == null) {
-				editRenameItem.setEnabled(false);				
+				setEditMenuItemsEnabled(false);				
 				return;
 			}
 			Object node = e.getNewLeadSelectionPath().getLastPathComponent();
