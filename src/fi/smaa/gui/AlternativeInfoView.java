@@ -18,15 +18,10 @@
 
 package fi.smaa.gui;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import nl.rug.escher.common.gui.LayoutUtil;
 import nl.rug.escher.common.gui.ViewBuilder;
-
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -46,10 +41,10 @@ public class AlternativeInfoView implements ViewBuilder {
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"pref, 3dlu, pref, 3dlu, pref",
+				"pref",
 				"p" );
 		
-		int fullWidth = 5;
+		int fullWidth = 1;
 
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
@@ -65,26 +60,10 @@ public class AlternativeInfoView implements ViewBuilder {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
-			JButton button = new JButton("Delete");
-			button.addActionListener(new DeleteAction(a));
-
-			builder.add(button, cc.xy(3, row));
 			row += 2;
 		}
 		
 		return builder.getPanel();
-	}
-	
-	private class DeleteAction extends AbstractAction {
-		private Alternative a;
-		
-		public DeleteAction(Alternative a) {
-			this.a = a;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			model.deleteAlternative(a);
-		}
 	}
 
 }
