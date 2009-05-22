@@ -26,7 +26,6 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -37,7 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
-import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -163,7 +161,7 @@ public class MainApp {
 		leftTreeModel = new LeftTreeModel(model);
 		leftTree = new JTree(new LeftTreeModel(model));
 		leftTree.addTreeSelectionListener(new LeftTreeSelectionListener());
-		leftTree.setEditable(false);
+		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
 	}
 	
@@ -278,8 +276,7 @@ public class MainApp {
 
 
 	protected void startRenameModel() {
-		// TODO Auto-generated method stub
-		
+		leftTree.startEditingAtPath(new TreePath(new Object[]{leftTreeModel.getModelNode()}));
 	}
 
 

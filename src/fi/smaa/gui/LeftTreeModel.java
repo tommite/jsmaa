@@ -54,6 +54,10 @@ public class LeftTreeModel implements TreeModel{
 		smaaModel.addPropertyChangeListener(new SMAAModelListener());
 	}
 	
+	public Object getModelNode() {
+		return smaaModel;
+	}
+	
 	public Object getAlternativesNode() {
 		return alternativesNode;
 	}
