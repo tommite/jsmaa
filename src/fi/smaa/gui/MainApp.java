@@ -124,7 +124,8 @@ public class MainApp {
 	}
 	
 	private JComponent createToolBar() {
-		simulationProgress = new JProgressBar();		
+		simulationProgress = new JProgressBar();	
+		simulationProgress.setStringPainted(true);
 		JToolBar bar = new JToolBar();
 		bar.add(simulationProgress);
 		bar.setFloatable(false);
@@ -161,7 +162,7 @@ public class MainApp {
 		leftTreeModel = new LeftTreeModel(model);
 		leftTree = new JTree(new LeftTreeModel(model));
 		leftTree.addTreeSelectionListener(new LeftTreeSelectionListener());
-		leftTree.setEditable(true);
+		leftTree.setEditable(false);
 		splitPane.setLeftComponent(leftTree);
 	}
 	
@@ -320,7 +321,13 @@ public class MainApp {
 	
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
-			simulationProgress.setValue(results.getIteration() * 100 / simulator.getTotalIterations());
+			int amount = results.getIteration() * 100 / simulator.getTotalIterations();
+			simulationProgress.setValue(amount);
+			if (amount < 100) {
+				simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");
+			} else {
+				simulationProgress.setString("Simulation complete.");
+			}
 		}
 	}
 
