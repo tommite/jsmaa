@@ -69,7 +69,7 @@ public class CriterionView implements ViewBuilder {
 		
 		builder.addSeparator("Criterion", cc.xyw(1,1, fullWidth));
 		builder.addLabel("Name:", cc.xy(1, 3));
-		builder.add(BasicComponentFactory.createTextField(pm.getModel(Criterion.PROPERTY_NAME)),
+		builder.add(BasicComponentFactory.createLabel(pm.getModel(Criterion.PROPERTY_NAME)),
 				cc.xyw(3, 3, fullWidth-2)
 				);
 		builder.addLabel("Type:", cc.xy(1, 5));

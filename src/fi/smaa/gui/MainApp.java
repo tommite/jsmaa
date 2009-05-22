@@ -19,10 +19,15 @@
 package fi.smaa.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
+import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -31,14 +36,20 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.WindowConstants;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeCellEditor;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 import nl.rug.escher.common.gui.GUIHelper;
@@ -164,7 +175,77 @@ public class MainApp {
 		leftTree.addTreeSelectionListener(new LeftTreeSelectionListener());
 		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
+		leftTree.setCellEditor(new MyCellEditor(leftTree, new DefaultTreeCellRenderer()));
 	}
+	
+	private class MyCellEditor extends DefaultTreeCellEditor {
+		
+		private ArrayList<String> oldNames = new ArrayList<String>();
+		private String oldName;
+		
+		public MyCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
+			super(tree, renderer);
+			addCellEditorListener(new CellEditorListener() {
+				public void editingCanceled(ChangeEvent e) {
+					validateEditing();					
+				}
+
+				public void editingStopped(ChangeEvent e) {
+					validateEditing();
+				}
+
+				private void validateEditing() {
+					String newName = (String) getCellEditorValue();
+					Object editObject = lastPath.getLastPathComponent();
+					
+					if (editObject instanceof Alternative) {
+						if (!isValidName(newName)) {
+							showErrorAlternativeExists(newName);
+							leftTree.startEditingAtPath(lastPath);							
+						}
+					} else if (editObject instanceof Criterion) {
+						if (!isValidName(newName)) {
+							showErrorCriterionExists(newName);
+							leftTree.startEditingAtPath(lastPath);
+						}
+					}
+				}
+			});
+		}
+		
+		private boolean isValidName(String name) {
+			return !oldNames.contains(name) || name.equals(oldName);
+		}
+		
+		@Override
+		public void prepareForEditing() {
+			oldNames.clear();
+			Object obj = lastPath.getLastPathComponent();
+			if (obj instanceof Alternative) {
+				oldName = ((Alternative) obj).getName();
+				for (Alternative a : model.getAlternatives()) {
+					oldNames.add(a.getName());
+				}
+			} else if (obj instanceof Criterion) {
+				oldName = ((Criterion) obj).getName();				
+				for (Criterion c : model.getCriteria()) {
+					oldNames.add(c.getName());
+				}
+			}
+			super.prepareForEditing();
+		}
+	}
+	
+
+	private void showErrorCriterionExists(String name) {
+		JOptionPane.showMessageDialog(leftTree, "There exists a criterion with name: " + name 
+				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);		
+	}					
+	
+	private void showErrorAlternativeExists(String name) {
+		JOptionPane.showMessageDialog(leftTree, "There exists an alternative with name: " + name 
+				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);
+	}	
 	
 	private void expandLeftMenu() {
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode()}));
@@ -442,8 +523,8 @@ public class MainApp {
 		}
 		simulationProgress.setValue(0);
 		simulator.restart();	
-	}
-	
+	}	
+
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
 			int amount = results.getIteration() * 100 / simulator.getTotalIterations();

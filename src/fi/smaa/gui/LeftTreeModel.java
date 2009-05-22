@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -30,6 +31,7 @@ import javax.swing.tree.TreePath;
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.SMAAModel;
+import fi.smaa.UniformCriterion;
 
 @SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
@@ -199,9 +201,13 @@ public class LeftTreeModel implements TreeModel{
 		Object obj = path.getLastPathComponent();
 		
 		if (obj instanceof Alternative) {
-			((Alternative) obj).setName((String) newValue);
+			if (!smaaModel.getAlternatives().contains(new Alternative((String)newValue))) {
+				((Alternative) obj).setName((String) newValue);
+			}
 		} else if (obj instanceof Criterion) {
-			((Criterion) obj).setName((String) newValue);
+			if (!smaaModel.getCriteria().contains(new UniformCriterion((String)newValue))) {			
+				((Criterion) obj).setName((String) newValue);
+			}
 		} else if (obj instanceof SMAAModel) {
 			((SMAAModel) obj).setName((String) newValue);
 		}
