@@ -179,17 +179,43 @@ public class MainApp {
 		
 		JMenu fileMenu = createFileMenu();
 		JMenu editMenu = createEditMenu();
-		JMenu modelMenu = createModelMenu();
 		JMenu critMenu = createCriteriaMenu();	
 		JMenu altMenu = createAlternativeMenu();
+		JMenu resultsMenu = createResultsMenu();
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
-		menuBar.add(modelMenu);
 		menuBar.add(critMenu);
 		menuBar.add(altMenu);
+		menuBar.add(resultsMenu);
 		
 		return menuBar;
+	}
+
+
+	private JMenu createResultsMenu() {
+		JMenu resultsMenu = new JMenu("Results");
+		resultsMenu.setMnemonic('r');
+		JMenuItem cwItem = new JMenuItem("Central weight vectors");
+		cwItem.setMnemonic('c');
+		JMenuItem racsItem = new JMenuItem("Rank acceptability indices");
+		racsItem.setMnemonic('r');
+		
+		cwItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				setRightViewToCentralWeights();
+			}
+		});
+		
+		racsItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				setRightViewToRankAcceptabilities();
+			}			
+		});
+		
+		resultsMenu.add(cwItem);
+		resultsMenu.add(racsItem);
+		return resultsMenu;
 	}
 
 
@@ -199,10 +225,19 @@ public class MainApp {
 		editRenameItem = new JMenuItem("Rename");
 		editRenameItem.setMnemonic('r');
 		editRenameItem.setEnabled(false);
+		editRenameItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				menuRenameClicked();
+			}			
+		});
 		editMenu.add(editRenameItem);
 		return editMenu;
 	}
 
+
+	protected void menuRenameClicked() {
+		leftTree.startEditingAtPath(leftTree.getSelectionPath());
+	}
 
 	private JMenu createFileMenu() {
 		JMenu fileMenu = new JMenu("File");
@@ -225,47 +260,48 @@ public class MainApp {
 
 
 	private JMenu createAlternativeMenu() {
-		JMenu alternativeMenu = new JMenu("Alternative");
+		JMenu alternativeMenu = new JMenu("Alternatives");
 		alternativeMenu.setMnemonic('a');
-		JMenuItem addAltButton = new JMenuItem("New");
+		JMenuItem showItem = new JMenuItem("Show");
+		showItem.setMnemonic('s');
+		JMenuItem addAltButton = new JMenuItem("Add new");
 		addAltButton.setMnemonic('n');
+		
+		showItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				setRightViewToAlternatives();
+			}			
+		});
 				
 		addAltButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative();
 			}
 		});
+		alternativeMenu.add(showItem);
+		alternativeMenu.addSeparator();
 		alternativeMenu.add(addAltButton);
 		return alternativeMenu;
 	}
 
 
-	private JMenu createModelMenu() {
-		JMenu modelMenu = new JMenu("Model");
-		modelMenu.setMnemonic('m');
-		JMenuItem modelRename = new JMenuItem("Rename");
-		modelRename.setMnemonic('r');
-		modelRename.addActionListener(new AbstractAction() {
+	private JMenu createCriteriaMenu() {
+		JMenu criteriaMenu = new JMenu("Criteria");
+		criteriaMenu.setMnemonic('c');
+		JMenuItem showItem = new JMenuItem("Show");
+		showItem.setMnemonic('s');
+		JMenuItem addUnifButton = new JMenuItem("Add uniform");
+		addUnifButton.setMnemonic('u');
+		JMenuItem addGaussianButton = new JMenuItem("Add gaussian");
+		addGaussianButton.setMnemonic('g');
+		JMenuItem addOrdinalButton = new JMenuItem("Add ordinal");
+		addOrdinalButton.setMnemonic('o');
+		
+		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				startRenameModel();
+				setRightViewToCriteria();
 			}
 		});
-		modelMenu.add(modelRename);
-		return modelMenu;
-	}
-
-
-	private JMenu createCriteriaMenu() {
-		JMenu criteriaMenu = new JMenu("Criterion");
-		criteriaMenu.setMnemonic('c');
-		JMenu addCritMenu = new JMenu("New");
-		addCritMenu.setMnemonic('n');
-		JMenuItem addUnifButton = new JMenuItem("Uniform");
-		addUnifButton.setMnemonic('u');
-		JMenuItem addGaussianButton = new JMenuItem("Gaussian");
-		addGaussianButton.setMnemonic('g');
-		JMenuItem addOrdinalButton = new JMenuItem("Ordinal");
-		addOrdinalButton.setMnemonic('o');
 		addUnifButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addUniformCriterion();
@@ -274,25 +310,20 @@ public class MainApp {
 		addGaussianButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addGaussianCriterion();
-			}			
+			}
 		});
 		addOrdinalButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addOrdinalCriterion();
 			}			
 		});
-		addCritMenu.add(addUnifButton);
+		criteriaMenu.add(showItem);
+		criteriaMenu.addSeparator();
+		criteriaMenu.add(addUnifButton);
 		//toolBarAddCritMenu.add(addOrdinalButton);			
-		addCritMenu.add(addGaussianButton);
-		criteriaMenu.add(addCritMenu);
+		criteriaMenu.add(addGaussianButton);
 		return criteriaMenu;
 	}
-
-
-	protected void startRenameModel() {
-		leftTree.startEditingAtPath(new TreePath(new Object[]{leftTreeModel.getModelNode()}));
-	}
-
 
 	protected void addGaussianCriterion() {
 		model.addCriterion(new GaussianCriterion(generateNextCriterionName()));
