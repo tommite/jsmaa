@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -177,17 +178,82 @@ public class MainApp {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
-		JButton addAltButton = new JButton("New alternative");
-		JMenu addCritMenu = new JMenu("New criterion");
-		JMenuItem addUnifButton = new JMenuItem("Uniform");
-		JMenuItem addGaussianButton = new JMenuItem("Gaussian");
-		JMenuItem addOrdinalButton = new JMenuItem("Ordinal");
+		JMenu fileMenu = createFileMenu();
+		JMenu modelMenu = createModelMenu();
+		JMenu critMenu = createCriteriaMenu();	
+		JMenu altMenu = createAlternativeMenu();
+		
+		menuBar.add(fileMenu);
+		menuBar.add(modelMenu);
+		menuBar.add(critMenu);
+		menuBar.add(altMenu);
+		
+		return menuBar;
+	}
+
+
+	private JMenu createFileMenu() {
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic('f');
+		JMenuItem quitItem = new JMenuItem("Quit");
+		quitItem.setMnemonic('q');
+		fileMenu.add(quitItem);
+		quitItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				quit();
+			}
+		});
+		return fileMenu;
+	}
+
+
+	protected void quit() {
+		System.exit(0);
+	}
+
+
+	private JMenu createAlternativeMenu() {
+		JMenu alternativeMenu = new JMenu("Alternative");
+		alternativeMenu.setMnemonic('a');
+		JMenuItem addAltButton = new JMenuItem("New");
+		addAltButton.setMnemonic('n');
 				
 		addAltButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative();
 			}
 		});
+		alternativeMenu.add(addAltButton);
+		return alternativeMenu;
+	}
+
+
+	private JMenu createModelMenu() {
+		JMenu modelMenu = new JMenu("Model");
+		modelMenu.setMnemonic('m');
+		JMenuItem modelRename = new JMenuItem("Rename");
+		modelRename.setMnemonic('r');
+		modelRename.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				startRenameModel();
+			}
+		});
+		modelMenu.add(modelRename);
+		return modelMenu;
+	}
+
+
+	private JMenu createCriteriaMenu() {
+		JMenu criteriaMenu = new JMenu("Criterion");
+		criteriaMenu.setMnemonic('c');
+		JMenu addCritMenu = new JMenu("New");
+		addCritMenu.setMnemonic('n');
+		JMenuItem addUnifButton = new JMenuItem("Uniform");
+		addUnifButton.setMnemonic('u');
+		JMenuItem addGaussianButton = new JMenuItem("Gaussian");
+		addGaussianButton.setMnemonic('g');
+		JMenuItem addOrdinalButton = new JMenuItem("Ordinal");
+		addOrdinalButton.setMnemonic('o');
 		addUnifButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addUniformCriterion();
@@ -203,15 +269,17 @@ public class MainApp {
 				addOrdinalCriterion();
 			}			
 		});
-
-		
 		addCritMenu.add(addUnifButton);
+		//toolBarAddCritMenu.add(addOrdinalButton);			
 		addCritMenu.add(addGaussianButton);
-		//toolBarAddCritMenu.add(addOrdinalButton);
-		menuBar.add(addAltButton);
-		menuBar.add(addCritMenu);
+		criteriaMenu.add(addCritMenu);
+		return criteriaMenu;
+	}
+
+
+	protected void startRenameModel() {
+		// TODO Auto-generated method stub
 		
-		return menuBar;
 	}
 
 
