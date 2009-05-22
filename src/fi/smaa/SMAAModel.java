@@ -131,6 +131,14 @@ public class SMAAModel extends Model {
 		}
 	}
 	
+	public void deleteCriterion(Criterion c) {
+		List<Criterion> newCrit = new ArrayList<Criterion>();
+		newCrit.addAll(criteria);
+		if (newCrit.remove(c)) {
+			setCriteria(newCrit);
+		}		
+	}
+	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
 		model.alternatives = new ArrayList<Alternative>();

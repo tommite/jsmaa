@@ -78,6 +78,7 @@ public class MainApp {
 	private JProgressBar simulationProgress;
 	private JScrollPane rightPane;
 	private JMenuItem editRenameItem;
+	private JMenuItem editDeleteItem;
 
 	/**
 	 * @param args
@@ -301,15 +302,62 @@ public class MainApp {
 		editRenameItem = new JMenuItem("Rename");
 		editRenameItem.setMnemonic('r');
 		editRenameItem.setEnabled(false);
+		editDeleteItem = new JMenuItem("Delete");
+		editDeleteItem.setMnemonic('d');
+		editDeleteItem.setEnabled(false);
+		
 		editRenameItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				menuRenameClicked();
 			}			
 		});
+		
+		editDeleteItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				menuDeleteClicked();
+			}
+		});
 		editMenu.add(editRenameItem);
+		editMenu.add(editDeleteItem);
 		return editMenu;
 	}
 
+	
+	private void menuDeleteClicked() {
+		Object selection = getLeftMenuSelection();
+		if (selection instanceof Alternative) {
+			confirmDeleteAlternative((Alternative) selection);
+		} else if (selection instanceof Criterion) {
+			confirmDeleteCriterion((Criterion)selection);
+		}
+	}
+
+
+	private void confirmDeleteCriterion(Criterion criterion) {
+		int conf = JOptionPane.showConfirmDialog(frame, 
+				"Do you really want to delete criterion " + criterion + "?",
+				"Confirm deletion",					
+				JOptionPane.YES_NO_OPTION);
+		if (conf == JOptionPane.YES_OPTION) {
+			model.deleteCriterion(criterion);
+		}
+	}
+
+
+	private void confirmDeleteAlternative(Alternative alternative) {
+		int conf = JOptionPane.showConfirmDialog(frame, 
+				"Do you really want to delete alternative " + alternative + "?",
+				"Confirm deletion",					
+				JOptionPane.YES_NO_OPTION);
+		if (conf == JOptionPane.YES_OPTION) {
+			model.deleteAlternative(alternative);
+		}
+	}
+
+
+	private Object getLeftMenuSelection() {
+		return leftTree.getSelectionPath().getLastPathComponent();
+	}
 
 	protected void menuRenameClicked() {
 		leftTree.startEditingAtPath(leftTree.getSelectionPath());
@@ -472,29 +520,34 @@ public class MainApp {
 			Object node = e.getNewLeadSelectionPath().getLastPathComponent();
 			if (node == leftTreeModel.getAlternativesNode()) {
 				setRightViewToAlternatives();
-				editRenameItem.setEnabled(false);
+				setEditMenuItemsEnabled(false);				
 			} else if (node == leftTreeModel.getCriteriaNode()){
 				setRightViewToCriteria();
-				editRenameItem.setEnabled(false);				
+				setEditMenuItemsEnabled(false);
 			} else if (node instanceof Criterion) {
 				setRightViewToCriterion((Criterion)node);
-				editRenameItem.setEnabled(true);				
+				setEditMenuItemsEnabled(true);
 			} else if (node instanceof Alternative) {
-				// do something? maybe not
-				editRenameItem.setEnabled(true);				
+				setEditMenuItemsEnabled(true);
 			} else if (node == leftTreeModel.getCentralWeightsNode()) {
 				setRightViewToCentralWeights();
-				editRenameItem.setEnabled(false);				
+				setEditMenuItemsEnabled(false);				
 			} else if (node == leftTreeModel.getRankAcceptabilitiesNode()) {
 				setRightViewToRankAcceptabilities();
-				editRenameItem.setEnabled(false);				
+				setEditMenuItemsEnabled(false);
 			} else if (node == leftTreeModel.getModelNode()) {
 				editRenameItem.setEnabled(true);
+				editDeleteItem.setEnabled(false);
 			} else {
-				editRenameItem.setEnabled(false);
+				setEditMenuItemsEnabled(false);
 			}
-		}		
+		}
 	}
+	
+	private void setEditMenuItemsEnabled(boolean enable) {
+		editDeleteItem.setEnabled(enable);
+		editRenameItem.setEnabled(enable);
+	}			
 
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {

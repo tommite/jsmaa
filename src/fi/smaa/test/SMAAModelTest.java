@@ -34,6 +34,7 @@ import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.SMAAModel;
+import fi.smaa.UniformCriterion;
 
 public class SMAAModelTest {
 	
@@ -92,6 +93,12 @@ public class SMAAModelTest {
 	public void testDeleteAlternative() throws Exception {
 		Alternative a = new Alternative("altToDelete");
 		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_ALTERNATIVES, "deleteAlternative", a);
+	}
+	
+	@Test
+	public void testDeleteCriterion() throws Exception {
+		UniformCriterion c = new UniformCriterion("critToDelete");
+		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_CRITERIA, "deleteCriterion", c);		
 	}
 	
 	@Test
