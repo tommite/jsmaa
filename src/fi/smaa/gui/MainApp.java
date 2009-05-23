@@ -23,10 +23,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -176,7 +178,7 @@ public class MainApp {
 		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
 		leftTree.setCellEditor(new MyCellEditor(leftTree, new DefaultTreeCellRenderer()));
-		leftTree.setCellRenderer(new LeftTreeCellRenderer(imageLoader));
+		leftTree.setCellRenderer(new LeftTreeCellRenderer(leftTreeModel, imageLoader));
 	}
 	
 	private class MyCellEditor extends DefaultTreeCellEditor {
@@ -278,9 +280,11 @@ public class MainApp {
 	private JMenu createResultsMenu() {
 		JMenu resultsMenu = new JMenu("Results");
 		resultsMenu.setMnemonic('r');
-		JMenuItem cwItem = new JMenuItem("Central weight vectors");
+		JMenuItem cwItem = new JMenuItem("Central weight vectors", 
+				getIcon(ImageLoader.ICON_CENTRALWEIGHTS));
 		cwItem.setMnemonic('c');
-		JMenuItem racsItem = new JMenuItem("Rank acceptability indices");
+		JMenuItem racsItem = new JMenuItem("Rank acceptability indices", 
+				getIcon(ImageLoader.ICON_RANKACCEPTABILITIES));
 		racsItem.setMnemonic('r');
 		
 		cwItem.addActionListener(new AbstractAction() {
@@ -304,10 +308,11 @@ public class MainApp {
 	private JMenu createEditMenu() {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.setMnemonic('e');
-		editRenameItem = new JMenuItem("Rename");
+		
+		editRenameItem = new JMenuItem("Rename", getIcon(ImageLoader.ICON_RENAME));
 		editRenameItem.setMnemonic('r');
 		editRenameItem.setEnabled(false);
-		editDeleteItem = new JMenuItem("Delete");
+		editDeleteItem = new JMenuItem("Delete", getIcon(ImageLoader.ICON_DELETE));
 		editDeleteItem.setMnemonic('d');
 		editDeleteItem.setEnabled(false);
 		
@@ -325,6 +330,16 @@ public class MainApp {
 		editMenu.add(editRenameItem);
 		editMenu.add(editDeleteItem);
 		return editMenu;
+	}
+
+
+	private Icon getIcon(String name) {
+		try {
+			return imageLoader.getIcon(name);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	

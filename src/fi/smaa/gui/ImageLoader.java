@@ -33,6 +33,10 @@ public class ImageLoader {
 	public static final String ICON_GAUSSIANCRITERION = "criterion_gaussian.gif";
 	public static final String ICON_UNIFORMCRITERION = "criterion_uniform.gif";
 	public static final String ICON_ALTERNATIVE = "alternative.gif";
+	public static final String ICON_RANKACCEPTABILITIES = "rankacceptabilities.gif";
+	public static final String ICON_CENTRALWEIGHTS = "centralweights.gif";
+	public static final String ICON_DELETE = "delete.gif";
+	public static final String ICON_RENAME = "rename.gif";
 	
 	public ImageLoader() {
 		icons = new HashMap<String, Icon>();

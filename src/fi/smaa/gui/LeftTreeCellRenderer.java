@@ -33,9 +33,11 @@ import fi.smaa.UniformCriterion;
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private ImageLoader loader;
+	private LeftTreeModel model;
 	
-	public LeftTreeCellRenderer(ImageLoader loader) {
+	public LeftTreeCellRenderer(LeftTreeModel model, ImageLoader loader) {
 		this.loader = loader;
+		this.model = model;
 	}
 	
 	public Component getTreeCellRendererComponent(JTree tree, Object value,	boolean sel,
@@ -56,6 +58,12 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 					setIcon(loader.getIcon(ImageLoader.ICON_ORDINALCRITERION));
 					setToolTipText("Ordinal criterion");					
 				}
+			} else if (value == model.getCentralWeightsNode()) {
+				setIcon(loader.getIcon(ImageLoader.ICON_CENTRALWEIGHTS));
+				setToolTipText("Central weights");									
+			} else if (value == model.getRankAcceptabilitiesNode()) {
+				setIcon(loader.getIcon(ImageLoader.ICON_RANKACCEPTABILITIES));
+				setToolTipText("Rank acceptability indices");									
 			} else {
 				setToolTipText(null); //no tool tip
 			}
