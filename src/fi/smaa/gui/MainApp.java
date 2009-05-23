@@ -177,8 +177,9 @@ public class MainApp {
 		leftTree.addTreeSelectionListener(new LeftTreeSelectionListener());
 		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
-		leftTree.setCellEditor(new MyCellEditor(leftTree, new DefaultTreeCellRenderer()));
-		leftTree.setCellRenderer(new LeftTreeCellRenderer(leftTreeModel, imageLoader));
+		LeftTreeCellRenderer renderer = new LeftTreeCellRenderer(leftTreeModel, imageLoader);
+		leftTree.setCellEditor(new MyCellEditor(leftTree, renderer));
+		leftTree.setCellRenderer(renderer);
 	}
 	
 	private class MyCellEditor extends DefaultTreeCellEditor {
@@ -357,7 +358,8 @@ public class MainApp {
 		int conf = JOptionPane.showConfirmDialog(frame, 
 				"Do you really want to delete criterion " + criterion + "?",
 				"Confirm deletion",					
-				JOptionPane.YES_NO_OPTION);
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+				getIcon(ImageLoader.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			model.deleteCriterion(criterion);
 		}
@@ -368,7 +370,8 @@ public class MainApp {
 		int conf = JOptionPane.showConfirmDialog(frame, 
 				"Do you really want to delete alternative " + alternative + "?",
 				"Confirm deletion",					
-				JOptionPane.YES_NO_OPTION);
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+				getIcon(ImageLoader.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			model.deleteAlternative(alternative);
 		}
