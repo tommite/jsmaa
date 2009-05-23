@@ -38,7 +38,7 @@ public class ImageLoaderTest {
 	
 	@Test
 	public void testGetIcon() throws Exception {
-		assertNotNull(loader.getIcon("alternative.gif"));
+		assertNotNull(loader.getIcon(ImageLoader.ICON_ALTERNATIVE));
 	}
 	
 	@Test(expected=FileNotFoundException.class)

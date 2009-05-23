@@ -82,6 +82,7 @@ public class MainApp {
 	private JScrollPane rightPane;
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;
+	private ImageLoader imageLoader = new ImageLoader();
 
 	/**
 	 * @param args
@@ -175,6 +176,7 @@ public class MainApp {
 		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
 		leftTree.setCellEditor(new MyCellEditor(leftTree, new DefaultTreeCellRenderer()));
+		leftTree.setCellRenderer(new LeftTreeCellRenderer(imageLoader));
 	}
 	
 	private class MyCellEditor extends DefaultTreeCellEditor {

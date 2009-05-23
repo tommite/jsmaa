@@ -25,10 +25,13 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import fi.smaa.Alternative;
+import fi.smaa.Criterion;
+import fi.smaa.GaussianCriterion;
+import fi.smaa.OrdinalCriterion;
+import fi.smaa.UniformCriterion;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
-	public static final String ICON_ALTERNATIVE = "alternative.gif";
 	private ImageLoader loader;
 	
 	public LeftTreeCellRenderer(ImageLoader loader) {
@@ -40,8 +43,19 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		try {		
 			if (leaf && value instanceof Alternative) {
-				setIcon(loader.getIcon(ICON_ALTERNATIVE));
+				setIcon(loader.getIcon(ImageLoader.ICON_ALTERNATIVE));
 				setToolTipText("Alternative");
+			} else if (leaf && value instanceof Criterion) {
+				if (value instanceof UniformCriterion) {
+					setIcon(loader.getIcon(ImageLoader.ICON_UNIFORMCRITERION));
+					setToolTipText("Uniform distributed criterion");
+				} else if (value instanceof GaussianCriterion) {
+					setIcon(loader.getIcon(ImageLoader.ICON_GAUSSIANCRITERION));
+					setToolTipText("Gaussian distributed criterion");					
+				} else if (value instanceof OrdinalCriterion) {
+					setIcon(loader.getIcon(ImageLoader.ICON_ORDINALCRITERION));
+					setToolTipText("Ordinal criterion");					
+				}
 			} else {
 				setToolTipText(null); //no tool tip
 			}

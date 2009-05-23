@@ -29,6 +29,10 @@ public class ImageLoader {
 	
 	public static final String IMAGE_PATH = "/gfx/";
 	private Map<String, Icon> icons;
+	public static final String ICON_ORDINALCRITERION = "criterion_ordinal.gif";
+	public static final String ICON_GAUSSIANCRITERION = "criterion_gaussian.gif";
+	public static final String ICON_UNIFORMCRITERION = "criterion_uniform.gif";
+	public static final String ICON_ALTERNATIVE = "alternative.gif";
 	
 	public ImageLoader() {
 		icons = new HashMap<String, Icon>();
