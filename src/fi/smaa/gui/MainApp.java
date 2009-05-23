@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -46,6 +47,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+
+import sun.ExampleFileFilter;
 
 import nl.rug.escher.common.gui.GUIHelper;
 import nl.rug.escher.common.gui.ViewBuilder;
@@ -366,15 +369,40 @@ public class MainApp {
 	private JMenu createFileMenu() {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
+		
+		JMenuItem openItem = new JMenuItem("Open");
+		openItem.setMnemonic('o');
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
-		fileMenu.add(quitItem);
+		
+		openItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				openFile();
+			}
+		});
 		quitItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				quit();
 			}
 		});
+		
+		fileMenu.add(openItem);
+		fileMenu.addSeparator();
+		fileMenu.add(quitItem);		
 		return fileMenu;
+	}
+
+
+	protected void openFile() {
+		JFileChooser chooser = new JFileChooser();
+		ExampleFileFilter filter = new ExampleFileFilter();
+		filter.addExtension("jsmaa");
+		filter.setDescription("JSMAA model files");
+		chooser.setFileFilter(filter);
+		int retVal = chooser.showOpenDialog(frame);
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println("Opening " + chooser.getSelectedFile().toString());
+		}
 	}
 
 
@@ -480,7 +508,7 @@ public class MainApp {
 			if (!found) {
 				return "Criterion " + index;				
 			}
-			index++;			
+			index++;
 		}
 	}
 
