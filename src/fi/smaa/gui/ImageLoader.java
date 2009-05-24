@@ -37,6 +37,11 @@ public class ImageLoader {
 	public static final String ICON_CENTRALWEIGHTS = "centralweights.gif";
 	public static final String ICON_DELETE = "delete.gif";
 	public static final String ICON_RENAME = "rename.gif";
+	public static final String ICON_ADD = "add.gif";
+	public static final String ICON_CRITERIALIST = "criterialist.gif";
+	public static final String ICON_OPENFILE = "openfile.gif";
+	public static final String ICON_SAVEFILE = "savefile.gif";
+	public static final String ICON_STOP = "stop.gif";
 	
 	public ImageLoader() {
 		icons = new HashMap<String, Icon>();

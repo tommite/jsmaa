@@ -96,13 +96,9 @@ public class MainApp {
 
 
 	private void startGui() {
-		GUIHelper.initializeLookAndFeel();
-
 	   	model = new SMAAModel("model");
-		frame = new JFrame("SMAA");
-		frame.setPreferredSize(new Dimension(800, 500));
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		initComponents(frame);
+		initFrame();
+		initComponents();
 		model.addPropertyChangeListener(new SMAAModelListener());
 		addAlternative();
 		addAlternative();
@@ -114,12 +110,20 @@ public class MainApp {
 		frame.pack();
 		frame.setVisible(true);	
 	}
+
+
+	private void initFrame() {
+		GUIHelper.initializeLookAndFeel();		
+		frame = new JFrame("SMAA");
+		frame.setPreferredSize(new Dimension(800, 500));
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
 		
 	private void rebuildRightPanel() {
 		rightPane.setViewportView(rightViewBuilder.buildPanel());
 	}
 
-	private void initComponents(JFrame frame) {
+	private void initComponents() {
 	   splitPane = new JSplitPane();
 	   splitPane.setResizeWeight(0.0);	   
 	   splitPane.setDividerSize(2);
@@ -390,35 +394,62 @@ public class MainApp {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
 		
+		JMenuItem saveItem = new JMenuItem("Save");
+		saveItem.setMnemonic('s');
+		saveItem.setIcon(getIcon(ImageLoader.ICON_SAVEFILE));
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.setMnemonic('o');
+		openItem.setIcon(getIcon(ImageLoader.ICON_OPENFILE));
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
+		quitItem.setIcon(getIcon(ImageLoader.ICON_STOP));
 		
+		saveItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				openSaveFileDialog();
+			}
+		});
 		openItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				openFile();
+				openOpenFileDialog();
 			}
 		});
 		quitItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				quit();
+				quitApplication();
 			}
 		});
 		
 		fileMenu.add(openItem);
+		fileMenu.add(saveItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);		
 		return fileMenu;
 	}
 
 
-	protected void openFile() {
+	protected void openSaveFileDialog() {
+		JFileChooser chooser = getFileChooser();
+		int retVal = chooser.showSaveDialog(frame);
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println("Saving " + chooser.getSelectedFile().toString());
+		}
+		
+	}
+
+
+	private JFileChooser getFileChooser() {
 		JFileChooser chooser = new JFileChooser();
 		ExampleFileFilter filter = new ExampleFileFilter();
 		filter.addExtension("jsmaa");
 		filter.setDescription("JSMAA model files");
 		chooser.setFileFilter(filter);
+		return chooser;
+	}
+
+
+	protected void openOpenFileDialog() {
+		JFileChooser chooser = getFileChooser();
 		int retVal = chooser.showOpenDialog(frame);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			System.out.println("Opening " + chooser.getSelectedFile().toString());
@@ -426,7 +457,7 @@ public class MainApp {
 	}
 
 
-	protected void quit() {
+	protected void quitApplication() {
 		System.exit(0);
 	}
 
@@ -438,6 +469,7 @@ public class MainApp {
 		showItem.setMnemonic('s');
 		JMenuItem addAltButton = new JMenuItem("Add new");
 		addAltButton.setMnemonic('n');
+		addAltButton.setIcon(getIcon(ImageLoader.ICON_ADD));
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -462,38 +494,42 @@ public class MainApp {
 		criteriaMenu.setMnemonic('c');
 		JMenuItem showItem = new JMenuItem("Show");
 		showItem.setMnemonic('s');
-		JMenuItem addUnifButton = new JMenuItem("Add uniform");
-		addUnifButton.setMnemonic('u');
-		JMenuItem addGaussianButton = new JMenuItem("Add gaussian");
-		addGaussianButton.setMnemonic('g');
-		JMenuItem addOrdinalButton = new JMenuItem("Add ordinal");
-		addOrdinalButton.setMnemonic('o');
+		showItem.setIcon(getIcon(ImageLoader.ICON_CRITERIALIST));
+		JMenuItem addUnifItem = new JMenuItem("Add uniform");
+		addUnifItem.setMnemonic('u');
+		addUnifItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
+		JMenuItem addGaussianItem = new JMenuItem("Add gaussian");
+		addGaussianItem.setMnemonic('g');
+		addGaussianItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
+		addOrdinalItem.setMnemonic('o');
+		addOrdinalItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				setRightViewToCriteria();
 			}
 		});
-		addUnifButton.addActionListener(new AbstractAction() {
+		addUnifItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addUniformCriterion();
 			}			
 		});
-		addGaussianButton.addActionListener(new AbstractAction() {
+		addGaussianItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addGaussianCriterion();
 			}
 		});
-		addOrdinalButton.addActionListener(new AbstractAction() {
+		addOrdinalItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addOrdinalCriterion();
 			}			
 		});
 		criteriaMenu.add(showItem);
 		criteriaMenu.addSeparator();
-		criteriaMenu.add(addUnifButton);
+		criteriaMenu.add(addUnifItem);
 		//toolBarAddCritMenu.add(addOrdinalButton);			
-		criteriaMenu.add(addGaussianButton);
+		criteriaMenu.add(addGaussianItem);
 		return criteriaMenu;
 	}
 
