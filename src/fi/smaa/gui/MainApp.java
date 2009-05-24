@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,7 @@ import fi.smaa.UniformCriterion;
 @SuppressWarnings("unchecked")
 public class MainApp {
 	
+	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	private JFrame frame;
 	private JSplitPane splitPane;
 	private JTree leftTree;
@@ -432,9 +434,25 @@ public class MainApp {
 		JFileChooser chooser = getFileChooser();
 		int retVal = chooser.showSaveDialog(frame);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("Saving " + chooser.getSelectedFile().toString());
+			File file = checkFileExtension(chooser.getSelectedFile());
+			saveModel(model, file);
 		}
 		
+	}
+
+
+	private void saveModel(SMAAModel model2, File file) {
+		// TODO Auto-generated method stub
+		System.out.println("Saving to " + file);
+	}
+
+
+	private File checkFileExtension(File file) {
+		if (ExampleFileFilter.getExtension(file) == null ||
+				!ExampleFileFilter.getExtension(file).equals(JSMAA_MODELFILE_EXTENSION)) {
+			return new File(file.getAbsolutePath() + "." + JSMAA_MODELFILE_EXTENSION);
+		}
+		return file;
 	}
 
 
