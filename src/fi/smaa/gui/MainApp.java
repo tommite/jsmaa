@@ -165,6 +165,7 @@ public class MainApp {
 		model.addPropertyChangeListener(new SMAAModelListener());
 		buildNewSimulator();
 		setRightViewToCriteria();
+		leftTreeFocusCriteria();
 	}
 	
 	private JComponent createToolBar() {
@@ -178,7 +179,7 @@ public class MainApp {
 
 
 	private void setRightViewToCentralWeights() {		
-		rightViewBuilder = new CentralWeightsView(results);		
+		rightViewBuilder = new CentralWeightsView(results);
 		rebuildRightPanel();
 	}
 	
@@ -483,7 +484,8 @@ public class MainApp {
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				loadModel(chooser.getSelectedFile());
-				expandLeftMenu();				
+				expandLeftMenu();	
+				leftTreeFocusCriteria();
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(frame,
 						"Error loading model: "+ e.getMessage(), 
@@ -494,8 +496,12 @@ public class MainApp {
 						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);				
 			}
 		}
-	}	
+	}
 
+	private void leftTreeFocusCriteria() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode() }));
+	}
 
 	private void loadModel(File file) throws IOException, ClassNotFoundException {
 		ObjectInputStream s = new ObjectInputStream(
