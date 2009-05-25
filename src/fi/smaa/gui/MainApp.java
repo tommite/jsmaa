@@ -21,6 +21,7 @@ package fi.smaa.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -49,6 +50,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -346,9 +348,11 @@ public class MainApp {
 		
 		editRenameItem = new JMenuItem("Rename", getIcon(ImageLoader.ICON_RENAME));
 		editRenameItem.setMnemonic('r');
+		editRenameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));		
 		editRenameItem.setEnabled(false);
 		editDeleteItem = new JMenuItem("Delete", getIcon(ImageLoader.ICON_DELETE));
 		editDeleteItem.setMnemonic('d');
+		editDeleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));		
 		editDeleteItem.setEnabled(false);
 		
 		editRenameItem.addActionListener(new AbstractAction() {
