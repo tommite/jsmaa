@@ -24,14 +24,22 @@ import fi.smaa.common.RandomUtil;
 
 public class MissingPreferenceInformation implements PreferenceInformation, Serializable {
 	transient private double[] tmparr;
+	private int numCrit;
 	
 	public MissingPreferenceInformation(int numCrit) {
-		tmparr = new double[numCrit];
+		this.numCrit = numCrit;
 	}
 
 	public double[] sampleWeights() {
+		initArray();
 		RandomUtil.createSumToOneRand(tmparr);
 		return tmparr;
+	}
+	
+	private void initArray() {
+		if (tmparr == null) {
+			tmparr = new double[numCrit];			
+		}
 	}
 
 }
