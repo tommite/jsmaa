@@ -18,19 +18,18 @@
 
 package fi.smaa;
 
+import java.io.Serializable;
 import java.util.List;
 
 import fi.smaa.common.RandomUtil;
 
-public class OrdinalPreferenceInformation implements PreferenceInformation {
+public class OrdinalPreferenceInformation implements PreferenceInformation, Serializable {
 	
-	private double[] tmparr;
-	private double[] samplearr;
+	transient private double[] tmparr;
+	transient private double[] samplearr;
 	private List<Rank> ranks;
 	
 	public OrdinalPreferenceInformation(List<Rank> ranks) {
-		tmparr = new double[ranks.size()];
-		samplearr = new double[ranks.size()];
 		this.ranks = ranks;
 	}
 	
@@ -38,7 +37,17 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 		return ranks;
 	}
 	
+	private void initArrays() {
+		if (tmparr == null) {
+			tmparr = new double[ranks.size()];
+		}
+		if (samplearr == null) {
+			samplearr = new double[ranks.size()];			
+		}
+	}
+	
 	public double[] sampleWeights() {
+		initArrays();
 		RandomUtil.createSumToOneSorted(tmparr);
 		
 		for (int i=0;i<samplearr.length;i++) {

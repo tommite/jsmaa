@@ -18,10 +18,12 @@
 
 package fi.smaa;
 
+import java.io.Serializable;
+
 import fi.smaa.common.RandomUtil;
 
-public class MissingPreferenceInformation implements PreferenceInformation {
-	private double[] tmparr;
+public class MissingPreferenceInformation implements PreferenceInformation, Serializable {
+	transient private double[] tmparr;
 	
 	public MissingPreferenceInformation(int numCrit) {
 		tmparr = new double[numCrit];
