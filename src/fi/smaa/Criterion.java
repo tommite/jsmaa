@@ -20,6 +20,9 @@ package fi.smaa;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +44,16 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	transient private MeasurementListener measurementListener = new MeasurementListener();
 	
 	private Semaphore changeSemaphore = new Semaphore(1);
+	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		measurementListener = new MeasurementListener();
+		connectMeasurementListener();
+	}
 
 	protected Criterion(String name) {
 		this.name = name;
@@ -117,17 +130,25 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	
 
 	public void setMeasurements(Map<Alternative, T> measurements) {
-		for (T g : getMeasurements().values()) {
-			g.removePropertyChangeListener(PROPERTY_MEASUREMENTS, measurementListener);
-		}
+		disconnectMeasurementListener();
 		Map<Alternative, T> oldVal = this.measurements;
 		this.measurements = measurements;
 
+		connectMeasurementListener();
+		firePropertyChange(PROPERTY_MEASUREMENTS, oldVal, this.measurements);
+		fireMeasurementChange();
+	}
+
+	private void disconnectMeasurementListener() {
+		for (T g : getMeasurements().values()) {
+			g.removePropertyChangeListener(PROPERTY_MEASUREMENTS, measurementListener);
+		}
+	}
+
+	private void connectMeasurementListener() {
 		for (T g : getMeasurements().values()) {
 			g.addPropertyChangeListener(measurementListener);
 		}
-		firePropertyChange(PROPERTY_MEASUREMENTS, oldVal, this.measurements);
-		fireMeasurementChange();
 	}
 
 	protected void updateMeasurements() {
@@ -161,5 +182,9 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		}
 		target.setAlternatives(list);
 		target.setMeasurements(meas);
+	}
+	
+	public PropertyChangeListener getMeasurementListener() {
+		return measurementListener;
 	}
 }

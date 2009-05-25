@@ -20,8 +20,13 @@ package fi.smaa.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +40,7 @@ import org.junit.Test;
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.Measurement;
+import fi.smaa.UniformCriterion;
 
 public class CriterionTest {
 	
@@ -106,6 +112,25 @@ public class CriterionTest {
 		assertTrue(criterion.equals(c2));
 		c2.setName("newname");
 		assertFalse(criterion.equals(c2));
+	}
+	
+	@Test
+	public void testSerializationHooksListeners() throws Exception {
+		UniformCriterion c2 = new UniformCriterion("unif");
+		List<Alternative> list = new ArrayList<Alternative>();
+		list.add(new Alternative("alt"));
+		c2.setAlternatives(list);
+		assertEquals(1, c2.getMeasurements().values().size());
+		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(bos);
+		
+		os.writeObject(c2);
+		
+		ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+		UniformCriterion c2Stream = (UniformCriterion) is.readObject();
+		
+		assertNotNull(c2Stream.getMeasurementListener());
 	}
 	
 }
