@@ -42,6 +42,7 @@ public class ImageLoader {
 	public static final String ICON_OPENFILE = "openfile.gif";
 	public static final String ICON_SAVEFILE = "savefile.gif";
 	public static final String ICON_STOP = "stop.gif";
+	public static final String ICON_PREFERENCES = "preferences.gif";
 	
 	public ImageLoader() {
 		icons = new HashMap<String, Icon>();

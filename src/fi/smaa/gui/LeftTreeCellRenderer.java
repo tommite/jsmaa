@@ -64,6 +64,9 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 			} else if (value == model.getRankAcceptabilitiesNode()) {
 				setIcon(loader.getIcon(ImageLoader.ICON_RANKACCEPTABILITIES));
 				setToolTipText("Rank acceptability indices");									
+			} else if (value == model.getPreferencesNode()) {
+				setIcon(loader.getIcon(ImageLoader.ICON_PREFERENCES));
+				setToolTipText("Preference information");
 			} else {
 				setToolTipText(null); //no tool tip
 			}
