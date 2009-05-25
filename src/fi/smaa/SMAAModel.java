@@ -29,10 +29,12 @@ public class SMAAModel extends Model {
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";
 	public final static String PROPERTY_CRITERIA = "criteria";	
 	public final static String PROPERTY_NAME = "name";
+	public final static String PROPERTY_PREFERENCEINFORMATION = "preferenceInformation";
 		
 	private List<Alternative> alternatives;
 	private List<Criterion> criteria;	
 	private String name;
+	private PreferenceInformation preferences;
 
 	public SMAAModel() {
 		init();
@@ -46,8 +48,23 @@ public class SMAAModel extends Model {
 	private void init() {
 		alternatives = new ArrayList<Alternative>();
 		criteria = new ArrayList<Criterion>();
+		updatePreferenceInformation(criteria.size());
 	}
 	
+	private void updatePreferenceInformation(int numCrit) {
+		setPreferenceInformation(new MissingPreferenceInformation(numCrit));
+	}
+
+	public void setPreferenceInformation(PreferenceInformation preferences) {
+		Object oldVal = this.preferences;
+		this.preferences = preferences;
+		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldVal, this.preferences);
+	}
+	
+	public PreferenceInformation getPreferenceInformation() {
+		return preferences;
+	}
+
 	public List<Alternative> getAlternatives() {
 		return alternatives;
 	}
@@ -56,7 +73,7 @@ public class SMAAModel extends Model {
 		Object oldval = this.alternatives;
 		this.alternatives = alts;
 		updateCriteriaAlternatives();
-		firePropertyChange(PROPERTY_ALTERNATIVES, oldval, this.alternatives);
+		firePropertyChange(PROPERTY_ALTERNATIVES, oldval, this.alternatives);	
 	}
 
 	public void setName(String name) {
@@ -91,7 +108,8 @@ public class SMAAModel extends Model {
 		Object oldVal = this.criteria;
 		this.criteria = criteria;
 		updateCriteriaAlternatives();
-		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
+		updatePreferenceInformation(criteria.size());		
+		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);		
 	}
 	
 	private void updateCriteriaAlternatives() {

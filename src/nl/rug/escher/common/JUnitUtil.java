@@ -120,11 +120,7 @@ public class JUnitUtil {
 		List list2 = new ArrayList();
 		list2.add(toAdd);
 		
-		PropertyChangeListener mock = createMock(PropertyChangeListener.class);
-		mock.propertyChange(eqEvent(new PropertyChangeEvent(
-				source, propertyName, list1, list2)));
-		replay(mock);
-		
+		PropertyChangeListener mock = mockListener(source, propertyName, list1, list2);
 		source.addPropertyChangeListener(mock);
 		Object actual = null;
 		try {
@@ -149,14 +145,10 @@ public class JUnitUtil {
 		// set the parameter
 		getSetterMethod(source, propertyName, list1).invoke(source, list1);
 
-		PropertyChangeListener mock = createMock(PropertyChangeListener.class);
-		mock.propertyChange(eqEvent(new PropertyChangeEvent(
-				source, propertyName, list1, list2)));
-		replay(mock);
-
+		PropertyChangeListener mock = mockListener(source, propertyName, list1, list2);
 		source.addPropertyChangeListener(mock);		
 
-		get1ParamMethod(source, deleteMethodName, toDelete).invoke(source, toDelete);
+		get1ParamMethod(source, deleteMethodName, toDelete).invoke(source, toDelete);		
 
 		Object actual = getGetterMethod(source, propertyName).invoke(source);
 		assertTrue(0 ==  ((List) actual).size());

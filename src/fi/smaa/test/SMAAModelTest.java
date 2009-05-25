@@ -33,6 +33,7 @@ import org.junit.Test;
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
+import fi.smaa.MissingPreferenceInformation;
 import fi.smaa.SMAAModel;
 import fi.smaa.UniformCriterion;
 
@@ -68,6 +69,13 @@ public class SMAAModelTest {
 		crit.add(new GaussianCriterion("c2"));
 		
 		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_CRITERIA, model.getCriteria(), crit);
+	}
+	
+	@Test
+	public void testSetPreferenceInformation() {
+		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_PREFERENCEINFORMATION, 
+			model.getPreferenceInformation(), 
+			new MissingPreferenceInformation(model.getAlternatives().size()));
 	}
 	
 	@Test

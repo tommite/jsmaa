@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fi.smaa.common.RandomUtil;
-
 @SuppressWarnings("unchecked")
 public class SMAASimulator {
 	
@@ -40,6 +38,7 @@ public class SMAASimulator {
 	private List<Alternative> alternatives;
 	private List<Criterion> criteria;
 	private UtilitySampler sampler;
+	private PreferenceInformation preferences;
 	
 	private MeasurementChangeListener listener = new MeasurementChangeListener();
 	
@@ -47,6 +46,9 @@ public class SMAASimulator {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getSource() instanceof Measurement ||
 					evt.getPropertyName().equals(CardinalCriterion.PROPERTY_ASCENDING)) {
+				restart();
+			} else if (evt.getSource() instanceof PreferenceInformation) {
+				preferences = (PreferenceInformation) evt.getNewValue();
 				restart();
 			}
 		}		
@@ -77,6 +79,7 @@ public class SMAASimulator {
 		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
 		this.iterations = iterations;
 		results = new SMAAResults(alternatives, criteria, 10);
+		this.preferences = model.getPreferenceInformation();
 		sampler = new UtilitySampler(this.alternatives.size());
 		init();
 		connectListeners();
@@ -212,7 +215,7 @@ public class SMAASimulator {
 	}
 
 	private void generateWeights() {
-		RandomUtil.createSumToOneRand(weights); 
+		weights = preferences.sampleWeights();
 	}
 	
 
