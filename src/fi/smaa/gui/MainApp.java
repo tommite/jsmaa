@@ -23,8 +23,16 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,19 +106,27 @@ public class MainApp {
 
 
 	private void startGui() {
-	   	model = new SMAAModel("model");
+	   	initDefaultModel();
 		initFrame();
-		initComponents();
-		model.addPropertyChangeListener(new SMAAModelListener());
-		addAlternative();
-		addAlternative();
-		addAlternative();
-		addUniformCriterion();
-		addGaussianCriterion();
-		//addOrdinalCriterion();
+		initComponents();		
+		initWithModel(model);
 		expandLeftMenu();
 		frame.pack();
 		frame.setVisible(true);	
+	}
+
+
+	private void initDefaultModel() {
+		model = new SMAAModel("model");
+		model.addCriterion(new UniformCriterion("Criterion 1"));
+		model.addCriterion(new GaussianCriterion("Criterion 2"));
+		try {
+			model.addAlternative(new Alternative("Alternative 1"));
+			model.addAlternative(new Alternative("Alternative 2"));			
+			model.addAlternative(new Alternative("Alternative 3"));
+		} catch (AlternativeExistsException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -132,14 +148,20 @@ public class MainApp {
 	   splitPane.setDividerLocation(-1);
 	   rightPane = new JScrollPane();
 	   splitPane.setRightComponent(rightPane);
-	   
-	   initLeftPanel();
-	   setRightViewToCriteria();
+
 	   
 	   frame.getContentPane().setLayout(new BorderLayout());
 	   frame.getContentPane().add("Center", splitPane);
 	   frame.getContentPane().add("South", createToolBar());
 	   frame.setJMenuBar(createMenuBar());
+	}
+
+
+	private void initWithModel(SMAAModel model) {
+		initLeftPanel();
+		model.addPropertyChangeListener(new SMAAModelListener());
+		buildNewSimulator();
+		setRightViewToCriteria();
 	}
 	
 	private JComponent createToolBar() {
@@ -435,15 +457,51 @@ public class MainApp {
 		int retVal = chooser.showSaveDialog(frame);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			File file = checkFileExtension(chooser.getSelectedFile());
-			saveModel(model, file);
+			try {
+				saveModel(model, file);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(frame, "Error saving model to " + file + 
+						", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		
+	}
+	
+	protected void openOpenFileDialog() {
+		JFileChooser chooser = getFileChooser();
+		int retVal = chooser.showOpenDialog(frame);
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				loadModel(chooser.getSelectedFile());
+				expandLeftMenu();				
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(frame,
+						"Error loading model: "+ e.getMessage(), 
+						"Load error", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(frame, "Error loading model from " +
+						chooser.getSelectedFile() + 
+						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);				
+			}
+		}
+	}	
+
+
+	private void loadModel(File file) throws IOException, ClassNotFoundException {
+		ObjectInputStream s = new ObjectInputStream(
+				new BufferedInputStream(
+						new FileInputStream(file)));
+		SMAAModel loadedModel = (SMAAModel) s.readObject();
+		this.model = loadedModel;
+		initWithModel(model);
 	}
 
 
-	private void saveModel(SMAAModel model2, File file) {
+	private void saveModel(SMAAModel model, File file) throws IOException {
 		// TODO Auto-generated method stub
-		System.out.println("Saving to " + file);
+		ObjectOutputStream s = new ObjectOutputStream(new BufferedOutputStream(
+						new FileOutputStream(file)));
+		s.writeObject(model);
+		s.close();
 	}
 
 
@@ -464,16 +522,6 @@ public class MainApp {
 		chooser.setFileFilter(filter);
 		return chooser;
 	}
-
-
-	protected void openOpenFileDialog() {
-		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showOpenDialog(frame);
-		if (retVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("Opening " + chooser.getSelectedFile().toString());
-		}
-	}
-
 
 	protected void quitApplication() {
 		System.exit(0);

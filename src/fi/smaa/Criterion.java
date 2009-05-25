@@ -38,7 +38,7 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	protected String name;
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
 	protected Map<Alternative, T> measurements = new HashMap<Alternative, T>();
-	private MeasurementListener measurementListener = new MeasurementListener();
+	transient private MeasurementListener measurementListener = new MeasurementListener();
 	
 	private Semaphore changeSemaphore = new Semaphore(1);
 
