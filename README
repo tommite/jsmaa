@@ -1,0 +1,22 @@
+README for JSMAA
+================
+JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) methodology.
+Currently only SMAA-2 for utility-theory based decision analysis is implemented.
+
+License
+=======
+JSMAA is licensed under GPL(3). See copying for more details.
+
+Files in package:
+-fi.smaa are original to JSMAA, and are (c) Tommi Tervonen.
+-gfx are icons of JSMAA taken from Eclipse, and are (c) Eclipse foundations
+ and of their corresponding authors.
+-nl.rug.escher are from ADDIS, and are (c) Tommi Tervonen & Gert van Valkenhoef
+-sun are examples from Sun, and are (c) Sun Microsystems.
+
+Contact
+=======
+Contact me by email at t dot p dot tervonen at rug dot nl.
+
+May 2009
+Tommi Tervonen
