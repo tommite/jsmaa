@@ -64,6 +64,9 @@ import nl.rug.escher.common.gui.GUIHelper;
 import nl.rug.escher.common.gui.ViewBuilder;
 import sun.ExampleFileFilter;
 
+import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.adapter.Bindings;
+import com.jgoodies.binding.beans.Model;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
@@ -82,9 +85,11 @@ import fi.smaa.SMAASimulator;
 import fi.smaa.UniformCriterion;
 
 @SuppressWarnings("unchecked")
-public class MainApp {
+public class MainApp extends Model {
 	
+	private static final String VERSION = "0.2";
 	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
+	private static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	private JFrame frame;
 	private JSplitPane splitPane;
 	private JTree leftTree;
@@ -98,6 +103,12 @@ public class MainApp {
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;
 	private ImageLoader imageLoader = new ImageLoader();
+	private File currentModelFile;
+	private Boolean modelUnsaved = true;
+	
+	public Boolean getModelUnsaved() {
+		return modelUnsaved;
+	}
 
 	/**
 	 * @param args
@@ -116,6 +127,23 @@ public class MainApp {
 		expandLeftMenu();
 		frame.pack();
 		frame.setVisible(true);	
+		updateFrameTitle();
+	}
+
+
+	private void updateFrameTitle() {
+		String appString = "JSMAA v" + VERSION;
+		String file = "Untitled model";
+		
+		if (currentModelFile != null) {
+			try {
+				file = currentModelFile.getCanonicalPath();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		String modelSavedStar = modelUnsaved ? "*" : "";
+		frame.setTitle(appString + " - " + file + modelSavedStar);
 	}
 
 
@@ -163,6 +191,7 @@ public class MainApp {
 	private void initWithModel(SMAAModel model) {
 		initLeftPanel();		
 		model.addPropertyChangeListener(new SMAAModelListener());
+		connectModelSubListeners();
 		buildNewSimulator();
 		setRightViewToCriteria();
 		leftTreeFocusCriteria();
@@ -433,16 +462,27 @@ public class MainApp {
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.setMnemonic('s');
 		saveItem.setIcon(getIcon(ImageLoader.ICON_SAVEFILE));
+		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		Bindings.bind(saveItem, "enabled", new PresentationModel<MainApp>(this).getModel(PROPERTY_MODELUNSAVED));
+		JMenuItem saveAsItem = new JMenuItem("Save As");
+		saveAsItem.setMnemonic('a');
+		saveAsItem.setIcon(getIcon(ImageLoader.ICON_SAVEAS));
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.setMnemonic('o');
 		openItem.setIcon(getIcon(ImageLoader.ICON_OPENFILE));
+		openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));		
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
 		quitItem.setIcon(getIcon(ImageLoader.ICON_STOP));
 		
 		saveItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				openSaveFileDialog();
+				save();
+			}
+		});
+		saveAsItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				saveAs();
 			}
 		});
 		openItem.addActionListener(new AbstractAction() {
@@ -458,23 +498,48 @@ public class MainApp {
 		
 		fileMenu.add(openItem);
 		fileMenu.add(saveItem);
+		fileMenu.add(saveAsItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);		
 		return fileMenu;
 	}
-
-
-	protected void openSaveFileDialog() {
+	
+	private boolean saveAs() {
 		JFileChooser chooser = getFileChooser();
 		int retVal = chooser.showSaveDialog(frame);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			File file = checkFileExtension(chooser.getSelectedFile());
-			try {
-				saveModel(model, file);
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(frame, "Error saving model to " + file + 
-						", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
-			}
+			trySaveModel(file);
+			setCurrentModelFile(file);
+			updateFrameTitle();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	private void setCurrentModelFile(File file) {
+		currentModelFile = file;
+	}
+
+
+	private boolean trySaveModel(File file) {
+		try {
+			saveModel(model, file);
+			return true;
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(frame, "Error saving model to " + file + 
+					", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}
+
+	protected boolean save() {
+		if (currentModelFile == null) {
+			return saveAs();
+		} else {
+			return trySaveModel(currentModelFile);
 		}
 	}
 	
@@ -510,6 +575,9 @@ public class MainApp {
 		SMAAModel loadedModel = (SMAAModel) s.readObject();
 		this.model = loadedModel;
 		initWithModel(model);
+		setCurrentModelFile(file);
+		setModelUnsaved(false);
+		updateFrameTitle();		
 	}
 
 
@@ -519,8 +587,16 @@ public class MainApp {
 						new FileOutputStream(file)));
 		s.writeObject(model);
 		s.close();
+		setModelUnsaved(false);
 	}
 
+
+	private void setModelUnsaved(boolean b) {
+		Boolean oldVal = modelUnsaved;
+		this.modelUnsaved = b;
+		firePropertyChange(PROPERTY_MODELUNSAVED, oldVal, this.modelUnsaved);
+		updateFrameTitle();
+	}
 
 	private File checkFileExtension(File file) {
 		if (ExampleFileFilter.getExtension(file) == null ||
@@ -541,6 +617,20 @@ public class MainApp {
 	}
 
 	protected void quitApplication() {
+		if (modelUnsaved) {
+			int conf = JOptionPane.showConfirmDialog(frame, 
+					"Model not saved. Do you want do save changes before quitting JSMAA?",
+					"Save changed",					
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+					getIcon(ImageLoader.ICON_STOP));
+			if (conf == JOptionPane.CANCEL_OPTION) {
+				return;
+			} else if (conf == JOptionPane.YES_OPTION) {
+				if (!save()) {
+					return;
+				}
+			}
+		}
 		System.exit(0);
 	}
 
@@ -740,13 +830,12 @@ public class MainApp {
 
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
-				connectRankListeners();
-			}
+			setModelUnsaved(true);
 			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
 					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
 					evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
 					evt.getSource() instanceof Rank) {
+				connectModelSubListeners();
 				buildNewSimulator();
 				rebuildRightPanel();
 				expandLeftMenu();
@@ -767,7 +856,13 @@ public class MainApp {
 		simulator.restart();	
 	}	
 
-	public void connectRankListeners() {
+	public void connectModelSubListeners() {
+		for (Criterion c : model.getCriteria()) {
+			c.addPropertyChangeListener(new SMAAModelListener());
+		}
+		for (Alternative a : model.getAlternatives()) {
+			a.addPropertyChangeListener(new SMAAModelListener());
+		}
 		if (model.getPreferenceInformation() instanceof OrdinalPreferenceInformation) {
 			OrdinalPreferenceInformation prefs = (OrdinalPreferenceInformation) model.getPreferenceInformation();
 			List<Rank> ranks = prefs.getRanks();
