@@ -526,7 +526,7 @@ public class MainApp {
 
 
 	private JFileChooser getFileChooser() {
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser(new File("."));
 		ExampleFileFilter filter = new ExampleFileFilter();
 		filter.addExtension("jsmaa");
 		filter.setDescription("JSMAA model files");
