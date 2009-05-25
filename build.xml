@@ -7,27 +7,12 @@
 <project basedir="." default="build" name="jsmaa">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../../eclipse"/>
-    <property name="ADDIS.location" value="../ADDIS"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.5"/>
 	<property name="junit.output.dir" value="junit"/>	
     <property name="source" value="1.5"/>
     <path id="JUnit 4.libraryclasspath">
         <pathelement location="${ECLIPSE_HOME}/plugins/org.junit4_4.3.1/junit.jar"/>
-    </path>
-    <path id="ADDIS.classpath">
-        <pathelement location="${ADDIS.location}/bin"/>
-        <pathelement location="${ADDIS.location}/lib/jgoodies/binding-2.0.6.jar"/>
-        <pathelement location="${ADDIS.location}/lib/jgoodies/forms-1.2.1.jar"/>
-        <pathelement location="${ADDIS.location}/lib/jgoodies/looks-2.2.1.jar"/>
-        <pathelement location="${ADDIS.location}/lib/junit/junit-4.6.jar"/>
-        <pathelement location="${ADDIS.location}/lib/junit/junit-dep-4.6.jar"/>
-        <pathelement location="${ADDIS.location}/lib/easymock/easymock.jar"/>
-        <pathelement location="${ADDIS.location}/lib/db4o/db4o-7.4.88.12908-java5.jar"/>
-        <pathelement location="${ADDIS.location}/lib/datanucleus/datanucleus-core-1.1.2.jar"/>
-        <pathelement location="${ADDIS.location}/lib/datanucleus/datanucleus-db4o-1.1.1.jar"/>
-        <pathelement location="${ADDIS.location}/lib/datanucleus/jdo2-api-2.3-SNAPSHOT.jar"/>
-        <pathelement location="${ADDIS.location}/lib/datanucleus/log4j-1.2.8.jar"/>
     </path>
     <path id="jsmaa.classpath">
         <pathelement location="bin"/>
@@ -36,8 +21,34 @@
         <pathelement location="lib/forms-1.2.1.jar"/>
         <pathelement location="lib/looks-2.2.1.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <path refid="ADDIS.classpath"/>
     </path>
+	
+	<path id="dist.class.path">
+		<path refid="jsmaa.classpath" />
+	</path>
+
+	<pathconvert property="dist-class-path" pathsep=" " dirsep="/">
+		<path refid="dist.class.path" />
+		<map from="${basedir}" to="." />		
+	</pathconvert>
+	
+	<target name="dist" depends="build">
+			<delete dir="dist" />
+			<mkdir dir="dist" />
+			<mkdir dir="dist/lib" />
+			<copy todir="dist/lib" includeemptydirs="false">
+				<!-- <path refid="dist.class.path" /> -->
+				<fileset dir="lib" />
+			</copy>
+
+			<jar destfile="dist/jsmaa.jar" basedir="bin">
+				<manifest>
+					<attribute name="Main-Class" value="fi.smaa.gui.MainApp" />
+					<attribute name="Class-Path" value="${dist-class-path}" />
+				</manifest>
+			</jar>
+		</target>
+	
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
@@ -48,17 +59,7 @@
         <delete dir="bin"/>
     	<delete dir="junit"/>
     </target>
-    <target depends="clean" name="cleanall">
-        <ant antfile="${ADDIS.location}/build.xml" inheritAll="false" target="clean"/>
-    </target>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects">
-        <ant antfile="${ADDIS.location}/build.xml" inheritAll="false" target="build-project">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-    </target>
+    <target depends="build-project" name="build"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">

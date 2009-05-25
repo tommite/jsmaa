@@ -39,13 +39,15 @@ public class LeftTreeModel implements TreeModel{
 	
 	private static final int ALTERNATIVES = 0;
 	private static final int CRITERIA = 1;
-	private static final int RESULTS = 2;
+	private static final int PREFERENCES = 2;
+	private static final int RESULTS = 3;
 	
 	private String alternativesNode = "Alternatives";
 	private String criteriaNode = "Criteria";
 	private String resultsNode = "Results";
 	private String rankAccNode = "RankAcc";
 	private String centralWeightsNode = "CW";
+	private String preferencesNode = "Preferences";
 	
 	public LeftTreeModel(SMAAModel smaaModel) throws NullPointerException {
 		if (smaaModel == null) {
@@ -84,6 +86,10 @@ public class LeftTreeModel implements TreeModel{
 		return rankAccNode;
 	}
 	
+	public Object getPreferencesNode() {
+		return preferencesNode;
+	}
+	
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName() == SMAAModel.PROPERTY_ALTERNATIVES) {
@@ -103,6 +109,8 @@ public class LeftTreeModel implements TreeModel{
 				return criteriaNode;
 			} else if (index == RESULTS) {
 				return resultsNode;
+			} else if (index == PREFERENCES) {
+				return preferencesNode;
 			}
 		} else if (parent == alternativesNode) {
 			return smaaModel.getAlternatives().get(index);
@@ -120,7 +128,7 @@ public class LeftTreeModel implements TreeModel{
 
 	public int getChildCount(Object parent) {
 		if (parent == getRoot()) {
-			return 3;
+			return 4;
 		} else if (parent == alternativesNode) {
 			return smaaModel.getAlternatives().size();
 		} else if (parent == criteriaNode) {
@@ -139,6 +147,8 @@ public class LeftTreeModel implements TreeModel{
 				return CRITERIA;
 			} else if (child == resultsNode) {
 				return RESULTS;
+			} else if (child == preferencesNode) {
+				return PREFERENCES;
 			}
 		} else if (parent == alternativesNode) {
 			if (child instanceof Alternative) {
@@ -186,6 +196,8 @@ public class LeftTreeModel implements TreeModel{
 		} else if (node == rankAccNode) {
 			return true;
 		} else if (node == centralWeightsNode) {
+			return true;
+		} else if (node == preferencesNode) {
 			return true;
 		}
 		return false;

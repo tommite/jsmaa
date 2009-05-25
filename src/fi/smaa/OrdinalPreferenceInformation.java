@@ -28,11 +28,14 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 	private double[] samplearr;
 	private List<Rank> ranks;
 	
-	public OrdinalPreferenceInformation(int numCrit, List<Rank> ranks) {
-		assert(numCrit == ranks.size());
-		tmparr = new double[numCrit];
-		samplearr = new double[numCrit];
+	public OrdinalPreferenceInformation(List<Rank> ranks) {
+		tmparr = new double[ranks.size()];
+		samplearr = new double[ranks.size()];
 		this.ranks = ranks;
+	}
+	
+	public List<Rank> getRanks() {
+		return ranks;
 	}
 	
 	public double[] sampleWeights() {
@@ -43,6 +46,11 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 			samplearr[i] = tmparr[tmparr.length - r.getRank()];
 		}
 		return samplearr;
+	}
+	
+	@Override
+	public String toString() {
+		return ranks.toString();
 	}
 
 }

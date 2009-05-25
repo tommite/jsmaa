@@ -36,7 +36,7 @@ public class OrdinalPreferenceInformationTest {
 		ranks.add(new Rank(1));
 		ranks.add(new Rank(3));
 		ranks.add(new Rank(2));
-		OrdinalPreferenceInformation pref = new OrdinalPreferenceInformation(3, ranks);		
+		OrdinalPreferenceInformation pref = new OrdinalPreferenceInformation(ranks);		
 
 		double[] w = pref.sampleWeights();
 		assertEquals(3, w.length);

@@ -70,6 +70,8 @@ import fi.smaa.AlternativeExistsException;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.OrdinalCriterion;
+import fi.smaa.OrdinalPreferenceInformation;
+import fi.smaa.Rank;
 import fi.smaa.SMAAModel;
 import fi.smaa.SMAAResults;
 import fi.smaa.SMAAResultsListener;
@@ -156,7 +158,7 @@ public class MainApp {
 
 
 	private void initWithModel(SMAAModel model) {
-		initLeftPanel();
+		initLeftPanel();		
 		model.addPropertyChangeListener(new SMAAModelListener());
 		buildNewSimulator();
 		setRightViewToCriteria();
@@ -196,6 +198,12 @@ public class MainApp {
 		rightViewBuilder = new CriterionView(node, model);
 		rebuildRightPanel();
 	}	
+	
+	public void setRightViewToPreferences() {
+		rightViewBuilder = new PreferenceInformationView(
+				new SMAAModelPreferencePresentationModel(model));
+		rebuildRightPanel();
+	}
 	
 	private void initLeftPanel() {
 		leftTreeModel = new LeftTreeModel(model);
@@ -686,6 +694,9 @@ public class MainApp {
 			} else if (node == leftTreeModel.getModelNode()) {
 				editRenameItem.setEnabled(true);
 				editDeleteItem.setEnabled(false);
+			} else if (node == leftTreeModel.getPreferencesNode()) {
+				setRightViewToPreferences();
+				setEditMenuItemsEnabled(false);
 			} else {
 				setEditMenuItemsEnabled(false);
 			}
@@ -699,8 +710,13 @@ public class MainApp {
 
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
+				connectRankListeners();
+			}
 			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
-					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA)) {
+					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
+					evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
+					evt.getSource() instanceof Rank) {
 				buildNewSimulator();
 				rebuildRightPanel();
 				expandLeftMenu();
@@ -720,6 +736,17 @@ public class MainApp {
 		simulationProgress.setValue(0);
 		simulator.restart();	
 	}	
+
+	public void connectRankListeners() {
+		if (model.getPreferenceInformation() instanceof OrdinalPreferenceInformation) {
+			OrdinalPreferenceInformation prefs = (OrdinalPreferenceInformation) model.getPreferenceInformation();
+			List<Rank> ranks = prefs.getRanks();
+			SMAAModelListener modelListener = new SMAAModelListener();
+			for (Rank r : ranks) {
+				r.addPropertyChangeListener(modelListener);
+			}
+		}
+	}
 
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {

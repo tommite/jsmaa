@@ -18,9 +18,6 @@
 
 package fi.smaa.gui;
 
-import java.util.List;
-
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import nl.rug.escher.common.gui.LayoutUtil;
@@ -115,10 +112,10 @@ public class CriterionView implements ViewBuilder {
 		builder.addLabel("Type", cc.xy(5, row));
 		
 		
-		List<JComboBox> rankSelectors = null;		
-		if (criterion instanceof OrdinalCriterion) {
-			 rankSelectors = new RankSelectorGroup((OrdinalCriterion) criterion).getSelectors();
-		}
+//		List<JComboBox> rankSelectors = null;		
+//		if (criterion instanceof OrdinalCriterion) {
+//			 rankSelectors = new RankSelectorGroup((OrdinalCriterion) criterion).getSelectors();
+//		}
 		
 		int index = 0;
 		for (Alternative a : model.getAlternatives()) {
@@ -141,9 +138,9 @@ public class CriterionView implements ViewBuilder {
 				builder.add(comp, cc.xy(3, row));
 				builder.addLabel("Normal distributed value", cc.xy(5, row));				
 			} else if (criterion instanceof OrdinalCriterion) {
-				JComboBox box = rankSelectors.get(index);
-				builder.add(box, cc.xy(3, row));
-				builder.addLabel("Rank", cc.xy(5, row));								
+//				JComboBox box = rankSelectors.get(index);
+//				builder.add(box, cc.xy(3, row));
+//				builder.addLabel("Rank", cc.xy(5, row));								
 			}
 			index++;
 		}

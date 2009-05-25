@@ -38,7 +38,7 @@ public class Rank extends Measurement {
 	public void setRank(Integer rank) {
 		if (rank < 1) {
 			throw new IllegalArgumentException();
-		}		
+		}
 		Object oldVal = this.rank;
 		this.rank = rank;
 		firePropertyChange(PROPERTY_RANK, oldVal, this.rank);

@@ -26,31 +26,28 @@ import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.ListModel;
 
-
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.beans.PropertyAdapter;
 import com.jgoodies.binding.list.ArrayListModel;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.OrdinalCriterion;
 import fi.smaa.Rank;
 
 public class RankSelectorGroup {
-	private List<Integer> ranks;
-	private OrdinalCriterion crit;
 	private ArrayList<JComboBox> components = new ArrayList<JComboBox>();
 	private ListModel listModel;
+	private List<Rank> boundRanks;
 	
-	public RankSelectorGroup(OrdinalCriterion crit) {
-		this.crit = crit;
-		this.ranks = createObjects(crit);
-		listModel = new ArrayListModel<Integer>(ranks);				
+	public RankSelectorGroup(List<Rank> boundRanks) {
+		int numBoxes = boundRanks.size();
+		this.boundRanks = boundRanks;
+		listModel = new ArrayListModel<Integer>(createObjects(numBoxes));
 		createComponents();
 	}
-	
-	private List<Integer> createObjects(OrdinalCriterion crit) {
+		
+	private List<Integer> createObjects(int numBoxes) {
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
-		for (int i=1;i<=crit.getAlternatives().size();i++) {
+		for (int i=1;i<=numBoxes;i++) {
 			ranks.add(i);
 		}
 		return ranks;
@@ -61,8 +58,8 @@ public class RankSelectorGroup {
 	}
 
 	private void createComponents() {
-		for (Rank r : crit.getMeasurements().values()){			
-			components.add(createComboBox(r));
+		for (int i=0;i<boundRanks.size();i++) {
+			components.add(createComboBox(boundRanks.get(i)));
 		}
 	}
 
@@ -87,10 +84,10 @@ public class RankSelectorGroup {
 	}
 
 	private Integer findUnselectedItem() {
-		for (Integer i : ranks) {
+		for (int i=1;i<=components.size();i++) {
 			boolean found = false;			
 			for (JComboBox box : components) {
-				if (box.getSelectedItem() == i) {
+				if (box.getSelectedItem().equals(new Integer(i))) {
 					found = true;
 					break;
 				}

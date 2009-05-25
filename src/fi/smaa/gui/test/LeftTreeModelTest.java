@@ -67,12 +67,13 @@ public class LeftTreeModelTest {
 	public void testChildOfRoot() {
 		assertEquals("Alternatives", treeModel.getChild(treeModel.getRoot(), 0));
 		assertEquals("Criteria", treeModel.getChild(treeModel.getRoot(), 1));
-		assertEquals("Results", treeModel.getChild(treeModel.getRoot(), 2));
+		assertEquals("Preferences", treeModel.getChild(treeModel.getRoot(), 2));		
+		assertEquals("Results", treeModel.getChild(treeModel.getRoot(), 3));
 	}
 	
 	@Test
 	public void testNumChildrenRoot() {
-		assertEquals(3, treeModel.getChildCount(treeModel.getRoot()));		
+		assertEquals(4, treeModel.getChildCount(treeModel.getRoot()));		
 	}
 	
 	private Object getAlternativeNode() {
@@ -83,8 +84,12 @@ public class LeftTreeModelTest {
 		return treeModel.getChild(treeModel.getRoot(), 1);
 	}
 	
-	private Object getResultsNode() {
+	private Object getPreferencesNode() {
 		return treeModel.getChild(treeModel.getRoot(), 2);
+	}
+	
+	private Object getResultsNode() {
+		return treeModel.getChild(treeModel.getRoot(), 3);
 	}
 	
 	private Object getRankAccNode() {
@@ -94,8 +99,6 @@ public class LeftTreeModelTest {
 	private Object getCentralWeightNode() {
 		return treeModel.getChild(getResultsNode(), 1);
 	}
-	
-	
 	
 	@Test
 	public void testAlternativeNodes() {
@@ -124,6 +127,10 @@ public class LeftTreeModelTest {
 		assertFalse(treeModel.isLeaf(getResultsNode()));
 	}
 	
+	@Test
+	public void testPreferenceNodes() {
+		assertTrue(treeModel.isLeaf(getPreferencesNode()));
+	}
 	
 	@Test
 	public void testEmptyAltsCrits() {
@@ -140,6 +147,8 @@ public class LeftTreeModelTest {
 	public void testGetIndexOfChild() {
 		assertEquals(0, treeModel.getIndexOfChild(treeModel.getRoot(), getAlternativeNode()));
 		assertEquals(1, treeModel.getIndexOfChild(treeModel.getRoot(), getCriteriaNode()));
+		assertEquals(2, treeModel.getIndexOfChild(treeModel.getRoot(), getPreferencesNode()));
+		assertEquals(3, treeModel.getIndexOfChild(treeModel.getRoot(), getResultsNode()));
 		
 		assertEquals(0, treeModel.getIndexOfChild(getAlternativeNode(), alt1));
 		assertEquals(1, treeModel.getIndexOfChild(getAlternativeNode(), alt2));
