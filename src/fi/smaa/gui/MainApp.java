@@ -546,6 +546,7 @@ public class MainApp {
 		JMenuItem addAltButton = new JMenuItem("Add new");
 		addAltButton.setMnemonic('n');
 		addAltButton.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addAltButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));		
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -573,10 +574,12 @@ public class MainApp {
 		showItem.setIcon(getIcon(ImageLoader.ICON_CRITERIALIST));
 		JMenuItem addUnifItem = new JMenuItem("Add uniform");
 		addUnifItem.setMnemonic('u');
-		addUnifItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
+		addUnifItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addUnifItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
 		JMenuItem addGaussianItem = new JMenuItem("Add gaussian");
 		addGaussianItem.setMnemonic('g');
 		addGaussianItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addGaussianItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));		
 		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
 		addOrdinalItem.setMnemonic('o');
 		addOrdinalItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
