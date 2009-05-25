@@ -63,11 +63,12 @@ import javax.swing.filechooser.FileFilter;
  *
  * @version 1.14 01/23/03
  * @author Jeff Dinkins
+ * 
+ * @version New version, small changes. 25/5/2009
+ * @author Tommi Tervonen
  */
+@SuppressWarnings("unchecked")
 public class ExampleFileFilter extends FileFilter {
-
-	private static String TYPE_UNKNOWN = "Type Unknown";
-	private static String HIDDEN_FILE = "Hidden File";
 
 	private Hashtable filters = null;
 	private String description = null;
