@@ -45,7 +45,7 @@ public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 	 * @param double2
 	 * @return
 	 */
-	private Double deriveMax(Double mean, Double stdev) {
+	protected Double deriveMax(Double mean, Double stdev) {
 		return mean + (stdev * 1.96);
 	}
 
@@ -55,7 +55,7 @@ public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 	 * @param double2
 	 * @return
 	 */
-	private Double deriveMin(Double mean, Double stdev) {
+	protected Double deriveMin(Double mean, Double stdev) {
 		return mean - (stdev * 1.96);
 	}
 

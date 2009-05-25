@@ -71,6 +71,7 @@ import fi.smaa.Alternative;
 import fi.smaa.AlternativeExistsException;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
+import fi.smaa.LogNormalCriterion;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.OrdinalPreferenceInformation;
 import fi.smaa.Rank;
@@ -579,7 +580,12 @@ public class MainApp {
 		JMenuItem addGaussianItem = new JMenuItem("Add gaussian");
 		addGaussianItem.setMnemonic('g');
 		addGaussianItem.setIcon(getIcon(ImageLoader.ICON_ADD));
-		addGaussianItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));		
+		addGaussianItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		JMenuItem addLogNormalItem = new JMenuItem("Add lognormal");
+		addLogNormalItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addLogNormalItem.setMnemonic('l');
+		addLogNormalItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));				
+		
 		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
 		addOrdinalItem.setMnemonic('o');
 		addOrdinalItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
@@ -599,6 +605,11 @@ public class MainApp {
 				addGaussianCriterion();
 			}
 		});
+		addLogNormalItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addLogNormalCriterion();
+			}
+		});		
 		addOrdinalItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addOrdinalCriterion();
@@ -609,6 +620,7 @@ public class MainApp {
 		criteriaMenu.add(addUnifItem);
 		//toolBarAddCritMenu.add(addOrdinalButton);			
 		criteriaMenu.add(addGaussianItem);
+		criteriaMenu.add(addLogNormalItem);
 		return criteriaMenu;
 	}
 
@@ -616,6 +628,11 @@ public class MainApp {
 		model.addCriterion(new GaussianCriterion(generateNextCriterionName()));
 		expandLeftMenu();						
 	}
+	
+	protected void addLogNormalCriterion() {
+		model.addCriterion(new LogNormalCriterion(generateNextCriterionName()));
+		expandLeftMenu();						
+	}	
 
 	protected void addUniformCriterion() {
 		model.addCriterion(new UniformCriterion(generateNextCriterionName()));

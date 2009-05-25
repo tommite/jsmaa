@@ -27,6 +27,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
+import fi.smaa.LogNormalCriterion;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.UniformCriterion;
 
@@ -51,6 +52,9 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				if (value instanceof UniformCriterion) {
 					setIcon(loader.getIcon(ImageLoader.ICON_UNIFORMCRITERION));
 					setToolTipText("Uniform distributed criterion");
+				} else if (value instanceof LogNormalCriterion) {
+					setIcon(loader.getIcon(ImageLoader.ICON_LOGNORMALCRITERION));
+					setToolTipText("LogNormal distributed criterion");					
 				} else if (value instanceof GaussianCriterion) {
 					setIcon(loader.getIcon(ImageLoader.ICON_GAUSSIANCRITERION));
 					setToolTipText("Gaussian distributed criterion");					

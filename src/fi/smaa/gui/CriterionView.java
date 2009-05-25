@@ -34,6 +34,7 @@ import fi.smaa.CardinalCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
+import fi.smaa.LogNormalCriterion;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.SMAAModel;
 import fi.smaa.UniformCriterion;
@@ -136,7 +137,9 @@ public class CriterionView implements ViewBuilder {
 				JComponent comp = ComponentBuilder.createGaussianMeasurementPanel(
 						new PresentationModel<GaussianMeasurement>(meas));
 				builder.add(comp, cc.xy(3, row));
-				builder.addLabel("Normal distributed value", cc.xy(5, row));				
+				String sLabel = criterion instanceof LogNormalCriterion ? 
+						"LogNormal distributed value" : "Normal distributed value";
+				builder.addLabel(sLabel, cc.xy(5, row));				
 			} else if (criterion instanceof OrdinalCriterion) {
 //				JComboBox box = rankSelectors.get(index);
 //				builder.add(box, cc.xy(3, row));

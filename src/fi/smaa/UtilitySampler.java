@@ -33,6 +33,9 @@ public class UtilitySampler {
 	public void sample(Criterion crit, double[] target) {
 		if (crit instanceof GaussianCriterion) {
 			sample((GaussianCriterion) crit, target);
+			if (crit instanceof LogNormalCriterion) {
+				exponentiateVector(target);
+			}
 		} else if (crit instanceof OrdinalCriterion) {
 			sample((OrdinalCriterion) crit, target);
 		} else if (crit instanceof UniformCriterion) {
@@ -42,6 +45,12 @@ public class UtilitySampler {
 		}		
 	}
 	
+	private void exponentiateVector(double[] target) {
+		for (int i=0;i<target.length;i++) {
+			target[i] = Math.exp(target[i]);
+		}
+	}
+
 	public void sample(GaussianCriterion crit, double[] target) {
 		assert(target.length == numAlts);
 		
