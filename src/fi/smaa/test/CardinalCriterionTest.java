@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.CardinalCriterion;
-import fi.smaa.Criterion;
 import fi.smaa.Measurement;
 import fi.smaa.common.Interval;
 
@@ -64,8 +63,7 @@ public class CardinalCriterionTest {
 			protected Interval createScale(Map oldMeas) {
 				return null;
 			}
-			@Override
-			public Criterion deepCopy() {
+			public Object deepCopy() {
 				return null;
 			}
 		};

@@ -85,8 +85,7 @@ public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 		return new Interval(min, max);
 	}
 
-	@Override
-	public GaussianCriterion deepCopy() {
+	public Object deepCopy() {
 		GaussianCriterion c = new GaussianCriterion(name);
 		deepCopyAscending(c);
 		deepCopyAlternativesAndMeasurements(c);

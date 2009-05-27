@@ -18,9 +18,6 @@
 
 package fi.smaa;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -37,65 +34,17 @@ public class SMAASimulator {
 	private double[][] measurements;
 	private double[] utilities;
 	private Integer[] ranks;
-	private List<Alternative> alternatives;
-	private List<Criterion> criteria;
 	private UtilitySampler sampler;
-	private PreferenceInformation preferences;
+	private SMAAModel model;
 	
-	private MeasurementChangeListener listener = new MeasurementChangeListener();
-	
-	private class MeasurementChangeListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof Measurement ||
-					evt.getPropertyName().equals(CardinalCriterion.PROPERTY_ASCENDING)) {
-				restart();
-			} else if (evt.getSource() instanceof PreferenceInformation) {
-				preferences = (PreferenceInformation) evt.getNewValue();
-				restart();
-			}
-		}		
-	}
-	
-	private static SMAASimulator simulator;
-	
-	public static SMAASimulator initSimulator(SMAAModel model, Integer iterations) {
-		if (simulator != null) {
-			simulator.stop();
-			simulator.disconnectListeners();
-		}
-		simulator = new SMAASimulator(model, iterations);
-		return simulator;
-	}
-	
-	private void disconnectListeners() {
-		for (Criterion<Measurement> c : criteria) {
-			c.removePropertyChangeListener(listener);
-			for (Measurement m : c.getMeasurements().values()) {
-				m.removePropertyChangeListener(listener);
-			}
-		}		
-	}
-
-	private SMAASimulator(SMAAModel model, Integer iterations) {
-		this.criteria = new ArrayList<Criterion>(model.getCriteria());
-		this.alternatives = new ArrayList<Alternative>(model.getAlternatives());
+	public SMAASimulator(SMAAModel smaaModel, Integer iterations) {
+		model = smaaModel.deepCopy();
+		results = new SMAAResults(model.getAlternatives(), model.getCriteria(), 10);
+		sampler = new UtilitySampler(model.getAlternatives().size());		
 		this.iterations = iterations;
-		results = new SMAAResults(alternatives, criteria, 10);
-		this.preferences = model.getPreferenceInformation();
-		sampler = new UtilitySampler(this.alternatives.size());
 		init();
-		connectListeners();
 	}
 	
-	private void connectListeners() {
-		for (Criterion<Measurement> c : criteria) {
-			c.addPropertyChangeListener(listener);
-			for (Measurement m : c.getMeasurements().values()) {
-				m.addPropertyChangeListener(listener);
-			}
-		}
-	}
-
 	public Integer getTotalIterations() {
 		return iterations;
 	}
@@ -114,7 +63,7 @@ public class SMAASimulator {
 	synchronized public void restart() {
 		stop();
 		results.reset();
-		if (alternatives.size() == 0 || criteria.size() == 0) {
+		if (model.getAlternatives().size() == 0 || model.getCriteria().size() == 0) {
 			return;
 		}
 		simulationThread = createSimulationThread();
@@ -132,41 +81,21 @@ public class SMAASimulator {
 		SimulationThread th = new SimulationThread();
 		th.addPhase(new SimulationPhase() {
 			public void iterate() {
-				lockCriteria();
 				generateWeights();
 				sampleCriteria();
 				aggregate();
 				rankAlternatives();
 				results.update(ranks, weights);
-				releaseCriteria();
 			}			
 		}, iterations);
 		th.addPhase(new SimulationPhase() {
 			public void iterate() {
-				lockCriteria();
 				sampleCriteria();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);				
-				releaseCriteria();
 			}			
 		}, iterations);
 		return th;
-	}
-
-	protected void releaseCriteria() {
-		for (Criterion c : criteria) {
-			c.getChangeSemaphore().release();
-		}		
-	}
-
-	protected void lockCriteria() {
-		for (Criterion c : criteria) {
-			try {
-				c.getChangeSemaphore().acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private void rankAlternatives() {
@@ -189,9 +118,9 @@ public class SMAASimulator {
 	private void aggregate() {
 		clearUtilities();
 		
-		for (int critIndex=0;critIndex<criteria.size();critIndex++) {
-			Criterion crit = criteria.get(critIndex);
-			for (int altIndex=0;altIndex<alternatives.size();altIndex++) {
+		for (int critIndex=0;critIndex<model.getCriteria().size();critIndex++) {
+			Criterion crit = model.getCriteria().get(critIndex);
+			for (int altIndex=0;altIndex<model.getAlternatives().size();altIndex++) {
 				double partUtil = computePartialUtility(critIndex, crit, altIndex);
 				utilities[altIndex] += weights[critIndex] * partUtil;
 			}
@@ -202,10 +131,10 @@ public class SMAASimulator {
 		clearConfidenceHits();
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 
-		for (int altIndex=0;altIndex<alternatives.size();altIndex++) {
-			List<Double> cw = cws.get(alternatives.get(altIndex));
+		for (int altIndex=0;altIndex<model.getAlternatives().size();altIndex++) {
+			List<Double> cw = cws.get(model.getAlternatives().get(altIndex));
 			double utility = computeUtility(altIndex, cw);
-			for (int otherAlt=0;otherAlt<alternatives.size();otherAlt++) {
+			for (int otherAlt=0;otherAlt<model.getAlternatives().size();otherAlt++) {
 				if (altIndex == otherAlt) {
 					continue;
 				}
@@ -226,8 +155,8 @@ public class SMAASimulator {
 
 	private double computeUtility(int altIndex, List<Double> cw) {
 		double utility = 0;
-		for (int i=0;i<criteria.size();i++) {
-			double partUtil = computePartialUtility(i, criteria.get(i), altIndex);
+		for (int i=0;i<model.getCriteria().size();i++) {
+			double partUtil = computePartialUtility(i, model.getCriteria().get(i), altIndex);
 			utility += partUtil * cw.get(i);
 		}
 		return utility;
@@ -249,19 +178,19 @@ public class SMAASimulator {
 	}
 
 	private void sampleCriteria() {
-		for (int i=0;i<criteria.size();i++) {
-			sampler.sample(criteria.get(i), measurements[i]);
+		for (int i=0;i<model.getCriteria().size();i++) {
+			sampler.sample(model.getCriteria().get(i), measurements[i]);
 		}
 	}
 
 	private void generateWeights() {
-		weights = preferences.sampleWeights();
+		weights = model.getPreferenceInformation().sampleWeights();
 	}
 	
 
 	private void init() {
-		int numAlts = alternatives.size();
-		int numCrit = criteria.size();
+		int numAlts = model.getAlternatives().size();
+		int numCrit = model.getCriteria().size();
 		weights = new double[numCrit];
 		measurements = new double[numCrit][numAlts];
 		utilities = new double[numAlts];

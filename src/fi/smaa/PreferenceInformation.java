@@ -18,6 +18,6 @@
 
 package fi.smaa;
 
-public interface PreferenceInformation {
+public interface PreferenceInformation extends DeepCopiable {
 	public double[] sampleWeights();
 }

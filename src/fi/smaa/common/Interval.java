@@ -113,8 +113,7 @@ public class Interval extends Measurement {
 		return other.getStart() >= getStart() && other.getEnd() <= getEnd(); 
 	}
 
-	@Override
-	public Measurement deepCopy() {
+	public Object deepCopy() {
 		return new Interval(start, end);
 	}
 

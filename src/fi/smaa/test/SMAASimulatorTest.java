@@ -55,13 +55,13 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testConstructor() {
-		SMAASimulator simulator = SMAASimulator.initSimulator(model, 100);		
+		SMAASimulator simulator = new SMAASimulator(model, 100);		
 		assertEquals(100, simulator.getTotalIterations().intValue());
 	}
 	
 	@Test
 	public void testIsSimulatorRunning() throws InterruptedException {
-		SMAASimulator simulator = SMAASimulator.initSimulator(model, Integer.MAX_VALUE);
+		SMAASimulator simulator = new SMAASimulator(model, Integer.MAX_VALUE);
 		assertFalse(simulator.isRunning());
 		simulator.restart();
 		Thread.sleep(1);
@@ -71,7 +71,7 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testStopSimulator() throws InterruptedException {
-		SMAASimulator simulator = SMAASimulator.initSimulator(model, Integer.MAX_VALUE);
+		SMAASimulator simulator = new SMAASimulator(model, Integer.MAX_VALUE);
 		simulator.restart();
 		Thread.sleep(1);
 		simulator.stop();
@@ -109,7 +109,7 @@ public class SMAASimulatorTest {
 		crit2.add(c2);
 		model2.setCriteria(crit2);
 		
-		SMAASimulator simulator = SMAASimulator.initSimulator(model2, 10000);
+		SMAASimulator simulator = new SMAASimulator(model2, 10000);
 		simulator.restart();
 		do {
 			Thread.sleep(100);
@@ -130,7 +130,7 @@ public class SMAASimulatorTest {
 	public void testCorrectResults() throws InterruptedException {
 		setCriteriaMeasurements();
 		
-		SMAASimulator simulator = SMAASimulator.initSimulator(model, 10000);
+		SMAASimulator simulator = new SMAASimulator(model, 10000);
 		simulator.restart();
 		do {
 			Thread.sleep(100);

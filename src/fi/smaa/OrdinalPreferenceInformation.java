@@ -19,6 +19,7 @@
 package fi.smaa;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import fi.smaa.common.RandomUtil;
@@ -60,6 +61,14 @@ public class OrdinalPreferenceInformation implements PreferenceInformation, Seri
 	@Override
 	public String toString() {
 		return ranks.toString();
+	}
+
+	public Object deepCopy() {
+		List<Rank> myranks = new ArrayList<Rank>();
+		for (Rank r : ranks) {
+			myranks.add((Rank) r.deepCopy());
+		}
+		return myranks;
 	}
 
 }

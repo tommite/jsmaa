@@ -27,11 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import com.jgoodies.binding.beans.Model;
 
-public abstract class Criterion<T extends Measurement> extends Model {
+public abstract class Criterion<T extends Measurement> extends Model implements DeepCopiable {
 	
 	public final static String PROPERTY_NAME = "name";	
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
@@ -42,8 +41,6 @@ public abstract class Criterion<T extends Measurement> extends Model {
 	protected List<Alternative> alternatives = new ArrayList<Alternative>();
 	protected Map<Alternative, T> measurements = new HashMap<Alternative, T>();
 	transient private MeasurementListener measurementListener = new MeasurementListener();
-	
-	private Semaphore changeSemaphore = new Semaphore(1);
 	
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
@@ -57,10 +54,6 @@ public abstract class Criterion<T extends Measurement> extends Model {
 
 	protected Criterion(String name) {
 		this.name = name;
-	}
-	
-	public Semaphore getChangeSemaphore() {
-		return changeSemaphore;
 	}
 	
 	@Override
@@ -92,16 +85,10 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		if (alternatives == null) {
 			throw new NullPointerException();
 		}		
-		try {
-			changeSemaphore.acquire();		
-			Object oldVal = this.alternatives;
-			this.alternatives = alternatives;
-			firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);		
-			updateMeasurements();
-			changeSemaphore.release();				
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Object oldVal = this.alternatives;
+		this.alternatives = alternatives;
+		firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);		
+		updateMeasurements();
 	}
 	
 	public abstract String getTypeLabel();
@@ -169,8 +156,6 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		}
 	}	
 
-	public abstract Criterion<T> deepCopy();
-
 	@SuppressWarnings("unchecked")
 	protected void deepCopyAlternativesAndMeasurements(Criterion target) {
 		List<Alternative> list = new ArrayList<Alternative>();
@@ -178,12 +163,16 @@ public abstract class Criterion<T extends Measurement> extends Model {
 		for (Alternative a : alternatives) {
 			Alternative newAlt = a.deepCopy();
 			list.add(newAlt);
-			meas.put(newAlt, (T) measurements.get(a).deepCopy());
+			T m = measurements.get(a);
+			if (m == null) {
+				m = createMeasurement();
+			}
+			meas.put(newAlt, (T) m.deepCopy());
 		}
 		target.setAlternatives(list);
 		target.setMeasurements(meas);
 	}
-	
+		
 	public PropertyChangeListener getMeasurementListener() {
 		return measurementListener;
 	}

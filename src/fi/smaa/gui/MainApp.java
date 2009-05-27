@@ -844,7 +844,10 @@ public class MainApp extends Model {
 	}
 
 	private void buildNewSimulator() {
-		simulator = SMAASimulator.initSimulator(model, 10000);		
+		if (simulator != null) {
+			simulator.stop();
+		}
+		simulator = new SMAASimulator(model, 10000);		
 		results = simulator.getResults();
 		results.addResultsListener(new SimulationProgressListener());
 		if (rightViewBuilder instanceof CentralWeightsView) {

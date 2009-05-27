@@ -95,8 +95,7 @@ public class OrdinalCriterion extends Criterion<Rank> {
 		ensureRanks();
 	}
 
-	@Override
-	public OrdinalCriterion deepCopy() {
+	public Object deepCopy() {
 		OrdinalCriterion crit = new OrdinalCriterion(name);
 		deepCopyAlternativesAndMeasurements(crit);
 		return crit;

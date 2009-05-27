@@ -63,8 +63,7 @@ public class CriterionTest {
 			public Map getMeasurements() {
 				return new HashMap();
 			}
-			@Override
-			public Criterion deepCopy() {
+			public Object deepCopy() {
 				return null;
 			}			
 		};

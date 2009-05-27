@@ -18,11 +18,6 @@
 
 package fi.smaa;
 
-import com.jgoodies.binding.beans.Model;
-
-/**
- * Marking abstract class
- */
-public abstract class Measurement extends Model implements DeepCopiable {
-
+public interface DeepCopiable {
+	public Object deepCopy();
 }

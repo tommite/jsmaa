@@ -53,8 +53,7 @@ public class UniformCriterion extends CardinalCriterion<Interval> {
 		return new Interval();
 	}
 
-	@Override
-	public UniformCriterion deepCopy() {
+	public Object deepCopy() {
 		UniformCriterion c = new UniformCriterion(name);
 		deepCopyAscending(c);
 		deepCopyAlternativesAndMeasurements(c);
