@@ -45,14 +45,11 @@ import fi.smaa.common.Interval;
 
 public class CriterionTest {
 	
-	@SuppressWarnings("unchecked")
-	private Criterion criterion;
-	
+	private Criterion<Measurement> criterion;
 	private List<Alternative> alts;
 	
-	@SuppressWarnings("unchecked")
-	private Criterion createInstance() {
-		return new Criterion("name") {
+	private Criterion<Measurement> createInstance() {
+		return new Criterion<Measurement>("name") {
 			public String getTypeLabel() {
 				return null;
 			}
@@ -61,8 +58,8 @@ public class CriterionTest {
 			}
 			protected void fireMeasurementChange() {
 			}
-			public Map getMeasurements() {
-				return new HashMap();
+			public Map<Alternative, Measurement> getMeasurements() {
+				return new HashMap<Alternative, Measurement>();
 			}
 			public Object deepCopy() {
 				return null;
@@ -100,9 +97,8 @@ public class CriterionTest {
 	
 	@Test
 	public void testSetAlternatives() {
-		List<Alternative> list = new ArrayList<Alternative>();
-		list.add(new Alternative("alt"));
-		JUnitUtil.testSetter(criterion, Criterion.PROPERTY_ALTERNATIVES, new ArrayList<Alternative>(), list);
+		UniformCriterion c = new UniformCriterion("crit");
+		JUnitUtil.testSetter(c, Criterion.PROPERTY_ALTERNATIVES, new ArrayList<Alternative>(), alts);
 	}
 	
 	@SuppressWarnings("unchecked")
