@@ -22,6 +22,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -57,6 +58,20 @@ public class SMAAResultsTest {
 		testData = new TestData();
 		model = testData.model;
 		results = new SMAAResults(model.getAlternatives(), model.getCriteria(), 10);
+	}
+	
+	@Test
+	public void testConfidenceFactors() {
+		boolean[] hit = new boolean[2];
+		results.confidenceUpdate(hit);
+		hit[0] = true;
+		results.confidenceUpdate(hit);
+		hit[1] = true;
+		results.confidenceUpdate(hit);
+		
+		List<Double> cf = results.getConfidenceFactors();
+		assertEquals(0.66, cf.get(0), 0.02);
+		assertEquals(0.33, cf.get(1), 0.02);
 	}
 	
 	@Test
@@ -120,8 +135,10 @@ public class SMAAResultsTest {
 		do10Hits();
 		
 		List<Double> cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));
+		assertFalse(cw1.get(0).equals(Double.NaN));
 		
 		results.reset();
+		cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));		
 		
 		Map<Alternative, List<Double>> raccs = results.getRankAcceptabilities();
 		for (List<Double> list : raccs.values()) {
@@ -129,7 +146,6 @@ public class SMAAResultsTest {
 				assertTrue(d.equals(Double.NaN));
 			}
 		}
-		
 		assertTrue(cw1.get(0).equals(Double.NaN));
 		assertTrue(cw1.get(1).equals(Double.NaN));
 		assertTrue(cw1.get(2).equals(Double.NaN));

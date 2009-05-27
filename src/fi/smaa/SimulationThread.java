@@ -18,35 +18,60 @@
 
 package fi.smaa;
 
-public abstract class SimulationThread extends Thread{
+import java.util.ArrayList;
+import java.util.List;
+
+public class SimulationThread extends Thread{
 
 	private int iteration;
-	private int totalIterations;
+	private SimulationPhase currentPhase;
 	private boolean go;
+	private List<SimulationPhase> phases = new ArrayList<SimulationPhase>();
+	private List<Integer> phaseIterations = new ArrayList<Integer>();
 
-	public SimulationThread(int totalIterations) {
-		iteration = 1;
-		this.totalIterations = totalIterations;
+	public SimulationThread() {
+		currentPhase = null;
+		iteration = 0;
 		go = false;
+	}
+	
+	public void addPhase(SimulationPhase phase, int iterations) {
+		assert(iterations > 0);
+		phases.add(phase);
+		phaseIterations.add(iterations);
 	}
 
 	public void run() {
 		go = true;
-		while (go && iteration < totalIterations) {
-			iterate();
-			iteration++;
+		for (int i=0;go && i<phases.size();i++) {
+			currentPhase = phases.get(i);
+			iteration = 1;
+			int currentTotalIters = phaseIterations.get(i);
+			while (go && iteration < currentTotalIters) {
+				currentPhase.iterate();
+				iteration++;
+			}
 		}
 		go = false;
 	}
 
-	public abstract void iterate();
-
 	public int getTotalIteration() {
-		return totalIterations;
+		int total = 0;
+		for (Integer i : phaseIterations) {
+			total += i;
+		}
+		return total;
 	}
 
 	public int getIteration() {
-		return iteration;
+		int total = 0;
+		for (int i=0;i<phases.size();i++) {
+			if (currentPhase == phases.get(i)) {
+				break;
+			}
+			total += phaseIterations.get(i);
+		}
+		return total + iteration;
 	}
 
 	public void stopSimulation() {

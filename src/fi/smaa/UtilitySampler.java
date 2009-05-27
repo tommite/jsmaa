@@ -54,7 +54,7 @@ public class UtilitySampler {
 	public void sample(GaussianCriterion crit, double[] target) {
 		assert(target.length == numAlts);
 		
-		for (int i = 0 ; i < numAlts;i++) {
+		for (int i = 0 ; i < crit.getAlternatives().size();i++) {
 			Alternative a = crit.getAlternatives().get(i);			
 			target[i] = RandomUtil.createGaussian(crit.getMeasurements().get(a).getMean(),
 					crit.getMeasurements().get(a).getStDev());
@@ -66,7 +66,7 @@ public class UtilitySampler {
 		
 		RandomUtil.createSumToOneSorted(tmparr);
 		
-		for (int i=0;i<numAlts;i++) {
+		for (int i=0;i<c.getAlternatives().size();i++) {
 			Rank rank = c.getMeasurements().get(c.getAlternatives().get(i));
 			target[i] = tmparr[tmparr.length - rank.getRank()];
 		}
@@ -75,7 +75,7 @@ public class UtilitySampler {
 	public void sample(UniformCriterion c, double[] target) {
 		assert(target.length == numAlts);
 
-		for (int i=0;i<numAlts;i++) {
+		for (int i=0;i<c.getAlternatives().size();i++) {
 			Alternative a = c.getAlternatives().get(i);
 			double intMin = c.getMeasurements().get(a).getStart();
 			double intMax = c.getMeasurements().get(a).getEnd();

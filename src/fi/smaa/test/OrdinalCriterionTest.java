@@ -77,7 +77,6 @@ public class OrdinalCriterionTest {
 		crit.setAlternatives(nAlts);
 		Map<Alternative, Rank> ranks = crit.getMeasurements();
 		assertEquals(2, ranks.size());
-		System.out.println(ranks);
 		assertEquals(new Rank(1), ranks.get(alts.get(0)));
 		assertEquals(new Rank(2), ranks.get(newAlt));
 	}	

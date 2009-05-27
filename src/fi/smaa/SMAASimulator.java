@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class SMAASimulator {
@@ -31,6 +32,7 @@ public class SMAASimulator {
 	private SMAAResults results;
 	private Integer iterations;
 	
+	private boolean[] confidenceHits;
 	private double[] weights;
 	private double[][] measurements;
 	private double[] utilities;
@@ -111,7 +113,7 @@ public class SMAASimulator {
 			
 	synchronized public void restart() {
 		stop();
-		resetValues();
+		results.reset();
 		if (alternatives.size() == 0 || criteria.size() == 0) {
 			return;
 		}
@@ -127,17 +129,28 @@ public class SMAASimulator {
 	}	
 
 	private SimulationThread createSimulationThread() {
-		return new SimulationThread(iterations) {
+		SimulationThread th = new SimulationThread();
+		th.addPhase(new SimulationPhase() {
 			public void iterate() {
 				lockCriteria();
 				generateWeights();
 				sampleCriteria();
 				aggregate();
 				rankAlternatives();
-				updateHits();
+				results.update(ranks, weights);
 				releaseCriteria();
-			}
-		};
+			}			
+		}, iterations);
+		th.addPhase(new SimulationPhase() {
+			public void iterate() {
+				lockCriteria();
+				sampleCriteria();
+				aggregateWithCentralWeights();
+				results.confidenceUpdate(confidenceHits);				
+				releaseCriteria();
+			}			
+		}, iterations);
+		return th;
 	}
 
 	protected void releaseCriteria() {
@@ -156,10 +169,6 @@ public class SMAASimulator {
 		}
 	}
 
-	private void resetValues() {
-		results.reset();
-	}
-	
 	private void rankAlternatives() {
 		UtilIndexPair[] pairs = new UtilIndexPair[utilities.length];
 		for (int i=0;i<utilities.length;i++) {
@@ -177,10 +186,6 @@ public class SMAASimulator {
 		}
 	}
 
-	private void updateHits() {
-		results.update(ranks, weights);
-	}
-
 	private void aggregate() {
 		clearUtilities();
 		
@@ -191,6 +196,41 @@ public class SMAASimulator {
 				utilities[altIndex] += weights[critIndex] * partUtil;
 			}
 		}
+	}
+
+	private void aggregateWithCentralWeights() {
+		clearConfidenceHits();
+		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
+
+		for (int altIndex=0;altIndex<alternatives.size();altIndex++) {
+			List<Double> cw = cws.get(alternatives.get(altIndex));
+			double utility = computeUtility(altIndex, cw);
+			for (int otherAlt=0;otherAlt<alternatives.size();otherAlt++) {
+				if (altIndex == otherAlt) {
+					continue;
+				}
+				double otherUtility = computeUtility(otherAlt, cw);
+				if (otherUtility > utility) {
+					confidenceHits[altIndex] = false;
+					break;
+				}
+			}
+		}		
+	}
+
+	private void clearConfidenceHits() {
+		for (int i=0;i<confidenceHits.length;i++) {
+			confidenceHits[i] = true;
+		}
+	}
+
+	private double computeUtility(int altIndex, List<Double> cw) {
+		double utility = 0;
+		for (int i=0;i<criteria.size();i++) {
+			double partUtil = computePartialUtility(i, criteria.get(i), altIndex);
+			utility += partUtil * cw.get(i);
+		}
+		return utility;
 	}
 
 	private double computePartialUtility(int critIndex, Criterion crit, int altIndex) {
@@ -226,5 +266,6 @@ public class SMAASimulator {
 		measurements = new double[numCrit][numAlts];
 		utilities = new double[numAlts];
 		ranks = new Integer[numAlts];
+		confidenceHits = new boolean[numAlts];
 	}	
 }

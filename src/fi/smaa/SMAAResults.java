@@ -36,19 +36,19 @@ public class SMAAResults {
 	private int updateInterval;
 	private List<Alternative> alternatives;
 	private List<Criterion> criteria;
+	private int[] confidenceHits;
+	private int confidenceIteration;
+	private List<Double> confidenceFactors;
 	
 	public SMAAResults(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
 		this.alternatives = alternatives;
 		this.criteria = criteria;
 		this.updateInterval = updateInterval;
-		initializeCentralWeightVectors();
-		initializeRankAcceptabilities();
-		initializeArrays();
+		initialize();
 	}
 
 	public void reset() {
-		initializeArrays();
-		calculateIndices();
+		initialize();
 	}
 	
 	public void addResultsListener(SMAAResultsListener listener) {
@@ -77,19 +77,43 @@ public class SMAAResults {
 				addCentralWeight(altIndex, weights);
 			}
 		}
-		if (getIteration()  % updateInterval == 0) {
+		calculateRankAccsAndCentralWeights();		
+		if (getRankAccIteration()  % updateInterval == 0) {
 			fireResultsChanged();
 		}
-		calculateIndices();
 	}
 	
+	public void confidenceUpdate(boolean[] hit) {
+		assert(hit.length == confidenceHits.length);
+		confidenceIteration++;
+		for (int i=0;i<hit.length;i++) {
+			if (hit[i]) {
+				confidenceHits[i]++;
+			}
+		}
+		calculateConfidenceFactors();		
+		if (confidenceIteration % updateInterval == 0) {
+			fireResultsChanged();
+		}
+	}
+	
+	private void calculateConfidenceFactors() {
+		for (int i=0;i<confidenceFactors.size();i++) {
+			confidenceFactors.set(i, calculateConfidenceFactor(i));
+		}
+	}
+
+	private Double calculateConfidenceFactor(int altIndex) {
+		return (double) confidenceHits[altIndex] / (double) confidenceIteration;
+	}
+
 	private void fireResultsChanged() {
 		for (SMAAResultsListener listener : listeners) {
 			listener.resultsChanged();
 		}
 	}
 
-	public Integer getIteration() {
+	public Integer getRankAccIteration() {
 		int num = 1;
 		for (int i=0;i<rankHits[0].length;i++) {
 			num += rankHits[0][i];
@@ -99,6 +123,10 @@ public class SMAAResults {
 
 	public Map<Alternative, List<Double>> getCentralWeightVectors() {
 		return transformMap(centralWeightVectors);
+	}
+	
+	public List<Double> getConfidenceFactors() {
+		return confidenceFactors;
 	}
 
 	private HashMap<Alternative, List<Double>> transformMap(
@@ -124,14 +152,21 @@ public class SMAAResults {
 
 	
 	private void initializeCentralWeightVectors() {
-		centralWeightVectors = createAlternativeMapWithZeroes(criteria.size());
+		centralWeightVectors = createAlternativeMapWithNans(criteria.size());
 	}
 	
 	private void initializeRankAcceptabilities() {
-		rankAcceptabilities = createAlternativeMapWithZeroes(alternatives.size());
+		rankAcceptabilities = createAlternativeMapWithNans(alternatives.size());
+	}
+	
+	private void initializeConfidenceFactors() {
+		confidenceFactors = new ArrayList<Double>();
+		for (int i=0;i<alternatives.size();i++) {
+			confidenceFactors.add(Double.NaN);
+		}
 	}
 
-	private HashMap<Integer, List<Double>> createAlternativeMapWithZeroes(int size) {
+	private HashMap<Integer, List<Double>> createAlternativeMapWithNans(int size) {
 		Double[] vals = new Double[size];
 		Arrays.fill(vals, Double.NaN);
 		HashMap<Integer, List<Double>> map = new HashMap<Integer, List<Double>>();		
@@ -148,14 +183,19 @@ public class SMAAResults {
 		}
 	}
 
-	private void initializeArrays() {
+	private void initialize() {
 		int numAlts = alternatives.size();
 		int numCrit = criteria.size();
 		rankHits = new int[numAlts][numAlts];
 		centralWeightAdds = new double[numAlts][numCrit];
+		confidenceHits = new int[numAlts];
+		confidenceIteration = 0;
+		initializeCentralWeightVectors();
+		initializeRankAcceptabilities();
+		initializeConfidenceFactors();		
 	}
 
-	private void calculateIndices() {
+	private void calculateRankAccsAndCentralWeights() {
 		calculateCentralWeightVectors();
 		calculateRankAcceptabilities();
 	}
@@ -180,8 +220,10 @@ public class SMAAResults {
 	private void calculateCentralWeightVectors() {
 		for(Integer altIndex : centralWeightVectors.keySet()) {
 			List<Double> vec = centralWeightVectors.get(altIndex);
-			for (int i=0;i<vec.size();i++) {
-				vec.set(i, centralWeightAdds[altIndex][i] / rankHits[altIndex][FIRSTRANK]);
+			if (rankHits[altIndex][FIRSTRANK] > 0) {
+				for (int i=0;i<vec.size();i++) {
+					vec.set(i, centralWeightAdds[altIndex][i] / rankHits[altIndex][FIRSTRANK]);
+				}
 			}
 		}
 	}
@@ -194,5 +236,4 @@ public class SMAAResults {
 	private void rankHit(int altIndex, int rank) {
 		rankHits[altIndex][rank]++;
 	}
-
 }

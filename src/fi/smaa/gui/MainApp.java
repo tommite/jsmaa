@@ -582,7 +582,6 @@ public class MainApp extends Model {
 
 
 	private void saveModel(SMAAModel model, File file) throws IOException {
-		// TODO Auto-generated method stub
 		ObjectOutputStream s = new ObjectOutputStream(new BufferedOutputStream(
 						new FileOutputStream(file)));
 		s.writeObject(model);
@@ -875,7 +874,7 @@ public class MainApp extends Model {
 
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
-			int amount = results.getIteration() * 100 / simulator.getTotalIterations();
+			int amount = results.getRankAccIteration() * 100 / simulator.getTotalIterations();
 			simulationProgress.setValue(amount);
 			if (amount < 100) {
 				simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");
