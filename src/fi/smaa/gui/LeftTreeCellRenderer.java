@@ -30,6 +30,7 @@ import fi.smaa.GaussianCriterion;
 import fi.smaa.LogNormalCriterion;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.UniformCriterion;
+import fi.smaa.common.ImageLoader;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
@@ -46,30 +47,30 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		try {		
 			if (leaf && value instanceof Alternative) {
-				setIcon(loader.getIcon(ImageLoader.ICON_ALTERNATIVE));
+				setIcon(loader.getIcon(FileNames.ICON_ALTERNATIVE));
 				setToolTipText("Alternative");
 			} else if (leaf && value instanceof Criterion) {
 				if (value instanceof UniformCriterion) {
-					setIcon(loader.getIcon(ImageLoader.ICON_UNIFORMCRITERION));
+					setIcon(loader.getIcon(FileNames.ICON_UNIFORMCRITERION));
 					setToolTipText("Uniform distributed criterion");
 				} else if (value instanceof LogNormalCriterion) {
-					setIcon(loader.getIcon(ImageLoader.ICON_LOGNORMALCRITERION));
+					setIcon(loader.getIcon(FileNames.ICON_LOGNORMALCRITERION));
 					setToolTipText("LogNormal distributed criterion");					
 				} else if (value instanceof GaussianCriterion) {
-					setIcon(loader.getIcon(ImageLoader.ICON_GAUSSIANCRITERION));
+					setIcon(loader.getIcon(FileNames.ICON_GAUSSIANCRITERION));
 					setToolTipText("Gaussian distributed criterion");					
 				} else if (value instanceof OrdinalCriterion) {
-					setIcon(loader.getIcon(ImageLoader.ICON_ORDINALCRITERION));
+					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));
 					setToolTipText("Ordinal criterion");					
 				}
 			} else if (value == model.getCentralWeightsNode()) {
-				setIcon(loader.getIcon(ImageLoader.ICON_CENTRALWEIGHTS));
+				setIcon(loader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
 				setToolTipText("Central weights");									
 			} else if (value == model.getRankAcceptabilitiesNode()) {
-				setIcon(loader.getIcon(ImageLoader.ICON_RANKACCEPTABILITIES));
+				setIcon(loader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 				setToolTipText("Rank acceptability indices");									
 			} else if (value == model.getPreferencesNode()) {
-				setIcon(loader.getIcon(ImageLoader.ICON_PREFERENCES));
+				setIcon(loader.getIcon(FileNames.ICON_PREFERENCES));
 				setToolTipText("Preference information");
 			} else {
 				setToolTipText(null); //no tool tip

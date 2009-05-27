@@ -25,7 +25,8 @@ import java.io.FileNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.gui.ImageLoader;
+import fi.smaa.common.ImageLoader;
+import fi.smaa.gui.FileNames;
 
 public class ImageLoaderTest {
 	
@@ -33,12 +34,12 @@ public class ImageLoaderTest {
 
 	@Before
 	public void setUp() {
-		loader = new ImageLoader();
+		loader = new ImageLoader("/gfx/");
 	}
 	
 	@Test
 	public void testGetIcon() throws Exception {
-		assertNotNull(loader.getIcon(ImageLoader.ICON_ALTERNATIVE));
+		assertNotNull(loader.getIcon(FileNames.ICON_ALTERNATIVE));
 	}
 	
 	@Test(expected=FileNotFoundException.class)

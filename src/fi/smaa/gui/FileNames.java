@@ -18,17 +18,7 @@
 
 package fi.smaa.gui;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-public class ImageLoader {
-	
-	public static final String IMAGE_PATH = "/gfx/";
-	private Map<String, Icon> icons;
+public class FileNames {
 	public static final String ICON_ORDINALCRITERION = "criterion.gif";
 	public static final String ICON_GAUSSIANCRITERION = "criterion_gaussian.gif";
 	public static final String ICON_UNIFORMCRITERION = "criterion_uniform.gif";
@@ -45,26 +35,4 @@ public class ImageLoader {
 	public static final String ICON_STOP = "stop.gif";
 	public static final String ICON_PREFERENCES = "preferences.gif";
 	public static final String ICON_SAVEAS = "saveas.gif";
-	
-	public ImageLoader() {
-		icons = new HashMap<String, Icon>();
-	}
-	
-	public Icon getIcon(String name) throws FileNotFoundException {
-		if (icons.containsKey(name)) {
-			return icons.get(name);
-		} else {
-		    java.net.URL imgURL = getClass().getResource(deriveGfxPath(name));
-		    if (imgURL == null) {
-		    	throw new FileNotFoundException("File not found for icon " + deriveGfxPath(name));
-		    }
-		    ImageIcon icon = new ImageIcon(imgURL);
-	        icons.put(name, icon);
-	        return icon;
-		}
-	}
-
-	private String deriveGfxPath(String name) {
-		return IMAGE_PATH + name;
-	}
 }

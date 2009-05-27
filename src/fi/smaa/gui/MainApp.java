@@ -83,6 +83,7 @@ import fi.smaa.SMAAResults;
 import fi.smaa.SMAAResultsListener;
 import fi.smaa.SMAASimulator;
 import fi.smaa.UniformCriterion;
+import fi.smaa.common.ImageLoader;
 
 @SuppressWarnings("unchecked")
 public class MainApp extends Model {
@@ -102,7 +103,7 @@ public class MainApp extends Model {
 	private JScrollPane rightPane;
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;
-	private ImageLoader imageLoader = new ImageLoader();
+	private ImageLoader imageLoader = new ImageLoader("/gfx/");
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
 	
@@ -349,10 +350,10 @@ public class MainApp extends Model {
 		JMenu resultsMenu = new JMenu("Results");
 		resultsMenu.setMnemonic('r');
 		JMenuItem cwItem = new JMenuItem("Central weight vectors", 
-				getIcon(ImageLoader.ICON_CENTRALWEIGHTS));
+				getIcon(FileNames.ICON_CENTRALWEIGHTS));
 		cwItem.setMnemonic('c');
 		JMenuItem racsItem = new JMenuItem("Rank acceptability indices", 
-				getIcon(ImageLoader.ICON_RANKACCEPTABILITIES));
+				getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 		racsItem.setMnemonic('r');
 		
 		cwItem.addActionListener(new AbstractAction() {
@@ -377,11 +378,11 @@ public class MainApp extends Model {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.setMnemonic('e');
 		
-		editRenameItem = new JMenuItem("Rename", getIcon(ImageLoader.ICON_RENAME));
+		editRenameItem = new JMenuItem("Rename", getIcon(FileNames.ICON_RENAME));
 		editRenameItem.setMnemonic('r');
 		editRenameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));		
 		editRenameItem.setEnabled(false);
-		editDeleteItem = new JMenuItem("Delete", getIcon(ImageLoader.ICON_DELETE));
+		editDeleteItem = new JMenuItem("Delete", getIcon(FileNames.ICON_DELETE));
 		editDeleteItem.setMnemonic('d');
 		editDeleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));		
 		editDeleteItem.setEnabled(false);
@@ -428,7 +429,7 @@ public class MainApp extends Model {
 				"Do you really want to delete criterion " + criterion + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-				getIcon(ImageLoader.ICON_DELETE));
+				getIcon(FileNames.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			model.deleteCriterion(criterion);
 		}
@@ -440,7 +441,7 @@ public class MainApp extends Model {
 				"Do you really want to delete alternative " + alternative + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-				getIcon(ImageLoader.ICON_DELETE));
+				getIcon(FileNames.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			model.deleteAlternative(alternative);
 		}
@@ -461,19 +462,19 @@ public class MainApp extends Model {
 		
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.setMnemonic('s');
-		saveItem.setIcon(getIcon(ImageLoader.ICON_SAVEFILE));
+		saveItem.setIcon(getIcon(FileNames.ICON_SAVEFILE));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		Bindings.bind(saveItem, "enabled", new PresentationModel<MainApp>(this).getModel(PROPERTY_MODELUNSAVED));
 		JMenuItem saveAsItem = new JMenuItem("Save As");
 		saveAsItem.setMnemonic('a');
-		saveAsItem.setIcon(getIcon(ImageLoader.ICON_SAVEAS));
+		saveAsItem.setIcon(getIcon(FileNames.ICON_SAVEAS));
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.setMnemonic('o');
-		openItem.setIcon(getIcon(ImageLoader.ICON_OPENFILE));
+		openItem.setIcon(getIcon(FileNames.ICON_OPENFILE));
 		openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));		
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
-		quitItem.setIcon(getIcon(ImageLoader.ICON_STOP));
+		quitItem.setIcon(getIcon(FileNames.ICON_STOP));
 		
 		saveItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -621,7 +622,7 @@ public class MainApp extends Model {
 					"Model not saved. Do you want do save changes before quitting JSMAA?",
 					"Save changed",					
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-					getIcon(ImageLoader.ICON_STOP));
+					getIcon(FileNames.ICON_STOP));
 			if (conf == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (conf == JOptionPane.YES_OPTION) {
@@ -641,7 +642,7 @@ public class MainApp extends Model {
 		showItem.setMnemonic('s');
 		JMenuItem addAltButton = new JMenuItem("Add new");
 		addAltButton.setMnemonic('n');
-		addAltButton.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addAltButton.setIcon(getIcon(FileNames.ICON_ADD));
 		addAltButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));		
 		
 		showItem.addActionListener(new AbstractAction() {
@@ -667,23 +668,23 @@ public class MainApp extends Model {
 		criteriaMenu.setMnemonic('c');
 		JMenuItem showItem = new JMenuItem("Show");
 		showItem.setMnemonic('s');
-		showItem.setIcon(getIcon(ImageLoader.ICON_CRITERIALIST));
+		showItem.setIcon(getIcon(FileNames.ICON_CRITERIALIST));
 		JMenuItem addUnifItem = new JMenuItem("Add uniform");
 		addUnifItem.setMnemonic('u');
-		addUnifItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addUnifItem.setIcon(getIcon(FileNames.ICON_ADD));
 		addUnifItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
 		JMenuItem addGaussianItem = new JMenuItem("Add gaussian");
 		addGaussianItem.setMnemonic('g');
-		addGaussianItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addGaussianItem.setIcon(getIcon(FileNames.ICON_ADD));
 		addGaussianItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		JMenuItem addLogNormalItem = new JMenuItem("Add lognormal");
-		addLogNormalItem.setIcon(getIcon(ImageLoader.ICON_ADD));
+		addLogNormalItem.setIcon(getIcon(FileNames.ICON_ADD));
 		addLogNormalItem.setMnemonic('l');
 		addLogNormalItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));				
 		
 		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
 		addOrdinalItem.setMnemonic('o');
-		addOrdinalItem.setIcon(getIcon(ImageLoader.ICON_ADD));		
+		addOrdinalItem.setIcon(getIcon(FileNames.ICON_ADD));		
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
