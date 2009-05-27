@@ -529,7 +529,7 @@ public class MainApp extends Model {
 			saveModel(model, file);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(frame, "Error saving model to " + file + 
+			JOptionPane.showMessageDialog(frame, "Error saving model to " + getCanonicalPath(file) + 
 					", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -555,11 +555,19 @@ public class MainApp extends Model {
 				JOptionPane.showMessageDialog(frame,
 						"Error loading model: "+ e.getMessage(), 
 						"Load error", JOptionPane.ERROR_MESSAGE);
-			} catch (Exception e) {
+			} catch (Exception e) {				
 				JOptionPane.showMessageDialog(frame, "Error loading model from " +
-						chooser.getSelectedFile() + 
-						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);				
+						getCanonicalPath(chooser.getSelectedFile()) + 
+						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);
 			}
+		}
+	}
+
+	private String getCanonicalPath(File selectedFile) {
+		try {
+			return selectedFile.getCanonicalPath();
+		} catch (Exception e) {
+			return selectedFile.toString();
 		}
 	}
 
@@ -824,11 +832,13 @@ public class MainApp extends Model {
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			setModelUnsaved(true);
-			//System.out.println(evt.getSource() + " - " + evt.getPropertyName());
 			if (evt.getSource() instanceof Criterion) {
 				if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 					buildNewSimulator();
 				}
+			}
+			if (evt.getSource() instanceof Rank) {
+				buildNewSimulator();
 			}
 			if (evt.getSource() == model) {
 				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
