@@ -831,12 +831,16 @@ public class MainApp extends Model {
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			setModelUnsaved(true);
+			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME) &&
+				!evt.getPropertyName().equals(Alternative.PROPERTY_NAME) &&
+				!evt.getPropertyName().equals(SMAAModel.PROPERTY_NAME)) {
+				buildNewSimulator();				
+			}
 			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
 					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
 					evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
 					evt.getSource() instanceof Rank) {
 				connectModelSubListeners();
-				buildNewSimulator();
 				rebuildRightPanel();
 				expandLeftMenu();
 			}

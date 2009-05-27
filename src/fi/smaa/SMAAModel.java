@@ -48,11 +48,7 @@ public class SMAAModel extends Model {
 	private void init() {
 		alternatives = new ArrayList<Alternative>();
 		criteria = new ArrayList<Criterion>();
-		setMissingPreferences();
-	}
-		
-	public void setMissingPreferences() {
-		setPreferenceInformation(new MissingPreferenceInformation(criteria.size()));
+		preferences = new MissingPreferenceInformation(criteria.size());		
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
@@ -107,9 +103,11 @@ public class SMAAModel extends Model {
 	public void setCriteria(List<Criterion> criteria) {
 		Object oldVal = this.criteria;
 		this.criteria = criteria;
+		Object oldPref = this.preferences;
+		preferences = new MissingPreferenceInformation(criteria.size());
+		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
+		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldPref,this.preferences);
 		updateCriteriaAlternatives();
-		setMissingPreferences();
-		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);		
 	}
 	
 	private void updateCriteriaAlternatives() {
@@ -171,6 +169,11 @@ public class SMAAModel extends Model {
 		model.setCriteria(crit);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 		return model;
+	}
+
+	public void setMissingPreferences() {
+		setPreferenceInformation(
+				new MissingPreferenceInformation(criteria.size()));
 	}
 	
 }
