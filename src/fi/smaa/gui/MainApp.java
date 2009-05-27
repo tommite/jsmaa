@@ -826,18 +826,25 @@ public class MainApp extends Model {
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			setModelUnsaved(true);
-			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME) &&
-				!evt.getPropertyName().equals(Alternative.PROPERTY_NAME) &&
-				!evt.getPropertyName().equals(SMAAModel.PROPERTY_NAME)) {
+			if (!(evt.getPropertyName().equals(Criterion.PROPERTY_NAME) &&
+					evt.getSource() instanceof Criterion)
+					&&
+				!(evt.getPropertyName().equals(Alternative.PROPERTY_NAME) &&
+					evt.getSource() instanceof Criterion)
+					&&
+				!(evt.getPropertyName().equals(SMAAModel.PROPERTY_NAME) &&
+						evt.getSource() instanceof SMAAModel)) {
 				buildNewSimulator();				
 			}
-			if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
-					evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
-					evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
-					evt.getSource() instanceof Rank) {
-				connectModelSubListeners();
-				rebuildRightPanel();
-				expandLeftMenu();
+			if (evt.getSource().equals(model)) {
+				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
+						evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
+						evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
+						evt.getSource() instanceof Rank) {
+					connectModelSubListeners();
+					rebuildRightPanel();
+					expandLeftMenu();
+				}
 			}
 		}
 	}
@@ -855,7 +862,7 @@ public class MainApp extends Model {
 			setRightViewToRankAcceptabilities();
 		}
 		simulationProgress.setValue(0);
-		simulator.restart();	
+		simulator.restart();
 	}	
 
 	public void connectModelSubListeners() {

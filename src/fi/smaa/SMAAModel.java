@@ -111,7 +111,7 @@ public class SMAAModel extends Model {
 	}
 	
 	private void updateCriteriaAlternatives() {
-		for (Criterion<Measurement> c : criteria) {
+		for (Criterion c : criteria) {
 			c.setAlternatives(alternatives);
 		}
 	}
