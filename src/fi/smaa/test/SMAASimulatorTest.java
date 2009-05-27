@@ -116,9 +116,10 @@ public class SMAASimulatorTest {
 		} while (simulator.isRunning());
 
 		SMAAResults results = simulator.getResults();
-
-		List<Double> cw1 = results.getCentralWeightVectors().get(alt1);
-		List<Double> cw2 = results.getCentralWeightVectors().get(alt2);
+		
+		Map<Alternative, List<Double>> cw = results.getCentralWeightVectors();
+		List<Double> cw1 = cw.get(alt1);
+		List<Double> cw2 = cw.get(alt2);
 
 		for(int i=0;i<cw1.size();i++) {
 			assertEquals(0.5, cw1.get(i), 0.02);

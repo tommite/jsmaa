@@ -87,8 +87,12 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 		}		
 		Object oldVal = this.alternatives;
 		this.alternatives = alternatives;
-		firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);		
-		updateMeasurements();
+		Object oldMeasurements = this.measurements;
+		disconnectMeasurementListener();
+		measurements = prepareNewMeasurements();
+		connectMeasurementListener();
+		firePropertyChange(PROPERTY_ALTERNATIVES, oldVal, this.alternatives);
+		firePropertyChange(PROPERTY_MEASUREMENTS, oldMeasurements, this.measurements);
 	}
 	
 	public abstract String getTypeLabel();
@@ -115,7 +119,6 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 		return name.equals(c.name);
 	}
 	
-
 	public void setMeasurements(Map<Alternative, T> measurements) {
 		disconnectMeasurementListener();
 		Map<Alternative, T> oldVal = this.measurements;
@@ -138,7 +141,7 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 		}
 	}
 
-	protected void updateMeasurements() {
+	protected Map<Alternative, T> prepareNewMeasurements() {
 		Map<Alternative, T> newMap = new HashMap<Alternative, T>();
 		for (Alternative a : getAlternatives()) {
 			if (getMeasurements().containsKey(a)) {
@@ -147,7 +150,7 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 				newMap.put(a, createMeasurement());
 			}
 		}
-		setMeasurements(newMap);
+		return newMap;
 	}
 
 	protected class MeasurementListener implements PropertyChangeListener {
@@ -175,5 +178,10 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 		
 	public PropertyChangeListener getMeasurementListener() {
 		return measurementListener;
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
 	}
 }

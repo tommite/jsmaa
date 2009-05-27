@@ -86,7 +86,7 @@ public class SMAASimulator {
 				aggregate();
 				rankAlternatives();
 				results.update(ranks, weights);
-			}			
+			}
 		}, iterations);
 		th.addPhase(new SimulationPhase() {
 			public void iterate() {

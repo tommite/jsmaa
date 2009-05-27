@@ -61,7 +61,6 @@ public class SMAAResults {
 		listeners.remove(listener);
 	}
 	
-	
 	/**
 	 * 
 	 * @param ranks an array, where [0] = altIndex of alternative in rank 0
@@ -129,15 +128,6 @@ public class SMAAResults {
 		return confidenceFactors;
 	}
 
-	private HashMap<Alternative, List<Double>> transformMap(
-			Map<Integer, List<Double>> map) {
-		HashMap<Alternative, List<Double>> cw = new HashMap<Alternative, List<Double>>();		
-		for (Integer index : map.keySet()) {
-			cw.put(alternatives.get(index), map.get(index));
-		}
-		return cw;
-	}
-	
 	public Map<Alternative, List<Double>> getRankAcceptabilities() {
 		return transformMap(rankAcceptabilities);
 	}
@@ -149,7 +139,15 @@ public class SMAAResults {
 	public List<Alternative> getAlternatives() {
 		return alternatives;
 	}
-
+	
+	private Map<Alternative, List<Double>> transformMap(
+			Map<Integer, List<Double>> map) {
+		Map<Alternative, List<Double>> cw = new HashMap<Alternative, List<Double>>();		
+		for (Integer index : map.keySet()) {
+			cw.put(alternatives.get(index), map.get(index));
+		}
+		return cw;
+	}
 	
 	private void initializeCentralWeightVectors() {
 		centralWeightVectors = createAlternativeMapWithNans(criteria.size());

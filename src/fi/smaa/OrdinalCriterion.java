@@ -19,6 +19,7 @@
 package fi.smaa;
 
 import java.util.Collection;
+import java.util.List;
 
 
 
@@ -99,5 +100,11 @@ public class OrdinalCriterion extends Criterion<Rank> {
 		OrdinalCriterion crit = new OrdinalCriterion(name);
 		deepCopyAlternativesAndMeasurements(crit);
 		return crit;
+	}
+	
+	@Override
+	public void setAlternatives(List<Alternative> alternatives) throws NullPointerException {
+		super.setAlternatives(alternatives);
+		ensureRanks();
 	}
 }

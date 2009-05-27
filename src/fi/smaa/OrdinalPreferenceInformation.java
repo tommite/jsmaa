@@ -68,7 +68,7 @@ public class OrdinalPreferenceInformation implements PreferenceInformation, Seri
 		for (Rank r : ranks) {
 			myranks.add((Rank) r.deepCopy());
 		}
-		return myranks;
+		return new OrdinalPreferenceInformation(myranks);
 	}
 
 }

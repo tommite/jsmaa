@@ -106,6 +106,7 @@ public class MainApp extends Model {
 	private ImageLoader imageLoader = new ImageLoader("/gfx/");
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
+	private SMAAModelListener modelListener = new SMAAModelListener();
 	
 	public Boolean getModelUnsaved() {
 		return modelUnsaved;
@@ -191,7 +192,7 @@ public class MainApp extends Model {
 
 	private void initWithModel(SMAAModel model) {
 		initLeftPanel();		
-		model.addPropertyChangeListener(new SMAAModelListener());
+		model.addPropertyChangeListener(modelListener);
 		connectModelSubListeners();
 		buildNewSimulator();
 		setRightViewToCriteria();
@@ -721,23 +722,19 @@ public class MainApp extends Model {
 	}
 
 	protected void addGaussianCriterion() {
-		model.addCriterion(new GaussianCriterion(generateNextCriterionName()));
-		expandLeftMenu();						
+		model.addCriterion(new GaussianCriterion(generateNextCriterionName()));	
 	}
 	
 	protected void addLogNormalCriterion() {
 		model.addCriterion(new LogNormalCriterion(generateNextCriterionName()));
-		expandLeftMenu();						
 	}	
 
 	protected void addUniformCriterion() {
 		model.addCriterion(new UniformCriterion(generateNextCriterionName()));
-		expandLeftMenu();				
 	}
 	
 	protected void addOrdinalCriterion() {
 		model.addCriterion(new OrdinalCriterion(generateNextCriterionName()));
-		expandLeftMenu();				
 	}
 
 	private String generateNextCriterionName() {
@@ -776,7 +773,6 @@ public class MainApp extends Model {
 			if (!found) {
 				try {
 					model.addAlternative(a);
-					expandLeftMenu();				
 				} catch (AlternativeExistsException e) {
 					throw new RuntimeException("Error: alternative with this name shouldn't exist");
 				}
@@ -788,7 +784,6 @@ public class MainApp extends Model {
 	
 	private class LeftTreeSelectionListener implements TreeSelectionListener {
 		public void valueChanged(TreeSelectionEvent e) {
-			//Object node = e.getPath().getLastPathComponent();
 			if (e.getNewLeadSelectionPath() == null) {
 				setEditMenuItemsEnabled(false);				
 				return;
@@ -865,15 +860,14 @@ public class MainApp extends Model {
 
 	public void connectModelSubListeners() {
 		for (Criterion c : model.getCriteria()) {
-			c.addPropertyChangeListener(new SMAAModelListener());
+			c.addPropertyChangeListener(modelListener);
 		}
 		for (Alternative a : model.getAlternatives()) {
-			a.addPropertyChangeListener(new SMAAModelListener());
+			a.addPropertyChangeListener(modelListener);
 		}
 		if (model.getPreferenceInformation() instanceof OrdinalPreferenceInformation) {
 			OrdinalPreferenceInformation prefs = (OrdinalPreferenceInformation) model.getPreferenceInformation();
 			List<Rank> ranks = prefs.getRanks();
-			SMAAModelListener modelListener = new SMAAModelListener();
 			for (Rank r : ranks) {
 				r.addPropertyChangeListener(modelListener);
 			}

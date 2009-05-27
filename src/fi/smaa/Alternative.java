@@ -56,5 +56,9 @@ public class Alternative extends Model {
 	public Alternative deepCopy() {
 		return new Alternative(name);
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

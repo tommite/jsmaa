@@ -25,6 +25,7 @@ public class UtilitySampler {
 	double[] tmparr;
 	
 	public UtilitySampler(int numAlts) {
+		assert(numAlts > 0);
 		this.numAlts = numAlts;
 		tmparr = new double[numAlts];			
 	}

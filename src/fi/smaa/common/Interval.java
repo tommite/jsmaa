@@ -67,7 +67,7 @@ public class Interval extends Measurement {
 	public void setEnd(Double end) {
 		Object oldVal = this.end;
 		this.end = end;
-		firePropertyChange(PROPERTY_END, oldVal, this.end);		
+		firePropertyChange(PROPERTY_END, oldVal, this.end);
 	}
 
 	@Override
