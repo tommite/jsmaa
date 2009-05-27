@@ -228,7 +228,7 @@ public class MainApp extends Model {
 	}
 	
 	public void setRightViewToCriterion(Criterion node) {
-		rightViewBuilder = new CriterionView(node, model);
+		rightViewBuilder = new CriterionView(node);
 		rebuildRightPanel();
 	}	
 	
@@ -843,12 +843,17 @@ public class MainApp extends Model {
 			if (evt.getSource() == model) {
 				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
 						evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
-						evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION) ||
-						evt.getSource() instanceof Rank) {
+						evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
 					buildNewSimulator();
-					rebuildRightPanel();
-					expandLeftMenu();
-				}				
+				}
+				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES)) {
+					setRightViewToAlternatives();
+				} else if (evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA)) {
+					setRightViewToCriteria();
+				} else if (evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
+					rebuildRightPanel();				
+				}
+				expandLeftMenu();
 			}
 		}
 	}

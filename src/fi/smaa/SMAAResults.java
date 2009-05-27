@@ -76,8 +76,8 @@ public class SMAAResults {
 				addCentralWeight(altIndex, weights);
 			}
 		}
-		calculateRankAccsAndCentralWeights();		
 		if (getRankAccIteration()  % updateInterval == 0) {
+			calculateRankAccsAndCentralWeights();		
 			fireResultsChanged();
 		}
 	}
@@ -90,8 +90,8 @@ public class SMAAResults {
 				confidenceHits[i]++;
 			}
 		}
-		calculateConfidenceFactors();		
 		if (confidenceIteration % updateInterval == 0) {
+			calculateConfidenceFactors();					
 			fireResultsChanged();
 		}
 	}
@@ -124,8 +124,12 @@ public class SMAAResults {
 		return transformMap(centralWeightVectors);
 	}
 	
-	public List<Double> getConfidenceFactors() {
-		return confidenceFactors;
+	public Map<Alternative, Double> getConfidenceFactors() {
+		Map<Alternative, Double> confs = new HashMap<Alternative, Double>();
+		for (int i=0;i<confidenceFactors.size();i++) {
+			confs.put(alternatives.get(i), confidenceFactors.get(i));
+		}
+		return confs;
 	}
 
 	public Map<Alternative, List<Double>> getRankAcceptabilities() {

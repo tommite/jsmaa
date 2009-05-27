@@ -35,19 +35,17 @@ import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
 import fi.smaa.LogNormalCriterion;
+import fi.smaa.Measurement;
 import fi.smaa.OrdinalCriterion;
-import fi.smaa.SMAAModel;
 import fi.smaa.UniformCriterion;
 import fi.smaa.common.Interval;
 import fi.smaa.common.gui.IntervalFormat;
 
 @SuppressWarnings("unchecked")
 public class CriterionView implements ViewBuilder {
-	private SMAAModel model;
 	private Criterion criterion;
 	
-	public CriterionView(Criterion crit, SMAAModel model) {
-		this.model = model;
+	public CriterionView(Criterion crit) {
 		this.criterion = crit;
 	}
 
@@ -119,7 +117,7 @@ public class CriterionView implements ViewBuilder {
 //		}
 		
 		int index = 0;
-		for (Alternative a : model.getAlternatives()) {
+		for (Alternative a : ((Criterion<Measurement>)criterion).getAlternatives()) {
 			LayoutUtil.addRow(layout);
 			row += 2;
 			builder.add(BasicComponentFactory.createLabel(

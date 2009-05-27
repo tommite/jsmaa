@@ -63,15 +63,21 @@ public class SMAAResultsTest {
 	@Test
 	public void testConfidenceFactors() {
 		boolean[] hit = new boolean[2];
-		results.confidenceUpdate(hit);
-		hit[0] = true;
-		results.confidenceUpdate(hit);
+		for (int i=0;i<10;i++) {
+			results.confidenceUpdate(hit);
+		}
+		hit[0] = true;		
+		for (int i=0;i<10;i++) {
+			results.confidenceUpdate(hit);
+		}
 		hit[1] = true;
-		results.confidenceUpdate(hit);
+		for (int i=0;i<10;i++) {
+			results.confidenceUpdate(hit);
+		}
 		
-		List<Double> cf = results.getConfidenceFactors();
-		assertEquals(0.66, cf.get(0), 0.02);
-		assertEquals(0.33, cf.get(1), 0.02);
+		Map<Alternative, Double> cf = results.getConfidenceFactors();
+		assertEquals(0.66, cf.get(testData.alt1), 0.02);
+		assertEquals(0.33, cf.get(testData.alt2), 0.02);
 	}
 	
 	@Test

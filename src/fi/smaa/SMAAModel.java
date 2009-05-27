@@ -113,9 +113,9 @@ public class SMAAModel extends Model {
 		this.criteria = criteria;
 		PreferenceInformation oldPref = this.preferences;
 		preferences = new MissingPreferenceInformation(criteria.size());
+		updateCriteriaAlternatives();	
 		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
 		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldPref,this.preferences);
-		updateCriteriaAlternatives();
 		disconnectConnectListeners(oldVal, this.criteria);
 	}
 	

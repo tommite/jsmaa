@@ -98,7 +98,7 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 	public abstract String getTypeLabel();
 	
 	public Map<Alternative, T> getMeasurements() {
-		return measurements;
+		return new HashMap<Alternative, T>(measurements);
 	}
 	
 	protected abstract void fireMeasurementChange();
@@ -130,13 +130,13 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 	}
 
 	private void disconnectMeasurementListener() {
-		for (T g : getMeasurements().values()) {
+		for (T g : measurements.values()) {
 			g.removePropertyChangeListener(PROPERTY_MEASUREMENTS, measurementListener);
 		}
 	}
 
 	private void connectMeasurementListener() {
-		for (T g : getMeasurements().values()) {
+		for (T g : measurements.values()) {
 			g.addPropertyChangeListener(measurementListener);
 		}
 	}
@@ -144,7 +144,7 @@ public abstract class Criterion<T extends Measurement> extends Model implements 
 	protected Map<Alternative, T> prepareNewMeasurements() {
 		Map<Alternative, T> newMap = new HashMap<Alternative, T>();
 		for (Alternative a : getAlternatives()) {
-			if (getMeasurements().containsKey(a)) {
+			if (measurements.containsKey(a)) {
 				newMap.put(a, measurements.get(a));
 			} else {
 				newMap.put(a, createMeasurement());

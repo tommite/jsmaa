@@ -36,7 +36,7 @@ public class Alternative extends Model {
 	public void setName(String _name) {
 		String oldVal = this.name;
 		this.name = _name;
-		firePropertyChange(PROPERTY_NAME, oldVal, _name);
+		firePropertyChange(PROPERTY_NAME, oldVal, this.name);
 	}	
 			
 	@Override
@@ -56,7 +56,7 @@ public class Alternative extends Model {
 	public Alternative deepCopy() {
 		return new Alternative(name);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return name.hashCode();

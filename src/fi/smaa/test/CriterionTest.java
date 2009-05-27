@@ -41,6 +41,7 @@ import fi.smaa.Alternative;
 import fi.smaa.Criterion;
 import fi.smaa.Measurement;
 import fi.smaa.UniformCriterion;
+import fi.smaa.common.Interval;
 
 public class CriterionTest {
 	
@@ -130,6 +131,22 @@ public class CriterionTest {
 		UniformCriterion c2Stream = (UniformCriterion) is.readObject();
 		
 		assertNotNull(c2Stream.getMeasurementListener());
+	}
+	
+	@Test
+	public void testMeasurementsChangeWhenAltNameChanges() {
+		UniformCriterion c = new UniformCriterion("crit");
+		List<Alternative> alts = new ArrayList<Alternative>();
+		Alternative a1 = new Alternative("a1");
+		Alternative a2 = new Alternative("a2");
+		alts.add(a1);
+		alts.add(a2);
+		c.setAlternatives(alts);
+		assertNotNull(c.getMeasurements().get(a1));
+		a1.setName("newName");
+		Map<Alternative, Interval> meas = c.getMeasurements();		
+		assertNotNull(meas.get(a2));
+		assertNotNull(meas.get(a1));
 	}
 	
 }
