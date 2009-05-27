@@ -18,6 +18,8 @@
 
 package fi.smaa;
 
-public interface PreferenceInformation extends DeepCopiable {
+import com.jgoodies.binding.beans.Observable;
+
+public interface PreferenceInformation extends DeepCopiable, Observable {
 	public double[] sampleWeights();
 }

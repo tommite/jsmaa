@@ -18,10 +18,14 @@
 
 package fi.smaa;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.jgoodies.binding.beans.Model;
+import com.jgoodies.binding.beans.Observable;
 
 @SuppressWarnings("unchecked")
 public class SMAAModel extends Model {
@@ -35,6 +39,7 @@ public class SMAAModel extends Model {
 	private List<Criterion> criteria;	
 	private String name;
 	private PreferenceInformation preferences;
+	private MemberListener listener = new MemberListener();
 
 	public SMAAModel() {
 		init();
@@ -52,9 +57,11 @@ public class SMAAModel extends Model {
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
-		Object oldVal = this.preferences;
+		PreferenceInformation oldVal = this.preferences;
 		this.preferences = preferences;
 		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldVal, this.preferences);
+		disconnectConnectListeners(Collections.singletonList(oldVal),
+				Collections.singletonList(this.preferences));		
 	}
 	
 	public PreferenceInformation getPreferenceInformation() {
@@ -66,10 +73,11 @@ public class SMAAModel extends Model {
 	}
 	
 	public void setAlternatives(List<Alternative> alts) {
-		Object oldval = this.alternatives;
+		List<Alternative> oldval = this.alternatives;
 		this.alternatives = alts;
 		updateCriteriaAlternatives();
-		firePropertyChange(PROPERTY_ALTERNATIVES, oldval, this.alternatives);	
+		disconnectConnectListeners(oldval, this.alternatives);
+		firePropertyChange(PROPERTY_ALTERNATIVES, oldval, this.alternatives);
 	}
 
 	public void setName(String name) {
@@ -101,15 +109,26 @@ public class SMAAModel extends Model {
 	 * @param criteria
 	 */
 	public void setCriteria(List<Criterion> criteria) {
-		Object oldVal = this.criteria;
+		List<Criterion> oldVal = this.criteria;
 		this.criteria = criteria;
-		Object oldPref = this.preferences;
+		PreferenceInformation oldPref = this.preferences;
 		preferences = new MissingPreferenceInformation(criteria.size());
 		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
 		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldPref,this.preferences);
 		updateCriteriaAlternatives();
+		disconnectConnectListeners(oldVal, this.criteria);
 	}
 	
+	private void disconnectConnectListeners(List<? extends Observable> disconnects,
+			List<? extends Observable> connects) {
+		for (Observable c : disconnects) {
+			c.removePropertyChangeListener(listener);			
+		}
+		for (Observable c : connects) {
+			c.addPropertyChangeListener(listener);
+		}
+	}
+
 	private void updateCriteriaAlternatives() {
 		for (Criterion c : criteria) {
 			c.setAlternatives(alternatives);
@@ -174,6 +193,13 @@ public class SMAAModel extends Model {
 	public void setMissingPreferences() {
 		setPreferenceInformation(
 				new MissingPreferenceInformation(criteria.size()));
-	}
+	}	
 	
+	private class MemberListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			for (PropertyChangeListener p : getPropertyChangeListeners()) {
+				p.propertyChange(evt);
+			}
+		}		
+	}
 }

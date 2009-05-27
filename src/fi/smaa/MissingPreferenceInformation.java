@@ -18,6 +18,7 @@
 
 package fi.smaa;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 
 import fi.smaa.common.RandomUtil;
@@ -46,4 +47,9 @@ public class MissingPreferenceInformation implements PreferenceInformation, Seri
 		return new MissingPreferenceInformation(numCrit);
 	}
 
+	public void addPropertyChangeListener(PropertyChangeListener arg0) {
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener arg0) {
+	}
 }
