@@ -884,6 +884,7 @@ public class MainApp extends Model {
 		} else {
 			buildSimulatorThread = new Thread(buildQueue.poll());
 			buildSimulatorThread.start();
+			buildQueue.clear();
 		}
 	}
 	
