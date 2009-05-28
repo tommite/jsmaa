@@ -654,7 +654,7 @@ public class MainApp extends Model {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setMnemonic('n');
 		item.setIcon(getIcon(FileNames.ICON_ADD));
-		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));		
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));		
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative();
@@ -748,6 +748,12 @@ public class MainApp extends Model {
 		leftTree.startEditingAtPath(leftTreeModel.getPathForCriterion(c));
 	}
 	
+	private void addAlternativeAndStartRename(Alternative a) throws AlternativeExistsException {
+		model.addAlternative(a);
+		leftTree.setSelectionPath(leftTreeModel.getPathForAlternative(a));
+		leftTree.startEditingAtPath(leftTreeModel.getPathForAlternative(a));			
+	}
+	
 	protected void addLogNormalCriterion() {
 		LogNormalCriterion c = new LogNormalCriterion(generateNextCriterionName());
 		addCriterionAndStartRename(c);
@@ -797,7 +803,7 @@ public class MainApp extends Model {
 			}
 			if (!found) {
 				try {
-					model.addAlternative(a);
+					addAlternativeAndStartRename(a);
 				} catch (AlternativeExistsException e) {
 					throw new RuntimeException("Error: alternative with this name shouldn't exist");
 				}
