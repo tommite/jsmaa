@@ -63,6 +63,8 @@ public class SMAAModel extends Model {
 		listener = new MemberListener();
 		disconnectConnectListeners(Collections.EMPTY_LIST, alternatives);
 		disconnectConnectListeners(Collections.EMPTY_LIST, criteria);	
+		disconnectConnectListeners(Collections.EMPTY_LIST,
+				Collections.singletonList(preferences));				
 	}
 	
 	private void init() {

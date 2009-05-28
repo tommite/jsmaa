@@ -20,6 +20,9 @@ package fi.smaa;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +36,26 @@ public class OrdinalPreferenceInformation implements PreferenceInformation, Seri
 	transient private double[] samplearr;
 	private List<Rank> ranks;
 	
-	private RankListener rankListener = new RankListener();
-	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+	transient private RankListener rankListener = new RankListener();
+	transient private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+	
+	private void writeObject(ObjectOutputStream o) throws IOException {
+		o.defaultWriteObject();
+	}
+	
+	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
+		i.defaultReadObject();
+		rankListener = new RankListener();
+		listeners = new ArrayList<PropertyChangeListener>();
+		connectRankListeners();
+	}	
 	
 	public OrdinalPreferenceInformation(List<Rank> ranks) {
 		this.ranks = ranks;
+		connectRankListeners();
+	}
+
+	private void connectRankListeners() {
 		for (Rank r : ranks) {
 			r.addPropertyChangeListener(rankListener);
 		}
