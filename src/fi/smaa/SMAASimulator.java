@@ -93,8 +93,13 @@ public class SMAASimulator {
 				sampleCriteria();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);				
-			}			
+			}	
 		}, iterations);
+		th.addPhase(new SimulationPhase() {
+			public void iterate() {
+				results.fireResultsChanged();
+			}
+		}, 1);
 		return th;
 	}
 
@@ -144,7 +149,7 @@ public class SMAASimulator {
 					break;
 				}
 			}
-		}		
+		}
 	}
 
 	private void clearConfidenceHits() {

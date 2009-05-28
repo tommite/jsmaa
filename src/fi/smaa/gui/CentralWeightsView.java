@@ -41,7 +41,8 @@ import fi.smaa.SMAAResults;
 
 public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
-	private JLabel[][] valCells;
+	private JLabel[][] CWCells;
+	private JLabel[] CFCells;
 
 	public CentralWeightsView(SMAAResults results) {
 		super(results);
@@ -52,7 +53,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		int numCrit = getNumCriteria();
 		
 		FormLayout layout = new FormLayout(
-				"pref",
+				"pref, 5dlu, center:pref",
 				"p, 3dlu, p");
 		
 		int[] groupCol = new int[numCrit];
@@ -63,18 +64,22 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		for (int i=0;i<numCrit;i++) {
 			layout.appendColumn(ColumnSpec.decode("5dlu"));
 			layout.appendColumn(ColumnSpec.decode("center:pref"));
-			groupCol[i] = 3 + 2*i;			
+			groupCol[i] = 5 + 2*i;			
 		}
 		
 		layout.setColumnGroups(new int[][]{groupCol});		
 		
-		int fullWidth = 1 + numCrit * 2;;
+		int fullWidth = 3 + numCrit * 2;
 
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addSeparator("Central weight vectors", cc.xyw(1, 1, fullWidth));
+		
+		JLabel cfLabel = new JLabel("CF");
+		cfLabel.setToolTipText("Confidence factor");
+		builder.add(cfLabel, cc.xy(3, 3));
 		
 		buildCriteriaLabels(builder);
 		buildAlternativeLabels(builder, 5, 1, true);
@@ -88,13 +93,18 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		CellConstraints cc = new CellConstraints();
 		int numAlternatives = getNumAlternatives();
 		int numCriteria = getNumCriteria();
-		valCells = new JLabel[numAlternatives][numCriteria];
+		CWCells = new JLabel[numAlternatives][numCriteria];
+		CFCells = new JLabel[numAlternatives];
 		int startRow = 5;
-		int startCol = 3;
+		int startCol = 5;
+		int CFcol = 3;
 		for (int altIndex=0;altIndex<numAlternatives;altIndex++) {
+			JLabel CFlabel = new JLabel("NA");
+			CFCells[altIndex] = CFlabel;
+			builder.add(CFlabel, cc.xy(CFcol, startRow + altIndex * 2));
 			for (int critIndex=0;critIndex<numCriteria;critIndex++) {
 				JLabel label = new JLabel("NA");
-				valCells[altIndex][critIndex] = label;
+				CWCells[altIndex][critIndex] = label;
 				builder.add(label, cc.xy(startCol + critIndex * 2, startRow + altIndex * 2));
 			}
 		}
@@ -102,7 +112,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 
 	private void buildCriteriaLabels(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
-		int col = 3;
+		int col = 5;
 		int row = 3;
 		for (Criterion<Measurement> c : results.getCriteria()) {
 			builder.add(BasicComponentFactory.createLabel(
@@ -114,12 +124,19 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 
 	
 	synchronized public void fireResultsChanged() {
+		//change confidence factors
+		Map<Alternative, Double> cfs = results.getConfidenceFactors();
+		for (int altIndex = 0;altIndex<results.getAlternatives().size();altIndex++) {
+			CFCells[altIndex].setText(formatDouble(cfs.get(results.getAlternatives().get(altIndex))));
+		}
+		
+		//change central weights
 		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
 		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {
 			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
 			for (int critIndex=0;critIndex<results.getCriteria().size();critIndex++) {
-				valCells[altIndex][critIndex].setText(formatDouble(cw.get(critIndex)));
+				CWCells[altIndex][critIndex].setText(formatDouble(cw.get(critIndex)));
 			}
 		}
 	}

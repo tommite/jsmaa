@@ -106,7 +106,7 @@ public class SMAAResults {
 		return (double) confidenceHits[altIndex] / (double) confidenceIteration;
 	}
 
-	private void fireResultsChanged() {
+	public void fireResultsChanged() {
 		for (SMAAResultsListener listener : listeners) {
 			listener.resultsChanged();
 		}
