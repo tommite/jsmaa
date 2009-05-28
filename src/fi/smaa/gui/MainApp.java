@@ -19,9 +19,12 @@
 package fi.smaa.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
@@ -49,6 +52,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -112,6 +116,8 @@ public class MainApp extends Model {
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
+	private JMenuItem leftTreeRenameItem;
+	private JMenuItem leftTreeDeleteItem;
 	
 	public Boolean getModelUnsaved() {
 		return modelUnsaved;
@@ -259,6 +265,30 @@ public class MainApp extends Model {
 		LeftTreeCellRenderer renderer = new LeftTreeCellRenderer(leftTreeModel, imageLoader);
 		leftTree.setCellEditor(new MyCellEditor(leftTree, renderer));
 		leftTree.setCellRenderer(renderer);
+		final JPopupMenu leftTreePopupMenu = new JPopupMenu();
+		leftTreeRenameItem = createRenameMenuItem();
+		leftTreePopupMenu.add(leftTreeRenameItem);
+		leftTreeDeleteItem = createDeleteMenuItem();
+		leftTreePopupMenu.add(leftTreeDeleteItem);
+		leftTree.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent evt) {
+				if (evt.isPopupTrigger()) {
+					int selRow = leftTree.getRowForLocation(evt.getX(), evt.getY());
+					if (selRow != -1) {
+						Object obj = leftTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
+						if (obj instanceof Alternative ||
+								obj instanceof Criterion ||
+								obj instanceof SMAAModel) {
+							leftTreeDeleteItem.setEnabled(!(obj instanceof SMAAModel));
+							leftTree.setSelectionRow(selRow);
+							leftTreePopupMenu.show((Component) evt.getSource(), 
+									evt.getX(), evt.getY());
+						}
+					}
+				}
+			}
+		});
 	}
 	
 	private class MyCellEditor extends DefaultTreeCellEditor {
@@ -389,29 +419,38 @@ public class MainApp extends Model {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.setMnemonic('e');
 		
-		editRenameItem = new JMenuItem("Rename", getIcon(FileNames.ICON_RENAME));
-		editRenameItem.setMnemonic('r');
-		editRenameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));		
+		editRenameItem = createRenameMenuItem();		
 		editRenameItem.setEnabled(false);
-		editDeleteItem = new JMenuItem("Delete", getIcon(FileNames.ICON_DELETE));
-		editDeleteItem.setMnemonic('d');
-		editDeleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));		
-		editDeleteItem.setEnabled(false);
 		
-		editRenameItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				menuRenameClicked();
-			}			
-		});
-		
-		editDeleteItem.addActionListener(new AbstractAction() {
+		editDeleteItem = createDeleteMenuItem();
+		editDeleteItem.setEnabled(false);		
+		editMenu.add(editRenameItem);
+		editMenu.add(editDeleteItem);
+		return editMenu;
+	}
+
+	private JMenuItem createDeleteMenuItem() {
+		JMenuItem item = new JMenuItem("Delete", getIcon(FileNames.ICON_DELETE));
+		item.setMnemonic('d');
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				menuDeleteClicked();
 			}
 		});
-		editMenu.add(editRenameItem);
-		editMenu.add(editDeleteItem);
-		return editMenu;
+		return item;
+	}
+
+	private JMenuItem createRenameMenuItem() {
+		JMenuItem item = new JMenuItem("Rename", getIcon(FileNames.ICON_RENAME));
+		item.setMnemonic('r');
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				menuRenameClicked();
+			}			
+		});		
+		return item;
 	}
 
 
@@ -918,5 +957,4 @@ public class MainApp extends Model {
 			}
 		}
 	}
-
 }
