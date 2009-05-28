@@ -20,6 +20,9 @@ package fi.smaa;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +43,7 @@ public class SMAAModel extends Model {
 	private List<Criterion> criteria;	
 	private String name;
 	private PreferenceInformation preferences;
-	private MemberListener listener = new MemberListener();
+	transient private MemberListener listener = new MemberListener();
 
 	public SMAAModel() {
 		init();
@@ -49,6 +52,17 @@ public class SMAAModel extends Model {
 	public SMAAModel(String name) {
 		this.name = name;
 		init();
+	}
+	
+	private void writeObject(ObjectOutputStream o) throws IOException {
+		o.defaultWriteObject();
+	}
+	
+	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
+		i.defaultReadObject();
+		listener = new MemberListener();
+		disconnectConnectListeners(Collections.EMPTY_LIST, alternatives);
+		disconnectConnectListeners(Collections.EMPTY_LIST, criteria);	
 	}
 	
 	private void init() {
