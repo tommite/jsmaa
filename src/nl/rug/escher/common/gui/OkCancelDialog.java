@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder2;
 
+@SuppressWarnings("serial")
 public abstract class OkCancelDialog extends JDialog {
 	private JPanel d_userPanel;
 

@@ -48,6 +48,7 @@ public class CriterionTest {
 	private Criterion<Measurement> criterion;
 	private List<Alternative> alts;
 	
+	@SuppressWarnings("serial")
 	private Criterion<Measurement> createInstance() {
 		return new Criterion<Measurement>("name") {
 			public String getTypeLabel() {

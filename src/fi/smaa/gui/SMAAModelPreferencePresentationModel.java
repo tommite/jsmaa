@@ -30,6 +30,7 @@ import fi.smaa.OrdinalPreferenceInformation;
 import fi.smaa.Rank;
 import fi.smaa.SMAAModel;
 
+@SuppressWarnings("serial")
 public class SMAAModelPreferencePresentationModel extends PresentationModel<SMAAModel> {
 	public static final String ORDINAL_ENABLED = "ordinalEnabled";
 	public static final String ORDINAL_RANKS = "ordinalRanks";

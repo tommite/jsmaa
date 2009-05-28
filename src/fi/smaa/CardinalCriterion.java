@@ -25,6 +25,7 @@ import fi.smaa.common.Interval;
 
 public abstract class CardinalCriterion<T extends Measurement> extends Criterion<T> {
 	
+	private static final long serialVersionUID = 306783908162696324L;
 	public final static String PROPERTY_SCALE = "scale";
 	public final static String PROPERTY_ASCENDING = "ascending";
 

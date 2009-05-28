@@ -25,6 +25,7 @@ import fi.smaa.Measurement;
 
 public class Interval extends Measurement {
 	
+	private static final long serialVersionUID = -4036986804177522602L;
 	public static final String PROPERTY_START = "start";
 	public static final String PROPERTY_END = "end";
 	

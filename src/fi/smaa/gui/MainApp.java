@@ -87,7 +87,7 @@ import fi.smaa.SMAASimulator;
 import fi.smaa.UniformCriterion;
 import fi.smaa.common.ImageLoader;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "serial" })
 public class MainApp extends Model {
 	
 	private static final String VERSION = "0.2";

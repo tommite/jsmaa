@@ -19,5 +19,6 @@
 package fi.smaa;
 
 public class AlternativeExistsException extends Exception {
+	private static final long serialVersionUID = -4241898557992004237L;
 
 }

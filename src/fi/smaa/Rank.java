@@ -20,6 +20,8 @@ package fi.smaa;
 
 
 public class Rank extends Measurement {
+	private static final long serialVersionUID = 3742542881007438912L;
+
 	private Integer rank;
 	
 	public final static String PROPERTY_RANK = "rank";

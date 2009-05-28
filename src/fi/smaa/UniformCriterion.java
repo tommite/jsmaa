@@ -25,6 +25,8 @@ import fi.smaa.common.Interval;
 
 public class UniformCriterion extends CardinalCriterion<Interval> {
 	
+	private static final long serialVersionUID = -4462753735102977965L;
+
 	public UniformCriterion(String name) {
 		super(name);
 	}

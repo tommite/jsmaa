@@ -25,6 +25,8 @@ import java.util.List;
 
 public class OrdinalCriterion extends Criterion<Rank> {
 	
+	private static final long serialVersionUID = -1153156807411990038L;
+
 	public OrdinalCriterion(String name) {
 		super(name);
 	}

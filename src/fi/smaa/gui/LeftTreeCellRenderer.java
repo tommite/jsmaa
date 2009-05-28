@@ -34,6 +34,7 @@ import fi.smaa.common.ImageLoader;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
+	private static final long serialVersionUID = -6982388941837275497L;
 	private ImageLoader loader;
 	private LeftTreeModel model;
 	

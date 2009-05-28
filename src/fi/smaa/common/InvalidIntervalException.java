@@ -20,4 +20,6 @@ package fi.smaa.common;
 
 public class InvalidIntervalException extends RuntimeException {
 
+	private static final long serialVersionUID = 7252916001644563411L;
+
 }

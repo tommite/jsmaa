@@ -21,6 +21,7 @@ package fi.smaa;
 
 public class GaussianMeasurement extends Measurement {
 	
+	private static final long serialVersionUID = 1821014379633287612L;
 	public final static String PROPERTY_MEAN = "mean";
 	public final static String PROPERTY_STDEV = "stDev";
 	

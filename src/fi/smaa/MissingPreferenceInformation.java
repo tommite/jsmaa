@@ -24,6 +24,7 @@ import java.io.Serializable;
 import fi.smaa.common.RandomUtil;
 
 public class MissingPreferenceInformation implements PreferenceInformation, Serializable {
+	private static final long serialVersionUID = -8477410889345079220L;
 	transient private double[] tmparr;
 	private int numCrit;
 	

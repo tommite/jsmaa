@@ -20,6 +20,8 @@ package fi.smaa;
 
 public class LogNormalCriterion extends GaussianCriterion {
 
+	private static final long serialVersionUID = 175433798993588809L;
+
 	public LogNormalCriterion(String name) {
 		super(name);
 	}

@@ -21,6 +21,8 @@ package fi.smaa;
 import com.jgoodies.binding.beans.Model;
 
 public class Alternative extends Model {
+	private static final long serialVersionUID = -3443177440566082791L;
+
 	private String name;
 	
 	public final static String PROPERTY_NAME = "name";

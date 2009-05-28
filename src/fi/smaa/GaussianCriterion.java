@@ -25,6 +25,8 @@ import fi.smaa.common.Interval;
 
 public class GaussianCriterion extends CardinalCriterion<GaussianMeasurement> {
 	
+	private static final long serialVersionUID = 8457433418858686712L;
+
 	public GaussianCriterion(String name) {
 		super(name);
 	}

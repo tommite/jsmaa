@@ -32,6 +32,7 @@ import com.jgoodies.binding.beans.Model;
 
 public abstract class Criterion<T extends Measurement> extends Model implements DeepCopiable {
 	
+	private static final long serialVersionUID = -7263844743829489232L;
 	public final static String PROPERTY_NAME = "name";	
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";

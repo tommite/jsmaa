@@ -34,6 +34,7 @@ import com.jgoodies.binding.value.ValueModel;
 import fi.smaa.common.Interval;
 
 public class IntervalPanel extends JPanel {
+	private static final long serialVersionUID = -5571531046764331786L;
 	private JComponent parent;
 	private Interval interval;
 	private static final String INPUT_ERROR = "Input error";
@@ -63,6 +64,7 @@ public class IntervalPanel extends JPanel {
 	}
 	
 	private class IntervalValueModel extends AbstractVetoableValueModel {
+		private static final long serialVersionUID = -5651105205219639989L;
 		private boolean start;
 		protected IntervalValueModel(ValueModel subject, boolean start) {
 			super(subject);

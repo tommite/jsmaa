@@ -30,6 +30,7 @@ import com.jgoodies.binding.beans.Observable;
 @SuppressWarnings("unchecked")
 public class SMAAModel extends Model {
 	
+	private static final long serialVersionUID = 1064123340687226048L;
 	public final static String PROPERTY_ALTERNATIVES = "alternatives";
 	public final static String PROPERTY_CRITERIA = "criteria";	
 	public final static String PROPERTY_NAME = "name";

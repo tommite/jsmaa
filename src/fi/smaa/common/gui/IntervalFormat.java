@@ -27,6 +27,8 @@ import fi.smaa.common.Interval;
 
 public class IntervalFormat extends Format {
 
+	private static final long serialVersionUID = -147400705393837897L;
+
 	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo,
 			FieldPosition pos) {

@@ -25,4 +25,5 @@ import com.jgoodies.binding.beans.Model;
  */
 public abstract class Measurement extends Model implements DeepCopiable {
 
+	private static final long serialVersionUID = -8591599918382039554L;
 }

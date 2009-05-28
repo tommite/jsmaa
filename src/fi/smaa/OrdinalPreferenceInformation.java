@@ -28,6 +28,7 @@ import fi.smaa.common.RandomUtil;
 
 public class OrdinalPreferenceInformation implements PreferenceInformation, Serializable {
 	
+	private static final long serialVersionUID = -8011596971699184854L;
 	transient private double[] tmparr;
 	transient private double[] samplearr;
 	private List<Rank> ranks;

@@ -40,7 +40,7 @@ public class CardinalCriterionTest {
 		criterion = getInstance();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "serial" })
 	private CardinalCriterion getInstance() {
 		return new CardinalCriterion("name") {
 			@Override

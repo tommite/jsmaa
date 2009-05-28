@@ -63,6 +63,7 @@ public class RankSelectorGroup {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private JComboBox createComboBox(Rank r) {
 		ValueModel valueModel = new PropertyAdapter<Rank>(r, Rank.PROPERTY_RANK, true);
 		JComboBox chooser = new JComboBox(new ComboBoxAdapter<Rank>(listModel, valueModel));
