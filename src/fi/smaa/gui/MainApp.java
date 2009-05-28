@@ -38,7 +38,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -59,12 +58,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultTreeCellEditor;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import nl.rug.escher.common.gui.GUIHelper;
@@ -129,7 +124,6 @@ public class MainApp extends Model {
 		app.startGui();
 	}
 
-
 	private void startGui() {
 	   	initDefaultModel();
 		initFrame();
@@ -140,7 +134,6 @@ public class MainApp extends Model {
 		frame.setVisible(true);	
 		updateFrameTitle();
 	}
-
 
 	private void updateFrameTitle() {
 		String appString = "JSMAA v" + VERSION;
@@ -261,7 +254,7 @@ public class MainApp extends Model {
 		leftTree.setEditable(true);
 		splitPane.setLeftComponent(leftTree);
 		LeftTreeCellRenderer renderer = new LeftTreeCellRenderer(leftTreeModel, imageLoader);
-		leftTree.setCellEditor(new MyCellEditor(leftTree, renderer));
+		leftTree.setCellEditor(new LeftTreeCellEditor(model, leftTree, renderer));
 		leftTree.setCellRenderer(renderer);
 		
 		final JPopupMenu leftTreeEditPopupMenu = new JPopupMenu();
@@ -304,76 +297,7 @@ public class MainApp extends Model {
 			}
 		});
 	}
-	
-	private class MyCellEditor extends DefaultTreeCellEditor {
 		
-		private ArrayList<String> oldNames = new ArrayList<String>();
-		private String oldName;
-		
-		public MyCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
-			super(tree, renderer);
-			addCellEditorListener(new CellEditorListener() {
-				public void editingCanceled(ChangeEvent e) {
-					validateEditing();					
-				}
-
-				public void editingStopped(ChangeEvent e) {
-					validateEditing();
-				}
-
-				private void validateEditing() {
-					String newName = (String) getCellEditorValue();
-					Object editObject = lastPath.getLastPathComponent();
-					
-					if (editObject instanceof Alternative) {
-						if (!isValidName(newName)) {
-							showErrorAlternativeExists(newName);
-							leftTree.startEditingAtPath(lastPath);							
-						}
-					} else if (editObject instanceof Criterion) {
-						if (!isValidName(newName)) {
-							showErrorCriterionExists(newName);
-							leftTree.startEditingAtPath(lastPath);
-						}
-					}
-				}
-			});
-		}
-		
-		private boolean isValidName(String name) {
-			return !oldNames.contains(name) || name.equals(oldName);
-		}
-		
-		@Override
-		public void prepareForEditing() {
-			oldNames.clear();
-			Object obj = lastPath.getLastPathComponent();
-			if (obj instanceof Alternative) {
-				oldName = ((Alternative) obj).getName();
-				for (Alternative a : model.getAlternatives()) {
-					oldNames.add(a.getName());
-				}
-			} else if (obj instanceof Criterion) {
-				oldName = ((Criterion) obj).getName();				
-				for (Criterion c : model.getCriteria()) {
-					oldNames.add(c.getName());
-				}
-			}
-			super.prepareForEditing();
-		}
-	}
-	
-
-	private void showErrorCriterionExists(String name) {
-		JOptionPane.showMessageDialog(leftTree, "There exists a criterion with name: " + name 
-				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);		
-	}					
-	
-	private void showErrorAlternativeExists(String name) {
-		JOptionPane.showMessageDialog(leftTree, "There exists an alternative with name: " + name 
-				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);
-	}	
-	
 	private void expandLeftMenu() {
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode()}));
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode()}));
@@ -814,15 +738,24 @@ public class MainApp extends Model {
 	}
 
 	protected void addGaussianCriterion() {
-		model.addCriterion(new GaussianCriterion(generateNextCriterionName()));	
+		Criterion c = new GaussianCriterion(generateNextCriterionName());
+		addCriterionAndStartRename(c);
+	}
+
+	private void addCriterionAndStartRename(Criterion c) {
+		model.addCriterion(c);
+		leftTree.setSelectionPath(leftTreeModel.getPathForCriterion(c));
+		leftTree.startEditingAtPath(leftTreeModel.getPathForCriterion(c));
 	}
 	
 	protected void addLogNormalCriterion() {
-		model.addCriterion(new LogNormalCriterion(generateNextCriterionName()));
+		LogNormalCriterion c = new LogNormalCriterion(generateNextCriterionName());
+		addCriterionAndStartRename(c);
 	}	
 
 	protected void addUniformCriterion() {
-		model.addCriterion(new UniformCriterion(generateNextCriterionName()));
+		UniformCriterion c = new UniformCriterion(generateNextCriterionName());
+		addCriterionAndStartRename(c);
 	}
 	
 	protected void addOrdinalCriterion() {

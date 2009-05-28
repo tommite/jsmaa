@@ -90,6 +90,14 @@ public class LeftTreeModel implements TreeModel{
 		return preferencesNode;
 	}
 	
+	public TreePath getPathForAlternative(Alternative alt) {
+		return new TreePath(new Object[]{smaaModel, alternativesNode, alt});
+	}
+	
+	public TreePath getPathForCriterion(Criterion c) {
+		return new TreePath(new Object[]{smaaModel, criteriaNode, c});
+	}	
+	
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName() == SMAAModel.PROPERTY_ALTERNATIVES) {
