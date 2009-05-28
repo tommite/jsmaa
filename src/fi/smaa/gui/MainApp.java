@@ -37,6 +37,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -107,6 +109,9 @@ public class MainApp extends Model {
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
 	private SMAAModelListener modelListener = new SMAAModelListener();
+	private BlockingQueue<BuildSimulatorRun> buildQueue
+		= new LinkedBlockingQueue<BuildSimulatorRun>();
+	private Thread buildSimulatorThread;
 	
 	public Boolean getModelUnsaved() {
 		return modelUnsaved;
@@ -865,21 +870,41 @@ public class MainApp extends Model {
 		}
 	}
 
-	private void buildNewSimulator() {
-		if (simulator != null) {
-			simulator.stop();
+	synchronized private void buildNewSimulator() {
+		buildQueue.add(new BuildSimulatorRun());
+		if (buildSimulatorThread == null) {
+			buildSimulatorThread = new Thread(buildQueue.poll());
+			buildSimulatorThread.start();
 		}
-		simulator = new SMAASimulator(model, 10000);		
-		results = simulator.getResults();
-		results.addResultsListener(new SimulationProgressListener());
-		if (rightViewBuilder instanceof CentralWeightsView) {
-			setRightViewToCentralWeights();
-		} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
-			setRightViewToRankAcceptabilities();
+	}
+	
+	synchronized private void checkStartNewSimulator() {
+		if (buildQueue.isEmpty()) {
+			buildSimulatorThread = null;
+		} else {
+			buildSimulatorThread = new Thread(buildQueue.poll());
+			buildSimulatorThread.start();
 		}
-		simulationProgress.setValue(0);
-		simulator.restart();
-	}	
+	}
+	
+	private class BuildSimulatorRun implements Runnable {
+		public void run() {
+			if (simulator != null) {
+				simulator.stop();
+			}
+			simulator = new SMAASimulator(model, 10000);		
+			results = simulator.getResults();
+			results.addResultsListener(new SimulationProgressListener());
+			if (rightViewBuilder instanceof CentralWeightsView) {
+				setRightViewToCentralWeights();
+			} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
+				setRightViewToRankAcceptabilities();
+			}
+			simulationProgress.setValue(0);
+			simulator.restart();
+			checkStartNewSimulator();
+		}		
+	}
 
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
