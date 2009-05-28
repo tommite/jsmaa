@@ -116,8 +116,6 @@ public class MainApp extends Model {
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
-	private JMenuItem leftTreeRenameItem;
-	private JMenuItem leftTreeDeleteItem;
 	
 	public Boolean getModelUnsaved() {
 		return modelUnsaved;
@@ -265,11 +263,21 @@ public class MainApp extends Model {
 		LeftTreeCellRenderer renderer = new LeftTreeCellRenderer(leftTreeModel, imageLoader);
 		leftTree.setCellEditor(new MyCellEditor(leftTree, renderer));
 		leftTree.setCellRenderer(renderer);
-		final JPopupMenu leftTreePopupMenu = new JPopupMenu();
-		leftTreeRenameItem = createRenameMenuItem();
-		leftTreePopupMenu.add(leftTreeRenameItem);
-		leftTreeDeleteItem = createDeleteMenuItem();
-		leftTreePopupMenu.add(leftTreeDeleteItem);
+		
+		final JPopupMenu leftTreeEditPopupMenu = new JPopupMenu();
+		final JMenuItem leftTreeRenameItem = createRenameMenuItem();
+		leftTreeEditPopupMenu.add(leftTreeRenameItem);
+		final JMenuItem leftTreeDeleteItem = createDeleteMenuItem();
+		leftTreeEditPopupMenu.add(leftTreeDeleteItem);
+		
+		final JPopupMenu leftTreeAltsPopupMenu = new JPopupMenu();
+		leftTreeAltsPopupMenu.add(createAddAltMenuItem());
+		
+		final JPopupMenu leftTreeCritPopupMenu = new JPopupMenu();
+		leftTreeCritPopupMenu.add(createAddUnifCritMenuItem());
+		leftTreeCritPopupMenu.add(createAddGausCritMenuItem());
+		leftTreeCritPopupMenu.add(createAddLogCritMenuItem());
+		
 		leftTree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent evt) {
@@ -277,12 +285,18 @@ public class MainApp extends Model {
 					int selRow = leftTree.getRowForLocation(evt.getX(), evt.getY());
 					if (selRow != -1) {
 						Object obj = leftTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
+						leftTree.setSelectionRow(selRow);						
 						if (obj instanceof Alternative ||
 								obj instanceof Criterion ||
 								obj instanceof SMAAModel) {
 							leftTreeDeleteItem.setEnabled(!(obj instanceof SMAAModel));
-							leftTree.setSelectionRow(selRow);
-							leftTreePopupMenu.show((Component) evt.getSource(), 
+							leftTreeEditPopupMenu.show((Component) evt.getSource(), 
+									evt.getX(), evt.getY());
+						} else if (obj == leftTreeModel.getAlternativesNode()) {
+							leftTreeAltsPopupMenu.show((Component) evt.getSource(),
+									evt.getX(), evt.getY());
+						} else if (obj == leftTreeModel.getCriteriaNode()) {
+							leftTreeCritPopupMenu.show((Component) evt.getSource(),
 									evt.getX(), evt.getY());
 						}
 					}
@@ -698,10 +712,7 @@ public class MainApp extends Model {
 		alternativeMenu.setMnemonic('a');
 		JMenuItem showItem = new JMenuItem("Show");
 		showItem.setMnemonic('s');
-		JMenuItem addAltButton = new JMenuItem("Add new");
-		addAltButton.setMnemonic('n');
-		addAltButton.setIcon(getIcon(FileNames.ICON_ADD));
-		addAltButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));		
+		JMenuItem addAltButton = createAddAltMenuItem();
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -709,15 +720,23 @@ public class MainApp extends Model {
 			}			
 		});
 				
-		addAltButton.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addAlternative();
-			}
-		});
 		alternativeMenu.add(showItem);
 		alternativeMenu.addSeparator();
 		alternativeMenu.add(addAltButton);
 		return alternativeMenu;
+	}
+
+	private JMenuItem createAddAltMenuItem() {
+		JMenuItem item = new JMenuItem("Add new");
+		item.setMnemonic('n');
+		item.setIcon(getIcon(FileNames.ICON_ADD));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));		
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addAlternative();
+			}
+		});
+		return item;
 	}
 
 
@@ -727,48 +746,25 @@ public class MainApp extends Model {
 		JMenuItem showItem = new JMenuItem("Show");
 		showItem.setMnemonic('s');
 		showItem.setIcon(getIcon(FileNames.ICON_CRITERIALIST));
-		JMenuItem addUnifItem = new JMenuItem("Add uniform");
-		addUnifItem.setMnemonic('u');
-		addUnifItem.setIcon(getIcon(FileNames.ICON_ADD));
-		addUnifItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
-		JMenuItem addGaussianItem = new JMenuItem("Add gaussian");
-		addGaussianItem.setMnemonic('g');
-		addGaussianItem.setIcon(getIcon(FileNames.ICON_ADD));
-		addGaussianItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-		JMenuItem addLogNormalItem = new JMenuItem("Add lognormal");
-		addLogNormalItem.setIcon(getIcon(FileNames.ICON_ADD));
-		addLogNormalItem.setMnemonic('l');
-		addLogNormalItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));				
-		
-		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
-		addOrdinalItem.setMnemonic('o');
-		addOrdinalItem.setIcon(getIcon(FileNames.ICON_ADD));		
-		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				setRightViewToCriteria();
 			}
-		});
-		addUnifItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addUniformCriterion();
-			}			
-		});
-		addGaussianItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addGaussianCriterion();
-			}
-		});
-		addLogNormalItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addLogNormalCriterion();
-			}
 		});		
+		
+		JMenuItem addUnifItem = createAddUnifCritMenuItem();
+		JMenuItem addGaussianItem = createAddGausCritMenuItem();		
+		JMenuItem addLogNormalItem = createAddLogCritMenuItem();		
+		
+		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
+		addOrdinalItem.setMnemonic('o');
+		addOrdinalItem.setIcon(getIcon(FileNames.ICON_ADD));		
 		addOrdinalItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addOrdinalCriterion();
 			}			
 		});
+		
 		criteriaMenu.add(showItem);
 		criteriaMenu.addSeparator();
 		criteriaMenu.add(addUnifItem);
@@ -776,6 +772,45 @@ public class MainApp extends Model {
 		criteriaMenu.add(addGaussianItem);
 		criteriaMenu.add(addLogNormalItem);
 		return criteriaMenu;
+	}
+
+	private JMenuItem createAddLogCritMenuItem() {
+		JMenuItem item = new JMenuItem("Add lognormal");
+		item.setIcon(getIcon(FileNames.ICON_LOGNORMALCRITERION));
+		item.setMnemonic('l');
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));				
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addLogNormalCriterion();
+			}
+		});
+		return item;
+	}
+
+	private JMenuItem createAddGausCritMenuItem() {
+		JMenuItem item = new JMenuItem("Add gaussian");
+		item.setMnemonic('g');
+		item.setIcon(getIcon(FileNames.ICON_GAUSSIANCRITERION));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addGaussianCriterion();
+			}
+		});
+		return item;
+	}
+
+	private JMenuItem createAddUnifCritMenuItem() {
+		JMenuItem item = new JMenuItem("Add uniform");
+		item.setMnemonic('u');
+		item.setIcon(getIcon(FileNames.ICON_UNIFORMCRITERION));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addUniformCriterion();
+			}			
+		});
+		return item;
 	}
 
 	protected void addGaussianCriterion() {
