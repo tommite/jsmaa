@@ -36,9 +36,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Queue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -109,8 +109,8 @@ public class MainApp extends Model {
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
 	private SMAAModelListener modelListener = new SMAAModelListener();
-	private BlockingQueue<BuildSimulatorRun> buildQueue
-		= new LinkedBlockingQueue<BuildSimulatorRun>();
+	private Queue<BuildSimulatorRun> buildQueue
+		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
 	
 	public Boolean getModelUnsaved() {
