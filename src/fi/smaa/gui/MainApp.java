@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Queue;
 
 import javax.swing.AbstractAction;
+import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -88,7 +89,7 @@ import fi.smaa.common.ImageLoader;
 @SuppressWarnings({ "unchecked", "serial" })
 public class MainApp extends Model {
 	
-	private static final String VERSION = "0.2";
+	public static final String VERSION = "0.2";
 	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	private static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	private JFrame frame;
@@ -315,16 +316,43 @@ public class MainApp extends Model {
 		JMenu critMenu = createCriteriaMenu();	
 		JMenu altMenu = createAlternativeMenu();
 		JMenu resultsMenu = createResultsMenu();
+		JMenu helpMenu = createHelpMenu();
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
 		menuBar.add(critMenu);
 		menuBar.add(altMenu);
 		menuBar.add(resultsMenu);
+		menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(helpMenu);
 		
 		return menuBar;
 	}
 
+
+	private JMenu createHelpMenu() {
+		JMenu menu = new JMenu("Help");
+		menu.setMnemonic('h');
+		JMenuItem aboutItem = new JMenuItem("About", getIcon(FileNames.ICON_HOME));
+		aboutItem.setMnemonic('a');
+		aboutItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent arg0) {
+				showAboutDialog();
+			}			
+		});
+		menu.add(aboutItem);
+		return menu;
+	}
+
+	protected void showAboutDialog() {
+		String title = "About JSMAA";
+		String msg = "JSMAA v" + VERSION;
+		msg += "\nJSMAA is open source and licensed under GPLv3.\n";
+		msg += "\t- and can be distributed freely!\n";
+		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
+		JOptionPane.showMessageDialog(frame, msg, title,
+				JOptionPane.INFORMATION_MESSAGE, getIcon(FileNames.ICON_HOME));
+	}
 
 	private JMenu createResultsMenu() {
 		JMenu resultsMenu = new JMenu("Results");
