@@ -613,6 +613,7 @@ public class MainApp extends Model {
 				new BufferedInputStream(
 						new FileInputStream(file)));
 		SMAAModel loadedModel = (SMAAModel) s.readObject();
+		s.close();
 		this.model = loadedModel;
 		initWithModel(model);
 		setCurrentModelFile(file);
