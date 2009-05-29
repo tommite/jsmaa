@@ -450,6 +450,15 @@ public class MainApp extends Model {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
 		
+		JMenuItem newItem = new JMenuItem("New model");
+		newItem.setMnemonic('n');
+		newItem.setIcon(getIcon(FileNames.ICON_FILENEW));
+		newItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent arg0) {
+				newModel();
+			}
+		});
+		
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.setMnemonic('s');
 		saveItem.setIcon(getIcon(FileNames.ICON_SAVEFILE));
@@ -478,7 +487,7 @@ public class MainApp extends Model {
 		});
 		openItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				openOpenFileDialog();
+				openFile();
 			}
 		});
 		quitItem.addActionListener(new AbstractAction() {
@@ -487,6 +496,7 @@ public class MainApp extends Model {
 			}
 		});
 		
+		fileMenu.add(newItem);
 		fileMenu.add(openItem);
 		fileMenu.add(saveItem);
 		fileMenu.add(saveAsItem);
@@ -495,6 +505,35 @@ public class MainApp extends Model {
 		return fileMenu;
 	}
 	
+	protected void newModel() {
+		if (!checkSaveCurrentModel()) {
+			return;
+		}
+		this.model = new SMAAModel("new model");
+		initWithModel(model);
+		setCurrentModelFile(null);
+		setModelUnsaved(true);
+		updateFrameTitle();				
+	}
+
+	private boolean checkSaveCurrentModel() {
+		if (modelUnsaved) {
+			int conf = JOptionPane.showConfirmDialog(frame, 
+					"Current model not saved. Do you want do save changes?",
+					"Save changed",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+					getIcon(FileNames.ICON_STOP));
+			if (conf == JOptionPane.CANCEL_OPTION) {
+				return false;
+			} else if (conf == JOptionPane.YES_OPTION) {
+				if (!save()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	private boolean saveAs() {
 		JFileChooser chooser = getFileChooser();
 		int retVal = chooser.showSaveDialog(frame);
@@ -534,7 +573,10 @@ public class MainApp extends Model {
 		}
 	}
 	
-	protected void openOpenFileDialog() {
+	protected void openFile() {
+		if (!checkSaveCurrentModel()) {
+			return;
+		}
 		JFileChooser chooser = getFileChooser();
 		int retVal = chooser.showOpenDialog(frame);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
