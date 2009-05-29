@@ -64,7 +64,6 @@ import javax.swing.tree.TreePath;
 
 import nl.rug.escher.common.gui.GUIHelper;
 import nl.rug.escher.common.gui.ViewBuilder;
-import sun.ExampleFileFilter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
@@ -639,8 +638,8 @@ public class MainApp extends Model {
 	}
 
 	private File checkFileExtension(File file) {
-		if (ExampleFileFilter.getExtension(file) == null ||
-				!ExampleFileFilter.getExtension(file).equals(JSMAA_MODELFILE_EXTENSION)) {
+		if (MyFileFilter.getExtension(file) == null ||
+				!MyFileFilter.getExtension(file).equals(JSMAA_MODELFILE_EXTENSION)) {
 			return new File(file.getAbsolutePath() + "." + JSMAA_MODELFILE_EXTENSION);
 		}
 		return file;
@@ -649,7 +648,7 @@ public class MainApp extends Model {
 
 	private JFileChooser getFileChooser() {
 		JFileChooser chooser = new JFileChooser(new File("."));
-		ExampleFileFilter filter = new ExampleFileFilter();
+		MyFileFilter filter = new MyFileFilter();
 		filter.addExtension("jsmaa");
 		filter.setDescription("JSMAA model files");
 		chooser.setFileFilter(filter);
