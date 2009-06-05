@@ -28,7 +28,13 @@ public class GaussianMeasurement extends Measurement {
 	private Double mean;
 	private Double stDev;
 
+	/**
+	 * 
+	 * @param mean
+	 * @param stDev has to be positive
+	 */
 	public GaussianMeasurement(Double mean, Double stDev) {
+		assert(stDev >= 0.0);
 		this.mean = mean;
 		this.stDev = stDev;
 	}
