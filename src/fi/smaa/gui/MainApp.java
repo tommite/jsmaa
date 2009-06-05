@@ -124,7 +124,7 @@ public class MainApp extends Model {
 		app.startGui();
 	}
 
-	private void startGui() {
+	public void startGui() {
 	   	initDefaultModel();
 		initFrame();
 		initComponents();		
@@ -198,7 +198,8 @@ public class MainApp extends Model {
 	}
 
 
-	private void initWithModel(SMAAModel model) {
+	public void initWithModel(SMAAModel model) {
+		this.model = model;
 		initLeftPanel();		
 		model.addPropertyChangeListener(modelListener);
 		buildNewSimulator();
