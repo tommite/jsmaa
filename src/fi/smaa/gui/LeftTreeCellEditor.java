@@ -28,6 +28,7 @@ import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import fi.smaa.Alternative;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.SMAAModel;
 
@@ -65,7 +66,7 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 					showErrorAlternativeExists(newName);
 					tree.startEditingAtPath(lastPath);							
 				}
-			} else if (editObject instanceof Criterion) {
+			} else if (editObject instanceof AbstractCriterion) {
 				if (!isValidName(newName)) {
 					showErrorCriterionExists(newName);
 					tree.startEditingAtPath(lastPath);
@@ -88,7 +89,6 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 		return !oldNames.contains(name) || name.equals(oldName);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void prepareForEditing() {
 		oldNames.clear();
@@ -98,7 +98,7 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 			for (Alternative a : model.getAlternatives()) {
 				oldNames.add(a.getName());
 			}
-		} else if (editObject instanceof Criterion) {
+		} else if (editObject instanceof AbstractCriterion) {
 			oldName = ((Criterion) editObject).getName();				
 			for (Criterion c : model.getCriteria()) {
 				oldNames.add(c.getName());

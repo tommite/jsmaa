@@ -23,7 +23,7 @@ import java.util.Map;
 
 import fi.smaa.Alternative;
 import fi.smaa.AlternativeExistsException;
-import fi.smaa.Criterion;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
 import fi.smaa.OrdinalCriterion;
@@ -39,7 +39,7 @@ public class TestData {
 	public Alternative alt2;
 	public OrdinalCriterion crit1;	
 	public UniformCriterion crit2;	
-	public Criterion<GaussianMeasurement> crit3;	
+	public AbstractCriterion<GaussianMeasurement> crit3;	
 	public Map<Alternative, Rank> ranks;
 	public Map<Alternative, Interval> intervals;
 	public Map<Alternative, GaussianMeasurement> gaussianMeasurements;

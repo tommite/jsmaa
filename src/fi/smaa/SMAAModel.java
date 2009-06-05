@@ -170,7 +170,7 @@ public class SMAAModel extends Model {
 		ret += "Criteria: " + criteria + "\n";
 		ret += "Measurements:\n";
 		for (Criterion crit : criteria) {
-			ret += crit.measurementsToString() + "\n";
+			ret += crit.getMeasurements().toString() + "\n";
 		}
 		return ret;
 	}
@@ -193,14 +193,14 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		ArrayList<Alternative> alts = new ArrayList<Alternative>();
-		ArrayList<Criterion> crit = new ArrayList<Criterion>();
+		List<Alternative> alts = new ArrayList<Alternative>();
+		List<Criterion> crit = new ArrayList<Criterion>();
 		for (Alternative a : alternatives) {
 			alts.add(a.deepCopy());
 		}
 		model.setAlternatives(alts);
 		for (Criterion c : criteria) {
-			crit.add((Criterion) c.deepCopy());
+			crit.add((AbstractCriterion) c.deepCopy());
 		}
 		model.setCriteria(crit);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());

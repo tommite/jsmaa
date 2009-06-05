@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.Alternative;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.MissingPreferenceInformation;
@@ -64,7 +65,7 @@ public class SMAAModelTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetCriteria() {
-		List<Criterion> crit = new ArrayList<Criterion>();
+		List<AbstractCriterion> crit = new ArrayList<AbstractCriterion>();
 		crit.add(new GaussianCriterion("c1"));
 		crit.add(new GaussianCriterion("c2"));
 		
@@ -90,7 +91,6 @@ public class SMAAModelTest {
 		assertEquals("testModel", mod.toString());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testAddCriterion() {
 		Criterion c = new GaussianCriterion("gaus");

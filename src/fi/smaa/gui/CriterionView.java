@@ -35,7 +35,6 @@ import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
 import fi.smaa.LogNormalCriterion;
-import fi.smaa.Measurement;
 import fi.smaa.OrdinalCriterion;
 import fi.smaa.UniformCriterion;
 import fi.smaa.common.Interval;
@@ -117,7 +116,7 @@ public class CriterionView implements ViewBuilder {
 //		}
 		
 		int index = 0;
-		for (Alternative a : ((Criterion<Measurement>)criterion).getAlternatives()) {
+		for (Alternative a : criterion.getAlternatives()) {
 			LayoutUtil.addRow(layout);
 			row += 2;
 			builder.add(BasicComponentFactory.createLabel(
@@ -130,7 +129,7 @@ public class CriterionView implements ViewBuilder {
 				builder.add(comp, cc.xy(3, row));
 				builder.addLabel("Interval", cc.xy(5, row));
 			} else if (criterion instanceof GaussianCriterion) {
-				Criterion<GaussianMeasurement> cardCrit = (Criterion<GaussianMeasurement>) criterion;
+				GaussianCriterion cardCrit = (GaussianCriterion) criterion;
 				GaussianMeasurement meas = cardCrit.getMeasurements().get(a);
 				JComponent comp = ComponentBuilder.createGaussianMeasurementPanel(
 						new PresentationModel<GaussianMeasurement>(meas));

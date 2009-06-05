@@ -36,7 +36,6 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.Alternative;
 import fi.smaa.Criterion;
-import fi.smaa.Measurement;
 import fi.smaa.SMAAResults;
 
 public class CentralWeightsView extends ResultsView implements ViewBuilder {
@@ -114,9 +113,9 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		CellConstraints cc = new CellConstraints();
 		int col = 5;
 		int row = 3;
-		for (Criterion<Measurement> c : results.getCriteria()) {
+		for (Criterion c : results.getCriteria()) {
 			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Criterion<Measurement>>(c).getModel(Criterion.PROPERTY_NAME)),
+					new PresentationModel<Criterion>(c).getModel(Criterion.PROPERTY_NAME)),
 					cc.xy(col, row));
 			col += 2;
 		}

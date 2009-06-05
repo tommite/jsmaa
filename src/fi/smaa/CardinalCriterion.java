@@ -23,7 +23,7 @@ import java.util.Map;
 import fi.smaa.common.Interval;
 
 
-public abstract class CardinalCriterion<T extends Measurement> extends Criterion<T> {
+public abstract class CardinalCriterion<T extends Measurement> extends AbstractCriterion<T> {
 	
 	private static final long serialVersionUID = 306783908162696324L;
 	public final static String PROPERTY_SCALE = "scale";

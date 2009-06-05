@@ -30,7 +30,6 @@ public class UtilitySampler {
 		tmparr = new double[numAlts];			
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void sample(Criterion crit, double[] target) {
 		if (crit instanceof GaussianCriterion) {
 			sample((GaussianCriterion) crit, target);

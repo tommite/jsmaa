@@ -38,19 +38,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.Alternative;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.Measurement;
 import fi.smaa.UniformCriterion;
 import fi.smaa.common.Interval;
 
-public class CriterionTest {
+public class AbstractCriterionTest {
 	
-	private Criterion<Measurement> criterion;
+	private AbstractCriterion<Measurement> criterion;
 	private List<Alternative> alts;
 	
 	@SuppressWarnings("serial")
-	private Criterion<Measurement> createInstance() {
-		return new Criterion<Measurement>("name") {
+	private AbstractCriterion<Measurement> createInstance() {
+		return new AbstractCriterion<Measurement>("name") {
 			public String getTypeLabel() {
 				return null;
 			}
@@ -79,7 +80,7 @@ public class CriterionTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testConstructor() {
-		Criterion c = createInstance();
+		AbstractCriterion c = createInstance();
 		c.setName("c");
 		assertEquals("c", c.getName());
 	}
@@ -105,7 +106,7 @@ public class CriterionTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testequals() {
-		Criterion c2 = createInstance();
+		AbstractCriterion c2 = createInstance();
 		assertTrue(criterion.equals(c2));
 		c2.setName("newname");
 		assertFalse(criterion.equals(c2));

@@ -74,6 +74,7 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.Alternative;
 import fi.smaa.AlternativeExistsException;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.LogNormalCriterion;
@@ -237,7 +238,7 @@ public class MainApp extends Model {
 		rebuildRightPanel();
 	}
 	
-	public void setRightViewToCriterion(Criterion node) {
+	public void setRightViewToCriterion(AbstractCriterion node) {
 		rightViewBuilder = new CriterionView(node);
 		rebuildRightPanel();
 	}	
@@ -283,7 +284,7 @@ public class MainApp extends Model {
 						Object obj = leftTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
 						leftTree.setSelectionRow(selRow);						
 						if (obj instanceof Alternative ||
-								obj instanceof Criterion ||
+								obj instanceof AbstractCriterion ||
 								obj instanceof SMAAModel) {
 							leftTreeDeleteItem.setEnabled(!(obj instanceof SMAAModel));
 							leftTreeEditPopupMenu.show((Component) evt.getSource(), 
@@ -436,7 +437,7 @@ public class MainApp extends Model {
 		Object selection = getLeftMenuSelection();
 		if (selection instanceof Alternative) {
 			confirmDeleteAlternative((Alternative) selection);
-		} else if (selection instanceof Criterion) {
+		} else if (selection instanceof AbstractCriterion) {
 			confirmDeleteCriterion((Criterion)selection);
 		}
 	}
@@ -811,11 +812,11 @@ public class MainApp extends Model {
 	}
 
 	protected void addGaussianCriterion() {
-		Criterion c = new GaussianCriterion(generateNextCriterionName());
+		AbstractCriterion c = new GaussianCriterion(generateNextCriterionName());
 		addCriterionAndStartRename(c);
 	}
 
-	private void addCriterionAndStartRename(Criterion c) {
+	private void addCriterionAndStartRename(AbstractCriterion c) {
 		model.addCriterion(c);
 		leftTree.setSelectionPath(leftTreeModel.getPathForCriterion(c));
 		leftTree.startEditingAtPath(leftTreeModel.getPathForCriterion(c));
@@ -899,8 +900,8 @@ public class MainApp extends Model {
 			} else if (node == leftTreeModel.getCriteriaNode()){
 				setRightViewToCriteria();
 				setEditMenuItemsEnabled(false);
-			} else if (node instanceof Criterion) {
-				setRightViewToCriterion((Criterion)node);
+			} else if (node instanceof AbstractCriterion) {
+				setRightViewToCriterion((AbstractCriterion)node);
 				setEditMenuItemsEnabled(true);
 			} else if (node instanceof Alternative) {
 				setEditMenuItemsEnabled(true);
@@ -930,7 +931,7 @@ public class MainApp extends Model {
 	private class SMAAModelListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			setModelUnsaved(true);
-			if (evt.getSource() instanceof Criterion) {
+			if (evt.getSource() instanceof AbstractCriterion) {
 				if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 					buildNewSimulator();
 				}

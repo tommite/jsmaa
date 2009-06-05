@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.Alternative;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.GaussianCriterion;
 import fi.smaa.GaussianMeasurement;
@@ -78,13 +79,12 @@ public class SMAASimulatorTest {
 		assertFalse(simulator.isRunning());
 	}	
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testEqualRanks() throws InterruptedException {
 		Alternative alt1 = new Alternative("a1");
 		Alternative alt2 = new Alternative("a2");
 		UniformCriterion c1 = new UniformCriterion("c1");
-		Criterion<GaussianMeasurement> c2 = new GaussianCriterion("c2");
+		AbstractCriterion<GaussianMeasurement> c2 = new GaussianCriterion("c2");
 		
 		ArrayList<Alternative> alts2 = new ArrayList<Alternative>();
 		alts2.add(alt1);

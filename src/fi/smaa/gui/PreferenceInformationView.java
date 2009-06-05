@@ -47,7 +47,6 @@ public class PreferenceInformationView implements ViewBuilder {
 		this.model = model;
 	}
 
-	@SuppressWarnings("unchecked")
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"right:pref, 3dlu, pref, 3dlu, pref",

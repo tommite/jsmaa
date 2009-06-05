@@ -28,6 +28,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import fi.smaa.Alternative;
+import fi.smaa.AbstractCriterion;
 import fi.smaa.Criterion;
 import fi.smaa.SMAAModel;
 import fi.smaa.UniformCriterion;
@@ -166,7 +167,7 @@ public class LeftTreeModel implements TreeModel{
 				}
 			}
 		} else if (parent == criteriaNode) {
-			if (child instanceof Criterion) {
+			if (child instanceof AbstractCriterion) {
 				int index = smaaModel.getCriteria().indexOf(child);
 				if (index != -1) {
 					return index;
@@ -191,7 +192,7 @@ public class LeftTreeModel implements TreeModel{
 			if (smaaModel.getAlternatives().contains(node)) {
 				return true;
 			}
-		} else if (node instanceof Criterion) {
+		} else if (node instanceof AbstractCriterion) {
 			if (smaaModel.getCriteria().contains(node)) {
 				return true;
 			}
@@ -228,9 +229,9 @@ public class LeftTreeModel implements TreeModel{
 			if (!smaaModel.getAlternatives().contains(new Alternative((String)newValue))) {
 				((Alternative) obj).setName((String) newValue);
 			}
-		} else if (obj instanceof Criterion) {
+		} else if (obj instanceof AbstractCriterion) {
 			if (!smaaModel.getCriteria().contains(new UniformCriterion((String)newValue))) {			
-				((Criterion) obj).setName((String) newValue);
+				((AbstractCriterion) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof SMAAModel) {
 			((SMAAModel) obj).setName((String) newValue);

@@ -23,7 +23,7 @@ import java.util.List;
 
 
 
-public class OrdinalCriterion extends Criterion<Rank> {
+public class OrdinalCriterion extends AbstractCriterion<Rank> {
 	
 	private static final long serialVersionUID = -1153156807411990038L;
 
