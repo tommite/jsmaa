@@ -25,8 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -63,12 +63,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import nl.rug.escher.common.gui.GUIHelper;
 import nl.rug.escher.common.gui.ViewBuilder;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
-import com.jgoodies.binding.beans.Model;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
@@ -88,12 +86,11 @@ import fi.smaa.jsmaa.model.UniformCriterion;
 import fi.smaa.jsmaa.simulator.SMAASimulator;
 
 @SuppressWarnings({ "unchecked", "serial" })
-public class MainApp extends Model {
+public class JSMAAMainFrame extends JFrame {
 	
 	public static final String VERSION = "0.2";
 	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	private static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
-	private JFrame frame;
 	private JSplitPane splitPane;
 	private JTree leftTree;
 	private SMAAModel model;
@@ -113,28 +110,54 @@ public class MainApp extends Model {
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
 	
+	public JSMAAMainFrame(SMAAModel model) {
+		super("SMAA");
+		this.model = model;
+		startGui();
+	}
+	
 	public Boolean getModelUnsaved() {
 		return modelUnsaved;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		MainApp app = new MainApp();
-		app.startGui();
-	}
-
-	public void startGui() {
-	   	initDefaultModel();
+	private void startGui() {		
 		initFrame();
-		initComponents();		
+		initComponents();
 		initWithModel(model);
 		expandLeftMenu();
-		frame.pack();
-		frame.setVisible(true);	
-		updateFrameTitle();
+		updateFrameTitle();		
+		pack();	
 	}
+	
+	public void initWithModel(SMAAModel model) {
+		this.model = model;
+		initLeftPanel();		
+		model.addPropertyChangeListener(modelListener);
+		buildNewSimulator();
+		setRightViewToCriteria();
+		leftTreeFocusCriteria();
+	}	
+	
+	public void setRightViewToCriteria() {
+		rightViewBuilder = new CriteriaListView(model);
+		rebuildRightPanel();
+	}
+	
+	public void setRightViewToAlternatives() {
+		rightViewBuilder = new AlternativeInfoView(model);
+		rebuildRightPanel();
+	}
+	
+	public void setRightViewToCriterion(AbstractCriterion node) {
+		rightViewBuilder = new CriterionView(node);
+		rebuildRightPanel();
+	}	
+	
+	public void setRightViewToPreferences() {
+		rightViewBuilder = new PreferenceInformationView(
+				new SMAAModelPreferencePresentationModel(model));
+		rebuildRightPanel();
+	}	
 
 	private void updateFrameTitle() {
 		String appString = "JSMAA v" + VERSION;
@@ -148,35 +171,12 @@ public class MainApp extends Model {
 			}
 		}
 		String modelSavedStar = modelUnsaved ? "*" : "";
-		frame.setTitle(appString + " - " + file + modelSavedStar);
+		setTitle(appString + " - " + file + modelSavedStar);
 	}
 
-
-	private void initDefaultModel() {
-		model = new SMAAModel("model");
-		model.addCriterion(new UniformCriterion("Criterion 1"));
-		model.addCriterion(new GaussianCriterion("Criterion 2"));
-		try {
-			model.addAlternative(new Alternative("Alternative 1"));
-			model.addAlternative(new Alternative("Alternative 2"));			
-			model.addAlternative(new Alternative("Alternative 3"));
-		} catch (AlternativeExistsException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	private void initFrame() {
-		GUIHelper.initializeLookAndFeel();		
-		frame = new JFrame("SMAA");
-		frame.setPreferredSize(new Dimension(800, 500));
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent evt) {
-				quitApplication();
-			}
-		});
+	private void initFrame() {		
+		setPreferredSize(new Dimension(800, 500));
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);		
 	}
 		
 	private void rebuildRightPanel() {
@@ -192,20 +192,10 @@ public class MainApp extends Model {
 	   splitPane.setRightComponent(rightPane);
 
 	   
-	   frame.getContentPane().setLayout(new BorderLayout());
-	   frame.getContentPane().add("Center", splitPane);
-	   frame.getContentPane().add("South", createToolBar());
-	   frame.setJMenuBar(createMenuBar());
-	}
-
-
-	public void initWithModel(SMAAModel model) {
-		this.model = model;
-		initLeftPanel();		
-		model.addPropertyChangeListener(modelListener);
-		buildNewSimulator();
-		setRightViewToCriteria();
-		leftTreeFocusCriteria();
+	   getContentPane().setLayout(new BorderLayout());
+	   getContentPane().add("Center", splitPane);
+	   getContentPane().add("South", createToolBar());
+	   setJMenuBar(createMenuBar());
 	}
 	
 	private JComponent createToolBar() {
@@ -227,28 +217,7 @@ public class MainApp extends Model {
 		rightViewBuilder = new RankAcceptabilitiesView(results);
 		rebuildRightPanel();
 	}
-	
-	private void setRightViewToCriteria() {
-		rightViewBuilder = new CriteriaListView(model);
-		rebuildRightPanel();
-	}
-	
-	public void setRightViewToAlternatives() {
-		rightViewBuilder = new AlternativeInfoView(model);
-		rebuildRightPanel();
-	}
-	
-	public void setRightViewToCriterion(AbstractCriterion node) {
-		rightViewBuilder = new CriterionView(node);
-		rebuildRightPanel();
-	}	
-	
-	public void setRightViewToPreferences() {
-		rightViewBuilder = new PreferenceInformationView(
-				new SMAAModelPreferencePresentationModel(model));
-		rebuildRightPanel();
-	}
-	
+		
 	private void initLeftPanel() {
 		leftTreeModel = new LeftTreeModel(model);
 		leftTree = new JTree(new LeftTreeModel(model));
@@ -346,13 +315,13 @@ public class MainApp extends Model {
 		return menu;
 	}
 
-	protected void showAboutDialog() {
+	private void showAboutDialog() {
 		String title = "About JSMAA";
 		String msg = "JSMAA v" + VERSION;
 		msg += "\nJSMAA is open source and licensed under GPLv3.\n";
 		msg += "\t- and can be distributed freely!\n";
 		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
-		JOptionPane.showMessageDialog(frame, msg, title,
+		JOptionPane.showMessageDialog(this, msg, title,
 				JOptionPane.INFORMATION_MESSAGE, getIcon(FileNames.ICON_HOME));
 	}
 
@@ -423,7 +392,7 @@ public class MainApp extends Model {
 	}
 
 
-	private Icon getIcon(String name) {
+	public Icon getIcon(String name) {
 		try {
 			return imageLoader.getIcon(name);
 		} catch (FileNotFoundException e) {
@@ -444,7 +413,7 @@ public class MainApp extends Model {
 
 
 	private void confirmDeleteCriterion(Criterion criterion) {
-		int conf = JOptionPane.showConfirmDialog(frame, 
+		int conf = JOptionPane.showConfirmDialog(this, 
 				"Do you really want to delete criterion " + criterion + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -456,7 +425,7 @@ public class MainApp extends Model {
 
 
 	private void confirmDeleteAlternative(Alternative alternative) {
-		int conf = JOptionPane.showConfirmDialog(frame, 
+		int conf = JOptionPane.showConfirmDialog(this, 
 				"Do you really want to delete alternative " + alternative + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -471,7 +440,7 @@ public class MainApp extends Model {
 		return leftTree.getSelectionPath().getLastPathComponent();
 	}
 
-	protected void menuRenameClicked() {
+	private void menuRenameClicked() {
 		leftTree.startEditingAtPath(leftTree.getSelectionPath());
 	}
 
@@ -492,7 +461,7 @@ public class MainApp extends Model {
 		saveItem.setMnemonic('s');
 		saveItem.setIcon(getIcon(FileNames.ICON_SAVEFILE));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-		Bindings.bind(saveItem, "enabled", new PresentationModel<MainApp>(this).getModel(PROPERTY_MODELUNSAVED));
+		Bindings.bind(saveItem, "enabled", new PresentationModel<JSMAAMainFrame>(this).getModel(PROPERTY_MODELUNSAVED));
 		JMenuItem saveAsItem = new JMenuItem("Save As");
 		saveAsItem.setMnemonic('a');
 		saveAsItem.setIcon(getIcon(FileNames.ICON_SAVEAS));
@@ -521,7 +490,7 @@ public class MainApp extends Model {
 		});
 		quitItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				quitApplication();
+				quitItemAction();
 			}
 		});
 		
@@ -534,7 +503,13 @@ public class MainApp extends Model {
 		return fileMenu;
 	}
 	
-	protected void newModel() {
+	protected void quitItemAction() {
+		for (WindowListener w : getWindowListeners()) {
+			w.windowClosing(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+
+	private void newModel() {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
@@ -547,7 +522,7 @@ public class MainApp extends Model {
 
 	private boolean checkSaveCurrentModel() {
 		if (modelUnsaved) {
-			int conf = JOptionPane.showConfirmDialog(frame, 
+			int conf = JOptionPane.showConfirmDialog(this, 
 					"Current model not saved. Do you want do save changes?",
 					"Save changed",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -565,7 +540,7 @@ public class MainApp extends Model {
 
 	private boolean saveAs() {
 		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showSaveDialog(frame);
+		int retVal = chooser.showSaveDialog(this);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			File file = checkFileExtension(chooser.getSelectedFile());
 			trySaveModel(file);
@@ -588,13 +563,13 @@ public class MainApp extends Model {
 			saveModel(model, file);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(frame, "Error saving model to " + getCanonicalPath(file) + 
+			JOptionPane.showMessageDialog(this, "Error saving model to " + getCanonicalPath(file) + 
 					", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 	}
 
-	protected boolean save() {
+	public boolean save() {
 		if (currentModelFile == null) {
 			return saveAs();
 		} else {
@@ -602,23 +577,23 @@ public class MainApp extends Model {
 		}
 	}
 	
-	protected void openFile() {
+	private void openFile() {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
 		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showOpenDialog(frame);
+		int retVal = chooser.showOpenDialog(this);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				loadModel(chooser.getSelectedFile());
 				expandLeftMenu();	
 				leftTreeFocusCriteria();
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(frame,
+				JOptionPane.showMessageDialog(this,
 						"Error loading model: "+ e.getMessage(), 
 						"Load error", JOptionPane.ERROR_MESSAGE);
 			} catch (Exception e) {				
-				JOptionPane.showMessageDialog(frame, "Error loading model from " +
+				JOptionPane.showMessageDialog(this, "Error loading model from " +
 						getCanonicalPath(chooser.getSelectedFile()) + 
 						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -685,25 +660,6 @@ public class MainApp extends Model {
 		chooser.setFileFilter(filter);
 		return chooser;
 	}
-
-	protected void quitApplication() {
-		if (modelUnsaved) {
-			int conf = JOptionPane.showConfirmDialog(frame, 
-					"Model not saved. Do you want do save changes before quitting JSMAA?",
-					"Save changed",					
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-					getIcon(FileNames.ICON_STOP));
-			if (conf == JOptionPane.CANCEL_OPTION) {
-				return;
-			} else if (conf == JOptionPane.YES_OPTION) {
-				if (!save()) {
-					return;
-				}
-			}
-		}
-		System.exit(0);
-	}
-
 
 	private JMenu createAlternativeMenu() {
 		JMenu alternativeMenu = new JMenu("Alternatives");
