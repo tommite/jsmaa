@@ -62,7 +62,7 @@
 
 			<jar destfile="dist/jsmaa.jar" basedir="bin" excludes="**/test/*">
 				<manifest>
-					<attribute name="Main-Class" value="fi.smaa.gui.MainApp" />
+					<attribute name="Main-Class" value="fi.smaa.jsmaa.JSMAAMain" />
 					<attribute name="Class-Path" value="${dist-class-path}" />
 				</manifest>
 			</jar>
