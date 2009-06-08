@@ -107,7 +107,10 @@
 		<mkdir dir="${junit.output.dir}"/>
 		<junit fork="yes" printsummary="withOutAndErr" haltonfailure="true">
 			<formatter type="xml"/>
-			<classpath refid="test.classpath"/>	
+			<classpath>
+				<pathelement location="bin/" />
+				<path refid="test.classpath" />	
+			</classpath>
 			<batchtest todir="${junit.output.dir}">
 				<fileset dir="bin/">
 					<include name="**/*test/*Test.class"/>
