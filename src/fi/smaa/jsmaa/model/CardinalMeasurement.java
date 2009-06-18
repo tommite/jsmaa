@@ -16,34 +16,13 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model.test;
+package fi.smaa.jsmaa.model;
 
-import static org.junit.Assert.assertEquals;
+import fi.smaa.jsmaa.common.Interval;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class CardinalMeasurement extends Measurement {
 
-import org.junit.Before;
-import org.junit.Test;
+	private static final long serialVersionUID = -1805819804451450374L;
 
-import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.LogNormalCriterion;
-
-public class LogNormalCriterionTest {
-
-	private List<Alternative> alts;
-	private LogNormalCriterion crit;
-	
-	@Before
-	public void setUp() {
-		crit = new LogNormalCriterion("crit");
-		alts = new ArrayList<Alternative>();
-		alts.add(new Alternative("alt1"));
-		alts.add(new Alternative("alt2"));
-	} 
-	
-	@Test
-	public void testGetTypeLabel() {
-		assertEquals("LogNormal", crit.getTypeLabel());
-	}	
+	public abstract Interval getRange();
 }

@@ -18,16 +18,18 @@
 
 package fi.smaa.jsmaa.model;
 
+import fi.smaa.jsmaa.common.Interval;
 
 
-public class GaussianMeasurement extends Measurement {
+
+public class GaussianMeasurement extends CardinalMeasurement {
 	
 	private static final long serialVersionUID = 1821014379633287612L;
 	public final static String PROPERTY_MEAN = "mean";
 	public final static String PROPERTY_STDEV = "stDev";
 	
-	private Double mean;
-	private Double stDev;
+	protected Double mean;
+	protected Double stDev;
 
 	/**
 	 * 
@@ -67,9 +69,6 @@ public class GaussianMeasurement extends Measurement {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
 		if (!(other instanceof GaussianMeasurement)) {
 			return false;
 		}
@@ -80,4 +79,12 @@ public class GaussianMeasurement extends Measurement {
 	public Object deepCopy() {
 		return new GaussianMeasurement(mean, stDev);
 	}
+	
+	/**
+	 * Derives range of 95% confidence interval.
+	 */
+	@Override
+	public Interval getRange() {
+		return new Interval((mean - (stDev * 1.96)), (mean + (stDev * 1.96)));
+	}	
 }

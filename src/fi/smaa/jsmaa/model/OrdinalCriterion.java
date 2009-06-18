@@ -18,13 +18,8 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.util.Collection;
-import java.util.List;
 
-
-
-
-public class OrdinalCriterion extends AbstractCriterion<Rank> {
+public class OrdinalCriterion extends AbstractCriterion {
 	
 	private static final long serialVersionUID = -1153156807411990038L;
 
@@ -32,82 +27,12 @@ public class OrdinalCriterion extends AbstractCriterion<Rank> {
 		super(name);
 	}
 
-	private void ensureRanks() {
-		ensureDifferentRanks();
-		ensureNoRankGaps();		
+	public Object deepCopy() {
+		return new OrdinalCriterion(name);
 	}
 
-	private void ensureDifferentRanks() {
-		int numRanks = measurements.size();
-		
-		for (int i=1;i<=numRanks;i++) {
-			boolean found = false;
-			for (Alternative a : getAlternatives()) {
-				Rank r = measurements.get(a);
-				if (r.getRank().equals(i)) {
-					if (found) {
-						r.setRank(r.getRank() + 1);
-					} else {
-						found = true;
-					}
-				}
-			}
-		}
-	}
-	
-	private void ensureNoRankGaps() {
-		int numRanks = measurements.size();
-		
-		for (int i=1;i<=numRanks;i++) {
-			while (!measurements.containsValue(new Rank(i))) {
-				shiftAllRanksDownFrom(i);
-			}
-		}
-	}
-
-	private void shiftAllRanksDownFrom(int i) {
-		for (Alternative a : getAlternatives()) {
-			Rank r = measurements.get(a);
-			if (r.getRank() > i) {
-				r.setRank(r.getRank()-1);
-			}
-		}
-	}
-		
 	@Override
 	public String getTypeLabel() {
 		return "Ordinal";
-	}
-
-	private int findMax(Collection<Rank> values) {
-		int max = 0;
-		for (Rank i : values) {
-			if (i.getRank() > max) {
-				max = i.getRank();
-			}
-		}
-		return max;
-	}
-	
-	@Override
-	protected Rank createMeasurement() {
-		return new Rank(findMax(measurements.values()) + 1);
-	}
-
-	@Override
-	protected void fireMeasurementChange() {
-		ensureRanks();
-	}
-
-	public Object deepCopy() {
-		OrdinalCriterion crit = new OrdinalCriterion(name);
-		deepCopyAlternativesAndMeasurements(crit);
-		return crit;
-	}
-	
-	@Override
-	public void setAlternatives(List<Alternative> alternatives) throws NullPointerException {
-		super.setAlternatives(alternatives);
-		ensureRanks();
-	}
+	}	
 }

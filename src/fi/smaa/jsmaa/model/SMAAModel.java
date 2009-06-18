@@ -18,84 +18,57 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jgoodies.binding.beans.Model;
-import com.jgoodies.binding.beans.Observable;
 
 
-@SuppressWarnings("unchecked")
 public class SMAAModel extends Model {
 	
 	private static final long serialVersionUID = 1064123340687226048L;
-	public final static String PROPERTY_ALTERNATIVES = "alternatives";
-	public final static String PROPERTY_CRITERIA = "criteria";	
 	public final static String PROPERTY_NAME = "name";
-	public final static String PROPERTY_PREFERENCEINFORMATION = "preferenceInformation";
 		
-	private List<Alternative> alternatives;
-	private List<Criterion> criteria;	
+	private Set<Alternative> alternatives;
+	private Set<Criterion> criteria;	
 	private String name;
 	private PreferenceInformation preferences;
-	transient private MemberListener listener = new MemberListener();
-
-	public SMAAModel() {
-		init();
-	}
+	private ImpactMatrix impactMatrix;
+	transient private Set<SMAAModelListener> modelListeners = new HashSet<SMAAModelListener>();
+	transient private ImpactMatrixListener impactListener = new ImpactListener();
 	
 	public SMAAModel(String name) {
 		this.name = name;
 		init();
 	}
-	
-	private void writeObject(ObjectOutputStream o) throws IOException {
-		o.defaultWriteObject();
-	}
-	
-	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
-		i.defaultReadObject();
-		listener = new MemberListener();
-		disconnectConnectListeners(Collections.EMPTY_LIST, alternatives);
-		disconnectConnectListeners(Collections.EMPTY_LIST, criteria);	
-		disconnectConnectListeners(Collections.EMPTY_LIST,
-				Collections.singletonList(preferences));				
-	}
-	
-	private void init() {
-		alternatives = new ArrayList<Alternative>();
-		criteria = new ArrayList<Criterion>();
-		preferences = new MissingPreferenceInformation(criteria.size());		
-	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
-		PreferenceInformation oldVal = this.preferences;
 		this.preferences = preferences;
-		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldVal, this.preferences);
-		disconnectConnectListeners(Collections.singletonList(oldVal),
-				Collections.singletonList(this.preferences));		
+		firePreferencesChanged();
+	}
+	
+	public void addModelListener(SMAAModelListener l) {
+		modelListeners.add(l);
+	}
+	
+	public void removeModelListener(SMAAModelListener l) {
+		modelListeners.remove(l);
 	}
 	
 	public PreferenceInformation getPreferenceInformation() {
 		return preferences;
 	}
 
-	public List<Alternative> getAlternatives() {
+	public Set<Alternative> getAlternatives() {
 		return alternatives;
 	}
 	
-	public void setAlternatives(List<Alternative> alts) {
-		List<Alternative> oldval = this.alternatives;
+	public void setAlternatives(Set<Alternative> alts) {
 		this.alternatives = alts;
-		updateCriteriaAlternatives();
-		disconnectConnectListeners(oldval, this.alternatives);
-		firePropertyChange(PROPERTY_ALTERNATIVES, oldval, this.alternatives);
+		impactMatrix.setAlternatives(alts);
+		fireAlternativesChanged();
 	}
 
 	public void setName(String name) {
@@ -112,52 +85,32 @@ public class SMAAModel extends Model {
 		if (getAlternatives().contains(alt)) {
 			throw new AlternativeExistsException();
 		}
-		List<Alternative> alts = new ArrayList<Alternative>(getAlternatives());
+		Set<Alternative> alts = new HashSet<Alternative>(getAlternatives());
 		alts.add(alt);
 		setAlternatives(alts);
 	}
 
-	public List<Criterion> getCriteria() {
+	public Set<Criterion> getCriteria() {
 		return criteria;
 	}
 	
-	/**
-	 * Side-effect: sets the numAlts in each criterion.
-	 * 
-	 * @param criteria
-	 */
-	public void setCriteria(List<Criterion> criteria) {
-		List<Criterion> oldVal = this.criteria;
+	public void setCriteria(Set<Criterion> criteria) {
 		this.criteria = criteria;
-		PreferenceInformation oldPref = this.preferences;
+		impactMatrix.setCriteria(criteria);
 		preferences = new MissingPreferenceInformation(criteria.size());
-		updateCriteriaAlternatives();	
-		firePropertyChange(PROPERTY_CRITERIA, oldVal, criteria);
-		firePropertyChange(PROPERTY_PREFERENCEINFORMATION, oldPref,this.preferences);
-		disconnectConnectListeners(oldVal, this.criteria);
-	}
-	
-	private void disconnectConnectListeners(List<? extends Observable> disconnects,
-			List<? extends Observable> connects) {
-		for (Observable c : disconnects) {
-			c.removePropertyChangeListener(listener);			
-		}
-		for (Observable c : connects) {
-			c.addPropertyChangeListener(listener);
-		}
-	}
-
-	private void updateCriteriaAlternatives() {
-		for (Criterion c : criteria) {
-			c.setAlternatives(alternatives);
-		}
+		fireCriteriaChanged();
+		firePreferencesChanged();
 	}
 
 	public void addCriterion(Criterion cri) {
-		List<Criterion> crit = new ArrayList<Criterion>();
+		Set<Criterion> crit = new HashSet<Criterion>();
 		crit.addAll(getCriteria());
 		crit.add(cri);
 		setCriteria(crit);
+	}
+	
+	public ImpactMatrix getImpactMatrix() {
+		return impactMatrix;
 	}
 	
 	@Override
@@ -170,14 +123,12 @@ public class SMAAModel extends Model {
 		ret += "Alternatives: " + alternatives + "\n";
 		ret += "Criteria: " + criteria + "\n";
 		ret += "Measurements:\n";
-		for (Criterion crit : criteria) {
-			ret += crit.getMeasurements().toString() + "\n";
-		}
+		ret += impactMatrix.toString() + "\n";
 		return ret;
 	}
 	
 	public void deleteAlternative(Alternative a) {
-		List<Alternative> newAlts = new ArrayList<Alternative>();
+		Set<Alternative> newAlts = new HashSet<Alternative>();
 		newAlts.addAll(alternatives);
 		if (newAlts.remove(a)) {
 			setAlternatives(newAlts);
@@ -185,7 +136,7 @@ public class SMAAModel extends Model {
 	}
 	
 	public void deleteCriterion(Criterion c) {
-		List<Criterion> newCrit = new ArrayList<Criterion>();
+		Set<Criterion> newCrit = new HashSet<Criterion>();
 		newCrit.addAll(criteria);
 		if (newCrit.remove(c)) {
 			setCriteria(newCrit);
@@ -194,8 +145,8 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		List<Alternative> alts = new ArrayList<Alternative>();
-		List<Criterion> crit = new ArrayList<Criterion>();
+		Set<Alternative> alts = new HashSet<Alternative>();
+		Set<Criterion> crit = new HashSet<Criterion>();
 		for (Alternative a : alternatives) {
 			alts.add(a.deepCopy());
 		}
@@ -211,13 +162,49 @@ public class SMAAModel extends Model {
 	public void setMissingPreferences() {
 		setPreferenceInformation(
 				new MissingPreferenceInformation(criteria.size()));
+	}
+
+	private void init() {
+		alternatives = new HashSet<Alternative>();
+		criteria = new HashSet<Criterion>();
+		preferences = new MissingPreferenceInformation(criteria.size());
+		impactMatrix = new ImpactMatrix(alternatives, criteria);
+		impactMatrix.addListener(impactListener);
+	}
+	
+	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
+		i.defaultReadObject();
+		impactMatrix.addListener(impactListener);
 	}	
 	
-	private class MemberListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			for (PropertyChangeListener p : getPropertyChangeListeners()) {
-				p.propertyChange(evt);
-			}
+	private void firePreferencesChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.preferencesChanged();
+		}
+	}
+	
+	private void fireAlternativesChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.alternativesChanged();
 		}		
 	}
+	
+	private void fireCriteriaChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.criteriaChanged();
+		}				
+	}
+	
+	private void fireMeasurementsChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.measurementsChanged();
+		}
+	}	
+	
+	private class ImpactListener implements ImpactMatrixListener {
+		public void measurementChanged() {
+			fireMeasurementsChanged();
+		}		
+	}
+	
 }

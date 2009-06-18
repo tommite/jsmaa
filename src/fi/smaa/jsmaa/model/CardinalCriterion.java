@@ -18,30 +18,36 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.util.Map;
-
 import fi.smaa.jsmaa.common.Interval;
 
 
-public abstract class CardinalCriterion<T extends Measurement> extends AbstractCriterion<T> {
+public class CardinalCriterion extends AbstractCriterion {
 	
 	private static final long serialVersionUID = 306783908162696324L;
 	public final static String PROPERTY_SCALE = "scale";
 	public final static String PROPERTY_ASCENDING = "ascending";
 
 	protected Boolean ascending;
-	protected CardinalCriterion(String name) {
+	private Interval scale = new Interval(0.0, 0.0);
+	
+	public CardinalCriterion(String name) {
 		super(name);
 		ascending = true;
 	}
 		
-	protected CardinalCriterion(String name, Boolean ascending) {
+	public CardinalCriterion(String name, Boolean ascending) {
 		super(name);
 		this.ascending = ascending;
 	}
 
 	public Interval getScale() {
-		return createScale(getMeasurements());
+		return scale;
+	}
+	
+	public void setScale(Interval scale) {
+		Interval oldVal = this.scale;
+		this.scale = scale;
+		firePropertyChange(PROPERTY_SCALE, oldVal, this.scale);
 	}
 	
 	public Boolean getAscending() {
@@ -53,20 +59,16 @@ public abstract class CardinalCriterion<T extends Measurement> extends AbstractC
 		this.ascending = asc;
 		firePropertyChange(PROPERTY_ASCENDING, oldVal, asc);
 	}
-	
-	public String getScaleLabel() {
-		return getScale().toString();
-	}
-	
+
 	@Override
-	protected void fireMeasurementChange() {
-		firePropertyChange(PROPERTY_SCALE, null, getScale());
+	public String getTypeLabel() {
+		return "Cardinal";
 	}
-	
-	protected abstract Interval createScale(Map<Alternative, T> oldMeas);
-	
-	protected void deepCopyAscending(CardinalCriterion<T> target) {
-		target.setAscending(ascending);
+
+	public Object deepCopy() {
+		CardinalCriterion c = new CardinalCriterion(name, ascending);
+		c.setScale(scale);
+		return c;
 	}
-	
+		
 }

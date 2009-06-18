@@ -16,26 +16,9 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model.test;
+package fi.smaa.jsmaa.model;
 
-import static org.junit.Assert.assertEquals;
+@SuppressWarnings("serial")
+public class NoSuchCriterionException extends NoSuchValueException {
 
-import org.junit.Before;
-import org.junit.Test;
-
-import fi.smaa.jsmaa.model.OrdinalCriterion;
-
-public class OrdinalCriterionTest {
-	
-	private OrdinalCriterion crit;
-	
-	@Before
-	public void setUp() {
-		crit = new OrdinalCriterion("Crit");
-	}
-
-	@Test
-	public void testGetTypeLabel() {
-		assertEquals("Ordinal", crit.getTypeLabel());
-	}
 }

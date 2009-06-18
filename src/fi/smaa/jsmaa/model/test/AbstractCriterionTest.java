@@ -20,48 +20,24 @@ package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.AbstractCriterion;
-import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.Measurement;
-import fi.smaa.jsmaa.model.UniformCriterion;
 
 public class AbstractCriterionTest {
 	
-	private AbstractCriterion<Measurement> criterion;
-	private List<Alternative> alts;
+	private AbstractCriterion criterion;
 	
 	@SuppressWarnings("serial")
-	private AbstractCriterion<Measurement> createInstance() {
-		return new AbstractCriterion<Measurement>("name") {
+	private AbstractCriterion createInstance() {
+		return new AbstractCriterion("name") {
 			public String getTypeLabel() {
 				return null;
-			}
-			protected Measurement createMeasurement() {
-				return null;
-			}
-			protected void fireMeasurementChange() {
-			}
-			public Map<Alternative, Measurement> getMeasurements() {
-				return new HashMap<Alternative, Measurement>();
 			}
 			public Object deepCopy() {
 				return null;
@@ -73,11 +49,8 @@ public class AbstractCriterionTest {
 	@Before
 	public void setUp() {
 		criterion = createInstance();
-		alts = new ArrayList<Alternative>();
-		alts.add(new Alternative("alt"));			
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testConstructor() {
 		AbstractCriterion c = createInstance();
@@ -98,53 +71,10 @@ public class AbstractCriterionTest {
 	}
 	
 	@Test
-	public void testSetAlternatives() {
-		UniformCriterion c = new UniformCriterion("crit");
-		JUnitUtil.testSetter(c, Criterion.PROPERTY_ALTERNATIVES, new ArrayList<Alternative>(), alts);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
 	public void testequals() {
 		AbstractCriterion c2 = createInstance();
 		assertTrue(criterion.equals(c2));
 		c2.setName("newname");
 		assertFalse(criterion.equals(c2));
-	}
-	
-	@Test
-	public void testSerializationHooksListeners() throws Exception {
-		UniformCriterion c2 = new UniformCriterion("unif");
-		List<Alternative> list = new ArrayList<Alternative>();
-		list.add(new Alternative("alt"));
-		c2.setAlternatives(list);
-		assertEquals(1, c2.getMeasurements().values().size());
-		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(bos);
-		
-		os.writeObject(c2);
-		
-		ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
-		UniformCriterion c2Stream = (UniformCriterion) is.readObject();
-		
-		assertNotNull(c2Stream.getMeasurementListener());
-	}
-	
-	@Test
-	public void testMeasurementsChangeWhenAltNameChanges() {
-		UniformCriterion c = new UniformCriterion("crit");
-		List<Alternative> alts = new ArrayList<Alternative>();
-		Alternative a1 = new Alternative("a1");
-		Alternative a2 = new Alternative("a2");
-		alts.add(a1);
-		alts.add(a2);
-		c.setAlternatives(alts);
-		assertNotNull(c.getMeasurements().get(a1));
-		a1.setName("newName");
-		Map<Alternative, Interval> meas = c.getMeasurements();		
-		assertNotNull(meas.get(a2));
-		assertNotNull(meas.get(a1));
-	}
-	
+	}	
 }

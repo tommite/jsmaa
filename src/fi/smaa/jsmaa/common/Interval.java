@@ -21,9 +21,9 @@ package fi.smaa.jsmaa.common;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
-import fi.smaa.jsmaa.model.Measurement;
+import fi.smaa.jsmaa.model.CardinalMeasurement;
 
-public class Interval extends Measurement {
+public class Interval extends CardinalMeasurement {
 	
 	private static final long serialVersionUID = -4036986804177522602L;
 	public static final String PROPERTY_START = "start";
@@ -116,6 +116,11 @@ public class Interval extends Measurement {
 
 	public Object deepCopy() {
 		return new Interval(start, end);
+	}
+
+	@Override
+	public Interval getRange() {
+		return this;
 	}
 
 }

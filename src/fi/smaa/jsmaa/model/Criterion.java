@@ -18,9 +18,6 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.util.List;
-import java.util.Map;
-
 import com.jgoodies.binding.beans.Observable;
 
 import fi.smaa.jsmaa.common.DeepCopiable;
@@ -29,13 +26,8 @@ public interface Criterion extends Observable, DeepCopiable {
 
 	public final static String PROPERTY_NAME = "name";
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
-	public final static String PROPERTY_ALTERNATIVES = "alternatives";
-	public static final String PROPERTY_MEASUREMENTS = "measurements";
 
 	public String getName();
-	public List<Alternative> getAlternatives();
 	public String getTypeLabel();
-	public Map<Alternative, ? extends Measurement> getMeasurements();
-	public void setAlternatives(List<Alternative> alternatives);
 	public Object deepCopy();
 }

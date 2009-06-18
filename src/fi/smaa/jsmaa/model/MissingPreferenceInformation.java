@@ -47,6 +47,15 @@ public class MissingPreferenceInformation implements PreferenceInformation, Seri
 	public Object deepCopy() {
 		return new MissingPreferenceInformation(numCrit);
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof MissingPreferenceInformation)) {
+			return false;
+		}
+		MissingPreferenceInformation mo = (MissingPreferenceInformation) other;
+		return numCrit == mo.numCrit;
+	}
 
 	public void addPropertyChangeListener(PropertyChangeListener arg0) {
 	}

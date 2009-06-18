@@ -16,26 +16,13 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model.test;
+package fi.smaa.jsmaa.model;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import fi.smaa.jsmaa.model.OrdinalCriterion;
-
-public class OrdinalCriterionTest {
+public interface SMAAModelListener {
 	
-	private OrdinalCriterion crit;
-	
-	@Before
-	public void setUp() {
-		crit = new OrdinalCriterion("Crit");
-	}
+	public void alternativesChanged();
+	public void criteriaChanged();
+	public void preferencesChanged();
+	public void measurementsChanged();
 
-	@Test
-	public void testGetTypeLabel() {
-		assertEquals("Ordinal", crit.getTypeLabel());
-	}
 }

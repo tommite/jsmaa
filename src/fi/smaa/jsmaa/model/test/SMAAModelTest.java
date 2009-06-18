@@ -18,26 +18,29 @@
 
 package fi.smaa.jsmaa.model.test;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.model.AbstractCriterion;
+import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.AlternativeExistsException;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.GaussianCriterion;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
+import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.UniformCriterion;
-import fi.smaa.jsmaa.test.TestData;
+import fi.smaa.jsmaa.model.SMAAModelListener;
 
 public class SMAAModelTest {
 	
@@ -45,8 +48,7 @@ public class SMAAModelTest {
 	
 	@Before
 	public void setUp() {
-		model = new SMAAModel();
-		model.setName("test");
+		model = new SMAAModel("test");
 	}
 
 	@Test
@@ -56,34 +58,73 @@ public class SMAAModelTest {
 	
 	@Test
 	public void testSetAlternatives() {
-		List<Alternative> alts = new ArrayList<Alternative>();
+		Set<Alternative> alts = new HashSet<Alternative>();
 		alts.add(new Alternative("alt1"));
 		alts.add(new Alternative("alt2"));
+		
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);
+		mock.alternativesChanged();
 
-		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_ALTERNATIVES, model.getAlternatives(), alts);
+		replay(mock);
+		
+		model.setAlternatives(alts);
+		verify(mock);
+		
+		assertEquals(alts, model.getAlternatives());
+		
+		assertEquals(alts, model.getImpactMatrix().getAlternatives());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetCriteria() {
-		List<AbstractCriterion> crit = new ArrayList<AbstractCriterion>();
-		crit.add(new GaussianCriterion("c1"));
-		crit.add(new GaussianCriterion("c2"));
+		Set<Criterion> crit = new HashSet<Criterion>();
+		crit.add(new CardinalCriterion("c1"));
+		crit.add(new CardinalCriterion("c2"));
 		
-		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_CRITERIA, model.getCriteria(), crit);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.preferencesChanged();
+		mock.criteriaChanged();
+		replay(mock);
+		
+		model.setCriteria(crit);
+		verify(mock);
+
+		assertEquals(crit, model.getCriteria());
+		assertEquals(crit, model.getImpactMatrix().getCriteria());		
 	}
 	
 	@Test
 	public void testSetPreferenceInformation() {
-		JUnitUtil.testSetter(model, SMAAModel.PROPERTY_PREFERENCEINFORMATION, 
-			model.getPreferenceInformation(), 
-			new MissingPreferenceInformation(model.getAlternatives().size()));
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.preferencesChanged();
+		replay(mock);
+		MissingPreferenceInformation pref = new MissingPreferenceInformation(model.getAlternatives().size());
+		model.setPreferenceInformation(pref);
+		verify(mock);
+		assertEquals(pref, model.getPreferenceInformation());
 	}
 	
 	@Test
-	public void testAddAlternative() {
-		Alternative a = new Alternative("alt");
-		JUnitUtil.testAdder(model, SMAAModel.PROPERTY_ALTERNATIVES, "addAlternative", a);
+	public void testAddAlternative() throws AlternativeExistsException {
+		Set<Alternative> alts = new HashSet<Alternative>();
+		alts.add(new Alternative("alt1"));
+		
+		model.setAlternatives(alts);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.alternativesChanged();
+		replay(mock);
+		
+		Set<Alternative> alts2 = new HashSet<Alternative>();
+		alts2.add(new Alternative("alt1"));
+		alts2.add(new Alternative("alt2"));		
+		model.addAlternative(new Alternative("alt2"));
+		verify(mock);
+		
+		assertEquals(alts2, model.getAlternatives());		
 	}
 	
 	@Test
@@ -94,41 +135,90 @@ public class SMAAModelTest {
 	
 	@Test
 	public void testAddCriterion() {
-		Criterion c = new GaussianCriterion("gaus");
-		JUnitUtil.testAdder(model, SMAAModel.PROPERTY_CRITERIA, "addCriterion", c);
+		Set<Criterion> crit = new HashSet<Criterion>();
+		crit.add(new CardinalCriterion("c1"));
+		
+		model.setCriteria(crit);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.criteriaChanged();
+		mock.preferencesChanged();
+		replay(mock);
+		
+		Set<Criterion> crit2 = new HashSet<Criterion>();
+		crit2.add(new CardinalCriterion("c1"));
+		crit2.add(new CardinalCriterion("c2"));		
+		model.addCriterion(new CardinalCriterion("c2"));
+		verify(mock);
+		
+		assertEquals(crit2, model.getCriteria());			
 	}
 	
 	@Test
 	public void testDeleteAlternative() throws Exception {
-		Alternative a = new Alternative("altToDelete");
-		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_ALTERNATIVES, "deleteAlternative", a);
+		Set<Alternative> alts = new HashSet<Alternative>();
+		alts.add(new Alternative("alt1"));
+		alts.add(new Alternative("alt2"));				
+		model.setAlternatives(alts);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.alternativesChanged();
+		replay(mock);
+		
+		Set<Alternative> alts2 = new HashSet<Alternative>();
+		alts2.add(new Alternative("alt1"));
+
+		model.deleteAlternative(new Alternative("alt2"));
+		verify(mock);
+		
+		assertEquals(alts2, model.getAlternatives());		
 	}
 	
 	@Test
 	public void testDeleteCriterion() throws Exception {
-		UniformCriterion c = new UniformCriterion("critToDelete");
-		JUnitUtil.testDeleter(model, SMAAModel.PROPERTY_CRITERIA, "deleteCriterion", c);		
+		Set<Criterion> crit = new HashSet<Criterion>();
+		crit.add(new CardinalCriterion("c1"));
+		crit.add(new CardinalCriterion("c2"));		
+		
+		model.setCriteria(crit);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);		
+		mock.criteriaChanged();
+		mock.preferencesChanged();
+		replay(mock);
+		
+		Set<Criterion> crit2 = new HashSet<Criterion>();
+		crit2.add(new CardinalCriterion("c1"));
+		model.deleteCriterion(new CardinalCriterion("c2"));
+		verify(mock);
+		
+		assertEquals(crit2, model.getCriteria());	
 	}
 	
 	@Test
-	public void testDeepCopy() {
-		TestData td = new TestData();
-		td.crit1.setMeasurements(td.ranks);
-		td.crit2.setMeasurements(td.intervals);
-		td.crit3.setMeasurements(td.gaussianMeasurements);
+	public void testDeepCopy() throws AlternativeExistsException, NoSuchValueException {
+		Alternative a1 = new Alternative("a1");
+		Alternative a2 = new Alternative("a2");
+		CardinalCriterion c1 = new CardinalCriterion("c1");
+		CardinalCriterion c2 = new CardinalCriterion("c2");
+		model.addAlternative(a1);
+		model.addAlternative(a2);
+		model.addCriterion(c1);
+		model.addCriterion(c2);
+		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
 		
-		SMAAModel model = td.model.deepCopy();
-		assertEquals(model.getName(), td.model.getName());
-		assertTrue(td.alt1.equals(model.getAlternatives().get(0)));
-		assertFalse(td.alt1 == model.getAlternatives().get(0));		
-		assertTrue(td.alt2.equals(model.getAlternatives().get(1)));
-		assertFalse(td.alt1 == model.getAlternatives().get(1));	
-		assertTrue(td.crit1.equals(model.getCriteria().get(0)));
-		assertFalse(td.crit1 == model.getCriteria().get(0));		
-		assertTrue(td.crit2.equals(model.getCriteria().get(1)));
-		assertFalse(td.crit2 == model.getCriteria().get(1));				
-		assertTrue(td.crit3.equals(model.getCriteria().get(2)));
-		assertFalse(td.crit3 == model.getCriteria().get(2));				
+		SMAAModel model2 = model.deepCopy();
+	
+		assertEquals(model.getName(), model2.getName());
+		assertEquals(model.getAlternatives(), model2.getAlternatives());
+		assertEquals(model.getCriteria(), model2.getCriteria());
+		assertEquals(model.getPreferenceInformation(), model2.getPreferenceInformation());
+		assertEquals(model.getImpactMatrix(), model2.getImpactMatrix());
 		
+		assertFalse(model.getName() == model2.getName());
+		assertFalse(model.getAlternatives() == model2.getAlternatives());
+		assertFalse(model.getCriteria() == model2.getCriteria());
+		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
+		assertFalse(model.getImpactMatrix() == model2.getImpactMatrix());
 	}
 }

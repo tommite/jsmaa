@@ -19,10 +19,13 @@
 package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Test;
 
+import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 
 public class GaussianMeasurementTest {
@@ -49,5 +52,33 @@ public class GaussianMeasurementTest {
 	@Test
 	public void testSetStdev() {
 		JUnitUtil.testSetter(new GaussianMeasurement(), GaussianMeasurement.PROPERTY_STDEV, 0.0, 1.0);
+	}
+	
+	@Test
+	public void testGetRange() {
+		GaussianMeasurement meas = new GaussianMeasurement(0.0, 1.0);
+		assertEquals(new Interval(-1.96, 1.96), meas.getRange());
+	}
+	
+	@Test
+	public void testEquals() {
+		GaussianMeasurement m = new GaussianMeasurement(0.1, 0.2);
+		GaussianMeasurement m2 = new GaussianMeasurement(0.1, 0.2);
+		GaussianMeasurement m3 = new GaussianMeasurement(0.1, 0.3);
+		GaussianMeasurement m4 = new GaussianMeasurement(0.2, 0.2);
+		
+		assertTrue(m.equals(m2));
+		assertFalse(m.equals(m3));
+		assertFalse(m.equals(m4));	
+		assertFalse(m.equals(null));
+	}
+	
+	@Test
+	public void testDeepCopy() {
+		GaussianMeasurement m = new GaussianMeasurement(0.1, 0.2);
+		GaussianMeasurement m2 = (GaussianMeasurement) m.deepCopy();
+		assertFalse(m == m2);
+		assertEquals(m.getMean(), m2.getMean(), 0.000000001);
+		assertEquals(m.getStDev(), m2.getStDev(), 0.000000001);
 	}
 }

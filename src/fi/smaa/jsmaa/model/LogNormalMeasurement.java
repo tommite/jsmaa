@@ -18,48 +18,39 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.util.Map;
-
 import fi.smaa.jsmaa.common.Interval;
 
-
-public class UniformCriterion extends CardinalCriterion<Interval> {
+public class LogNormalMeasurement extends GaussianMeasurement {
 	
-	private static final long serialVersionUID = -4462753735102977965L;
+	private static final long serialVersionUID = -562511137486161262L;
 
-	public UniformCriterion(String name) {
-		super(name);
-	}
-
-	public UniformCriterion(String name, Boolean ascending) {
-		super(name, ascending);
-	}
-
-	@Override
-	public String getTypeLabel() {
-		return "Uniform";
-	}
-
-	@Override
-	public Interval getScale() {
-		return createScale(measurements);
+	public LogNormalMeasurement(double mean, double stdev) {
+		super(mean, stdev);
 	}
 	
-	@Override
-	protected Interval createScale(Map<Alternative, Interval> measurements) {
-		return Interval.enclosingInterval(measurements.values());		
+	public LogNormalMeasurement() {
+		super();
 	}
+	
+	/**
+	 * Derives range of 95% confidence interval.
+	 */
+	@Override
+	public Interval getRange() {
+		return new Interval(Math.exp(mean - (stDev * 1.96)),
+				Math.exp(mean + (stDev * 1.96)));
+	}	
 
 	@Override
-	protected Interval createMeasurement() {
-		return new Interval();
-	}
-
 	public Object deepCopy() {
-		UniformCriterion c = new UniformCriterion(name);
-		deepCopyAscending(c);
-		deepCopyAlternativesAndMeasurements(c);
-		return c;
+		return new LogNormalMeasurement(mean, stDev);
 	}
-
+	
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof LogNormalMeasurement)) {
+			return false;
+		}
+		return super.equals(other);
+	}
 }

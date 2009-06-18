@@ -18,6 +18,9 @@
 
 package fi.smaa.jsmaa.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.jgoodies.binding.beans.Model;
 
 public class Alternative extends Model {
@@ -26,6 +29,9 @@ public class Alternative extends Model {
 	private String name;
 	
 	public final static String PROPERTY_NAME = "name";
+	public final static String PROPERTY_MEASUREMENTS = "measurements";
+	
+	private Map<Criterion, Measurement> measurements = new HashMap<Criterion, Measurement>();
 	
 	public Alternative(String name) {
 		this.name = name;
@@ -39,7 +45,17 @@ public class Alternative extends Model {
 		String oldVal = this.name;
 		this.name = _name;
 		firePropertyChange(PROPERTY_NAME, oldVal, this.name);
-	}	
+	}
+	
+	public Map<Criterion, Measurement> getMeasurements() {
+		return measurements;
+	}
+	
+	public void setMeasurements(Map<Criterion, Measurement> meas) {
+		Object oldVal = this.measurements;
+		this.measurements = meas;
+		firePropertyChange(PROPERTY_MEASUREMENTS, oldVal, this.measurements);
+	}
 			
 	@Override
 	public String toString() {
@@ -56,7 +72,9 @@ public class Alternative extends Model {
 	}
 	
 	public Alternative deepCopy() {
-		return new Alternative(name);
+		Alternative a = new Alternative(name);
+		a.setMeasurements(new HashMap<Criterion, Measurement>(measurements));
+		return a;
 	}
 
 	@Override

@@ -18,9 +18,7 @@
 
 package fi.smaa.jsmaa.model.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static org.junit.Assert.*;
 import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
@@ -28,50 +26,45 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.Measurement;
 
 public class CardinalCriterionTest {
 	
-	@SuppressWarnings("unchecked")
 	private CardinalCriterion criterion;
 	
 	@Before
 	public void setUp() {
-		criterion = getInstance();
+		criterion = new CardinalCriterion("crit");
 	}
-
-	@SuppressWarnings({ "unchecked", "serial" })
-	private CardinalCriterion getInstance() {
-		return new CardinalCriterion("name") {
-			@Override
-			public String getTypeLabel() {
-				return null;
-			}
-			@Override
-			public Interval getScale() {
-				return new Interval(0.0, 1.0);
-			}
-			@Override
-			protected Measurement createMeasurement() {
-				return null;
-			}
-			@Override
-			public Map getMeasurements() {
-				return new HashMap();
-			}
-			@Override
-			protected Interval createScale(Map oldMeas) {
-				return null;
-			}
-			public Object deepCopy() {
-				return null;
-			}
-		};
-	}	
+	
+	@Test
+	public void test1Contructor() {
+		CardinalCriterion crit = new CardinalCriterion("c");
+		assertEquals("c", crit.getName());
+		assertEquals(true, crit.getAscending());
+	}
+	
+	@Test
+	public void test2Constructor() {
+		CardinalCriterion crit = new CardinalCriterion("c", false);
+		assertEquals("c", crit.getName());
+		assertEquals(false, crit.getAscending());
+	}
 
 	@Test
 	public void testSetAscending() {
 		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_ASCENDING, true, false);
+	}
+	
+	@Test
+	public void testSetScale() {
+		Interval oldScale = new Interval(0.0, 0.0);
+		Interval newScale = new Interval(0.0, 1.0);
+		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_SCALE, oldScale, newScale);
+	}
+	
+	@Test
+	public void testGetTypeLabel() {
+		assertEquals("Cardinal", criterion.getTypeLabel());
 	}
 
 }

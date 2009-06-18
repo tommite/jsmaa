@@ -18,32 +18,7 @@
 
 package fi.smaa.jsmaa.model;
 
+@SuppressWarnings("serial")
+public class NoSuchValueException extends Exception {
 
-public class LogNormalCriterion extends GaussianCriterion {
-
-	private static final long serialVersionUID = 175433798993588809L;
-
-	public LogNormalCriterion(String name) {
-		super(name);
-	}
-	
-	public LogNormalCriterion(String name, Boolean ascending) {
-		super(name, ascending);
-	}
-
-	@Override
-	public String getTypeLabel() {
-		return "LogNormal";
-	}
-	
-	@Override
-	protected Double deriveMin(Double mean, Double stDev) {
-		return Math.exp(super.deriveMin(mean, stDev));
-	}
-	
-	@Override
-	protected Double deriveMax(Double mean, Double stDev) {
-		return Math.exp(super.deriveMax(mean, stDev));		
-	}
-	
 }
