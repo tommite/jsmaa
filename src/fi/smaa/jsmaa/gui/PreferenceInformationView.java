@@ -80,8 +80,8 @@ public class PreferenceInformationView implements ViewBuilder {
 		selectorGroup = new RankSelectorGroup(model.getOrdinalRanks());
 		
 		List<Rank> ordinalRanks = model.getOrdinalRanks();
-		for (int i = 0 ; i < model.getBean().getCriteria().size();i++) {
-			Criterion c = model.getBean().getCriteria().get(i);			
+		int i=0;
+		for (Criterion c : model.getBean().getCriteria()) {			
 			JLabel label = new JLabel();
 
 			Bindings.bind(label, "text",
@@ -96,6 +96,7 @@ public class PreferenceInformationView implements ViewBuilder {
 			JComboBox selector = createSelector(enabledModel, ordinalRanks, i);
 			
 			builder.add(selector, cc.xy(5, row));
+			i++;
 		}
 
 		return builder.getPanel();

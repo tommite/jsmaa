@@ -23,14 +23,13 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
+import nl.rug.escher.common.gui.GUIHelper;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.AlternativeExistsException;
-import fi.smaa.jsmaa.model.GaussianCriterion;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.UniformCriterion;
-import nl.rug.escher.common.gui.GUIHelper;
 
 public class JSMAAMain {
 	
@@ -58,8 +57,8 @@ public class JSMAAMain {
 	
 	private static SMAAModel buildDefaultModel() {
 		SMAAModel model = new SMAAModel("model");
-		model.addCriterion(new UniformCriterion("Criterion 1"));
-		model.addCriterion(new GaussianCriterion("Criterion 2"));
+		model.addCriterion(new CardinalCriterion("Criterion 1"));
+		model.addCriterion(new CardinalCriterion("Criterion 2"));
 		try {
 			model.addAlternative(new Alternative("Alternative 1"));
 			model.addAlternative(new Alternative("Alternative 2"));			

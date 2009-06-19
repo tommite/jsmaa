@@ -33,19 +33,18 @@ import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.common.gui.IntervalFormat;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.GaussianCriterion;
-import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.LogNormalCriterion;
-import fi.smaa.jsmaa.model.OrdinalCriterion;
-import fi.smaa.jsmaa.model.UniformCriterion;
+import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.NoSuchValueException;
 
-@SuppressWarnings("unchecked")
 public class CriterionView implements ViewBuilder {
 	private Criterion criterion;
+	private ImpactMatrix matrix;
 	
-	public CriterionView(Criterion crit) {
+	public CriterionView(Criterion crit, ImpactMatrix matrix) {
 		this.criterion = crit;
+		this.matrix = matrix;
 	}
 
 
@@ -74,7 +73,12 @@ public class CriterionView implements ViewBuilder {
 		
 		int row = 5;
 		row = buildScalePart(layout, builder, cc, row, fullWidth);
-		buildMeasurementsPart(layout, fullWidth, builder, cc, row);
+		try {
+			buildMeasurementsPart(layout, fullWidth, builder, cc, row);
+		} catch (NoSuchValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			
 		return builder.getPanel();
 	}
@@ -102,7 +106,7 @@ public class CriterionView implements ViewBuilder {
 	}
 
 	private void buildMeasurementsPart(FormLayout layout, int fullWidth,
-			PanelBuilder builder, CellConstraints cc, int row) {
+			PanelBuilder builder, CellConstraints cc, int row) throws NoSuchValueException {
 		row += 2;
 		builder.addSeparator("Measurements", cc.xyw(1, row, fullWidth));
 		row += 2;
@@ -116,31 +120,21 @@ public class CriterionView implements ViewBuilder {
 //		}
 		
 		int index = 0;
-		for (Alternative a : criterion.getAlternatives()) {
+		for (Alternative a : matrix.getAlternatives()) {
 			LayoutUtil.addRow(layout);
 			row += 2;
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
-			if (criterion instanceof UniformCriterion) {
-				UniformCriterion cardCrit = (UniformCriterion) criterion;
-				Interval ival = cardCrit.getMeasurements().get(a);
-				JComponent comp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
-				builder.add(comp, cc.xy(3, row));
-				builder.addLabel("Interval", cc.xy(5, row));
-			} else if (criterion instanceof GaussianCriterion) {
-				GaussianCriterion cardCrit = (GaussianCriterion) criterion;
-				GaussianMeasurement meas = cardCrit.getMeasurements().get(a);
-				JComponent comp = ComponentBuilder.createGaussianMeasurementPanel(
-						new PresentationModel<GaussianMeasurement>(meas));
-				builder.add(comp, cc.xy(3, row));
-				String sLabel = criterion instanceof LogNormalCriterion ? 
-						"LogNormal distributed value" : "Normal distributed value";
-				builder.addLabel(sLabel, cc.xy(5, row));				
-			} else if (criterion instanceof OrdinalCriterion) {
-//				JComboBox box = rankSelectors.get(index);
-//				builder.add(box, cc.xy(3, row));
-//				builder.addLabel("Rank", cc.xy(5, row));								
+			if (criterion instanceof CardinalCriterion) {
+				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
+				CardinalMeasurement m = matrix.getMeasurement(cardCrit, a);
+				if (m instanceof Interval) {
+					Interval ival = (Interval) m;
+					JComponent comp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
+					builder.add(comp, cc.xy(3, row));
+					builder.addLabel("Interval", cc.xy(5, row));
+				}
 			}
 			index++;
 		}

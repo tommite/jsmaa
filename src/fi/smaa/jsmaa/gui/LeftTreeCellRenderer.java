@@ -27,10 +27,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import fi.smaa.jsmaa.common.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.GaussianCriterion;
-import fi.smaa.jsmaa.model.LogNormalCriterion;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
-import fi.smaa.jsmaa.model.UniformCriterion;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
@@ -51,15 +49,9 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				setIcon(loader.getIcon(FileNames.ICON_ALTERNATIVE));
 				setToolTipText("Alternative");
 			} else if (leaf && value instanceof AbstractCriterion) {
-				if (value instanceof UniformCriterion) {
+				if (value instanceof CardinalCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_UNIFORMCRITERION));
-					setToolTipText("Uniform distributed criterion");
-				} else if (value instanceof LogNormalCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_LOGNORMALCRITERION));
-					setToolTipText("LogNormal distributed criterion");					
-				} else if (value instanceof GaussianCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_GAUSSIANCRITERION));
-					setToolTipText("Gaussian distributed criterion");					
+					setToolTipText("Cardinal criterion");
 				} else if (value instanceof OrdinalCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));
 					setToolTipText("Ordinal criterion");					

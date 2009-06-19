@@ -18,7 +18,6 @@
 
 package fi.smaa.jsmaa.gui;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -130,12 +129,12 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		}
 		
 		//change central weights
-		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
+		Map<Alternative, Map<Criterion, Double>> cws = results.getCentralWeightVectors();
 		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {
-			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
+			Map<Criterion, Double> cw = cws.get(results.getAlternatives().get(altIndex));
 			for (int critIndex=0;critIndex<results.getCriteria().size();critIndex++) {
-				CWCells[altIndex][critIndex].setText(formatDouble(cw.get(critIndex)));
+				CWCells[altIndex][critIndex].setText(formatDouble(cw.get(results.getCriteria().get(critIndex))));
 			}
 		}
 	}

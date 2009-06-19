@@ -27,8 +27,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -39,8 +37,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
@@ -76,16 +74,14 @@ import fi.smaa.jsmaa.common.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.AlternativeExistsException;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.GaussianCriterion;
-import fi.smaa.jsmaa.model.LogNormalCriterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
-import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.UniformCriterion;
+import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.simulator.SMAASimulator;
 
-@SuppressWarnings({ "unchecked", "serial" })
+@SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
 	
 	public static final String VERSION = "0.2";
@@ -105,7 +101,7 @@ public class JSMAAMainFrame extends JFrame {
 	private ImageLoader imageLoader = new ImageLoader("/gfx/");
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
-	private SMAAModelListener modelListener = new SMAAModelListener();
+	private SMAAModelListener modelListener = new MySMAAModelListener();
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
@@ -132,7 +128,7 @@ public class JSMAAMainFrame extends JFrame {
 	public void initWithModel(SMAAModel model) {
 		this.model = model;
 		initLeftPanel();		
-		model.addPropertyChangeListener(modelListener);
+		model.addModelListener(modelListener);
 		buildNewSimulator();
 		setRightViewToCriteria();
 		leftTreeFocusCriteria();
@@ -148,8 +144,8 @@ public class JSMAAMainFrame extends JFrame {
 		rebuildRightPanel();
 	}
 	
-	public void setRightViewToCriterion(AbstractCriterion node) {
-		rightViewBuilder = new CriterionView(node);
+	public void setRightViewToCriterion(Criterion node) {
+		rightViewBuilder = new CriterionView(node, model.getImpactMatrix());
 		rebuildRightPanel();
 	}	
 	
@@ -240,9 +236,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTreeAltsPopupMenu.add(createAddAltMenuItem());
 		
 		final JPopupMenu leftTreeCritPopupMenu = new JPopupMenu();
-		leftTreeCritPopupMenu.add(createAddUnifCritMenuItem());
-		leftTreeCritPopupMenu.add(createAddGausCritMenuItem());
-		leftTreeCritPopupMenu.add(createAddLogCritMenuItem());
+		leftTreeCritPopupMenu.add(createAddCardCritMenuItem());
 		
 		leftTree.addMouseListener(new MouseAdapter() {
 			@Override
@@ -706,9 +700,7 @@ public class JSMAAMainFrame extends JFrame {
 			}
 		});		
 		
-		JMenuItem addUnifItem = createAddUnifCritMenuItem();
-		JMenuItem addGaussianItem = createAddGausCritMenuItem();		
-		JMenuItem addLogNormalItem = createAddLogCritMenuItem();		
+		JMenuItem addCardItem = createAddCardCritMenuItem();
 		
 		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
 		addOrdinalItem.setMnemonic('o');
@@ -721,58 +713,25 @@ public class JSMAAMainFrame extends JFrame {
 		
 		criteriaMenu.add(showItem);
 		criteriaMenu.addSeparator();
-		criteriaMenu.add(addUnifItem);
+		criteriaMenu.add(addCardItem);
 		//toolBarAddCritMenu.add(addOrdinalButton);			
-		criteriaMenu.add(addGaussianItem);
-		criteriaMenu.add(addLogNormalItem);
 		return criteriaMenu;
 	}
 
-	private JMenuItem createAddLogCritMenuItem() {
-		JMenuItem item = new JMenuItem("Add lognormal");
-		item.setIcon(getIcon(FileNames.ICON_LOGNORMALCRITERION));
-		item.setMnemonic('l');
-		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));				
-		item.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addLogNormalCriterion();
-			}
-		});
-		return item;
-	}
-
-	private JMenuItem createAddGausCritMenuItem() {
-		JMenuItem item = new JMenuItem("Add gaussian");
-		item.setMnemonic('g');
-		item.setIcon(getIcon(FileNames.ICON_GAUSSIANCRITERION));
-		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-		item.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addGaussianCriterion();
-			}
-		});
-		return item;
-	}
-
-	private JMenuItem createAddUnifCritMenuItem() {
+	private JMenuItem createAddCardCritMenuItem() {
 		JMenuItem item = new JMenuItem("Add uniform");
 		item.setMnemonic('u');
 		item.setIcon(getIcon(FileNames.ICON_UNIFORMCRITERION));
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				addUniformCriterion();
+				addCardinalCriterion();
 			}			
 		});
 		return item;
 	}
 
-	protected void addGaussianCriterion() {
-		AbstractCriterion c = new GaussianCriterion(generateNextCriterionName());
-		addCriterionAndStartRename(c);
-	}
-
-	private void addCriterionAndStartRename(AbstractCriterion c) {
+	private void addCriterionAndStartRename(Criterion c) {
 		model.addCriterion(c);
 		leftTree.setSelectionPath(leftTreeModel.getPathForCriterion(c));
 		leftTree.startEditingAtPath(leftTreeModel.getPathForCriterion(c));
@@ -783,14 +742,9 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.setSelectionPath(leftTreeModel.getPathForAlternative(a));
 		leftTree.startEditingAtPath(leftTreeModel.getPathForAlternative(a));			
 	}
-	
-	protected void addLogNormalCriterion() {
-		LogNormalCriterion c = new LogNormalCriterion(generateNextCriterionName());
-		addCriterionAndStartRename(c);
-	}	
 
-	protected void addUniformCriterion() {
-		UniformCriterion c = new UniformCriterion(generateNextCriterionName());
+	protected void addCardinalCriterion() {
+		CardinalCriterion c = new CardinalCriterion(generateNextCriterionName());
 		addCriterionAndStartRename(c);
 	}
 	
@@ -799,7 +753,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private String generateNextCriterionName() {
-		List<Criterion> crit = model.getCriteria();
+		Set<Criterion> crit = model.getCriteria();
 		
 		int index = 1;
 		while(true) {
@@ -819,7 +773,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	protected void addAlternative() {
-		List<Alternative> alts = model.getAlternatives();
+		Set<Alternative> alts = model.getAlternatives();
 		
 		int index = 1;
 		while (true) {
@@ -884,32 +838,33 @@ public class JSMAAMainFrame extends JFrame {
 		editRenameItem.setEnabled(enable);
 	}			
 
-	private class SMAAModelListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
+	private class MySMAAModelListener implements SMAAModelListener {
+
+		public void alternativesChanged() {
 			setModelUnsaved(true);
-			if (evt.getSource() instanceof AbstractCriterion) {
-				if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-					buildNewSimulator();
-				}
-			}
-			if (evt.getSource() instanceof Rank) {
-				buildNewSimulator();
-			}
-			if (evt.getSource() == model) {
-				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES) ||
-						evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA) ||
-						evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
-					buildNewSimulator();
-				}
-				if (evt.getPropertyName().equals(SMAAModel.PROPERTY_ALTERNATIVES)) {
-					setRightViewToAlternatives();
-				} else if (evt.getPropertyName().equals(SMAAModel.PROPERTY_CRITERIA)) {
-					setRightViewToCriteria();
-				} else if (evt.getPropertyName().equals(SMAAModel.PROPERTY_PREFERENCEINFORMATION)) {
-					rebuildRightPanel();				
-				}
-				expandLeftMenu();
-			}
+			buildNewSimulator();
+			setRightViewToAlternatives();
+			expandLeftMenu();
+		}
+
+		public void criteriaChanged() {
+			setModelUnsaved(true);
+			buildNewSimulator();			
+			setRightViewToCriteria();
+			expandLeftMenu();			
+		}
+
+		public void measurementsChanged() {
+			setModelUnsaved(true);
+			buildNewSimulator();
+			expandLeftMenu();			
+		}
+
+		public void preferencesChanged() {
+			setModelUnsaved(true);
+			buildNewSimulator();			
+			rebuildRightPanel();
+			expandLeftMenu();			
 		}
 	}
 
