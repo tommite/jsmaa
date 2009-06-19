@@ -93,11 +93,14 @@ public class ImpactMatrix {
 	
 	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
 	throws NoSuchAlternativeException, NoSuchCriterionException {
+		if (meas == null) {
+			throw new NullPointerException("null measurement");
+		}
 		checkExistAlternativeAndCriterion(crit, alt);
 		disconnectConnectMeasurementListener(crit, alt, meas);
 		measurements.get(crit).put(alt, meas);
-		fireMeasurementChanged();
 		updateScales();
+		fireMeasurementChanged();
 	}
 	
 	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) 
@@ -180,34 +183,45 @@ public class ImpactMatrix {
 	}
 
 	public void setAlternatives(Set<Alternative> alternatives) {
+		this.alternatives = alternatives;		
 		for (Alternative a : alternatives) {
 			for (Criterion c : criteria) {
 				Map<Alternative, Measurement> map = measurements.get(c);
 				if (!map.keySet().contains(a)) {
 					if (c instanceof CardinalCriterion) {
-						map.put(a, new Interval());
+						try {
+							setMeasurement((CardinalCriterion)c, a, new Interval());
+						} catch (NoSuchValueException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
 		}
-		this.alternatives = alternatives;
 		updateScales();
+		fireMeasurementChanged();
 	}
 	
 	public void setCriteria(Set<Criterion> criteria) {
+		this.criteria = criteria;		
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
-				Map<Alternative, Measurement> m = new HashMap<Alternative, Measurement>();
-				if (c instanceof CardinalCriterion) {
-					for (Alternative a : alternatives) {
-						m.put(a, new Interval());
-					}
-				}
-				measurements.put(c, m);
+				measurements.put(c, new HashMap<Alternative, Measurement>());
 			}
 		}
-		this.criteria = criteria;
+		for (Criterion c : criteria) {
+			if (c instanceof CardinalCriterion) {
+				for (Alternative a : alternatives) {
+					try {
+						setMeasurement((CardinalCriterion)c, a, new Interval());
+					} catch (NoSuchValueException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 		updateScales();
+		fireMeasurementChanged();
 	}
 	
 	private void updateScales() {
@@ -251,7 +265,10 @@ public class ImpactMatrix {
 	
 	private void disconnectConnectMeasurementListener(CardinalCriterion crit,
 			Alternative alt, CardinalMeasurement meas) {
-		Measurement m = measurements.get(crit).put(alt, meas);
+		if (meas == null) {
+			throw new NullPointerException("null measurement");
+		}
+		Measurement m = measurements.get(crit).get(alt);
 		if (m != null) {
 			m.removePropertyChangeListener(measListener);
 		}
@@ -271,5 +288,5 @@ public class ImpactMatrix {
 		for (ImpactMatrixListener l : thisListeners) {
 			l.measurementChanged();
 		}
-	}			
+	}
 }

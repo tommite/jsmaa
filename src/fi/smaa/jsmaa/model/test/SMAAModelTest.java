@@ -65,9 +65,8 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
 		mock.alternativesChanged();
-
+		mock.measurementsChanged();
 		replay(mock);
-		
 		model.setAlternatives(alts);
 		verify(mock);
 		
@@ -86,6 +85,7 @@ public class SMAAModelTest {
 		model.addModelListener(mock);		
 		mock.preferencesChanged();
 		mock.criteriaChanged();
+		mock.measurementsChanged();
 		replay(mock);
 		
 		model.setCriteria(crit);
@@ -116,6 +116,7 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.alternativesChanged();
+		mock.measurementsChanged();
 		replay(mock);
 		
 		Set<Alternative> alts2 = new HashSet<Alternative>();
@@ -143,6 +144,7 @@ public class SMAAModelTest {
 		model.addModelListener(mock);		
 		mock.criteriaChanged();
 		mock.preferencesChanged();
+		mock.measurementsChanged();
 		replay(mock);
 		
 		Set<Criterion> crit2 = new HashSet<Criterion>();
@@ -163,6 +165,7 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.alternativesChanged();
+		mock.measurementsChanged();
 		replay(mock);
 		
 		Set<Alternative> alts2 = new HashSet<Alternative>();
@@ -185,6 +188,7 @@ public class SMAAModelTest {
 		model.addModelListener(mock);		
 		mock.criteriaChanged();
 		mock.preferencesChanged();
+		mock.measurementsChanged();
 		replay(mock);
 		
 		Set<Criterion> crit2 = new HashSet<Criterion>();

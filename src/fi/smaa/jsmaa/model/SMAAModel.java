@@ -18,8 +18,12 @@
 
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,8 +40,9 @@ public class SMAAModel extends Model {
 	private String name;
 	private PreferenceInformation preferences;
 	private ImpactMatrix impactMatrix;
-	transient private Set<SMAAModelListener> modelListeners = new TreeSet<SMAAModelListener>();
+	transient private List<SMAAModelListener> modelListeners = new ArrayList<SMAAModelListener>();
 	transient private ImpactMatrixListener impactListener = new ImpactListener();
+	transient private CriteriaListener critListener = new CriteriaListener();
 	
 	public SMAAModel(String name) {
 		this.name = name;
@@ -50,7 +55,9 @@ public class SMAAModel extends Model {
 	}
 	
 	public void addModelListener(SMAAModelListener l) {
-		modelListeners.add(l);
+		if (!modelListeners.contains(l)) {
+			modelListeners.add(l);
+		}
 	}
 	
 	public void removeModelListener(SMAAModelListener l) {
@@ -95,11 +102,22 @@ public class SMAAModel extends Model {
 	}
 	
 	public void setCriteria(Set<Criterion> criteria) {
+		disconnectConnectCriteriaListeners(this.criteria, criteria);
 		this.criteria = criteria;
 		impactMatrix.setCriteria(criteria);
 		preferences = new MissingPreferenceInformation(criteria.size());
 		fireCriteriaChanged();
 		firePreferencesChanged();
+	}
+
+	private void disconnectConnectCriteriaListeners(Set<Criterion> oldCriteria,
+			Set<Criterion> newCriteria) {
+		for (Criterion c : oldCriteria) {
+			c.removePropertyChangeListener(critListener);
+		}
+		for (Criterion c : newCriteria) {
+			c.addPropertyChangeListener(critListener);
+		}		
 	}
 
 	public void addCriterion(Criterion cri) {
@@ -214,7 +232,13 @@ public class SMAAModel extends Model {
 		for (SMAAModelListener l : modelListeners) {
 			l.measurementsChanged();
 		}
-	}	
+	}
+	
+	private class CriteriaListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			fireMeasurementsChanged();
+		}
+	}
 	
 	private class ImpactListener implements ImpactMatrixListener {
 		public void measurementChanged() {
