@@ -32,14 +32,14 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Alternative;
 
 public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder {
 	
 	private JLabel[][] valCells;
 	
-	public RankAcceptabilitiesView(SMAAResults results) {
+	public RankAcceptabilitiesView(SMAA2Results results) {
 		super(results);
 	}
 

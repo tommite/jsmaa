@@ -26,16 +26,16 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
 
 public abstract class ResultsView {
 
-	protected SMAAResults results;
+	protected SMAA2Results results;
 	protected NumberFormat format;	
 	
-	public ResultsView(SMAAResults results) {
+	public ResultsView(SMAA2Results results) {
 		this.results = results;
 		setupFormat();
 		results.addResultsListener(new MyResultsListener());		
@@ -55,7 +55,7 @@ public abstract class ResultsView {
 		}
 	}
 
-	public void setResults(SMAAResults results) {
+	public void setResults(SMAA2Results results) {
 		this.results = results;
 		results.addResultsListener(new MyResultsListener());		
 	}

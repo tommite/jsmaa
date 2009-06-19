@@ -23,7 +23,6 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 
 public class UtilityFunction {
 	
-	@SuppressWarnings("unchecked")
 	public static double utility(CardinalCriterion crit, double val) {
 		boolean asc = crit.getAscending();
 		double overMin = val - crit.getScale().getStart();

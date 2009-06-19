@@ -70,7 +70,7 @@ import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.common.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
@@ -94,7 +94,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JSplitPane splitPane;
 	private JTree leftTree;
 	private SMAAModel model;
-	private SMAAResults results;
+	private SMAA2Results results;
 	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private LeftTreeModel leftTreeModel;

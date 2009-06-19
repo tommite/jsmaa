@@ -215,7 +215,6 @@ public class SMAAModelTest {
 		assertEquals(model.getPreferenceInformation(), model2.getPreferenceInformation());
 		assertEquals(model.getImpactMatrix(), model2.getImpactMatrix());
 		
-		assertFalse(model.getName() == model2.getName());
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());
 		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());

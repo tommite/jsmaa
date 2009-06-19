@@ -117,6 +117,15 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
+	public void testAddCriterionSetsMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException {
+		CardinalCriterion c = new CardinalCriterion("cx");
+		m.setCriteria(crit);
+		m.setAlternatives(alts);		
+		m.addCriterion(c);
+		assertEquals(new Interval(), m.getMeasurement(c, a1));
+	}
+	
+	@Test
 	public void testDeleteCriterion() {
 		Criterion c = new CardinalCriterion("c");
 		m.addCriterion(c);

@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa.model;
 
 import fi.smaa.jsmaa.common.Interval;
+import fi.smaa.jsmaa.common.RandomUtil;
 
 
 
@@ -87,4 +88,8 @@ public class GaussianMeasurement extends CardinalMeasurement {
 	public Interval getRange() {
 		return new Interval((mean - (stDev * 1.96)), (mean + (stDev * 1.96)));
 	}	
+	
+	public double sample() {
+		return RandomUtil.createGaussian(mean, stDev);
+	}
 }

@@ -21,10 +21,6 @@ package fi.smaa.jsmaa.maut.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,24 +28,20 @@ import org.junit.Test;
 import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.UniformCriterion;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 
 public class UtilityFunctionTest {
 	
-	private UniformCriterion crit;
+	private CardinalCriterion crit;
 	
 	@Before
 	public void setUp() {
-		crit = new UniformCriterion("crit");
+		crit = new CardinalCriterion("crit");
 		ArrayList<Alternative> alts = new ArrayList<Alternative>();
 		alts.add(new Alternative ("alt1"));
 		alts.add(new Alternative ("alt2"));
-		crit.setAlternatives(alts);
 		
-		Map<Alternative, Interval> meas = new HashMap<Alternative, Interval>();
-		meas.put(alts.get(0), new Interval(1.0, 1.5));
-		meas.put(alts.get(1), new Interval(1.5, 2.0));
-		crit.setMeasurements(meas);
+		crit.setScale(new Interval(1.0, 2.0));
 	}
 	
 	@Test

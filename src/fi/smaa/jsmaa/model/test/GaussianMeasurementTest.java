@@ -81,4 +81,10 @@ public class GaussianMeasurementTest {
 		assertEquals(m.getMean(), m2.getMean(), 0.000000001);
 		assertEquals(m.getStDev(), m2.getStDev(), 0.000000001);
 	}
+	
+	@Test
+	public void testSample() {
+		GaussianMeasurement m = new GaussianMeasurement(1.0, 0.0);
+		assertEquals(1.0, m.sample(), 0.0001);
+	}
 }

@@ -20,8 +20,8 @@ package fi.smaa.jsmaa.model;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.jgoodies.binding.beans.Model;
 
@@ -36,7 +36,7 @@ public class SMAAModel extends Model {
 	private String name;
 	private PreferenceInformation preferences;
 	private ImpactMatrix impactMatrix;
-	transient private Set<SMAAModelListener> modelListeners = new HashSet<SMAAModelListener>();
+	transient private Set<SMAAModelListener> modelListeners = new TreeSet<SMAAModelListener>();
 	transient private ImpactMatrixListener impactListener = new ImpactListener();
 	
 	public SMAAModel(String name) {
@@ -85,7 +85,7 @@ public class SMAAModel extends Model {
 		if (getAlternatives().contains(alt)) {
 			throw new AlternativeExistsException();
 		}
-		Set<Alternative> alts = new HashSet<Alternative>(getAlternatives());
+		Set<Alternative> alts = new TreeSet<Alternative>(getAlternatives());
 		alts.add(alt);
 		setAlternatives(alts);
 	}
@@ -103,7 +103,7 @@ public class SMAAModel extends Model {
 	}
 
 	public void addCriterion(Criterion cri) {
-		Set<Criterion> crit = new HashSet<Criterion>();
+		Set<Criterion> crit = new TreeSet<Criterion>();
 		crit.addAll(getCriteria());
 		crit.add(cri);
 		setCriteria(crit);
@@ -128,7 +128,7 @@ public class SMAAModel extends Model {
 	}
 	
 	public void deleteAlternative(Alternative a) {
-		Set<Alternative> newAlts = new HashSet<Alternative>();
+		Set<Alternative> newAlts = new TreeSet<Alternative>();
 		newAlts.addAll(alternatives);
 		if (newAlts.remove(a)) {
 			setAlternatives(newAlts);
@@ -136,7 +136,7 @@ public class SMAAModel extends Model {
 	}
 	
 	public void deleteCriterion(Criterion c) {
-		Set<Criterion> newCrit = new HashSet<Criterion>();
+		Set<Criterion> newCrit = new TreeSet<Criterion>();
 		newCrit.addAll(criteria);
 		if (newCrit.remove(c)) {
 			setCriteria(newCrit);
@@ -145,8 +145,8 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		Set<Alternative> alts = new HashSet<Alternative>();
-		Set<Criterion> crit = new HashSet<Criterion>();
+		Set<Alternative> alts = new TreeSet<Alternative>();
+		Set<Criterion> crit = new TreeSet<Criterion>();
 		for (Alternative a : alternatives) {
 			alts.add(a.deepCopy());
 		}
@@ -156,6 +156,21 @@ public class SMAAModel extends Model {
 		}
 		model.setCriteria(crit);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
+		ImpactMatrix m = getImpactMatrix();
+		
+		for (Criterion c : criteria) {
+			if (c instanceof CardinalCriterion) {
+				for (Alternative a : alternatives) {
+					try {
+						model.getImpactMatrix().setMeasurement((CardinalCriterion) c, a, 
+								m.getMeasurement((CardinalCriterion) c, a));
+					} catch (NoSuchValueException e) {
+						e.printStackTrace();
+					}
+				}				
+			}
+		}
+		
 		return model;
 	}
 
@@ -165,8 +180,8 @@ public class SMAAModel extends Model {
 	}
 
 	private void init() {
-		alternatives = new HashSet<Alternative>();
-		criteria = new HashSet<Criterion>();
+		alternatives = new TreeSet<Alternative>();
+		criteria = new TreeSet<Criterion>();
 		preferences = new MissingPreferenceInformation(criteria.size());
 		impactMatrix = new ImpactMatrix(alternatives, criteria);
 		impactMatrix.addListener(impactListener);

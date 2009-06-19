@@ -22,7 +22,7 @@ import com.jgoodies.binding.beans.Observable;
 
 import fi.smaa.jsmaa.common.DeepCopiable;
 
-public interface Criterion extends Observable, DeepCopiable {
+public interface Criterion extends Observable, DeepCopiable, Comparable<Criterion> {
 
 	public final static String PROPERTY_NAME = "name";
 	public final static String PROPERTY_TYPELABEL = "typeLabel";

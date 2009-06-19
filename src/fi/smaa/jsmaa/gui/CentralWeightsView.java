@@ -34,7 +34,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 
@@ -43,7 +43,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	private JLabel[][] CWCells;
 	private JLabel[] CFCells;
 
-	public CentralWeightsView(SMAAResults results) {
+	public CentralWeightsView(SMAA2Results results) {
 		super(results);
 	}
 	

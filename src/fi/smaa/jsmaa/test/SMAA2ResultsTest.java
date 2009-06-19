@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.simulator.test;
+package fi.smaa.jsmaa.test;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -25,40 +25,51 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.test.TestData;
+import fi.smaa.jsmaa.model.AlternativeExistsException;
+import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.Criterion;
 
-public class SMAAResultsTest {
+public class SMAA2ResultsTest {
 	
-	private SMAAResults results;
-	private SMAAModel model;
-	private TestData testData;
+	private SMAA2Results results;
 	
 	private double[] weights1;
 	private double[] weights2;
 	private Integer[] firstFirst;
 	private Integer[] secondFirst;
-	
+	private Alternative alt1 = new Alternative("alt1");
+	private Alternative alt2 = new Alternative("alt2");
+	private CardinalCriterion c1 = new CardinalCriterion("c1");
+	private CardinalCriterion c2 = new CardinalCriterion("c2");
+	private CardinalCriterion c3 = new CardinalCriterion("c3");
+	private List<Alternative> alts;
+	private List<Criterion> crit;	
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws AlternativeExistsException {
 		weights1 = new double[]{0.0, 1.0, 0.0};	
 		weights2 = new double[]{1.0, 0.0, 0.0};
 		firstFirst = new Integer[]{0, 1};
-		secondFirst = new Integer[]{1, 0};		
-		testData = new TestData();
-		model = testData.model;
-		results = new SMAAResults(model.getAlternatives(), model.getCriteria(), 10);
+		secondFirst = new Integer[]{1, 0};
+		alts = new ArrayList<Alternative>();
+		crit = new ArrayList<Criterion>();
+		alts.add(alt1);
+		alts.add(alt2);
+		crit.add(c1);
+		crit.add(c2);
+		crit.add(c3);
+		
+		results = new SMAA2Results(alts, crit, 10);
 	}
 	
 	@Test
@@ -77,22 +88,24 @@ public class SMAAResultsTest {
 		}
 		
 		Map<Alternative, Double> cf = results.getConfidenceFactors();
-		assertEquals(0.66, cf.get(testData.alt1), 0.02);
-		assertEquals(0.33, cf.get(testData.alt2), 0.02);
+		assertEquals(0.66, cf.get(alt1), 0.02);
+		assertEquals(0.33, cf.get(alt2), 0.02);
 	}
 	
 	@Test
 	public void test10HitsCWs() {
 		do10Hits();
 		
-		List<Double> cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));
-		List<Double> cw2 = results.getCentralWeightVectors().get(model.getAlternatives().get(1));
+		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);
+		Map<Criterion, Double> cw2 = results.getCentralWeightVectors().get(alt2);
+				
+		assertEquals(0.0, cw1.get(c1), 0.0001);
+		assertEquals(1.0, cw1.get(c2), 0.0001);
+		assertEquals(0.0, cw1.get(c3), 0.0001);
 		
-		List<Double> ex1 = Arrays.asList(new Double[]{0.0, 1.0, 0.0});
-		List<Double> ex2 = Arrays.asList(new Double[]{1.0, 0.0, 0.0});		
-		
-		assertEquals(ex1, cw1);
-		assertEquals(ex2, cw2);		
+		assertEquals(1.0, cw2.get(c1), 0.0001);
+		assertEquals(0.0, cw2.get(c2), 0.0001);
+		assertEquals(0.0, cw2.get(c3), 0.0001);
 	}
 	
 	@Test
@@ -107,8 +120,8 @@ public class SMAAResultsTest {
 			results.update(ranks, weights);
 		}
 		
-		List<Double> cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));
-		List<Double> cw2 = results.getCentralWeightVectors().get(model.getAlternatives().get(1));
+		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);
+		Map<Criterion, Double> cw2 = results.getCentralWeightVectors().get(alt2);
 		assertTrue(cw1.equals(cw2));		
 	}	
 
@@ -126,8 +139,8 @@ public class SMAAResultsTest {
 		secondFirst = new Integer[] { 0, 1 };
 		do10Hits();
 
-		List<Double> ra1 = results.getRankAcceptabilities().get(testData.alt1);
-		List<Double> ra2 = results.getRankAcceptabilities().get(testData.alt2);
+		List<Double> ra1 = results.getRankAcceptabilities().get(alt1);
+		List<Double> ra2 = results.getRankAcceptabilities().get(alt2);
 
 		assertEquals(1.0, ra1.get(0), 0.00001);
 		assertEquals(0.0, ra1.get(1), 0.00001);
@@ -141,11 +154,11 @@ public class SMAAResultsTest {
 	public void testReset() {
 		do10Hits();
 		
-		List<Double> cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));
-		assertFalse(cw1.get(0).equals(Double.NaN));
+		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);
+		assertFalse(cw1.get(c1).equals(Double.NaN));
 		
 		results.reset();
-		cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));		
+		cw1 = results.getCentralWeightVectors().get(alt2);		
 		
 		Map<Alternative, List<Double>> raccs = results.getRankAcceptabilities();
 		for (List<Double> list : raccs.values()) {
@@ -153,9 +166,9 @@ public class SMAAResultsTest {
 				assertTrue(d.equals(Double.NaN));
 			}
 		}
-		assertTrue(cw1.get(0).equals(Double.NaN));
-		assertTrue(cw1.get(1).equals(Double.NaN));
-		assertTrue(cw1.get(2).equals(Double.NaN));
+		assertTrue(cw1.get(c1).equals(Double.NaN));
+		assertTrue(cw1.get(c2).equals(Double.NaN));
+		assertTrue(cw1.get(c3).equals(Double.NaN));
 	}
 
 	

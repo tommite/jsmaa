@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.jgoodies.binding.beans.Model;
 
-public class Alternative extends Model {
+public class Alternative extends Model implements Comparable<Alternative> {
 	private static final long serialVersionUID = -3443177440566082791L;
 
 	private String name;
@@ -80,5 +80,9 @@ public class Alternative extends Model {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	public int compareTo(Alternative o) {
+		return (name.compareTo(o.getName()));
 	}
 }

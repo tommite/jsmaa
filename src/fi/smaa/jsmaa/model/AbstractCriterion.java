@@ -20,9 +20,7 @@ package fi.smaa.jsmaa.model;
 
 import com.jgoodies.binding.beans.Model;
 
-import fi.smaa.jsmaa.common.DeepCopiable;
-
-public abstract class AbstractCriterion extends Model implements DeepCopiable, Criterion {
+public abstract class AbstractCriterion extends Model implements Criterion {
 	
 	private static final long serialVersionUID = 6926477036734383519L;
 	protected String name;
@@ -60,5 +58,9 @@ public abstract class AbstractCriterion extends Model implements DeepCopiable, C
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+	
+	public int compareTo(Criterion o) {
+		return name.compareTo(o.getName());
 	}
 }

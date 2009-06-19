@@ -108,4 +108,13 @@ public class IntervalTest {
 		assertFalse(i1.includes(i3));
 		assertTrue(i1.includes(i4));		
 	}
+	
+	@Test
+	public void testSample() {
+		Interval in = new Interval(0.0, 0.1);
+		for (int i=0;i<10;i++) {
+			assertTrue(in.sample() <= 0.1);
+			assertTrue(in.sample() >= 0.0);
+		}
+	}
 }

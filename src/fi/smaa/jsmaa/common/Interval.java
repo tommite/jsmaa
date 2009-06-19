@@ -123,4 +123,9 @@ public class Interval extends CardinalMeasurement {
 		return this;
 	}
 
+	@Override
+	public double sample() {
+		return getStart() + RandomUtil.createUnif01() * (getEnd() - getStart());
+	}
+
 }

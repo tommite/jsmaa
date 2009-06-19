@@ -29,7 +29,7 @@ import org.junit.Test;
 import fi.smaa.jsmaa.gui.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.AlternativeExistsException;
-import fi.smaa.jsmaa.model.GaussianCriterion;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class LeftTreeModelTest {
@@ -38,7 +38,7 @@ public class LeftTreeModelTest {
 	private SMAAModel smaaModel;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private GaussianCriterion crit1 = new GaussianCriterion("crit1");
+	private CardinalCriterion crit1 = new CardinalCriterion("crit1");
 	
 	@Before
 	public void setUp() {
@@ -47,7 +47,7 @@ public class LeftTreeModelTest {
 	}
 	
 	private SMAAModel createSmaaModel() {
-		SMAAModel model = new SMAAModel();
+		SMAAModel model = new SMAAModel("model");
 		try {
 			model.addAlternative(alt1);
 			model.addAlternative(alt2);

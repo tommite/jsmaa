@@ -53,4 +53,9 @@ public class LogNormalMeasurement extends GaussianMeasurement {
 		}
 		return super.equals(other);
 	}
+	
+	@Override
+	public double sample() {
+		return Math.exp(super.sample());
+	}
 }

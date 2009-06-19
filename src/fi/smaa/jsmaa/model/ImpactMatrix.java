@@ -33,8 +33,8 @@ import fi.smaa.jsmaa.common.Interval;
 
 public class ImpactMatrix {
 	
-	private Set<Criterion> criteria;
-	private Set<Alternative> alternatives;
+	private Set<Criterion> criteria = new HashSet<Criterion>();
+	private Set<Alternative> alternatives = new HashSet<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements 
 		= new HashMap<Criterion, Map<Alternative, Measurement>>();
 	private transient MeasurementListener measListener = new MeasurementListener();
@@ -44,9 +44,11 @@ public class ImpactMatrix {
 	 * Constructs an impact matrix without alternatives or criteria.
 	 */
 	public ImpactMatrix() {
-		criteria = new HashSet<Criterion>();
-		alternatives = new HashSet<Alternative>();
-		measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
+	}
+	
+	@Override
+	public String toString() {
+		return measurements.toString();
 	}
 	
 	/**
@@ -195,7 +197,13 @@ public class ImpactMatrix {
 	public void setCriteria(Set<Criterion> criteria) {
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
-				measurements.put(c, new HashMap<Alternative, Measurement>());
+				Map<Alternative, Measurement> m = new HashMap<Alternative, Measurement>();
+				if (c instanceof CardinalCriterion) {
+					for (Alternative a : alternatives) {
+						m.put(a, new Interval());
+					}
+				}
+				measurements.put(c, m);
 			}
 		}
 		this.criteria = criteria;

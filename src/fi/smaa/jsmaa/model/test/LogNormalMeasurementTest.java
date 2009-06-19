@@ -57,4 +57,10 @@ public class LogNormalMeasurementTest {
 		assertEquals(m.getMean(), m2.getMean(), 0.000000001);
 		assertEquals(m.getStDev(), m2.getStDev(), 0.000000001);
 	}	
+	
+	@Test
+	public void testSample() {
+		LogNormalMeasurement m = new LogNormalMeasurement(0.5, 0.0);
+		assertEquals(Math.exp(0.5), m.sample(), 0.000001);
+	}
 }

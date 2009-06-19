@@ -18,26 +18,26 @@
 
 package fi.smaa.jsmaa.simulator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.maut.UtilIndexPair;
 import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.maut.UtilitySampler;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
-@SuppressWarnings("unchecked")
 public class SMAASimulator {
 	
 	private SimulationThread simulationThread;
-	private SMAAResults results;
+	private SMAA2Results results;
 	private Integer iterations;
 	
 	private boolean[] confidenceHits;
@@ -47,11 +47,15 @@ public class SMAASimulator {
 	private Integer[] ranks;
 	private UtilitySampler sampler;
 	private SMAAModel model;
+	private List<Alternative> alts;
+	private List<Criterion> crits;
 	
 	public SMAASimulator(SMAAModel smaaModel, Integer iterations) {
 		model = smaaModel.deepCopy();
-		results = new SMAAResults(model.getAlternatives(), model.getCriteria(), 10);
-		sampler = new UtilitySampler(model.getAlternatives().size());		
+		alts = new ArrayList<Alternative>(model.getAlternatives());
+		crits = new ArrayList<Criterion>(model.getCriteria());
+		results = new SMAA2Results(alts, crits, 10);
+		sampler = new UtilitySampler(model.getImpactMatrix(), alts);		
 		this.iterations = iterations;
 		init();
 	}
@@ -60,7 +64,7 @@ public class SMAASimulator {
 		return iterations;
 	}
 
-	public SMAAResults getResults() {
+	public SMAA2Results getResults() {
 		return results;
 	}
 	
@@ -135,7 +139,7 @@ public class SMAASimulator {
 		clearUtilities();
 		
 		for (int critIndex=0;critIndex<model.getCriteria().size();critIndex++) {
-			Criterion crit = model.getCriteria().get(critIndex);
+			Criterion crit = crits.get(critIndex);
 			for (int altIndex=0;altIndex<model.getAlternatives().size();altIndex++) {
 				double partUtil = computePartialUtility(critIndex, crit, altIndex);
 				utilities[altIndex] += weights[critIndex] * partUtil;
@@ -145,16 +149,16 @@ public class SMAASimulator {
 
 	private void aggregateWithCentralWeights() {
 		clearConfidenceHits();
-		Map<Alternative, List<Double>> cws = results.getCentralWeightVectors();
+		Map<Alternative, Map<Criterion, Double>> cws = results.getCentralWeightVectors();
 
-		for (int altIndex=0;altIndex<model.getAlternatives().size();altIndex++) {
-			List<Double> cw = cws.get(model.getAlternatives().get(altIndex));
-			double utility = computeUtility(altIndex, cw);
+		for (int altIndex=0;altIndex<alts.size();altIndex++) {
+			Map<Criterion, Double> cw = cws.get(alts.get(altIndex));
+			double utility = computeUtility(altIndex, new ArrayList<Double>(cw.values()));
 			for (int otherAlt=0;otherAlt<model.getAlternatives().size();otherAlt++) {
 				if (altIndex == otherAlt) {
 					continue;
 				}
-				double otherUtility = computeUtility(otherAlt, cw);
+				double otherUtility = computeUtility(otherAlt, new ArrayList<Double>(cw.values()));
 				if (otherUtility > utility) {
 					confidenceHits[altIndex] = false;
 					break;
@@ -171,8 +175,8 @@ public class SMAASimulator {
 
 	private double computeUtility(int altIndex, List<Double> cw) {
 		double utility = 0;
-		for (int i=0;i<model.getCriteria().size();i++) {
-			double partUtil = computePartialUtility(i, model.getCriteria().get(i), altIndex);
+		for (int i=0;i<crits.size();i++) {
+			double partUtil = computePartialUtility(i, crits.get(i), altIndex);
 			utility += partUtil * cw.get(i);
 		}
 		return utility;
@@ -194,8 +198,12 @@ public class SMAASimulator {
 	}
 
 	private void sampleCriteria() {
-		for (int i=0;i<model.getCriteria().size();i++) {
-			sampler.sample(model.getCriteria().get(i), measurements[i]);
+		for (int i=0;i<crits.size();i++) {
+			try {
+				sampler.sample(crits.get(i), measurements[i]);
+			} catch (NoSuchValueException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

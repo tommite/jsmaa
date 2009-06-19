@@ -18,8 +18,6 @@
 
 package fi.smaa.jsmaa.gui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.event.TreeModelEvent;
@@ -29,9 +27,10 @@ import javax.swing.tree.TreePath;
 
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.UniformCriterion;
+import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
@@ -55,7 +54,18 @@ public class LeftTreeModel implements TreeModel{
 			throw new NullPointerException();
 		}
 		this.smaaModel = smaaModel;
-		smaaModel.addPropertyChangeListener(new SMAAModelListener());
+		smaaModel.addModelListener(new SMAAModelListener() {
+			public void alternativesChanged() {
+				fireTreeChange();
+			}
+			public void criteriaChanged() {
+				fireTreeChange();
+			}
+			public void measurementsChanged() {				
+			}
+			public void preferencesChanged() {
+			}			
+		});
 	}
 	
 	public void setSMAAModel(SMAAModel model) {
@@ -97,18 +107,7 @@ public class LeftTreeModel implements TreeModel{
 	
 	public TreePath getPathForCriterion(Criterion c) {
 		return new TreePath(new Object[]{smaaModel, criteriaNode, c});
-	}	
-	
-	private class SMAAModelListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName() == SMAAModel.PROPERTY_ALTERNATIVES) {
-				fireTreeChange();
-			} else if (evt.getPropertyName() == SMAAModel.PROPERTY_CRITERIA) {
-				fireTreeChange();
-			}
-		}
 	}
-
 
 	public Object getChild(Object parent, int index) {
 		if (parent == getRoot()) {
@@ -122,9 +121,9 @@ public class LeftTreeModel implements TreeModel{
 				return preferencesNode;
 			}
 		} else if (parent == alternativesNode) {
-			return smaaModel.getAlternatives().get(index);
+			return new ArrayList(smaaModel.getAlternatives()).get(index);
 		} else if (parent == criteriaNode) {
-			return smaaModel.getCriteria().get(index);
+			return new ArrayList(smaaModel.getCriteria()).get(index);
 		} else if (parent == resultsNode) {
 			if (index == 0) {
 				return rankAccNode;
@@ -161,14 +160,14 @@ public class LeftTreeModel implements TreeModel{
 			}
 		} else if (parent == alternativesNode) {
 			if (child instanceof Alternative) {
-				int index = smaaModel.getAlternatives().indexOf(child);
+				int index = new ArrayList(smaaModel.getAlternatives()).indexOf(child);
 				if (index != -1) {
 					return index;
 				}
 			}
 		} else if (parent == criteriaNode) {
 			if (child instanceof AbstractCriterion) {
-				int index = smaaModel.getCriteria().indexOf(child);
+				int index = new ArrayList(smaaModel.getCriteria()).indexOf(child);
 				if (index != -1) {
 					return index;
 				}
@@ -230,7 +229,7 @@ public class LeftTreeModel implements TreeModel{
 				((Alternative) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof AbstractCriterion) {
-			if (!smaaModel.getCriteria().contains(new UniformCriterion((String)newValue))) {			
+			if (!smaaModel.getCriteria().contains(new CardinalCriterion((String)newValue))) {			
 				((AbstractCriterion) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof SMAAModel) {

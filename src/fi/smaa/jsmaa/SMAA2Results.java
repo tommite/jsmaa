@@ -27,7 +27,7 @@ import java.util.Map;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 
-public class SMAAResults {
+public class SMAA2Results {
 
 	private int[][] rankHits;
 	private double[][] centralWeightAdds;
@@ -42,7 +42,7 @@ public class SMAAResults {
 	private int confidenceIteration;
 	private List<Double> confidenceFactors;
 	
-	public SMAAResults(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
+	public SMAA2Results(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
 		this.alternatives = alternatives;
 		this.criteria = criteria;
 		this.updateInterval = updateInterval;
@@ -122,8 +122,18 @@ public class SMAAResults {
 		return new Integer(num);
 	}
 
-	public Map<Alternative, List<Double>> getCentralWeightVectors() {
-		return transformMap(centralWeightVectors);
+	public Map<Alternative, Map<Criterion, Double>> getCentralWeightVectors() {
+		
+		Map<Alternative, Map<Criterion, Double>> cw 
+			= new HashMap<Alternative, Map<Criterion, Double>>();		
+		for (Integer index : centralWeightVectors.keySet()) {
+			Map<Criterion, Double> vector = new HashMap<Criterion, Double>();
+			for (int i=0;i<criteria.size();i++) {
+				vector.put(criteria.get(i), centralWeightVectors.get(index).get(i));
+			}
+			cw.put(alternatives.get(index), vector);
+		}
+		return cw;
 	}
 	
 	public Map<Alternative, Double> getConfidenceFactors() {

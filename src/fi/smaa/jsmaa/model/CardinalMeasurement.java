@@ -25,4 +25,5 @@ public abstract class CardinalMeasurement extends Measurement {
 	private static final long serialVersionUID = -1805819804451450374L;
 
 	public abstract Interval getRange();
+	public abstract double sample();
 }

@@ -22,37 +22,50 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.common.Interval;
-import fi.smaa.jsmaa.model.AbstractCriterion;
+import fi.smaa.jsmaa.common.InvalidIntervalException;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.GaussianCriterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.Rank;
+import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.NoSuchAlternativeException;
+import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.UniformCriterion;
 import fi.smaa.jsmaa.simulator.SMAASimulator;
-import fi.smaa.jsmaa.test.TestData;
 
 
 public class SMAASimulatorTest {
 	
 	private SMAAModel model;
-	private TestData data;
+	private Alternative alt1 = new Alternative("alt1");
+	private Alternative alt2 = new Alternative("alt2");
+	private CardinalCriterion c1 = new CardinalCriterion("c1");
+	private CardinalCriterion c2 = new CardinalCriterion("c2");
+	private CardinalCriterion c3 = new CardinalCriterion("c3");
+	private Set<Alternative> alts;
+	private Set<Criterion> crit;		
 	
 	@Before
 	public void setUp() {
-		data = new TestData();
-		model = data.model;
+		alts = new HashSet<Alternative>();
+		crit = new HashSet<Criterion>();
+		alts.add(alt1);
+		alts.add(alt2);
+		crit.add(c1);
+		crit.add(c2);
+		crit.add(c3);
+		model = new SMAAModel("model");
+		model.setAlternatives(alts);
+		model.setCriteria(crit);
 	}
 	
 	@Test
@@ -81,55 +94,42 @@ public class SMAASimulatorTest {
 	}	
 	
 	@Test
-	public void testEqualRanks() throws InterruptedException {
-		Alternative alt1 = new Alternative("a1");
-		Alternative alt2 = new Alternative("a2");
-		UniformCriterion c1 = new UniformCriterion("c1");
-		AbstractCriterion<GaussianMeasurement> c2 = new GaussianCriterion("c2");
-		
-		ArrayList<Alternative> alts2 = new ArrayList<Alternative>();
-		alts2.add(alt1);
-		alts2.add(alt2);
-		SMAAModel model2 = new SMAAModel("model");
-		model2.setAlternatives(alts2);
-		
+	public void testEqualRanks() throws InterruptedException, NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+		ImpactMatrix im = model.getImpactMatrix();
 		// set intervals for cardinal criterion
-		Map<Alternative, Interval> unifMeas = new HashMap<Alternative, Interval>();
-		unifMeas.put(alt1, new Interval(0.0, 0.0));
-		unifMeas.put(alt2, new Interval(0.0, 0.0));
-		c1.setMeasurements(unifMeas);
+		im.setMeasurement(c1, alt1, new Interval(0.0, 0.0));
+		im.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
 		// set measurements for gaussian criterion
-		Map<Alternative, GaussianMeasurement> gausMeas = new HashMap<Alternative, GaussianMeasurement>();		
-		gausMeas.put(alt1, new GaussianMeasurement(0.0, 0.0));
-		gausMeas.put(alt2, new GaussianMeasurement(0.0, 0.0));
-		c2.setMeasurements(gausMeas);
+		im.setMeasurement(c2, alt1, new GaussianMeasurement(0.0, 0.0));
+		im.setMeasurement(c2, alt2, new GaussianMeasurement(0.0, 0.0));
 		
-		ArrayList<Criterion> crit2 = new ArrayList<Criterion>();
-		crit2.add(c1);
-		crit2.add(c2);
-		model2.setCriteria(crit2);
-		
-		SMAASimulator simulator = new SMAASimulator(model2, 10000);
+		im.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
+		im.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
+				
+		SMAASimulator simulator = new SMAASimulator(model, 10000);
 		simulator.restart();
 		do {
 			Thread.sleep(100);
 		} while (simulator.isRunning());
 
-		SMAAResults results = simulator.getResults();
+		SMAA2Results results = simulator.getResults();
 		
-		Map<Alternative, List<Double>> cw = results.getCentralWeightVectors();
-		List<Double> cw1 = cw.get(alt1);
-		List<Double> cw2 = cw.get(alt2);
+		Map<Alternative, Map<Criterion, Double>> cw = results.getCentralWeightVectors();
+		Map<Criterion, Double> cw1 = cw.get(alt1);
+		Map<Criterion, Double> cw2 = cw.get(alt2);
 
-		for(int i=0;i<cw1.size();i++) {
-			assertEquals(0.5, cw1.get(i), 0.02);
-			assertEquals(0.5, cw2.get(i), 0.02);			
+		for(Double d : cw1.values()) {
+			assertEquals(0.333, d, 0.01);
 		}
+		for(Double d : cw2.values()) {
+			assertEquals(0.333, d, 0.01);
+		}
+		
 	}
 	
 	@Test
-	public void testCorrectResults() throws InterruptedException {
+	public void testCorrectResults() throws InterruptedException, NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
 		setCriteriaMeasurements();
 		
 		SMAASimulator simulator = new SMAASimulator(model, 10000);
@@ -138,35 +138,30 @@ public class SMAASimulatorTest {
 			Thread.sleep(100);
 		} while (simulator.isRunning());
 
-		SMAAResults results = simulator.getResults();
+		SMAA2Results results = simulator.getResults();
 		
-		List<Double> cw1 = results.getCentralWeightVectors().get(model.getAlternatives().get(0));
-		List<Double> cw2 = results.getCentralWeightVectors().get(model.getAlternatives().get(1));
+		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);
+		Map<Criterion, Double> cw2 = results.getCentralWeightVectors().get(alt2);
 
-		assertTrue(cw1.get(0) > cw2.get(0));
-		assertTrue(cw1.get(1) < cw2.get(1));
-		assertTrue(cw1.get(2) > cw2.get(2));
+		assertTrue(cw1.get(c1) > cw2.get(c1));
+		assertTrue(cw1.get(c2) < cw2.get(c2));
+		assertTrue(cw1.get(c3) > cw2.get(c3));
 		
 	}
 
-	private void setCriteriaMeasurements() {
-		// set ranks for ordinal criterion. alt1 = rank1, alt2 = rank2
-		Map<Alternative, Rank> ranks = new HashMap<Alternative, Rank>();
-		ranks.put(data.alt1, new Rank(1));
-		ranks.put(data.alt2, new Rank(2));
-		data.crit1.setMeasurements(ranks);
+	private void setCriteriaMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+		ImpactMatrix im = model.getImpactMatrix();
+		// set interval measurements
+		im.setMeasurement(c1, alt1, new Interval(1.0, 1.0));
+		im.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
-		// set intervals for cardinal criterion
-		Map<Alternative, Interval> unifMeas = new HashMap<Alternative, Interval>();
-		unifMeas.put(data.alt1, new Interval(0.0, 0.0));
-		unifMeas.put(data.alt2, new Interval(1.0, 1.0));
-		data.crit2.setMeasurements(unifMeas);
+		// set interval measurements
+		im.setMeasurement(c2, alt1, new Interval(0.0, 0.0));
+		im.setMeasurement(c2, alt2, new Interval(1.0, 1.0));
 		
-		// set measurements for gaussian criterion
-		Map<Alternative, GaussianMeasurement> gausMeas = new HashMap<Alternative, GaussianMeasurement>();
-		gausMeas.put(data.alt1, new GaussianMeasurement(1.0, 0.0));
-		gausMeas.put(data.alt2, new GaussianMeasurement(0.0, 0.0));
-		data.crit3.setMeasurements(gausMeas);
+		// set gaussian measurements
+		im.setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
+		im.setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
 	}
 	
 }
