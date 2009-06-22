@@ -50,7 +50,7 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				setToolTipText("Alternative");
 			} else if (leaf && value instanceof AbstractCriterion) {
 				if (value instanceof CardinalCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_UNIFORMCRITERION));
+					setIcon(loader.getIcon(FileNames.ICON_CARDINALCRITERION));
 					setToolTipText("Cardinal criterion");
 				} else if (value instanceof OrdinalCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));

@@ -719,10 +719,9 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private JMenuItem createAddCardCritMenuItem() {
-		JMenuItem item = new JMenuItem("Add uniform");
-		item.setMnemonic('u');
-		item.setIcon(getIcon(FileNames.ICON_UNIFORMCRITERION));
-		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+		JMenuItem item = new JMenuItem("Add new");
+		item.setMnemonic('c');
+		item.setIcon(getIcon(FileNames.ICON_CARDINALCRITERION));
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addCardinalCriterion();
