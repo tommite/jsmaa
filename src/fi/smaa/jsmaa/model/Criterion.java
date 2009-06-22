@@ -28,6 +28,6 @@ public interface Criterion extends Observable, DeepCopiable, Comparable<Criterio
 	public final static String PROPERTY_TYPELABEL = "typeLabel";
 
 	public String getName();
+	public void setName(String name);
 	public String getTypeLabel();
-	public Object deepCopy();
 }

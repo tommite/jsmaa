@@ -23,9 +23,8 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import com.jgoodies.binding.beans.Model;
 
@@ -35,8 +34,6 @@ public class SMAAModel extends Model {
 	private static final long serialVersionUID = 1064123340687226048L;
 	public final static String PROPERTY_NAME = "name";
 		
-	private Set<Alternative> alternatives;
-	private Set<Criterion> criteria;	
 	private String name;
 	private PreferenceInformation preferences;
 	private ImpactMatrix impactMatrix;
@@ -46,11 +43,14 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel(String name) {
 		this.name = name;
-		init();
+		setPreferenceInformation(new MissingPreferenceInformation(0));
+		impactMatrix = new ImpactMatrix();
+		impactMatrix.addListener(impactListener);		
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
 		this.preferences = preferences;
+		preferences.addPropertyChangeListener(new PreferenceListener());
 		firePreferencesChanged();
 	}
 	
@@ -68,13 +68,13 @@ public class SMAAModel extends Model {
 		return preferences;
 	}
 
-	public Set<Alternative> getAlternatives() {
-		return alternatives;
+	public List<Alternative> getAlternatives() {
+		return impactMatrix.getAlternatives();
 	}
 	
-	public void setAlternatives(Set<Alternative> alts) {
-		this.alternatives = alts;
-		impactMatrix.setAlternatives(alts);
+	public void setAlternatives(Collection<Alternative> alts) {
+		List<Alternative> altsList = new ArrayList<Alternative>(alts);
+		impactMatrix.setAlternatives(altsList);
 		fireAlternativesChanged();
 	}
 
@@ -92,26 +92,28 @@ public class SMAAModel extends Model {
 		if (getAlternatives().contains(alt)) {
 			throw new AlternativeExistsException();
 		}
-		Set<Alternative> alts = new TreeSet<Alternative>(getAlternatives());
+		List<Alternative> alts = new ArrayList<Alternative>(getAlternatives());
 		alts.add(alt);
 		setAlternatives(alts);
 	}
 
-	public Set<Criterion> getCriteria() {
-		return criteria;
+	public List<Criterion> getCriteria() {
+		return impactMatrix.getCriteria();
 	}
 	
-	public void setCriteria(Set<Criterion> criteria) {
-		disconnectConnectCriteriaListeners(this.criteria, criteria);
-		this.criteria = criteria;
-		impactMatrix.setCriteria(criteria);
-		preferences = new MissingPreferenceInformation(criteria.size());
+	public void setCriteria(Collection<Criterion> criteria) {
+		impactMatrix.removeListener(impactListener);
+		List<Criterion> critList = new ArrayList<Criterion>(criteria);
+		disconnectConnectCriteriaListeners(getCriteria(), critList);
+		impactMatrix.setCriteria(critList);
+		preferences = new MissingPreferenceInformation(getCriteria().size());
+		impactMatrix.addListener(impactListener);		
 		fireCriteriaChanged();
 		firePreferencesChanged();
 	}
 
-	private void disconnectConnectCriteriaListeners(Set<Criterion> oldCriteria,
-			Set<Criterion> newCriteria) {
+	private void disconnectConnectCriteriaListeners(List<Criterion> oldCriteria,
+			List<Criterion> newCriteria) {
 		for (Criterion c : oldCriteria) {
 			c.removePropertyChangeListener(critListener);
 		}
@@ -121,7 +123,7 @@ public class SMAAModel extends Model {
 	}
 
 	public void addCriterion(Criterion cri) {
-		Set<Criterion> crit = new TreeSet<Criterion>();
+		List<Criterion> crit = new ArrayList<Criterion>();
 		crit.addAll(getCriteria());
 		crit.add(cri);
 		setCriteria(crit);
@@ -137,25 +139,26 @@ public class SMAAModel extends Model {
 	}
 	
 	public String toStringDeep() {
-		String ret = name + " : " + alternatives.size() + " alternatives - " + criteria.size() + " criteria\n";
-		ret += "Alternatives: " + alternatives + "\n";
-		ret += "Criteria: " + criteria + "\n";
+		String ret = name + " : " + impactMatrix.getAlternatives().size() + 
+			" alternatives - " + impactMatrix.getCriteria().size() + " criteria\n";
+		ret += "Alternatives: " + impactMatrix.getAlternatives() + "\n";
+		ret += "Criteria: " + impactMatrix.getCriteria() + "\n";
 		ret += "Measurements:\n";
 		ret += impactMatrix.toString() + "\n";
 		return ret;
 	}
 	
 	public void deleteAlternative(Alternative a) {
-		Set<Alternative> newAlts = new TreeSet<Alternative>();
-		newAlts.addAll(alternatives);
+		List<Alternative> newAlts = new ArrayList<Alternative>();
+		newAlts.addAll(impactMatrix.getAlternatives());
 		if (newAlts.remove(a)) {
 			setAlternatives(newAlts);
 		}
 	}
 	
 	public void deleteCriterion(Criterion c) {
-		Set<Criterion> newCrit = new TreeSet<Criterion>();
-		newCrit.addAll(criteria);
+		List<Criterion> newCrit = new ArrayList<Criterion>();
+		newCrit.addAll(impactMatrix.getCriteria());
 		if (newCrit.remove(c)) {
 			setCriteria(newCrit);
 		}		
@@ -163,48 +166,26 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		Set<Alternative> alts = new TreeSet<Alternative>();
-		Set<Criterion> crit = new TreeSet<Criterion>();
-		for (Alternative a : alternatives) {
+		List<Alternative> alts = new ArrayList<Alternative>();
+		List<Criterion> crit = new ArrayList<Criterion>();
+		for (Alternative a : impactMatrix.getAlternatives()) {
 			alts.add(a.deepCopy());
 		}
 		model.setAlternatives(alts);
-		for (Criterion c : criteria) {
-			crit.add((AbstractCriterion) c.deepCopy());
+		for (Criterion c : impactMatrix.getCriteria()) {
+			crit.add((Criterion) c.deepCopy());
 		}
 		model.setCriteria(crit);
+		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy();		
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
-		ImpactMatrix m = getImpactMatrix();
-		
-		for (Criterion c : criteria) {
-			if (c instanceof CardinalCriterion) {
-				for (Alternative a : alternatives) {
-					try {
-						model.getImpactMatrix().setMeasurement((CardinalCriterion) c, a, 
-								m.getMeasurement((CardinalCriterion) c, a));
-					} catch (NoSuchValueException e) {
-						e.printStackTrace();
-					}
-				}				
-			}
-		}
-		
 		return model;
 	}
 
 	public void setMissingPreferences() {
 		setPreferenceInformation(
-				new MissingPreferenceInformation(criteria.size()));
+				new MissingPreferenceInformation(impactMatrix.getCriteria().size()));
 	}
 
-	private void init() {
-		alternatives = new TreeSet<Alternative>();
-		criteria = new TreeSet<Criterion>();
-		preferences = new MissingPreferenceInformation(criteria.size());
-		impactMatrix = new ImpactMatrix(alternatives, criteria);
-		impactMatrix.addListener(impactListener);
-	}
-	
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		i.defaultReadObject();
 		impactMatrix.addListener(impactListener);
@@ -243,6 +224,12 @@ public class SMAAModel extends Model {
 	private class ImpactListener implements ImpactMatrixListener {
 		public void measurementChanged() {
 			fireMeasurementsChanged();
+		}
+	}
+	
+	private class PreferenceListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			firePreferencesChanged();
 		}		
 	}
 	

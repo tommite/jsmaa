@@ -48,7 +48,7 @@ public abstract class AbstractCriterion extends Model implements Criterion {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof Criterion)) {
+		if (!(other instanceof Criterion)) {
 			return false;
 		}
 		Criterion c = (Criterion) other;

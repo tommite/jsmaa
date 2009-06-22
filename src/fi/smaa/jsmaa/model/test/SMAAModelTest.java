@@ -19,12 +19,16 @@
 package fi.smaa.jsmaa.model.test;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import nl.rug.escher.common.JUnitUtil;
@@ -38,7 +42,11 @@ import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
+import fi.smaa.jsmaa.model.NoSuchAlternativeException;
+import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
+import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
@@ -58,7 +66,7 @@ public class SMAAModelTest {
 	
 	@Test
 	public void testSetAlternatives() {
-		Set<Alternative> alts = new HashSet<Alternative>();
+		List<Alternative> alts = new ArrayList<Alternative>();
 		alts.add(new Alternative("alt1"));
 		alts.add(new Alternative("alt2"));
 		
@@ -77,7 +85,7 @@ public class SMAAModelTest {
 	
 	@Test
 	public void testSetCriteria() {
-		Set<Criterion> crit = new HashSet<Criterion>();
+		List<Criterion> crit = new ArrayList<Criterion>();
 		crit.add(new CardinalCriterion("c1"));
 		crit.add(new CardinalCriterion("c2"));
 		
@@ -85,7 +93,6 @@ public class SMAAModelTest {
 		model.addModelListener(mock);		
 		mock.preferencesChanged();
 		mock.criteriaChanged();
-		mock.measurementsChanged();
 		replay(mock);
 		
 		model.setCriteria(crit);
@@ -108,24 +115,47 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testAddAlternative() throws AlternativeExistsException {
-		Set<Alternative> alts = new HashSet<Alternative>();
+	public void testSetPreferenceInformationConnectsListener() {
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		List<Rank> ranks = new ArrayList<Rank>();
+		Rank r1 = new Rank(1);
+		ranks.add(r1);
+		ranks.add(new Rank(2));
+		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));		
+		model.addModelListener(mock);
+		mock.preferencesChanged();
+		replay(mock);
+		r1.setRank(2);
+		verify(mock);
+	}
+	
+	@Test
+	public void testAddAlternative() throws AlternativeExistsException, NoSuchAlternativeException, NoSuchCriterionException {
+		List<Alternative> alts = new ArrayList<Alternative>();
 		alts.add(new Alternative("alt1"));
 		
+		CardinalCriterion c = new CardinalCriterion("crit");
+		List<Criterion> crit = new ArrayList<Criterion>();
+		crit.add(c);
+		model.setCriteria(crit);
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.alternativesChanged();
 		mock.measurementsChanged();
+		expectLastCall().anyTimes();
 		replay(mock);
 		
-		Set<Alternative> alts2 = new HashSet<Alternative>();
+		List<Alternative> alts2 = new ArrayList<Alternative>();
 		alts2.add(new Alternative("alt1"));
-		alts2.add(new Alternative("alt2"));		
+		Alternative alt2 = new Alternative("alt2");
+		alts2.add(alt2);		
 		model.addAlternative(new Alternative("alt2"));
 		verify(mock);
 		
-		assertEquals(alts2, model.getAlternatives());		
+		assertEquals(alts2, model.getAlternatives());
+		
+		assertNotNull(model.getImpactMatrix().getMeasurement(c, alt2));
 	}
 	
 	@Test
@@ -137,20 +167,21 @@ public class SMAAModelTest {
 	@Test
 	public void testAddCriterion() {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		crit.add(new CardinalCriterion("c1"));
+		CardinalCriterion c1 = new CardinalCriterion("c1");
+		crit.add(c1);
 		
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.criteriaChanged();
 		mock.preferencesChanged();
-		mock.measurementsChanged();
 		replay(mock);
 		
-		Set<Criterion> crit2 = new HashSet<Criterion>();
-		crit2.add(new CardinalCriterion("c1"));
-		crit2.add(new CardinalCriterion("c2"));		
-		model.addCriterion(new CardinalCriterion("c2"));
+		List<Criterion> crit2 = new ArrayList<Criterion>();
+		crit2.add(c1);
+		CardinalCriterion c2 = new CardinalCriterion("c2");
+		crit2.add(c2);		
+		model.addCriterion(c2);
 		verify(mock);
 		
 		assertEquals(crit2, model.getCriteria());			
@@ -168,7 +199,7 @@ public class SMAAModelTest {
 		mock.measurementsChanged();
 		replay(mock);
 		
-		Set<Alternative> alts2 = new HashSet<Alternative>();
+		List<Alternative> alts2 = new ArrayList<Alternative>();
 		alts2.add(new Alternative("alt1"));
 
 		model.deleteAlternative(new Alternative("alt2"));
@@ -180,20 +211,21 @@ public class SMAAModelTest {
 	@Test
 	public void testDeleteCriterion() throws Exception {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		crit.add(new CardinalCriterion("c1"));
-		crit.add(new CardinalCriterion("c2"));		
+		CardinalCriterion c1 = new CardinalCriterion("c1");
+		crit.add(c1);
+		CardinalCriterion c2 = new CardinalCriterion("c2");
+		crit.add(c2);		
 		
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.criteriaChanged();
 		mock.preferencesChanged();
-		mock.measurementsChanged();
 		replay(mock);
 		
-		Set<Criterion> crit2 = new HashSet<Criterion>();
-		crit2.add(new CardinalCriterion("c1"));
-		model.deleteCriterion(new CardinalCriterion("c2"));
+		List<Criterion> crit2 = new ArrayList<Criterion>();
+		crit2.add(c1);
+		model.deleteCriterion(c2);
 		verify(mock);
 		
 		assertEquals(crit2, model.getCriteria());	

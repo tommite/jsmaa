@@ -36,9 +36,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
@@ -753,7 +753,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private String generateNextCriterionName() {
-		Set<Criterion> crit = model.getCriteria();
+		Collection<Criterion> crit = model.getCriteria();
 		
 		int index = 1;
 		while(true) {
@@ -773,7 +773,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	protected void addAlternative() {
-		Set<Alternative> alts = model.getAlternatives();
+		Collection<Alternative> alts = model.getAlternatives();
 		
 		int index = 1;
 		while (true) {

@@ -22,9 +22,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -49,8 +49,8 @@ public class ImpactMatrixTest {
 	private CardinalCriterion c2;
 	private Alternative a1;
 	private Alternative a2;
-	private Set<Alternative> alts;
-	private Set<Criterion> crit;
+	private List<Alternative> alts;
+	private List<Criterion> crit;
 	
 	@Before
 	public void setUp() {
@@ -58,8 +58,8 @@ public class ImpactMatrixTest {
 		c2 = new CardinalCriterion("c2");
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");
-		alts = new HashSet<Alternative>();
-		crit = new HashSet<Criterion>();
+		alts = new ArrayList<Alternative>();
+		crit = new ArrayList<Criterion>();
 		alts.add(a1);
 		alts.add(a2);
 		crit.add(c1);
@@ -77,8 +77,8 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testParameterConstructor() {
-		Set<Alternative> alts = Collections.singleton(new Alternative("a"));
-		Set<Criterion> crit = Collections.singleton((Criterion) new CardinalCriterion("c"));
+		List<Alternative> alts = Collections.singletonList(new Alternative("a"));
+		List<Criterion> crit = Collections.singletonList((Criterion) new CardinalCriterion("c"));
 		
 		ImpactMatrix m = new ImpactMatrix(alts, crit);
 		assertEquals(alts, m.getAlternatives());
@@ -89,9 +89,9 @@ public class ImpactMatrixTest {
 	public void testAddAlternative() {
 		Alternative a = new Alternative("a");
 		m.addAlternative(a);
-		assertEquals(Collections.singleton(a), m.getAlternatives());
+		assertEquals(Collections.singletonList(a), m.getAlternatives());
 		m.addAlternative(a);
-		assertEquals(Collections.singleton(a), m.getAlternatives());		
+		assertEquals(Collections.singletonList(a), m.getAlternatives());		
 	}
 	
 	@Test
@@ -99,9 +99,9 @@ public class ImpactMatrixTest {
 		Alternative a = new Alternative("a");
 		m.addAlternative(a);
 		m.deleteAlternative(a);
-		assertEquals(Collections.EMPTY_SET, m.getAlternatives());
+		assertEquals(Collections.EMPTY_LIST, m.getAlternatives());
 		m.deleteAlternative(a);
-		assertEquals(Collections.EMPTY_SET, m.getAlternatives());		
+		assertEquals(Collections.EMPTY_LIST, m.getAlternatives());		
 		m.addAlternative(new Alternative("b"));
 		m.deleteAlternative(a);
 		assertEquals(1, m.getAlternatives().size());
@@ -111,9 +111,9 @@ public class ImpactMatrixTest {
 	public void testAddCriterion() {
 		Criterion c = new CardinalCriterion("c");
 		m.addCriterion(c);
-		assertEquals(Collections.singleton(c), m.getCriteria());
+		assertEquals(Collections.singletonList(c), m.getCriteria());
 		m.addCriterion(c);
-		assertEquals(Collections.singleton(c), m.getCriteria());			
+		assertEquals(Collections.singletonList(c), m.getCriteria());			
 	}
 	
 	@Test
@@ -130,9 +130,9 @@ public class ImpactMatrixTest {
 		Criterion c = new CardinalCriterion("c");
 		m.addCriterion(c);
 		m.deleteCriterion(c);
-		assertEquals(Collections.EMPTY_SET, m.getCriteria());
+		assertEquals(Collections.EMPTY_LIST, m.getCriteria());
 		m.deleteCriterion(c);
-		assertEquals(Collections.EMPTY_SET, m.getCriteria());		
+		assertEquals(Collections.EMPTY_LIST, m.getCriteria());		
 		m.addCriterion(new CardinalCriterion("b"));
 		m.deleteCriterion(c);
 		assertEquals(1, m.getCriteria().size());		
@@ -175,6 +175,24 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
+	public void testCriterionNameChangePropagates() throws NoSuchValueException {
+		m.setCriteria(crit);
+		m.setAlternatives(alts);
+		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
+		c1.setName("cccc");
+		assertEquals(new Interval(0.0, 1.0), m.getMeasurement(c1, a1));
+	}
+	
+	@Test
+	public void testAlternativeNameChangePropagates() throws NoSuchValueException {
+		m.setCriteria(crit);
+		m.setAlternatives(alts);
+		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
+		a1.setName("aaaa");
+		assertEquals(new Interval(0.0, 1.0), m.getMeasurement(c1, a1));
+	}	
+	
+	@Test
 	public void testScalesChangeOnMeasurementChange() throws NoSuchValueException {
 		m = new ImpactMatrix(alts, crit);
 		Interval meas = new Interval(0.0, 2.0);
@@ -203,17 +221,28 @@ public class ImpactMatrixTest {
 		
 		assertFalse(m.equals(null));
 		assertFalse(m.equals("a"));
-		Set<Criterion> s = new HashSet<Criterion>();
+		List<Criterion> s = new ArrayList<Criterion>();
 		s.add(c1);
 		ImpactMatrix m3 = new ImpactMatrix(alts, s);
 		assertFalse(m.equals(m3));
-		Set<Alternative> s2 = new HashSet<Alternative>();
+		List<Alternative> s2 = new ArrayList<Alternative>();
 		s2.add(a2);
 		ImpactMatrix m4 = new ImpactMatrix(s2, crit);
 		assertFalse(m.equals(m4));
 		
 		m2.setMeasurement(c1, a1, new Interval(0.2, 0.3));
 		assertFalse(m.equals(m2));		
+	}
+
+	@Test
+	public void testDeepCopy() throws NoSuchValueException {
+		m = new ImpactMatrix(alts, crit);
+		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
+		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy();
+		assertEquals(m, m2);
+		
+		assertTrue(m.getAlternatives() != m2.getAlternatives());
+		assertTrue(m.getCriteria() != m2.getCriteria());
 	}
 
 }

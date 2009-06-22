@@ -23,22 +23,23 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeMap;
 
+import fi.smaa.jsmaa.common.DeepCopiable;
 import fi.smaa.jsmaa.common.Interval;
 
-public class ImpactMatrix {
+public class ImpactMatrix implements DeepCopiable {
 	
-	private Set<Criterion> criteria = new HashSet<Criterion>();
-	private Set<Alternative> alternatives = new HashSet<Alternative>();
+	private List<Criterion> criteria = new ArrayList<Criterion>();
+	private List<Alternative> alternatives = new ArrayList<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements 
-		= new HashMap<Criterion, Map<Alternative, Measurement>>();
+		= new TreeMap<Criterion, Map<Alternative, Measurement>>();
 	private transient MeasurementListener measListener = new MeasurementListener();
-	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>(); 
+	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
+	private transient AlternativeListener altListener = new AlternativeListener();
+	private transient CriterionListener critListener = new CriterionListener();
 		
 	/**
 	 * Constructs an impact matrix without alternatives or criteria.
@@ -57,7 +58,7 @@ public class ImpactMatrix {
 	 * @param alternatives the alternatives.
 	 * @param criteria the criteria.
 	 */
-	public ImpactMatrix(Set<Alternative> alternatives, Set<Criterion> criteria) {
+	public ImpactMatrix(List<Alternative> alternatives, List<Criterion> criteria) {
 		setCriteria(criteria);		
 		setAlternatives(alternatives);
 	}
@@ -131,7 +132,10 @@ public class ImpactMatrix {
 	 * @param alt Alternative to delete.
 	 */
 	public void deleteAlternative(Alternative alt) {
-		Set<Alternative> newAlts = new HashSet<Alternative>(alternatives);
+		if (!alternatives.contains(alt)) {
+			return;
+		}
+		List<Alternative> newAlts = new ArrayList<Alternative>(alternatives);
 		newAlts.remove(alt);
 		setAlternatives(newAlts);
 	}
@@ -141,7 +145,10 @@ public class ImpactMatrix {
 	 * @param alt Alternative to add.
 	 */
 	public void addAlternative(Alternative alt) {
-		Set<Alternative> newAlts = new HashSet<Alternative>(alternatives);
+		if (alternatives.contains(alt)) {
+			return;
+		}
+		List<Alternative> newAlts = new ArrayList<Alternative>(alternatives);
 		newAlts.add(alt);
 		setAlternatives(newAlts);		
 	}
@@ -151,7 +158,10 @@ public class ImpactMatrix {
 	 * @param c Criterion to delete
 	 */
 	public void deleteCriterion(Criterion c) {
-		Set<Criterion> newCrit = new HashSet<Criterion>(criteria);
+		if (!criteria.contains(c)) {
+			return;
+		}
+		List<Criterion> newCrit = new ArrayList<Criterion>(criteria);
 		newCrit.remove(c);
 		setCriteria(newCrit);
 	}
@@ -161,7 +171,10 @@ public class ImpactMatrix {
 	 * @param c
 	 */
 	public void addCriterion(Criterion c) {
-		Set<Criterion> newCrit = new HashSet<Criterion>(criteria);		
+		if (criteria.contains(c)) {
+			return;
+		}
+		List<Criterion> newCrit = new ArrayList<Criterion>(criteria);		
 		newCrit.add(c);
 		setCriteria(newCrit);
 	}
@@ -170,7 +183,7 @@ public class ImpactMatrix {
 	 * Gets the alternatives.
 	 * @return the alternatives. Never a null.
 	 */
-	public Set<Alternative> getAlternatives() {
+	public List<Alternative> getAlternatives() {
 		return alternatives;
 	}
 	
@@ -178,12 +191,13 @@ public class ImpactMatrix {
 	 * Gets the criteria.
 	 * @return the criteria. Never a null.
 	 */
-	public Set<Criterion> getCriteria() {
+	public List<Criterion> getCriteria() {
 		return criteria;
 	}
 
-	public void setAlternatives(Set<Alternative> alternatives) {
-		this.alternatives = alternatives;		
+	public void setAlternatives(List<Alternative> alternatives) {
+		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
+		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
 			for (Criterion c : criteria) {
 				Map<Alternative, Measurement> map = measurements.get(c);
@@ -201,12 +215,24 @@ public class ImpactMatrix {
 		updateScales();
 		fireMeasurementChanged();
 	}
+
+	private void disconnectConnectAlternativeListeners(
+			List<Alternative> oldAlts, List<Alternative> newAlts) {
+		for (Alternative a : oldAlts) {
+			a.removePropertyChangeListener(altListener);
+		}
+		connectAlternativeListeners(newAlts);
+	}
 	
-	public void setCriteria(Set<Criterion> criteria) {
-		this.criteria = criteria;		
+
+	public void setCriteria(List<Criterion> criteria) {
+		for (Criterion c1 : this.criteria) {
+			c1.removePropertyChangeListener(critListener);
+		}
+		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
-				measurements.put(c, new HashMap<Alternative, Measurement>());
+				measurements.put(c, new TreeMap<Alternative, Measurement>());
 			}
 		}
 		for (Criterion c : criteria) {
@@ -220,10 +246,17 @@ public class ImpactMatrix {
 				}
 			}
 		}
+		connectCriteriaListeners(criteria);		
 		updateScales();
 		fireMeasurementChanged();
 	}
 	
+	private void connectCriteriaListeners(List<Criterion> newCrit) {
+		for (Criterion c : newCrit) {
+			c.addPropertyChangeListener(critListener);
+		}
+	}
+
 	private void updateScales() {
 		for (Criterion c : criteria) {
 			if (c instanceof CardinalCriterion) {
@@ -261,6 +294,13 @@ public class ImpactMatrix {
 				}
 			}
 		}
+		connectAlternativeListeners(alternatives);
+	}
+
+	private void connectAlternativeListeners(List<Alternative> alternatives) {
+		for (Alternative a : alternatives) {
+			a.addPropertyChangeListener(altListener);
+		}
 	}	
 	
 	private void disconnectConnectMeasurementListener(CardinalCriterion crit,
@@ -288,5 +328,65 @@ public class ImpactMatrix {
 		for (ImpactMatrixListener l : thisListeners) {
 			l.measurementChanged();
 		}
+	}
+	
+	private class AlternativeListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
+				Alternative oldAlt = new Alternative((String) evt.getOldValue());
+				Alternative newAlt = new Alternative((String) evt.getNewValue());
+				for (Map<Alternative, Measurement> m : measurements.values()) {
+					if (m.containsKey(oldAlt)) {
+						Measurement meas = m.get(oldAlt);
+						m.remove(oldAlt);
+						m.put(newAlt, meas);
+					}
+				}
+			}
+		}
+	}
+	
+	private class CriterionListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
+				Criterion oldCrit = new CardinalCriterion((String)evt.getOldValue());
+				Criterion newCrit = (Criterion) ((Criterion)evt.getSource()).deepCopy();
+				newCrit.setName((String)evt.getNewValue());
+
+				if (measurements.keySet().contains(oldCrit)) {
+					Map<Alternative, Measurement> val = measurements.get(oldCrit);
+					measurements.remove(val);
+					measurements.put(newCrit, val);
+				}
+			}
+		}
+	}
+
+	public Object deepCopy() {
+		List<Criterion> crit = new ArrayList<Criterion>();
+		List<Alternative> alts = new ArrayList<Alternative>();
+		for (Criterion c : criteria) {
+			crit.add((Criterion) c.deepCopy());
+		}
+		for (Alternative a : alternatives) {
+			alts.add((Alternative) a.deepCopy());
+		}
+		ImpactMatrix other = new ImpactMatrix(alts, crit);		
+
+		for (Criterion c : getCriteria()) {
+			if (c instanceof CardinalCriterion) {
+				for (Alternative a : getAlternatives()) {
+					try {
+						CardinalMeasurement m = 
+							(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
+							.deepCopy();
+						other.setMeasurement((CardinalCriterion) c, a, m);
+					} catch (NoSuchValueException e) {
+						throw new RuntimeException("invalid object state");
+					}
+				}				
+			}
+		}
+		return other;
 	}
 }
