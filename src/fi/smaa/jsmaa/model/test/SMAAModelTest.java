@@ -26,6 +26,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -233,15 +238,7 @@ public class SMAAModelTest {
 	
 	@Test
 	public void testDeepCopy() throws AlternativeExistsException, NoSuchValueException {
-		Alternative a1 = new Alternative("a1");
-		Alternative a2 = new Alternative("a2");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
-		model.addAlternative(a1);
-		model.addAlternative(a2);
-		model.addCriterion(c1);
-		model.addCriterion(c2);
-		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
+		setupModel();
 		
 		SMAAModel model2 = model.deepCopy();
 	
@@ -255,5 +252,35 @@ public class SMAAModelTest {
 		assertFalse(model.getCriteria() == model2.getCriteria());
 		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
 		assertFalse(model.getImpactMatrix() == model2.getImpactMatrix());
+	}
+
+	private void setupModel() throws AlternativeExistsException,
+			NoSuchAlternativeException, NoSuchCriterionException {
+		Alternative a1 = new Alternative("a1");
+		Alternative a2 = new Alternative("a2");
+		CardinalCriterion c1 = new CardinalCriterion("c1");
+		CardinalCriterion c2 = new CardinalCriterion("c2");
+		model.addAlternative(a1);
+		model.addAlternative(a2);
+		model.addCriterion(c1);
+		model.addCriterion(c2);
+		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
+	}
+	
+	@Test
+	public void testEquals() {
+		SMAAModel model2 = model.deepCopy();
+		assertEquals(model, model2);
+	}
+	
+	@Test
+	public void testSerialization() throws NoSuchAlternativeException, NoSuchCriterionException, AlternativeExistsException, IOException, ClassNotFoundException {
+		setupModel();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oout = new ObjectOutputStream(bos);
+		oout.writeObject(model);
+		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+		SMAAModel newModel = (SMAAModel) in.readObject();
+		assertEquals(model, newModel);
 	}
 }

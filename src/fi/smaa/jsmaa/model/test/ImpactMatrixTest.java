@@ -165,6 +165,7 @@ public class ImpactMatrixTest {
 	public void testMeasurementListenerFires() throws NoSuchValueException {
 		ImpactMatrixListener mock = EasyMock.createMock(ImpactMatrixListener.class);
 		mock.measurementChanged();
+		EasyMock.expectLastCall().times(1);		
 		m = new ImpactMatrix(alts, crit);
 		Interval meas = new Interval(0.0, 2.0);
 		m.setMeasurement(c1, a1, meas);
@@ -190,7 +191,7 @@ public class ImpactMatrixTest {
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		a1.setName("aaaa");
 		assertEquals(new Interval(0.0, 1.0), m.getMeasurement(c1, a1));
-	}	
+	}
 	
 	@Test
 	public void testScalesChangeOnMeasurementChange() throws NoSuchValueException {

@@ -27,6 +27,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -129,6 +131,11 @@ public class JSMAAMainFrame extends JFrame {
 		this.model = model;
 		initLeftPanel();		
 		model.addModelListener(modelListener);
+		model.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				setModelUnsaved(true);
+			}
+		});
 		buildNewSimulator();
 		setRightViewToCriteria();
 		leftTreeFocusCriteria();
@@ -586,12 +593,18 @@ public class JSMAAMainFrame extends JFrame {
 				JOptionPane.showMessageDialog(this,
 						"Error loading model: "+ e.getMessage(), 
 						"Load error", JOptionPane.ERROR_MESSAGE);
-			} catch (Exception e) {				
-				JOptionPane.showMessageDialog(this, "Error loading model from " +
-						getCanonicalPath(chooser.getSelectedFile()) + 
-						", file doesn't contain a JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);
+			} catch (IOException e) {				
+				showErrorIncompatibleModel(chooser);
+			} catch (ClassNotFoundException e) {
+				showErrorIncompatibleModel(chooser);				
 			}
 		}
+	}
+
+	private void showErrorIncompatibleModel(JFileChooser chooser) {
+		JOptionPane.showMessageDialog(this, "Error loading model from " +
+				getCanonicalPath(chooser.getSelectedFile()) + 
+				", file doesn't contain a compatible JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private String getCanonicalPath(File selectedFile) {

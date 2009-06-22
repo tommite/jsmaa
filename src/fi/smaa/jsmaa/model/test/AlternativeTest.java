@@ -65,5 +65,12 @@ public class AlternativeTest {
 		assertFalse(a.equals(a2));
 		assertFalse(a.equals("alt"));
 	}
+	
+	@Test
+	public void testCompareTo() {
+		Alternative a = new Alternative("a");
+		Alternative a2 = new Alternative("a");
+		assertEquals(0, a.compareTo(a2));
+	}
 
 }

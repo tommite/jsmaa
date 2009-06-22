@@ -22,7 +22,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,8 +32,9 @@ import java.util.TreeMap;
 import fi.smaa.jsmaa.common.DeepCopiable;
 import fi.smaa.jsmaa.common.Interval;
 
-public class ImpactMatrix implements DeepCopiable {
+public class ImpactMatrix implements DeepCopiable, Serializable {
 	
+	private static final long serialVersionUID = -5524839710856011441L;
 	private List<Criterion> criteria = new ArrayList<Criterion>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements 
@@ -40,7 +43,7 @@ public class ImpactMatrix implements DeepCopiable {
 	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
 	private transient AlternativeListener altListener = new AlternativeListener();
 	private transient CriterionListener critListener = new CriterionListener();
-		
+	
 	/**
 	 * Constructs an impact matrix without alternatives or criteria.
 	 */
@@ -232,7 +235,7 @@ public class ImpactMatrix implements DeepCopiable {
 		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
-				measurements.put(c, new TreeMap<Alternative, Measurement>());
+				measurements.put(c, new HashMap<Alternative, Measurement>());
 			}
 		}
 		for (Criterion c : criteria) {
@@ -286,7 +289,11 @@ public class ImpactMatrix implements DeepCopiable {
 	}	
 		
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
-		i.defaultReadObject();
+		measListener = new MeasurementListener();
+		thisListeners = new ArrayList<ImpactMatrixListener>();
+		altListener = new AlternativeListener();
+		critListener = new CriterionListener();			
+		i.defaultReadObject();	
 		for (Map<Alternative, Measurement> m : measurements.values()) {
 			for (Measurement meas : m.values()) {
 				if (meas != null) {
@@ -295,6 +302,7 @@ public class ImpactMatrix implements DeepCopiable {
 			}
 		}
 		connectAlternativeListeners(alternatives);
+		connectCriteriaListeners(criteria);
 	}
 
 	private void connectAlternativeListeners(List<Alternative> alternatives) {
@@ -333,15 +341,13 @@ public class ImpactMatrix implements DeepCopiable {
 	private class AlternativeListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
-				Alternative oldAlt = new Alternative((String) evt.getOldValue());
-				Alternative newAlt = new Alternative((String) evt.getNewValue());
-				for (Map<Alternative, Measurement> m : measurements.values()) {
-					if (m.containsKey(oldAlt)) {
-						Measurement meas = m.get(oldAlt);
-						m.remove(oldAlt);
-						m.put(newAlt, meas);
-					}
+				Map<Criterion, Map<Alternative, Measurement>> newMeas
+					= new TreeMap<Criterion, Map<Alternative, Measurement>>(measurements);
+				for (Criterion c : measurements.keySet()) {
+					Map<Alternative, Measurement> m = measurements.get(c);
+					newMeas.put(c, new TreeMap<Alternative, Measurement>(m));
 				}
+				measurements = newMeas;
 			}
 		}
 	}
@@ -349,15 +355,7 @@ public class ImpactMatrix implements DeepCopiable {
 	private class CriterionListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-				Criterion oldCrit = new CardinalCriterion((String)evt.getOldValue());
-				Criterion newCrit = (Criterion) ((Criterion)evt.getSource()).deepCopy();
-				newCrit.setName((String)evt.getNewValue());
-
-				if (measurements.keySet().contains(oldCrit)) {
-					Map<Alternative, Measurement> val = measurements.get(oldCrit);
-					measurements.remove(val);
-					measurements.put(newCrit, val);
-				}
+				measurements = new TreeMap<Criterion, Map<Alternative, Measurement>>(measurements);
 			}
 		}
 	}

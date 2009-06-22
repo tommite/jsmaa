@@ -31,7 +31,8 @@ import com.jgoodies.binding.beans.Model;
 
 public class SMAAModel extends Model {
 	
-	private static final long serialVersionUID = 1064123340687226048L;
+	private static final long serialVersionUID = 6100076809211865658L;
+
 	public final static String PROPERTY_NAME = "name";
 		
 	private String name;
@@ -164,6 +165,30 @@ public class SMAAModel extends Model {
 		}		
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof SMAAModel)) {
+			return false;
+		}
+		SMAAModel m = (SMAAModel) other;
+		if (!m.name.equals(name)) {
+			return false;
+		}
+		if (!m.impactMatrix.equals(impactMatrix)) {
+			return false;
+		}
+		if (m.preferences == null) {
+			if (preferences != null) {
+				return false;
+			}
+		}
+		if (!m.preferences.equals(preferences)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
 		List<Alternative> alts = new ArrayList<Alternative>();
@@ -187,6 +212,10 @@ public class SMAAModel extends Model {
 	}
 
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
+		modelListeners = new ArrayList<SMAAModelListener>();
+		impactListener = new ImpactListener();
+		critListener = new CriteriaListener();
+			
 		i.defaultReadObject();
 		impactMatrix.addListener(impactListener);
 	}	
