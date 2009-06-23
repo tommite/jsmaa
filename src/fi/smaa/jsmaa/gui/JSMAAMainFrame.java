@@ -904,6 +904,10 @@ public class JSMAAMainFrame extends JFrame {
 				simulator.stop();
 			}
 			SMAAModel newModel = model.deepCopy();
+			
+			connectAlternativeNameAdapters(model, newModel);
+			connectCriteriaNameAdapters(model, newModel);
+			
 			simulator = new SMAASimulator(newModel, 10000);		
 			results = simulator.getResults();
 			results.addResultsListener(new SimulationProgressListener());
@@ -915,7 +919,57 @@ public class JSMAAMainFrame extends JFrame {
 			simulationProgress.setValue(0);
 			simulator.restart();
 			checkStartNewSimulator();
-		}		
+		}
+	}
+
+	private void connectAlternativeNameAdapters(SMAAModel model,
+			SMAAModel newModel) {
+		assert(model.getAlternatives().size() == newModel.getAlternatives().size());
+		for (int i=0;i<model.getAlternatives().size();i++) {
+			Alternative mAlt = model.getAlternatives().get(i);
+			Alternative nmAlt = newModel.getAlternatives().get(i);
+			mAlt.addPropertyChangeListener(new AlternativeNameUpdater(nmAlt));
+		}
+	}	
+	
+	private void connectCriteriaNameAdapters(SMAAModel model,
+			SMAAModel newModel) {
+		assert(model.getCriteria().size() == newModel.getCriteria().size());
+		for (int i=0;i<model.getCriteria().size();i++) {
+			Criterion mCrit = model.getCriteria().get(i);
+			Criterion nmCrit = newModel.getCriteria().get(i);
+			mCrit.addPropertyChangeListener(new CriterionNameUpdater(nmCrit));
+		}
+	}		
+	
+	private class CriterionNameUpdater implements PropertyChangeListener {
+
+		private Criterion toUpdate;
+		public CriterionNameUpdater(Criterion toUpdate) {
+			this.toUpdate = toUpdate;
+		}
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)){ 
+				setModelUnsaved(true);
+				toUpdate.setName((String) evt.getNewValue());
+			}
+			
+		}
+	
+	}
+	
+	private class AlternativeNameUpdater implements PropertyChangeListener {
+		
+		private Alternative toUpdate;
+		public AlternativeNameUpdater(Alternative toUpdate) {
+			this.toUpdate = toUpdate;
+		}
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
+				setModelUnsaved(true);				
+				toUpdate.setName((String) evt.getNewValue());
+			}
+		}
 	}
 		
 	private class SimulationProgressListener implements SMAAResultsListener {

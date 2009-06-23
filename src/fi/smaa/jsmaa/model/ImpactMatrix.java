@@ -46,16 +46,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	 */
 	public ImpactMatrix() {
 	}
-
-	
-	public ImpactMatrix shallowCopy() {
-		ImpactMatrix ret = new ImpactMatrix();
-		ret.alternatives = new ArrayList<Alternative>(alternatives);
-		ret.criteria = new ArrayList<Criterion>(criteria);
-		ret.measurements = new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
-		return ret;
-	}
-	
 	
 	@Override
 	public String toString() {

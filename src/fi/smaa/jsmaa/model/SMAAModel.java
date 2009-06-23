@@ -196,13 +196,6 @@ public class SMAAModel extends Model {
 		return model;
 	}
 	
-	public SMAAModel shallowCopy() {
-		SMAAModel model = new SMAAModel(name);
-		model.impactMatrix = (ImpactMatrix) impactMatrix.shallowCopy();
-		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
-		return model;
-	}
-
 	public void setMissingPreferences() {
 		setPreferenceInformation(
 				new MissingPreferenceInformation(impactMatrix.getCriteria().size()));
