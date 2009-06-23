@@ -47,23 +47,9 @@ public class Alternative extends Model implements Comparable<Alternative> {
 		return name;
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (!(other instanceof Alternative)) {
-			return false;
-		}
-		Alternative ao = (Alternative) other;
-		return name.equals(ao.name);
-	}
-	
 	public Alternative deepCopy() {
 		Alternative a = new Alternative(name);
 		return a;
-	}
-
-	@Override
-	public int hashCode() {
-		return name.hashCode();
 	}
 
 	public int compareTo(Alternative o) {

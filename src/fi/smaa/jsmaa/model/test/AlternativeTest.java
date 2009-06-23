@@ -60,8 +60,7 @@ public class AlternativeTest {
 	@Test
 	public void testEquals() {
 		Alternative a2 = new Alternative("a2");
-		Alternative a3 = new Alternative("alt");
-		assertEquals(a, a3);
+		assertEquals(a, a);
 		assertFalse(a.equals(a2));
 		assertFalse(a.equals("alt"));
 	}

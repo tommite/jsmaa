@@ -234,18 +234,11 @@ public class SMAAModel extends Model {
 		}
 	}
 	
-	private void fireNamesChanged() {
-		for (SMAAModelListener l : modelListeners) {
-			l.alternativeOrCriteriaNameChanged();
-		}
-	}
 	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 				fireMeasurementsChanged();
-			} else {
-				fireNamesChanged();
 			}
 		}
 	}

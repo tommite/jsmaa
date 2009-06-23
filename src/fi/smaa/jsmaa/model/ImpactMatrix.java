@@ -40,8 +40,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		= new HashMap<Criterion, Map<Alternative, Measurement>>();
 	private transient MeasurementListener measListener = new MeasurementListener();
 	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
-	private transient AlternativeListener altListener = new AlternativeListener();
-	private transient CriterionListener critListener = new CriterionListener();
 	
 	/**
 	 * Constructs an impact matrix without alternatives or criteria.
@@ -94,7 +92,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		thisListeners.remove(l);
 	}	
 	
-	public synchronized void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
+	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
 	throws NoSuchAlternativeException, NoSuchCriterionException {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
@@ -197,7 +195,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		return criteria;
 	}
 
-	public synchronized void setAlternatives(List<Alternative> alternatives) {
+	public void setAlternatives(List<Alternative> alternatives) {
 		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
 		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
@@ -220,17 +218,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 
 	private void disconnectConnectAlternativeListeners(
 			List<Alternative> oldAlts, List<Alternative> newAlts) {
-		for (Alternative a : oldAlts) {
-			a.removePropertyChangeListener(altListener);
-		}
-		connectAlternativeListeners(newAlts);
 	}
 	
 
-	public synchronized void setCriteria(List<Criterion> criteria) {
-		for (Criterion c1 : this.criteria) {
-			c1.removePropertyChangeListener(critListener);
-		}
+	public void setCriteria(List<Criterion> criteria) {
 		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
@@ -248,16 +239,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 				}
 			}
 		}
-		connectCriteriaListeners(criteria);		
 		updateScales();
 		fireMeasurementChanged();
 	}
 	
-	private void connectCriteriaListeners(List<Criterion> newCrit) {
-		for (Criterion c : newCrit) {
-			c.addPropertyChangeListener(critListener);
-		}
-	}
 
 	private void updateScales() {
 		for (Criterion c : criteria) {
@@ -290,8 +275,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		measListener = new MeasurementListener();
 		thisListeners = new ArrayList<ImpactMatrixListener>();
-		altListener = new AlternativeListener();
-		critListener = new CriterionListener();			
 		i.defaultReadObject();	
 		for (Map<Alternative, Measurement> m : measurements.values()) {
 			for (Measurement meas : m.values()) {
@@ -300,16 +283,8 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 				}
 			}
 		}
-		connectAlternativeListeners(alternatives);
-		connectCriteriaListeners(criteria);
 	}
 
-	private void connectAlternativeListeners(List<Alternative> alternatives) {
-		for (Alternative a : alternatives) {
-			a.addPropertyChangeListener(altListener);
-		}
-	}	
-	
 	private void disconnectConnectMeasurementListener(CardinalCriterion crit,
 			Alternative alt, CardinalMeasurement meas) {
 		if (meas == null) {
@@ -337,31 +312,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		}
 	}
 	
-	private class AlternativeListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
-				Map<Criterion, Map<Alternative, Measurement>> newMeas
-					= new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
-				for (Criterion c : measurements.keySet()) {
-					Map<Alternative, Measurement> m = measurements.get(c);
-					newMeas.put(c, new HashMap<Alternative, Measurement>(m));
-				}
-				measurements = newMeas;
-			}
-		}
-	}
-	
-	private class CriterionListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-				Map<Criterion, Map<Alternative, Measurement>> newMeasurements = 
-					new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
-				measurements = newMeasurements;
-			}
-		}
-	}
-
-	public synchronized ImpactMatrix deepCopy() {
+	/**
+	 * Doesn't deep copy each alternative and criterion.
+	 */
+	public ImpactMatrix deepCopy() {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Criterion c : criteria) {
@@ -372,19 +326,24 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		}
 		ImpactMatrix other = new ImpactMatrix(alts, crit);		
 
+		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
 			if (c instanceof CardinalCriterion) {
+				int aIndex = 0;				
 				for (Alternative a : getAlternatives()) {
 					try {
 						CardinalMeasurement m = 
 							(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
 							.deepCopy();
-						other.setMeasurement((CardinalCriterion) c, a, m);
+						other.setMeasurement((CardinalCriterion) crit.get(cIndex), 
+								alts.get(aIndex), m);
 					} catch (NoSuchValueException e) {
 						throw new RuntimeException("invalid object state");
 					}
-				}				
+					aIndex++;
+				}			
 			}
+			cIndex++;
 		}
 		return other;
 	}

@@ -137,7 +137,8 @@ public class SMAAModelTest {
 	@Test
 	public void testAddAlternative() throws AlternativeExistsException, NoSuchAlternativeException, NoSuchCriterionException {
 		List<Alternative> alts = new ArrayList<Alternative>();
-		alts.add(new Alternative("alt1"));
+		Alternative a1 = new Alternative("alt1");
+		alts.add(a1);
 		
 		CardinalCriterion c = new CardinalCriterion("crit");
 		List<Criterion> crit = new ArrayList<Criterion>();
@@ -152,10 +153,11 @@ public class SMAAModelTest {
 		replay(mock);
 		
 		List<Alternative> alts2 = new ArrayList<Alternative>();
-		alts2.add(new Alternative("alt1"));
-		Alternative alt2 = new Alternative("alt2");
+		alts2.add(a1);
+		Alternative a2 = new Alternative("alt2");
+		Alternative alt2 = a2;
 		alts2.add(alt2);		
-		model.addAlternative(new Alternative("alt2"));
+		model.addAlternative(a2);
 		verify(mock);
 		
 		assertEquals(alts2, model.getAlternatives());
@@ -195,8 +197,10 @@ public class SMAAModelTest {
 	@Test
 	public void testDeleteAlternative() throws Exception {
 		Set<Alternative> alts = new HashSet<Alternative>();
-		alts.add(new Alternative("alt1"));
-		alts.add(new Alternative("alt2"));				
+		Alternative a1 = new Alternative("alt1");
+		alts.add(a1);
+		Alternative a2 = new Alternative("alt2");
+		alts.add(a2);				
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
@@ -205,9 +209,9 @@ public class SMAAModelTest {
 		replay(mock);
 		
 		List<Alternative> alts2 = new ArrayList<Alternative>();
-		alts2.add(new Alternative("alt1"));
+		alts2.add(a1);
 
-		model.deleteAlternative(new Alternative("alt2"));
+		model.deleteAlternative(a2);
 		verify(mock);
 		
 		assertEquals(alts2, model.getAlternatives());		
@@ -281,7 +285,8 @@ public class SMAAModelTest {
 		oout.writeObject(model);
 		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
 		SMAAModel newModel = (SMAAModel) in.readObject();
-		assertEquals(model, newModel);
+		assertEquals(model.getAlternatives().size(), newModel.getAlternatives().size());
+		assertEquals(model.getCriteria().size(), newModel.getCriteria().size());
 	}
 	
 	@Test

@@ -73,8 +73,7 @@ public class AbstractCriterionTest {
 	@Test
 	public void testequals() {
 		AbstractCriterion c2 = createInstance();
-		assertTrue(criterion.equals(c2));
-		c2.setName("newname");
+		assertTrue(criterion.equals(criterion));
 		assertFalse(criterion.equals(c2));
 	}	
 }

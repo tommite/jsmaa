@@ -65,8 +65,6 @@ public class LeftTreeModel implements TreeModel{
 			}
 			public void preferencesChanged() {
 			}
-			public void alternativeOrCriteriaNameChanged() {
-			}			
 		});
 	}
 	
