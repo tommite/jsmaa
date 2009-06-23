@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.Interval;
 
 public class UtilityFunctionTest {
 	

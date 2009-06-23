@@ -23,8 +23,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 
 public class LogNormalMeasurementTest {

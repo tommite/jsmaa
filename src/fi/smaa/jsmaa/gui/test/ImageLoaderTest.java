@@ -25,7 +25,7 @@ import java.io.FileNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.ImageLoader;
+import fi.smaa.common.ImageLoader;
 import fi.smaa.jsmaa.gui.FileNames;
 
 public class ImageLoaderTest {

@@ -28,8 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.smaa.jsmaa.common.DeepCopiable;
-import fi.smaa.jsmaa.common.Interval;
+import fi.smaa.common.DeepCopiable;
 
 public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	

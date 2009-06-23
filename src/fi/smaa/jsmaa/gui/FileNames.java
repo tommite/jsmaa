@@ -19,10 +19,8 @@
 package fi.smaa.jsmaa.gui;
 
 public class FileNames {
-	public static final String ICON_ORDINALCRITERION = "criterion.gif";
-	public static final String ICON_GAUSSIANCRITERION = "criterion_gaussian.gif";
-	public static final String ICON_CARDINALCRITERION = "criterion_uniform.gif";
-	public static final String ICON_LOGNORMALCRITERION = "criterion_lognormal.gif";
+	public static final String ICON_ORDINALCRITERION = "criterion_ordinal.gif";
+	public static final String ICON_CARDINALCRITERION = "criterion_cardinal.gif";
 	public static final String ICON_ALTERNATIVE = "alternative.gif";
 	public static final String ICON_RANKACCEPTABILITIES = "rankacceptabilities.gif";
 	public static final String ICON_CENTRALWEIGHTS = "centralweights.gif";

@@ -31,7 +31,7 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.value.AbstractVetoableValueModel;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.common.Interval;
+import fi.smaa.jsmaa.model.Interval;
 
 public class IntervalPanel extends JPanel {
 	private static final long serialVersionUID = -5571531046764331786L;

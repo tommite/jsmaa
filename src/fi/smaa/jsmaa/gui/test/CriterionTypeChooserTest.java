@@ -24,13 +24,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.gui.CriterionTypeChooser;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.NoSuchAlternativeException;
 import fi.smaa.jsmaa.model.NoSuchCriterionException;

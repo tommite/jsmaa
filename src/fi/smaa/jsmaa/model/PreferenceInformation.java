@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import com.jgoodies.binding.beans.Observable;
 
-import fi.smaa.jsmaa.common.DeepCopiable;
+import fi.smaa.common.DeepCopiable;
 
 public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, 
 	Observable, Serializable {

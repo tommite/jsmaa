@@ -70,9 +70,10 @@ import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
+import fi.smaa.common.ImageLoader;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
-import fi.smaa.jsmaa.common.ImageLoader;
+import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.AlternativeExistsException;
@@ -81,7 +82,6 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
-import fi.smaa.jsmaa.simulator.SMAASimulator;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {

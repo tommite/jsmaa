@@ -18,7 +18,6 @@
 
 package fi.smaa.jsmaa.model;
 
-import fi.smaa.jsmaa.common.Interval;
 
 public class LogNormalMeasurement extends GaussianMeasurement {
 	

@@ -29,14 +29,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.common.Interval;
-import fi.smaa.jsmaa.common.gui.IntervalFormat;
+import fi.smaa.common.gui.IntervalFormat;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.NoSuchValueException;
 
 public class CriterionView implements ViewBuilder {

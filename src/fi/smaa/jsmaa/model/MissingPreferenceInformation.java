@@ -21,7 +21,7 @@ package fi.smaa.jsmaa.model;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 
-import fi.smaa.jsmaa.common.RandomUtil;
+import fi.smaa.common.RandomUtil;
 
 public class MissingPreferenceInformation implements PreferenceInformation, Serializable {
 	private static final long serialVersionUID = -8477410889345079220L;

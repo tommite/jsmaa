@@ -24,8 +24,8 @@ import nl.rug.escher.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.Interval;
 
 public class CardinalCriterionTest {
 	

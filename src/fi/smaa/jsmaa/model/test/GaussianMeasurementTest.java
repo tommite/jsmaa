@@ -25,8 +25,8 @@ import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 
 public class GaussianMeasurementTest {
 	

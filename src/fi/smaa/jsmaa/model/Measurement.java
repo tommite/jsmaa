@@ -20,7 +20,7 @@ package fi.smaa.jsmaa.model;
 
 import com.jgoodies.binding.beans.Model;
 
-import fi.smaa.jsmaa.common.DeepCopiable;
+import fi.smaa.common.DeepCopiable;
 
 /**
  * Marking abstract class

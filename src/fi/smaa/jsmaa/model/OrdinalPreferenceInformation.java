@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import fi.smaa.jsmaa.common.RandomUtil;
+import fi.smaa.common.RandomUtil;
 
 public class OrdinalPreferenceInformation implements PreferenceInformation {
 	

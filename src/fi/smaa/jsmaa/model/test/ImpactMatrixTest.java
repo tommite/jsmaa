@@ -30,14 +30,14 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.common.Interval;
-import fi.smaa.jsmaa.common.InvalidIntervalException;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.ImpactMatrixListener;
+import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.InvalidIntervalException;
 import fi.smaa.jsmaa.model.NoSuchAlternativeException;
 import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.NoSuchValueException;

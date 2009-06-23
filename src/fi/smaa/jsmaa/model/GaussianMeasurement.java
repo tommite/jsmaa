@@ -18,8 +18,7 @@
 
 package fi.smaa.jsmaa.model;
 
-import fi.smaa.jsmaa.common.Interval;
-import fi.smaa.jsmaa.common.RandomUtil;
+import fi.smaa.common.RandomUtil;
 
 
 
