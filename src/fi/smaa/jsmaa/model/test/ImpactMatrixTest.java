@@ -267,7 +267,9 @@ public class ImpactMatrixTest {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy();
-		assertEquals(m, m2);
+		
+		assertTrue(m.getAlternatives().size() == m2.getAlternatives().size());
+		assertTrue(m.getCriteria().size() == m2.getCriteria().size());
 		
 		assertTrue(m.getAlternatives() != m2.getAlternatives());
 		assertTrue(m.getCriteria() != m2.getCriteria());
