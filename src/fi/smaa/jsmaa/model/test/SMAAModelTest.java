@@ -283,4 +283,15 @@ public class SMAAModelTest {
 		SMAAModel newModel = (SMAAModel) in.readObject();
 		assertEquals(model, newModel);
 	}
+	
+	@Test
+	public void testChangeCritNameDoesntFire() throws Exception {
+		setupModel();
+		SMAAModelListener l = createMock(SMAAModelListener.class);
+		model.addModelListener(l);
+		replay(l);
+		Criterion c = model.getCriteria().get(0);
+		c.setName("ccc");
+		verify(l);
+	}
 }

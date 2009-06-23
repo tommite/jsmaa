@@ -246,7 +246,9 @@ public class SMAAModel extends Model {
 	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			fireMeasurementsChanged();
+			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
+				fireMeasurementsChanged();
+			}
 		}
 	}
 	

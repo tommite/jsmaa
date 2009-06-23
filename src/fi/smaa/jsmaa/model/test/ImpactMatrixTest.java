@@ -185,6 +185,33 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
+	public void testCriterionNameChangeDoesntFire() {
+		ImpactMatrixListener l = EasyMock.createMock(ImpactMatrixListener.class);
+		m.setCriteria(crit);
+		m.setAlternatives(alts);		
+		m.addListener(l);
+		EasyMock.replay(l);
+		c1.setName("xxx");
+		c2.setName("yyy");
+		EasyMock.verify(l);
+	}
+	
+	@Test
+	public void testCriterionNameChangeMaintainsMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException {
+		m.setCriteria(crit);
+		m.setAlternatives(alts);
+		m.setMeasurement(c1, a1, new Interval());
+		m.setMeasurement(c1, a2, new Interval());
+		m.setMeasurement(c2, a1, new Interval());
+		m.setMeasurement(c2, a2, new Interval());
+
+		assertEquals(new Interval(), m.getMeasurement(c2, a1));
+		assertEquals(new Interval(), m.getMeasurement(c2, a2));
+		assertEquals(new Interval(), m.getMeasurement(c1, a1));
+		assertEquals(new Interval(), m.getMeasurement(c1, a2));		
+	}
+	
+	@Test
 	public void testAlternativeNameChangePropagates() throws NoSuchValueException {
 		m.setCriteria(crit);
 		m.setAlternatives(alts);

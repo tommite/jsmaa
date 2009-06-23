@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import fi.smaa.jsmaa.common.DeepCopiable;
 import fi.smaa.jsmaa.common.Interval;
@@ -38,7 +37,7 @@ public class ImpactMatrix implements DeepCopiable, Serializable {
 	private List<Criterion> criteria = new ArrayList<Criterion>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements 
-		= new TreeMap<Criterion, Map<Alternative, Measurement>>();
+		= new HashMap<Criterion, Map<Alternative, Measurement>>();
 	private transient MeasurementListener measListener = new MeasurementListener();
 	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
 	private transient AlternativeListener altListener = new AlternativeListener();
@@ -342,10 +341,10 @@ public class ImpactMatrix implements DeepCopiable, Serializable {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
 				Map<Criterion, Map<Alternative, Measurement>> newMeas
-					= new TreeMap<Criterion, Map<Alternative, Measurement>>(measurements);
+					= new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
 				for (Criterion c : measurements.keySet()) {
 					Map<Alternative, Measurement> m = measurements.get(c);
-					newMeas.put(c, new TreeMap<Alternative, Measurement>(m));
+					newMeas.put(c, new HashMap<Alternative, Measurement>(m));
 				}
 				measurements = newMeas;
 			}
@@ -355,7 +354,9 @@ public class ImpactMatrix implements DeepCopiable, Serializable {
 	private class CriterionListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-				measurements = new TreeMap<Criterion, Map<Alternative, Measurement>>(measurements);
+				Map<Criterion, Map<Alternative, Measurement>> newMeasurements = 
+					new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
+				measurements = newMeasurements;
 			}
 		}
 	}
