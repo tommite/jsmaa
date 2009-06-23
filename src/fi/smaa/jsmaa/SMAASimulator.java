@@ -106,8 +106,8 @@ public class SMAASimulator {
 			public void iterate() {
 				sampleCriteria();
 				aggregateWithCentralWeights();
-				results.confidenceUpdate(confidenceHits);				
-			}	
+				results.confidenceUpdate(confidenceHits);
+			}
 		}, iterations);
 		th.addPhase(new SimulationPhase() {
 			public void iterate() {

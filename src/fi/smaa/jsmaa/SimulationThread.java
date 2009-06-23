@@ -47,7 +47,7 @@ public class SimulationThread extends Thread{
 			currentPhase = phases.get(i);
 			iteration = 1;
 			int currentTotalIters = phaseIterations.get(i);
-			while (go && iteration < currentTotalIters) {
+			while (go && iteration <= currentTotalIters) {
 				currentPhase.iterate();
 				iteration++;
 			}
