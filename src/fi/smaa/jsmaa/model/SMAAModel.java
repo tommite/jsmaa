@@ -240,6 +240,12 @@ public class SMAAModel extends Model {
 		}
 	}
 	
+	private void fireMeasurementsTypeChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.measurementTypeChanged();
+		}			
+	}
+	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
@@ -251,6 +257,10 @@ public class SMAAModel extends Model {
 	private class ImpactListener implements ImpactMatrixListener {
 		public void measurementChanged() {
 			fireMeasurementsChanged();
+		}
+
+		public void measurementTypeChanged() {
+			fireMeasurementsTypeChanged();
 		}
 	}
 	

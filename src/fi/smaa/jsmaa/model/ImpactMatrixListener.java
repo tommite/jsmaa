@@ -20,4 +20,5 @@ package fi.smaa.jsmaa.model;
 
 public interface ImpactMatrixListener {
 	public void measurementChanged();
+	public void measurementTypeChanged();
 }

@@ -101,7 +101,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		disconnectConnectMeasurementListener(crit, alt, meas);
 		measurements.get(crit).put(alt, meas);
 		updateScales();
-		fireMeasurementChanged();
+		fireMeasurementTypeChanged();
 	}
 	
 	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) 
@@ -311,6 +311,12 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			l.measurementChanged();
 		}
 	}
+	
+	private void fireMeasurementTypeChanged() {
+		for (ImpactMatrixListener l : thisListeners) {
+			l.measurementTypeChanged();
+		}
+	}	
 		
 	/**
 	 * Doesn't deep copy each alternative and criterion.

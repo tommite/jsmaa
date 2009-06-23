@@ -149,6 +149,7 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.alternativesChanged();
+		mock.measurementTypeChanged();
 		mock.measurementsChanged();
 		expectLastCall().anyTimes();
 		replay(mock);

@@ -92,6 +92,9 @@ public class SMAAModelPreferencePresentationModel extends PresentationModel<SMAA
 
 		public void alternativeOrCriterionNameChanged() {
 		}
+
+		public void measurementTypeChanged() {
+		}
 	}
 	
 	public class OrdinalEnabledValueModel extends AbstractValueModel {

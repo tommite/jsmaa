@@ -35,6 +35,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.NoSuchValueException;
 
@@ -129,12 +130,18 @@ public class CriterionView implements ViewBuilder {
 			if (criterion instanceof CardinalCriterion) {
 				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
 				CardinalMeasurement m = matrix.getMeasurement(cardCrit, a);
+				JComponent measComp = null;
 				if (m instanceof Interval) {
 					Interval ival = (Interval) m;
-					JComponent comp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
-					builder.add(comp, cc.xy(3, row));
-					builder.addLabel("Interval", cc.xy(5, row));
+					measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
+				} else if (m instanceof GaussianMeasurement) {
+					GaussianMeasurement gm = (GaussianMeasurement) m;
+				    measComp = ComponentBuilder.createGaussianMeasurementPanel(
+				             new PresentationModel<GaussianMeasurement>(gm));
 				}
+				builder.add(measComp, cc.xy(3, row));				
+				CriterionTypeChooser chooser = new CriterionTypeChooser(matrix, a, criterion);
+				builder.add(chooser, cc.xy(5, row));			
 			}
 			index++;
 		}

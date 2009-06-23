@@ -232,7 +232,7 @@ public class ImpactMatrixTest {
 	@Test
 	public void testMeasurementListenerFiresOnSet() throws NoSuchValueException {
 		ImpactMatrixListener mock = EasyMock.createMock(ImpactMatrixListener.class);
-		mock.measurementChanged();
+		mock.measurementTypeChanged();
 		m = new ImpactMatrix(alts, crit);
 		Interval meas = new Interval(0.0, 2.0);
 		m.addListener(mock);
