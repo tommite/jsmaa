@@ -27,7 +27,7 @@ public class OrdinalCriterion extends AbstractCriterion {
 		super(name);
 	}
 
-	public Object deepCopy() {
+	public OrdinalCriterion deepCopy() {
 		return new OrdinalCriterion(name);
 	}
 

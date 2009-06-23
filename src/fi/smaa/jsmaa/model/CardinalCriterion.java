@@ -65,7 +65,7 @@ public class CardinalCriterion extends AbstractCriterion {
 		return "Cardinal";
 	}
 
-	public Object deepCopy() {
+	public CardinalCriterion deepCopy() {
 		CardinalCriterion c = new CardinalCriterion(name, ascending);
 		c.setScale(scale);
 		return c;

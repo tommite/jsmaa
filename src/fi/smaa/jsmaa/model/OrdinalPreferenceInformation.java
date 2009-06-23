@@ -90,7 +90,7 @@ public class OrdinalPreferenceInformation implements PreferenceInformation, Seri
 		return ranks.toString();
 	}
 
-	public Object deepCopy() {
+	public OrdinalPreferenceInformation deepCopy() {
 		List<Rank> myranks = new ArrayList<Rank>();
 		for (Rank r : ranks) {
 			myranks.add((Rank) r.deepCopy());

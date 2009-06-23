@@ -18,6 +18,6 @@
 
 package fi.smaa.jsmaa.common;
 
-public interface DeepCopiable {
-	public Object deepCopy();
+public interface DeepCopiable<T> {
+	public T deepCopy();
 }

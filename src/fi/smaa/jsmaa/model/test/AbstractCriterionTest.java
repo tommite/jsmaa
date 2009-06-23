@@ -39,7 +39,7 @@ public class AbstractCriterionTest {
 			public String getTypeLabel() {
 				return null;
 			}
-			public Object deepCopy() {
+			public AbstractCriterion deepCopy() {
 				return null;
 			}			
 		};

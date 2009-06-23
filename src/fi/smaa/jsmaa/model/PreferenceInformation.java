@@ -22,6 +22,6 @@ import com.jgoodies.binding.beans.Observable;
 
 import fi.smaa.jsmaa.common.DeepCopiable;
 
-public interface PreferenceInformation extends DeepCopiable, Observable {
+public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, Observable {
 	public double[] sampleWeights();
 }

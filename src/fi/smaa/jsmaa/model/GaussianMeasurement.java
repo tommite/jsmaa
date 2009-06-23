@@ -77,7 +77,7 @@ public class GaussianMeasurement extends CardinalMeasurement {
 		return mean.equals(mo.getMean()) && stDev.equals(mo.getStDev());
 	}
 	
-	public Object deepCopy() {
+	public GaussianMeasurement deepCopy() {
 		return new GaussianMeasurement(mean, stDev);
 	}
 	

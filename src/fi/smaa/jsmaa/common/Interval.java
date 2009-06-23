@@ -114,7 +114,7 @@ public class Interval extends CardinalMeasurement {
 		return other.getStart() >= getStart() && other.getEnd() <= getEnd(); 
 	}
 
-	public Object deepCopy() {
+	public Interval deepCopy() {
 		return new Interval(start, end);
 	}
 

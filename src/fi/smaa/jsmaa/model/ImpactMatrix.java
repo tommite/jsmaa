@@ -31,7 +31,7 @@ import java.util.Map;
 import fi.smaa.jsmaa.common.DeepCopiable;
 import fi.smaa.jsmaa.common.Interval;
 
-public class ImpactMatrix implements DeepCopiable, Serializable {
+public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	private List<Criterion> criteria = new ArrayList<Criterion>();
@@ -361,14 +361,14 @@ public class ImpactMatrix implements DeepCopiable, Serializable {
 		}
 	}
 
-	public Object deepCopy() {
+	public ImpactMatrix deepCopy() {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Criterion c : criteria) {
 			crit.add((Criterion) c.deepCopy());
 		}
 		for (Alternative a : alternatives) {
-			alts.add((Alternative) a.deepCopy());
+			alts.add(a.deepCopy());
 		}
 		ImpactMatrix other = new ImpactMatrix(alts, crit);		
 

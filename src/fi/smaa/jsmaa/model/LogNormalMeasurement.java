@@ -42,7 +42,7 @@ public class LogNormalMeasurement extends GaussianMeasurement {
 	}	
 
 	@Override
-	public Object deepCopy() {
+	public LogNormalMeasurement deepCopy() {
 		return new LogNormalMeasurement(mean, stDev);
 	}
 	

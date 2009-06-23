@@ -64,7 +64,7 @@ public class Rank extends Measurement {
 		return rank.toString();
 	}
 
-	public Object deepCopy() {
+	public Rank deepCopy() {
 		return new Rank(rank);
 	}
 }
