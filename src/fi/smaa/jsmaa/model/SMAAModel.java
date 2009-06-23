@@ -118,9 +118,13 @@ public class SMAAModel extends Model {
 		for (Criterion c : oldCriteria) {
 			c.removePropertyChangeListener(critListener);
 		}
+		connectCriteriaListeners(newCriteria);		
+	}
+
+	private void connectCriteriaListeners(List<Criterion> newCriteria) {
 		for (Criterion c : newCriteria) {
 			c.addPropertyChangeListener(critListener);
-		}		
+		}
 	}
 
 	public void addCriterion(Criterion cri) {
@@ -208,6 +212,8 @@ public class SMAAModel extends Model {
 			
 		i.defaultReadObject();
 		impactMatrix.addListener(impactListener);
+		connectCriteriaListeners(getCriteria());
+		preferences.addPropertyChangeListener(new PreferenceListener());		
 	}	
 	
 	private void firePreferencesChanged() {

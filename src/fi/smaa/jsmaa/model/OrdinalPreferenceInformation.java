@@ -23,13 +23,12 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fi.smaa.jsmaa.common.RandomUtil;
 
-public class OrdinalPreferenceInformation implements PreferenceInformation, Serializable {
+public class OrdinalPreferenceInformation implements PreferenceInformation {
 	
 	private static final long serialVersionUID = -8011596971699184854L;
 	transient private double[] tmparr;
@@ -110,9 +109,25 @@ public class OrdinalPreferenceInformation implements PreferenceInformation, Seri
 	
 	private class RankListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(Rank.PROPERTY_RANK)) {
+				Rank r = (Rank) evt.getSource();
+				int oldVal = (Integer) evt.getOldValue();
+				int newVal = (Integer) evt.getNewValue();
+				if (oldVal != newVal) {
+					ensureRanks(r, oldVal, newVal);
+				}
+			}
 			for (PropertyChangeListener l : listeners) {
 				l.propertyChange(evt);
 			}
 		}		
+	}
+
+	public void ensureRanks(Rank r, int oldVal, int newVal) {
+		for (Rank ra : ranks) {
+			if (ra.getRank() == newVal && ra != r) {
+				ra.setRank(oldVal);
+			}
+		}
 	}	
 }

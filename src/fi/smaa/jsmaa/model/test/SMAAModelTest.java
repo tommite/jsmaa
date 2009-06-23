@@ -129,6 +129,7 @@ public class SMAAModelTest {
 		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));		
 		model.addModelListener(mock);
 		mock.preferencesChanged();
+		expectLastCall().anyTimes();
 		replay(mock);
 		r1.setRank(2);
 		verify(mock);
@@ -286,6 +287,66 @@ public class SMAAModelTest {
 		assertEquals(model.getAlternatives().size(), newModel.getAlternatives().size());
 		assertEquals(model.getCriteria().size(), newModel.getCriteria().size());
 	}
+	
+	@Test
+	public void testSerializationHooksPreferenceListeners() throws Exception{
+		setupModel();
+		List<Rank> ranks = new ArrayList<Rank>();
+		ranks.add(new Rank(2));
+		ranks.add(new Rank(1));
+		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oout = new ObjectOutputStream(bos);
+		oout.writeObject(model);
+		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+		SMAAModel newModel = (SMAAModel) in.readObject();
+		
+		SMAAModelListener l = createMock(SMAAModelListener.class);
+		newModel.addModelListener(l);		
+		l.preferencesChanged();
+		expectLastCall().anyTimes();
+		replay(l);
+		OrdinalPreferenceInformation pref = (OrdinalPreferenceInformation) newModel.getPreferenceInformation();
+		pref.getRanks().get(0).setRank(1);
+		verify(l);
+	}
+	
+	@Test
+	public void testSerializationHooksOrdinalChange() throws Exception{
+		setupModel();
+		List<Rank> ranks = new ArrayList<Rank>();
+		ranks.add(new Rank(2));
+		ranks.add(new Rank(1));
+		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oout = new ObjectOutputStream(bos);
+		oout.writeObject(model);
+		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+		SMAAModel newModel = (SMAAModel) in.readObject();
+		
+		OrdinalPreferenceInformation pref = (OrdinalPreferenceInformation) newModel.getPreferenceInformation();
+		pref.getRanks().get(0).setRank(1);
+		assertEquals(new Rank(1), pref.getRanks().get(0));
+		assertEquals(new Rank(2), pref.getRanks().get(1));		
+	}	
+	
+	@Test
+	public void testSerializationHooksCriteriaListeners() throws Exception{
+		setupModel();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oout = new ObjectOutputStream(bos);
+		oout.writeObject(model);
+		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+		SMAAModel newModel = (SMAAModel) in.readObject();
+		
+		SMAAModelListener l = createMock(SMAAModelListener.class);
+		newModel.addModelListener(l);		
+		l.measurementsChanged();
+		replay(l);
+		CardinalCriterion c = (CardinalCriterion) newModel.getCriteria().get(0);
+		c.setAscending(false);
+		verify(l);
+	}	
 	
 	@Test
 	public void testChangeCritNameDoesntFire() throws Exception {

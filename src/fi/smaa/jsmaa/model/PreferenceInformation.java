@@ -18,10 +18,13 @@
 
 package fi.smaa.jsmaa.model;
 
+import java.io.Serializable;
+
 import com.jgoodies.binding.beans.Observable;
 
 import fi.smaa.jsmaa.common.DeepCopiable;
 
-public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, Observable {
+public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, 
+	Observable, Serializable {
 	public double[] sampleWeights();
 }
