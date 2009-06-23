@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +39,7 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.InvalidIntervalException;
+import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.NoSuchAlternativeException;
 import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -162,6 +164,149 @@ public class SMAASimulatorTest {
 		// set gaussian measurements
 		im.setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
 		im.setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
+	}
+	
+	@Test
+	public void testCorrectResultsWithBRModel() throws NoSuchAlternativeException, NoSuchCriterionException, InterruptedException {
+		Alternative parox = new Alternative("Paroxetine");
+		Alternative fluox = new Alternative("Fluoxetine");
+		Alternative sert = new Alternative("Sertraline");
+		Alternative ven = new Alternative("Venlafaxine");
+		
+		CardinalCriterion efficacy = new CardinalCriterion("Efficacy", true);
+		CardinalCriterion diarrhea = new CardinalCriterion("Diarrhea", false);
+		CardinalCriterion dizziness = new CardinalCriterion("Dizziness", false);
+		CardinalCriterion headache = new CardinalCriterion("Headache", false);
+		CardinalCriterion insomnia = new CardinalCriterion("Insomnia", false);
+		CardinalCriterion nausea = new CardinalCriterion("Nausea", false);
+		
+		SMAAModel model = new SMAAModel("BRModel");
+		model.addAlternative(parox);
+		model.addAlternative(fluox);
+		model.addAlternative(sert);
+		model.addAlternative(ven);
+		model.addCriterion(efficacy);
+		model.addCriterion(diarrhea);
+		model.addCriterion(dizziness);
+		model.addCriterion(headache);
+		model.addCriterion(insomnia);
+		model.addCriterion(nausea);
+		
+		ImpactMatrix m = model.getImpactMatrix();
+		
+		m.setMeasurement(efficacy, fluox, new LogNormalMeasurement(0.0, 0.0));
+		m.setMeasurement(efficacy, parox, new LogNormalMeasurement(0.086, 0.056));
+		m.setMeasurement(efficacy, sert, new LogNormalMeasurement(0.095, 0.044));
+		m.setMeasurement(efficacy, ven, new LogNormalMeasurement(0.113, 0.048));
+		
+		m.setMeasurement(diarrhea, fluox, new GaussianMeasurement(11.7, 2.5));
+		m.setMeasurement(diarrhea, parox, new GaussianMeasurement(9.2, 1.86));
+		m.setMeasurement(diarrhea, sert, new GaussianMeasurement(15.4, 2.65));
+		m.setMeasurement(diarrhea, ven, new GaussianMeasurement(5.5, 2.32));
+
+		m.setMeasurement(dizziness, fluox, new GaussianMeasurement(7.2, 1.45));
+		m.setMeasurement(dizziness, parox, new GaussianMeasurement(10.6, 1.58));
+		m.setMeasurement(dizziness, sert, new GaussianMeasurement(7.5, 1.48));
+		m.setMeasurement(dizziness, ven, new GaussianMeasurement(15.7, 4.44));
+		
+		m.setMeasurement(headache, fluox, new GaussianMeasurement(16.6, 3.27));
+		m.setMeasurement(headache, parox, new GaussianMeasurement(21.2, 5.15));
+		m.setMeasurement(headache, sert, new GaussianMeasurement(20.2, 3.78));
+		m.setMeasurement(headache, ven, new GaussianMeasurement(12.8, 2.45));
+		
+		m.setMeasurement(insomnia, fluox, new GaussianMeasurement(13.7, 1.89));
+		m.setMeasurement(insomnia, parox, new GaussianMeasurement(14.3, 2.93));
+		m.setMeasurement(insomnia, sert, new GaussianMeasurement(15.0, 3.21));
+		m.setMeasurement(insomnia, ven, new GaussianMeasurement(11.2, 3.98));
+		
+		m.setMeasurement(nausea, fluox, new GaussianMeasurement(18.6, 1.79));
+		m.setMeasurement(nausea, parox, new GaussianMeasurement(18.3, 3.7));
+		m.setMeasurement(nausea, sert, new GaussianMeasurement(19.5, 2.6));
+		m.setMeasurement(nausea, ven, new GaussianMeasurement(31.0, 1.68));
+		
+		assertEquals(0.98, efficacy.getScale().getStart(), 0.01);
+		assertEquals(1.23, efficacy.getScale().getEnd(), 0.01);
+		
+		assertEquals(1.0, diarrhea.getScale().getStart(), 1.0);
+		assertEquals(20.6, diarrhea.getScale().getEnd(), 1.0);
+	
+		assertEquals(4.4, dizziness.getScale().getStart(), 1.0);
+		assertEquals(24.4, dizziness.getScale().getEnd(), 1.0);
+	
+		assertEquals(8.0, headache.getScale().getStart(), 1.0);
+		assertEquals(31.3, headache.getScale().getEnd(), 1.0);
+	
+		assertEquals(3.4, insomnia.getScale().getStart(), 1.0);
+		assertEquals(21.3, insomnia.getScale().getEnd(), 1.0);
+	
+		assertEquals(11.1, nausea.getScale().getStart(), 1.0);
+		assertEquals(34.0, nausea.getScale().getEnd(), 1.0);
+	
+		SMAASimulator sim = new SMAASimulator(model, 10000);
+		sim.restart();
+		while (sim.isRunning()) {
+			Thread.sleep(100);
+		}
+		
+		SMAA2Results res = sim.getResults();
+		Map<Alternative, Map<Criterion, Double>> cw = res.getCentralWeightVectors();
+		Map<Alternative, List<Double>> ra = res.getRankAcceptabilities();
+		Map<Alternative, Double> conf = res.getConfidenceFactors();
+		
+		assertEquals(0.20, ra.get(fluox).get(0), 0.02);
+		assertEquals(0.28, ra.get(fluox).get(1), 0.02);
+		assertEquals(0.30, ra.get(fluox).get(2), 0.02);
+		assertEquals(0.22, ra.get(fluox).get(3), 0.02);
+		
+		assertEquals(0.25, ra.get(parox).get(0), 0.02);
+		assertEquals(0.29, ra.get(parox).get(1), 0.02);
+		assertEquals(0.27, ra.get(parox).get(2), 0.02);
+		assertEquals(0.19, ra.get(parox).get(3), 0.02);
+
+		assertEquals(0.17, ra.get(sert).get(0), 0.02);
+		assertEquals(0.25, ra.get(sert).get(1), 0.02);
+		assertEquals(0.29, ra.get(sert).get(2), 0.02);
+		assertEquals(0.30, ra.get(sert).get(3), 0.02);
+
+		assertEquals(0.39, ra.get(ven).get(0), 0.02);
+		assertEquals(0.18, ra.get(ven).get(1), 0.02);
+		assertEquals(0.15, ra.get(ven).get(2), 0.02);
+		assertEquals(0.29, ra.get(ven).get(3), 0.02);
+		
+		assertEquals(0.08, cw.get(fluox).get(efficacy), 0.02);
+		assertEquals(0.14, cw.get(fluox).get(diarrhea), 0.02);
+		assertEquals(0.23, cw.get(fluox).get(dizziness), 0.02);
+		assertEquals(0.18, cw.get(fluox).get(headache), 0.02);
+		assertEquals(0.16, cw.get(fluox).get(insomnia), 0.02);
+		assertEquals(0.22, cw.get(fluox).get(nausea), 0.02);
+		
+		assertEquals(0.18, cw.get(parox).get(efficacy), 0.02);
+		assertEquals(0.17, cw.get(parox).get(diarrhea), 0.02);
+		assertEquals(0.15, cw.get(parox).get(dizziness), 0.02);
+		assertEquals(0.13, cw.get(parox).get(headache), 0.02);
+		assertEquals(0.15, cw.get(parox).get(insomnia), 0.02);
+		assertEquals(0.22, cw.get(parox).get(nausea), 0.02);
+		
+		assertEquals(0.21, cw.get(sert).get(efficacy), 0.02);
+		assertEquals(0.10, cw.get(sert).get(diarrhea), 0.02);
+		assertEquals(0.22, cw.get(sert).get(dizziness), 0.02);
+		assertEquals(0.13, cw.get(sert).get(headache), 0.02);
+		assertEquals(0.15, cw.get(sert).get(insomnia), 0.02);
+		assertEquals(0.20, cw.get(sert).get(nausea), 0.02);
+		
+		assertEquals(0.18, cw.get(ven).get(efficacy), 0.02);
+		assertEquals(0.21, cw.get(ven).get(diarrhea), 0.02);
+		assertEquals(0.12, cw.get(ven).get(dizziness), 0.02);
+		assertEquals(0.21, cw.get(ven).get(headache), 0.02);
+		assertEquals(0.19, cw.get(ven).get(insomnia), 0.02);
+		assertEquals(0.09, cw.get(ven).get(nausea), 0.02);
+		
+		assertEquals(0.48, conf.get(fluox), 0.02);
+		assertEquals(0.45, conf.get(parox), 0.02);
+		assertEquals(0.34, conf.get(sert), 0.02);
+		assertEquals(0.74, conf.get(ven), 0.02);
+		
+		
 	}
 	
 }

@@ -152,12 +152,12 @@ public class SMAASimulator {
 
 		for (int altIndex=0;altIndex<alts.size();altIndex++) {
 			Map<Criterion, Double> cw = cws.get(alts.get(altIndex));
-			double utility = computeUtility(altIndex, new ArrayList<Double>(cw.values()));
+			double utility = computeUtility(altIndex, cw);
 			for (int otherAlt=0;otherAlt<model.getAlternatives().size();otherAlt++) {
 				if (altIndex == otherAlt) {
 					continue;
 				}
-				double otherUtility = computeUtility(otherAlt, new ArrayList<Double>(cw.values()));
+				double otherUtility = computeUtility(otherAlt, cw);
 				if (otherUtility > utility) {
 					confidenceHits[altIndex] = false;
 					break;
@@ -172,11 +172,11 @@ public class SMAASimulator {
 		}
 	}
 
-	private double computeUtility(int altIndex, List<Double> cw) {
+	private double computeUtility(int altIndex, Map<Criterion, Double> cw) {
 		double utility = 0;
 		for (int i=0;i<crits.size();i++) {
 			double partUtil = computePartialUtility(i, crits.get(i), altIndex);
-			utility += partUtil * cw.get(i);
+			utility += partUtil * cw.get(crits.get(i));
 		}
 		return utility;
 	}

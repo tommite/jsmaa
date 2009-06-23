@@ -89,10 +89,7 @@ public class SMAAModel extends Model {
 		return name;
 	}	
 	
-	public void addAlternative(Alternative alt) throws AlternativeExistsException {
-		if (getAlternatives().contains(alt)) {
-			throw new AlternativeExistsException();
-		}
+	public void addAlternative(Alternative alt) {
 		List<Alternative> alts = new ArrayList<Alternative>(getAlternatives());
 		alts.add(alt);
 		setAlternatives(alts);

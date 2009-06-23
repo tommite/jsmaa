@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -48,12 +47,8 @@ public class LeftTreeModelTest {
 	
 	private SMAAModel createSmaaModel() {
 		SMAAModel model = new SMAAModel("model");
-		try {
-			model.addAlternative(alt1);
-			model.addAlternative(alt2);
-		} catch (AlternativeExistsException e) {
-			
-		}
+		model.addAlternative(alt1);
+		model.addAlternative(alt2);
 		model.addCriterion(crit1);
 		return model;
 	}

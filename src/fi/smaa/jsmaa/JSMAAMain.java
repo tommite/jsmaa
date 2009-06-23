@@ -27,7 +27,6 @@ import nl.rug.escher.common.gui.GUIHelper;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -59,13 +58,9 @@ public class JSMAAMain {
 		SMAAModel model = new SMAAModel("model");
 		model.addCriterion(new CardinalCriterion("Criterion 1"));
 		model.addCriterion(new CardinalCriterion("Criterion 2"));
-		try {
-			model.addAlternative(new Alternative("Alternative 1"));
-			model.addAlternative(new Alternative("Alternative 2"));			
-			model.addAlternative(new Alternative("Alternative 3"));
-		} catch (AlternativeExistsException e) {
-			e.printStackTrace();
-		}
+		model.addAlternative(new Alternative("Alternative 1"));
+		model.addAlternative(new Alternative("Alternative 2"));			
+		model.addAlternative(new Alternative("Alternative 3"));
 		return model;
 	}
 	

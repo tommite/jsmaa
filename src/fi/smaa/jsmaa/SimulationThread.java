@@ -32,7 +32,7 @@ public class SimulationThread extends Thread{
 	public SimulationThread() {
 		currentPhase = null;
 		iteration = 0;
-		go = false;
+		go = true;
 	}
 	
 	public void addPhase(SimulationPhase phase, int iterations) {
