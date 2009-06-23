@@ -78,13 +78,11 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
 		mock.alternativesChanged();
-		mock.measurementsChanged();
+		mock.measurementTypeChanged();
 		replay(mock);
 		model.setAlternatives(alts);
 		verify(mock);
-		
 		assertEquals(alts, model.getAlternatives());
-		
 		assertEquals(alts, model.getImpactMatrix().getAlternatives());
 	}
 	
@@ -207,7 +205,7 @@ public class SMAAModelTest {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
 		mock.alternativesChanged();
-		mock.measurementsChanged();
+		mock.measurementTypeChanged();
 		replay(mock);
 		
 		List<Alternative> alts2 = new ArrayList<Alternative>();
