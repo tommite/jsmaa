@@ -878,13 +878,6 @@ public class JSMAAMainFrame extends JFrame {
 			rebuildRightPanel();
 			expandLeftMenu();			
 		}
-		
-		public void alternativeOrCriteriaNameChanged() {
-			setModelUnsaved(true);
-			buildNewSimulator();
-			rebuildRightPanel();
-			expandLeftMenu();
-		}
 	}
 
 	synchronized private void buildNewSimulator() {

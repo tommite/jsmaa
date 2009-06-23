@@ -46,6 +46,16 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	 */
 	public ImpactMatrix() {
 	}
+
+	
+	public ImpactMatrix shallowCopy() {
+		ImpactMatrix ret = new ImpactMatrix();
+		ret.alternatives = new ArrayList<Alternative>(alternatives);
+		ret.criteria = new ArrayList<Criterion>(criteria);
+		ret.measurements = new HashMap<Criterion, Map<Alternative, Measurement>>(measurements);
+		return ret;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -195,7 +205,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		return criteria;
 	}
 
-	public void setAlternatives(List<Alternative> alternatives) {
+	public synchronized void setAlternatives(List<Alternative> alternatives) {
 		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
 		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
@@ -221,7 +231,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	}
 	
 
-	public void setCriteria(List<Criterion> criteria) {
+	public synchronized void setCriteria(List<Criterion> criteria) {
 		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
 			if (measurements.get(c) == null) {
@@ -311,11 +321,11 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			l.measurementChanged();
 		}
 	}
-	
+		
 	/**
 	 * Doesn't deep copy each alternative and criterion.
 	 */
-	public ImpactMatrix deepCopy() {
+	public synchronized ImpactMatrix deepCopy() {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Criterion c : criteria) {

@@ -195,6 +195,13 @@ public class SMAAModel extends Model {
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 		return model;
 	}
+	
+	public SMAAModel shallowCopy() {
+		SMAAModel model = new SMAAModel(name);
+		model.impactMatrix = (ImpactMatrix) impactMatrix.shallowCopy();
+		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
+		return model;
+	}
 
 	public void setMissingPreferences() {
 		setPreferenceInformation(
@@ -234,12 +241,11 @@ public class SMAAModel extends Model {
 		}
 	}
 	
-	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 				fireMeasurementsChanged();
-			}
+			} 
 		}
 	}
 	

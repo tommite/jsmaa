@@ -55,7 +55,7 @@ public class SMAASimulator {
 		alts = new ArrayList<Alternative>(model.getAlternatives());
 		crits = new ArrayList<Criterion>(model.getCriteria());
 		results = new SMAA2Results(alts, crits, 10);
-		sampler = new UtilitySampler(model.getImpactMatrix(), alts);		
+		sampler = new UtilitySampler(model.getImpactMatrix(), alts);
 		this.iterations = iterations;
 		init();
 	}
