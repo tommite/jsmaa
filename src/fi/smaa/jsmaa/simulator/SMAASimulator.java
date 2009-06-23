@@ -51,7 +51,7 @@ public class SMAASimulator {
 	private List<Criterion> crits;
 	
 	public SMAASimulator(SMAAModel smaaModel, Integer iterations) {
-		model = smaaModel.deepCopy();
+		model = smaaModel;
 		alts = new ArrayList<Alternative>(model.getAlternatives());
 		crits = new ArrayList<Criterion>(model.getCriteria());
 		results = new SMAA2Results(alts, crits, 10);

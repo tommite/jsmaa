@@ -878,6 +878,13 @@ public class JSMAAMainFrame extends JFrame {
 			rebuildRightPanel();
 			expandLeftMenu();			
 		}
+		
+		public void alternativeOrCriteriaNameChanged() {
+			setModelUnsaved(true);
+			buildNewSimulator();
+			rebuildRightPanel();
+			expandLeftMenu();
+		}
 	}
 
 	synchronized private void buildNewSimulator() {
@@ -903,7 +910,8 @@ public class JSMAAMainFrame extends JFrame {
 			if (simulator != null) {
 				simulator.stop();
 			}
-			simulator = new SMAASimulator(model, 10000);		
+			SMAAModel newModel = model.deepCopy();
+			simulator = new SMAASimulator(newModel, 10000);		
 			results = simulator.getResults();
 			results.addResultsListener(new SimulationProgressListener());
 			if (rightViewBuilder instanceof CentralWeightsView) {
@@ -916,7 +924,7 @@ public class JSMAAMainFrame extends JFrame {
 			checkStartNewSimulator();
 		}		
 	}
-
+		
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
 			int amount = results.getRankAccIteration() * 100 / simulator.getTotalIterations();

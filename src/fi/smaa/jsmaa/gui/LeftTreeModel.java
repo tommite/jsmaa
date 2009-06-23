@@ -64,6 +64,8 @@ public class LeftTreeModel implements TreeModel{
 			public void measurementsChanged() {				
 			}
 			public void preferencesChanged() {
+			}
+			public void alternativeOrCriteriaNameChanged() {
 			}			
 		});
 	}

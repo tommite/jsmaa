@@ -24,5 +24,6 @@ public interface SMAAModelListener {
 	public void criteriaChanged();
 	public void preferencesChanged();
 	public void measurementsChanged();
+	public void alternativeOrCriteriaNameChanged();
 
 }

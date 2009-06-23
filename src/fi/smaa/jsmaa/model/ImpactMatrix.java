@@ -94,7 +94,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		thisListeners.remove(l);
 	}	
 	
-	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
+	public synchronized void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
 	throws NoSuchAlternativeException, NoSuchCriterionException {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
@@ -197,7 +197,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		return criteria;
 	}
 
-	public void setAlternatives(List<Alternative> alternatives) {
+	public synchronized void setAlternatives(List<Alternative> alternatives) {
 		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
 		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
@@ -227,7 +227,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	}
 	
 
-	public void setCriteria(List<Criterion> criteria) {
+	public synchronized void setCriteria(List<Criterion> criteria) {
 		for (Criterion c1 : this.criteria) {
 			c1.removePropertyChangeListener(critListener);
 		}
@@ -361,11 +361,11 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		}
 	}
 
-	public ImpactMatrix deepCopy() {
+	public synchronized ImpactMatrix deepCopy() {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Criterion c : criteria) {
-			crit.add((Criterion) c.deepCopy());
+			crit.add(c.deepCopy());
 		}
 		for (Alternative a : alternatives) {
 			alts.add(a.deepCopy());

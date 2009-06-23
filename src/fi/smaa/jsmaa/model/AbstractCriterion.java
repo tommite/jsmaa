@@ -46,20 +46,6 @@ public abstract class AbstractCriterion extends Model implements Criterion {
 		return name;
 	}
 	
-	@Override
-	public boolean equals(Object other) {
-		if (!(other instanceof Criterion)) {
-			return false;
-		}
-		Criterion c = (Criterion) other;
-		return name.equals(c.getName());
-	}
-		
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-	
 	public int compareTo(Criterion o) {
 		return name.compareTo(o.getName());
 	}

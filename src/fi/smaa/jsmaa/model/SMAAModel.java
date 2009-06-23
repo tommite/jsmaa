@@ -191,18 +191,6 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		/*
-		List<Alternative> alts = new ArrayList<Alternative>();
-		List<Criterion> crit = new ArrayList<Criterion>();
-		for (Alternative a : impactMatrix.getAlternatives()) {
-			alts.add(a);//.deepCopy());
-		}
-		model.setAlternatives(alts);
-		for (Criterion c : impactMatrix.getCriteria()) {
-			crit.add((Criterion) c.deepCopy());
-		}
-		model.setCriteria(crit);
-		*/
 		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy();	
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 		return model;
@@ -246,10 +234,18 @@ public class SMAAModel extends Model {
 		}
 	}
 	
+	private void fireNamesChanged() {
+		for (SMAAModelListener l : modelListeners) {
+			l.alternativeOrCriteriaNameChanged();
+		}
+	}
+	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 				fireMeasurementsChanged();
+			} else {
+				fireNamesChanged();
 			}
 		}
 	}

@@ -86,6 +86,9 @@ public class SMAAModelPreferencePresentationModel extends PresentationModel<SMAA
 					null,
 					getBean().getPreferenceInformation() instanceof OrdinalPreferenceInformation);						
 		}
+
+		public void alternativeOrCriteriaNameChanged() {
+		}
 	}
 	
 	public class OrdinalEnabledValueModel extends AbstractValueModel {
