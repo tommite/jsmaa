@@ -105,6 +105,13 @@ public class JSMAAMainFrame extends JFrame {
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
+	private JMenu fileMenu;
+	private JMenu editMenu;
+	private JMenu critMenu;
+	private JMenu altMenu;
+	private JMenu resultsMenu;
+	private JMenu helpMenu;
+	private JMenuBar menuBar;
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super("SMAA");
@@ -161,7 +168,7 @@ public class JSMAAMainFrame extends JFrame {
 	}	
 
 	private void updateFrameTitle() {
-		String appString = "JSMAA v" + VERSION;
+		String appString = getFrameTitleBase();
 		String file = "Untitled model";
 		
 		if (currentModelFile != null) {
@@ -173,6 +180,11 @@ public class JSMAAMainFrame extends JFrame {
 		}
 		String modelSavedStar = modelUnsaved ? "*" : "";
 		setTitle(appString + " - " + file + modelSavedStar);
+	}
+
+	private String getFrameTitleBase() {
+		String appString = "JSMAA v" + VERSION;
+		return appString;
 	}
 
 	private void initFrame() {		
@@ -196,7 +208,8 @@ public class JSMAAMainFrame extends JFrame {
 	   getContentPane().setLayout(new BorderLayout());
 	   getContentPane().add("Center", splitPane);
 	   getContentPane().add("South", createToolBar());
-	   setJMenuBar(createMenuBar());
+	   createMenuBar();
+	   setJMenuBar(menuBar);
 	}
 	
 	private JComponent createToolBar() {
@@ -275,18 +288,30 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode()}));
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getResultsNode()}));
 	}
-
-
-	private JMenuBar createMenuBar() {
-		JMenuBar menuBar = new JMenuBar();
+	
+	public void setMinimalFrame() {
+		menuBar = new JMenuBar();
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
-		JMenu fileMenu = createFileMenu();
-		JMenu editMenu = createEditMenu();
-		JMenu critMenu = createCriteriaMenu();	
-		JMenu altMenu = createAlternativeMenu();
-		JMenu resultsMenu = createResultsMenu();
-		JMenu helpMenu = createHelpMenu();
+		fileMenu = createFileMenu(true);
+		menuBar.add(fileMenu);
+		menuBar.add(resultsMenu);
+		menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(helpMenu);
+		setJMenuBar(menuBar);
+		setTitle(getFrameTitleBase());
+	}
+
+	private void createMenuBar() {
+		menuBar = new JMenuBar();
+		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
+		
+		fileMenu = createFileMenu(false);
+		editMenu = createEditMenu();
+		critMenu = createCriteriaMenu();	
+		altMenu = createAlternativeMenu();
+		resultsMenu = createResultsMenu();
+		helpMenu = createHelpMenu();
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
@@ -295,8 +320,6 @@ public class JSMAAMainFrame extends JFrame {
 		menuBar.add(resultsMenu);
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(helpMenu);
-		
-		return menuBar;
 	}
 
 
@@ -316,7 +339,7 @@ public class JSMAAMainFrame extends JFrame {
 
 	private void showAboutDialog() {
 		String title = "About JSMAA";
-		String msg = "JSMAA v" + VERSION;
+		String msg = getFrameTitleBase();
 		msg += "\nJSMAA is open source and licensed under GPLv3.\n";
 		msg += "\t- and can be distributed freely!\n";
 		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
@@ -443,10 +466,10 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.startEditingAtPath(leftTree.getSelectionPath());
 	}
 
-	private JMenu createFileMenu() {
+	private JMenu createFileMenu(boolean minimal) {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
-		
+
 		JMenuItem newItem = new JMenuItem("New model");
 		newItem.setMnemonic('n');
 		newItem.setIcon(getIcon(FileNames.ICON_FILENEW));
@@ -464,13 +487,12 @@ public class JSMAAMainFrame extends JFrame {
 		JMenuItem saveAsItem = new JMenuItem("Save As");
 		saveAsItem.setMnemonic('a');
 		saveAsItem.setIcon(getIcon(FileNames.ICON_SAVEAS));
+		
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.setMnemonic('o');
 		openItem.setIcon(getIcon(FileNames.ICON_OPENFILE));
 		openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));		
-		JMenuItem quitItem = new JMenuItem("Quit");
-		quitItem.setMnemonic('q');
-		quitItem.setIcon(getIcon(FileNames.ICON_STOP));
+		JMenuItem quitItem = createQuitItem();
 		
 		saveItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -487,19 +509,28 @@ public class JSMAAMainFrame extends JFrame {
 				openFile();
 			}
 		});
-		quitItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				quitItemAction();
-			}
-		});
 		
-		fileMenu.add(newItem);
-		fileMenu.add(openItem);
+		if (!minimal) {
+			fileMenu.add(newItem);
+			fileMenu.add(openItem);			
+		}
 		fileMenu.add(saveItem);
 		fileMenu.add(saveAsItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);		
 		return fileMenu;
+	}
+
+	private JMenuItem createQuitItem() {
+		JMenuItem quitItem = new JMenuItem("Quit");
+		quitItem.setMnemonic('q');
+		quitItem.setIcon(getIcon(FileNames.ICON_STOP));
+		quitItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				quitItemAction();
+			}
+		});
+		return quitItem;
 	}
 	
 	protected void quitItemAction() {
