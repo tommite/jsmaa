@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package nl.rug.escher.common;
+package fi.smaa.common;
 
 import java.beans.PropertyChangeEvent;
 

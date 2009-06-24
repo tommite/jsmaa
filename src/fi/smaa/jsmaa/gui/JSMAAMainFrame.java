@@ -63,20 +63,18 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import nl.rug.escher.common.gui.ViewBuilder;
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
 import fi.smaa.common.ImageLoader;
+import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
@@ -749,7 +747,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.startEditingAtPath(leftTreeModel.getPathForCriterion(c));
 	}
 	
-	private void addAlternativeAndStartRename(Alternative a) throws AlternativeExistsException {
+	private void addAlternativeAndStartRename(Alternative a) {
 		model.addAlternative(a);
 		leftTree.setSelectionPath(leftTreeModel.getPathForAlternative(a));
 		leftTree.startEditingAtPath(leftTreeModel.getPathForAlternative(a));			
@@ -798,11 +796,7 @@ public class JSMAAMainFrame extends JFrame {
 				}
 			}
 			if (!found) {
-				try {
-					addAlternativeAndStartRename(a);
-				} catch (AlternativeExistsException e) {
-					throw new RuntimeException("Error: alternative with this name shouldn't exist");
-				}
+				addAlternativeAndStartRename(a);
 				return;
 			}
 			index++;

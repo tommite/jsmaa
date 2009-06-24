@@ -28,7 +28,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -36,13 +35,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.rug.escher.common.JUnitUtil;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
@@ -134,7 +131,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testAddAlternative() throws AlternativeExistsException, NoSuchAlternativeException, NoSuchCriterionException {
+	public void testAddAlternative() throws NoSuchAlternativeException, NoSuchCriterionException {
 		List<Alternative> alts = new ArrayList<Alternative>();
 		Alternative a1 = new Alternative("alt1");
 		alts.add(a1);
@@ -241,7 +238,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testDeepCopy() throws AlternativeExistsException, NoSuchValueException {
+	public void testDeepCopy() throws NoSuchValueException {
 		setupModel();
 		
 		SMAAModel model2 = model.deepCopy();
@@ -256,8 +253,7 @@ public class SMAAModelTest {
 		assertFalse(model.getImpactMatrix() == model2.getImpactMatrix());
 	}
 
-	private void setupModel() throws AlternativeExistsException,
-			NoSuchAlternativeException, NoSuchCriterionException {
+	private void setupModel() throws NoSuchAlternativeException, NoSuchCriterionException {
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");
 		CardinalCriterion c1 = new CardinalCriterion("c1");
@@ -276,7 +272,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testSerialization() throws NoSuchAlternativeException, NoSuchCriterionException, AlternativeExistsException, IOException, ClassNotFoundException {
+	public void testSerialization() throws Exception {
 		setupModel();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oout = new ObjectOutputStream(bos);

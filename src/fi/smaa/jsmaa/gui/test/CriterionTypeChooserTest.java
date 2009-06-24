@@ -26,14 +26,11 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.CriterionTypeChooser;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
-import fi.smaa.jsmaa.model.NoSuchAlternativeException;
-import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class CriterionTypeChooserTest {
@@ -45,7 +42,7 @@ public class CriterionTypeChooserTest {
 	private SMAAModel model;
 	
 	@Before
-	public void setUp() throws NoSuchAlternativeException, NoSuchCriterionException, AlternativeExistsException {
+	public void setUp() throws Exception {
 		setupModel();
 		chooser = new CriterionTypeChooser(matrix, alt, crit);
 	}
@@ -66,7 +63,7 @@ public class CriterionTypeChooserTest {
 		assertTrue(matrix.getMeasurement(crit, alt) instanceof LogNormalMeasurement);	
 	}
 	
-	private void setupModel() throws AlternativeExistsException, NoSuchAlternativeException, NoSuchCriterionException {
+	private void setupModel() throws Exception {
 		model = new SMAAModel("model");
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");

@@ -9,9 +9,9 @@ JSMAA is licensed under GPL(3). See copying for more details.
 
 Files in package:
 -fi.smaa are original to JSMAA, and are (c) Tommi Tervonen.
+-some classes in fi.smaa.common are taken from ADDIS, and are (c) Gert van Valkenhoef & Tommi Tervonen.
 -gfx are icons of JSMAA taken from Eclipse, and are (c) Eclipse foundations
  and of their corresponding authors.
--nl.rug.escher are from ADDIS, and are (c) Gert van Valkenhoef & Tommi Tervonen.
 
 Contact
 =======

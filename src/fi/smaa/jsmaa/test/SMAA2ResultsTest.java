@@ -35,7 +35,6 @@ import org.junit.Test;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.AlternativeExistsException;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 
@@ -56,7 +55,7 @@ public class SMAA2ResultsTest {
 	private List<Criterion> crit;	
 	
 	@Before
-	public void setUp() throws AlternativeExistsException {
+	public void setUp()  {
 		weights1 = new double[]{0.0, 1.0, 0.0};	
 		weights2 = new double[]{1.0, 0.0, 0.0};
 		firstFirst = new Integer[]{0, 1};

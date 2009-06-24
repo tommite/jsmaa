@@ -23,8 +23,6 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import nl.rug.escher.common.gui.LayoutUtil;
-import nl.rug.escher.common.gui.ViewBuilder;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -33,6 +31,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
+import fi.smaa.common.gui.LayoutUtil;
+import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;

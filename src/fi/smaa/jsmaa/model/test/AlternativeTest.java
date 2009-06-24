@@ -20,11 +20,11 @@ package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
 
 public class AlternativeTest {

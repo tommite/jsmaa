@@ -23,7 +23,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
-import nl.rug.escher.common.gui.GUIHelper;
+import fi.smaa.common.gui.GUIHelper;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 import fi.smaa.jsmaa.model.Alternative;

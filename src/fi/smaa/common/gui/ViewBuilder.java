@@ -16,9 +16,12 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model;
+package fi.smaa.common.gui;
 
-public class AlternativeExistsException extends Exception {
-	private static final long serialVersionUID = -4241898557992004237L;
+import javax.swing.JComponent;
+
+public interface ViewBuilder {
+
+	public abstract JComponent buildPanel();
 
 }

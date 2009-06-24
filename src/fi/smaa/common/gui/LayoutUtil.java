@@ -16,12 +16,22 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package nl.rug.escher.common.gui;
+package fi.smaa.common.gui;
 
-import javax.swing.JComponent;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
 
-public interface ViewBuilder {
+public class LayoutUtil {
 
-	public abstract JComponent buildPanel();
+	public static void addColumn(FormLayout layout) {
+		layout.appendColumn(ColumnSpec.decode("3dlu"));
+		layout.appendColumn(ColumnSpec.decode("pref"));
+	}
+
+	public static void addRow(FormLayout layout) {
+		layout.appendRow(RowSpec.decode("3dlu"));
+		layout.appendRow(RowSpec.decode("p"));
+	}
 
 }

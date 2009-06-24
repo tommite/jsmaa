@@ -20,8 +20,6 @@ package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
 
-import nl.rug.escher.common.gui.LayoutUtil;
-import nl.rug.escher.common.gui.ViewBuilder;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -29,6 +27,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import fi.smaa.common.gui.LayoutUtil;
+import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.SMAAModel;
 

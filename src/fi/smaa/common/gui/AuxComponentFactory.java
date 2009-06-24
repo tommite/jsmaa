@@ -16,22 +16,21 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package nl.rug.escher.common.gui;
+package fi.smaa.common.gui;
 
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JComboBox;
 
-public class LayoutUtil {
+import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.AbstractValueModel;
 
-	public static void addColumn(FormLayout layout) {
-		layout.appendColumn(ColumnSpec.decode("3dlu"));
-		layout.appendColumn(ColumnSpec.decode("pref"));
-	}
+public class AuxComponentFactory {
 
-	public static void addRow(FormLayout layout) {
-		layout.appendRow(RowSpec.decode("3dlu"));
-		layout.appendRow(RowSpec.decode("p"));
+	public static <T> JComboBox createBoundComboBox(T[] values, AbstractValueModel model) {
+		SelectionInList<T> typeSelectionInList =
+			new SelectionInList<T>(values, model);
+		JComboBox type = BasicComponentFactory.createComboBox(typeSelectionInList);
+		return type;
 	}
 
 }

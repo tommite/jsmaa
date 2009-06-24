@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package nl.rug.escher.common.gui;
+package fi.smaa.common.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;

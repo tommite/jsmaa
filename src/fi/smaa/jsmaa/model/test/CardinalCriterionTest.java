@@ -19,11 +19,11 @@
 package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.*;
-import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Interval;
 

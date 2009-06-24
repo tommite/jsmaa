@@ -24,10 +24,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import nl.rug.escher.common.JUnitUtil;
 
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.InvalidIntervalException;
 
