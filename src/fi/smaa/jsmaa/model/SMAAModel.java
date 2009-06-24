@@ -76,7 +76,7 @@ public class SMAAModel extends Model {
 		return alternatives;
 	}
 	
-	public void setAlternatives(Collection<Alternative> alts) {
+	public synchronized void setAlternatives(Collection<Alternative> alts) {
 		List<Alternative> altsList = new ArrayList<Alternative>(alts);
 		alternatives = altsList;
 		impactMatrix.setAlternatives(altsList);
@@ -103,7 +103,7 @@ public class SMAAModel extends Model {
 		return criteria;
 	}
 	
-	public void setCriteria(Collection<Criterion> criteria) {
+	public synchronized void setCriteria(Collection<Criterion> criteria) {
 		impactMatrix.removeListener(impactListener);
 		List<Criterion> critList = new ArrayList<Criterion>(criteria);
 		disconnectConnectCriteriaListeners(getCriteria(), critList);
@@ -199,7 +199,7 @@ public class SMAAModel extends Model {
 		return true;
 	}
 	
-	public SMAAModel deepCopy() {
+	public synchronized SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
 		model.setAlternatives(new ArrayList<Alternative>(alternatives));
 		model.setCriteria(new ArrayList<Criterion>(criteria));

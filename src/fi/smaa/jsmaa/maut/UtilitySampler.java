@@ -48,7 +48,6 @@ public class UtilitySampler {
 		assert(target.length == alts.size());
 
 		for (int i=0;i<alts.size();i++) {
-			
 			target[i] = m.getMeasurement(c, alts.get(i)).sample();
 		}
 	}

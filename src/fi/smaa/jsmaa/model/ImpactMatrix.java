@@ -198,7 +198,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	}
 
 	public synchronized void setAlternatives(List<Alternative> alternatives) {
-		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
 		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
 			for (Criterion c : criteria) {
@@ -214,11 +213,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		fireMeasurementTypeChanged();
 	}
 
-	private void disconnectConnectAlternativeListeners(
-			List<Alternative> oldAlts, List<Alternative> newAlts) {
-	}
-	
-
 	public synchronized void setCriteria(List<Criterion> criteria) {
 		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
@@ -228,9 +222,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		}
 		for (Criterion c : criteria) {
 			if (c instanceof CardinalCriterion) {
+				CardinalCriterion cc = (CardinalCriterion) c;
 				for (Alternative a : alternatives) {
-					if (getMeasurement((CardinalCriterion) c, a) == null) {
-						setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
+					if (getMeasurement(cc, a) == null) {
+						setMeasurementNoFires(cc, a, new Interval());
 					}
 				}
 			}
@@ -315,10 +310,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		List<Criterion> crit = new ArrayList<Criterion>();
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Criterion c : criteria) {
-			crit.add(c.deepCopy());
+			crit.add(c);//.deepCopy());
 		}
 		for (Alternative a : alternatives) {
-			alts.add(a.deepCopy());
+			alts.add(a);//.deepCopy());
 		}
 		ImpactMatrix other = new ImpactMatrix(alts, crit);		
 
@@ -330,7 +325,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 					CardinalMeasurement m = 
 						(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
 						.deepCopy();
-					other.setMeasurement((CardinalCriterion) crit.get(cIndex), 
+					other.setMeasurementNoFires((CardinalCriterion) crit.get(cIndex), 
 							alts.get(aIndex), m);
 					aIndex++;
 				}			

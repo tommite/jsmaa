@@ -270,6 +270,21 @@ public class ImpactMatrixTest {
 		
 		assertTrue(m.getAlternatives() != m2.getAlternatives());
 		assertTrue(m.getCriteria() != m2.getCriteria());
+		
+		Alternative na1 = m2.getAlternatives().get(0);
+		Alternative na2 = m2.getAlternatives().get(1);
+		Criterion nc1 = m2.getCriteria().get(0);
+		Criterion nc2 = m2.getCriteria().get(1);		
+		
+		assertEquals(a1.getName(), na1.getName());
+		assertEquals(a2.getName(), na2.getName());
+		assertEquals(c1.getName(), nc1.getName());
+		assertEquals(c2.getName(), nc2.getName());
+		assertEquals(c1.getClass(), nc1.getClass());
+		assertEquals(c2.getClass(), nc2.getClass());
+		
+		Interval ival = (Interval) m2.getMeasurement((CardinalCriterion) nc1, na1);
+		assertEquals(new Interval(0.0, 1.0), ival);
 	}
 	
 	@Test
