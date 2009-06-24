@@ -5,6 +5,15 @@
 	<artifactId>jsmaa</artifactId>
 	<version>0.3-SNAPSHOT</version>
 
+	<build>
+		<sourceDirectory>${basedir}/src</sourceDirectory>
+		<outputDirectory>${basedir}/bin</outputDirectory>
+		<resources>
+			<resource>
+				<directory>${basedir}/resource</directory>
+			</resource>
+		</resources>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.jgoodies</groupId>

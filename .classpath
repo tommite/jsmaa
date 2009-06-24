@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="var" path="M2_REPO/com/jgoodies/binding/2.0.6/binding-2.0.6.jar" sourcepath="M2_REPO/com/jgoodies/binding/2.0.6/binding-2.0.6-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/Users/tommi/.m2/repository/com/jgoodies/binding/2.0.6/binding-2.0.6-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/easymock/easymock/2.4/easymock-2.4.jar" sourcepath="M2_REPO/org/easymock/easymock/2.4/easymock-2.4-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/Users/tommi/.m2/repository/org/easymock/easymock/2.4/easymock-2.4-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/com/jgoodies/forms/1.2.1/forms-1.2.1.jar" sourcepath="M2_REPO/com/jgoodies/forms/1.2.1/forms-1.2.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/Users/tommi/.m2/repository/com/jgoodies/forms/1.2.1/forms-1.2.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/4.6/junit-4.6.jar" sourcepath="M2_REPO/junit/junit/4.6/junit-4.6-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/jgoodies/looks/2.2.1/looks-2.2.1.jar" sourcepath="M2_REPO/com/jgoodies/looks/2.2.1/looks-2.2.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/Users/tommi/.m2/repository/com/jgoodies/looks/2.2.1/looks-2.2.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="src" path="src" including="**/*.java"/>
+  <classpathentry kind="src" path="resource" excluding="**/*.java"/>
+  <classpathentry kind="output" path="bin"/>
+  <classpathentry kind="var" path="M2_REPO/com/jgoodies/binding/2.0.6/binding-2.0.6.jar" sourcepath="M2_REPO/com/jgoodies/binding/2.0.6/binding-2.0.6-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/tommi/.m2/repository/com/jgoodies/binding/2.0.6/binding-2.0.6-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/easymock/easymock/2.4/easymock-2.4.jar" sourcepath="M2_REPO/org/easymock/easymock/2.4/easymock-2.4-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/tommi/.m2/repository/org/easymock/easymock/2.4/easymock-2.4-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/jgoodies/forms/1.2.1/forms-1.2.1.jar" sourcepath="M2_REPO/com/jgoodies/forms/1.2.1/forms-1.2.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/tommi/.m2/repository/com/jgoodies/forms/1.2.1/forms-1.2.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.6/junit-4.6.jar" sourcepath="M2_REPO/junit/junit/4.6/junit-4.6-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/jgoodies/looks/2.2.1/looks-2.2.1.jar" sourcepath="M2_REPO/com/jgoodies/looks/2.2.1/looks-2.2.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/tommi/.m2/repository/com/jgoodies/looks/2.2.1/looks-2.2.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 </classpath>
