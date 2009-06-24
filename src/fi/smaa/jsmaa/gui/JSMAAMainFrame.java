@@ -79,6 +79,7 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAAModelChangeType;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("serial")
@@ -876,39 +877,19 @@ public class JSMAAMainFrame extends JFrame {
 	}			
 
 	private class MySMAAModelListener implements SMAAModelListener {
-
-		public void alternativesChanged() {
+		
+		public void modelChanged(SMAAModelChangeType type) {
 			setModelUnsaved(true);
 			buildNewSimulator();
-			setRightViewToAlternatives();
-			expandLeftMenu();
-		}
-
-		public void criteriaChanged() {
-			setModelUnsaved(true);
-			buildNewSimulator();			
-			setRightViewToCriteria();
-			expandLeftMenu();			
-		}
-
-		public void measurementsChanged() {
-			setModelUnsaved(true);
-			buildNewSimulator();
-			expandLeftMenu();			
-		}
-
-		public void preferencesChanged() {
-			setModelUnsaved(true);
-			buildNewSimulator();			
-			rebuildRightPanel();
-			expandLeftMenu();			
-		}
-
-		public void measurementTypeChanged() {
-			setModelUnsaved(true);
-			buildNewSimulator();			
-			rebuildRightPanel();
-			expandLeftMenu();			
+			if (type == SMAAModelChangeType.ALTERNATIVES) {
+				setRightViewToAlternatives();
+			} else if (type == SMAAModelChangeType.CRITERIA) {
+				setRightViewToCriteria();
+			} else if (type != SMAAModelChangeType.MEASUREMENT) {
+				rebuildRightPanel();
+			}
+			
+			expandLeftMenu();				
 		}
 	}
 

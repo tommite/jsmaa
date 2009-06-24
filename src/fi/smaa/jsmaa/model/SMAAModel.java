@@ -30,14 +30,14 @@ import com.jgoodies.binding.beans.Model;
 
 
 public class SMAAModel extends Model {
-	
-	private static final long serialVersionUID = 6100076809211865658L;
-
 	public final static String PROPERTY_NAME = "name";
-		
+	
 	private String name;
 	private PreferenceInformation preferences;
 	private ImpactMatrix impactMatrix;
+	
+	private static final long serialVersionUID = 6100076809211865658L;
+	
 	transient private List<SMAAModelListener> modelListeners = new ArrayList<SMAAModelListener>();
 	transient private ImpactMatrixListener impactListener = new ImpactListener();
 	transient private CriteriaListener critListener = new CriteriaListener();
@@ -52,7 +52,7 @@ public class SMAAModel extends Model {
 	public void setPreferenceInformation(PreferenceInformation preferences) {
 		this.preferences = preferences;
 		preferences.addPropertyChangeListener(new PreferenceListener());
-		firePreferencesChanged();
+		fireModelChange(SMAAModelChangeType.PREFERENCES);
 	}
 	
 	public void addModelListener(SMAAModelListener l) {
@@ -76,7 +76,7 @@ public class SMAAModel extends Model {
 	public void setAlternatives(Collection<Alternative> alts) {
 		List<Alternative> altsList = new ArrayList<Alternative>(alts);
 		impactMatrix.setAlternatives(altsList);
-		fireAlternativesChanged();
+		fireModelChange(SMAAModelChangeType.ALTERNATIVES);
 	}
 
 	public void setName(String name) {
@@ -105,9 +105,9 @@ public class SMAAModel extends Model {
 		disconnectConnectCriteriaListeners(getCriteria(), critList);
 		impactMatrix.setCriteria(critList);
 		preferences = new MissingPreferenceInformation(getCriteria().size());
-		impactMatrix.addListener(impactListener);		
-		fireCriteriaChanged();
-		firePreferencesChanged();
+		impactMatrix.addListener(impactListener);
+		fireModelChange(SMAAModelChangeType.CRITERIA);
+		fireModelChange(SMAAModelChangeType.PREFERENCES);
 	}
 
 	private void disconnectConnectCriteriaListeners(List<Criterion> oldCriteria,
@@ -213,57 +213,34 @@ public class SMAAModel extends Model {
 		preferences.addPropertyChangeListener(new PreferenceListener());		
 	}	
 	
-	private void firePreferencesChanged() {
+	private void fireModelChange(SMAAModelChangeType type) {
 		for (SMAAModelListener l : modelListeners) {
-			l.preferencesChanged();
+			l.modelChanged(type);
 		}
 	}
 	
-	private void fireAlternativesChanged() {
-		for (SMAAModelListener l : modelListeners) {
-			l.alternativesChanged();
-		}		
-	}
-	
-	private void fireCriteriaChanged() {
-		for (SMAAModelListener l : modelListeners) {
-			l.criteriaChanged();
-		}				
-	}
-	
-	private void fireMeasurementsChanged() {
-		for (SMAAModelListener l : modelListeners) {
-			l.measurementsChanged();
-		}
-	}
-	
-	private void fireMeasurementsTypeChanged() {
-		for (SMAAModelListener l : modelListeners) {
-			l.measurementTypeChanged();
-		}			
-	}
 	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-				fireMeasurementsChanged();
+				fireModelChange(SMAAModelChangeType.MEASUREMENT);
 			} 
 		}
 	}
 	
 	private class ImpactListener implements ImpactMatrixListener {
 		public void measurementChanged() {
-			fireMeasurementsChanged();
+			fireModelChange(SMAAModelChangeType.MEASUREMENT);			
 		}
 
 		public void measurementTypeChanged() {
-			fireMeasurementsTypeChanged();
+			fireModelChange(SMAAModelChangeType.MEASUREMENT_TYPE);
 		}
 	}
 	
 	private class PreferenceListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			firePreferencesChanged();
+			fireModelChange(SMAAModelChangeType.PREFERENCES);			
 		}		
 	}
 	

@@ -30,6 +30,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAAModelChangeType;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("unchecked")
@@ -55,17 +56,11 @@ public class LeftTreeModel implements TreeModel{
 		}
 		this.smaaModel = smaaModel;
 		smaaModel.addModelListener(new SMAAModelListener() {
-			public void alternativesChanged() {
-				fireTreeChange();
-			}
-			public void criteriaChanged() {
-				fireTreeChange();
-			}
-			public void measurementsChanged() {				
-			}
-			public void preferencesChanged() {
-			}
-			public void measurementTypeChanged() {
+			public void modelChanged(SMAAModelChangeType type) {
+				if (type == SMAAModelChangeType.ALTERNATIVES ||
+						type == SMAAModelChangeType.CRITERIA) {
+					fireTreeChange();
+				}
 			}
 		});
 	}

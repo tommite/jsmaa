@@ -18,6 +18,11 @@
 
 package fi.smaa.jsmaa.model;
 
-public interface SMAAModelListener {	
-	public void modelChanged(SMAAModelChangeType type);
+public enum SMAAModelChangeType {
+	
+	CRITERIA,
+	ALTERNATIVES,
+	MEASUREMENT_TYPE,
+	PREFERENCES,
+	MEASUREMENT
 }
