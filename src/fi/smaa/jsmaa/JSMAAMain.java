@@ -26,9 +26,6 @@ import javax.swing.JOptionPane;
 import fi.smaa.common.gui.GUIHelper;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
-import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.SMAAModel;
 
 public class JSMAAMain {
 	
@@ -44,7 +41,7 @@ public class JSMAAMain {
 	
 	private void start() {
 		GUIHelper.initializeLookAndFeel();		
-		app = new JSMAAMainFrame(buildDefaultModel());
+		app = new JSMAAMainFrame(DefaultModels.getSMAA2Model());
 		app.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent evt) {
@@ -52,16 +49,6 @@ public class JSMAAMain {
 			}
 		});		
 		app.setVisible(true);			
-	}
-	
-	private static SMAAModel buildDefaultModel() {
-		SMAAModel model = new SMAAModel("model");
-		model.addCriterion(new CardinalCriterion("Criterion 1"));
-		model.addCriterion(new CardinalCriterion("Criterion 2"));
-		model.addAlternative(new Alternative("Alternative 1"));
-		model.addAlternative(new Alternative("Alternative 2"));			
-		model.addAlternative(new Alternative("Alternative 3"));
-		return model;
 	}
 	
 	private void quitApplication() {

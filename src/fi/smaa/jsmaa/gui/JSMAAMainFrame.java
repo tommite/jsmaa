@@ -70,6 +70,7 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.common.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.SMAASimulator;
@@ -129,7 +130,6 @@ public class JSMAAMainFrame extends JFrame {
 		initFrame();
 		initComponents();
 		initWithModel(model);
-		expandLeftMenu();
 		updateFrameTitle();		
 		pack();	
 	}
@@ -146,6 +146,7 @@ public class JSMAAMainFrame extends JFrame {
 		buildNewSimulator();
 		setRightViewToCriteria();
 		leftTreeFocusCriteria();
+		expandLeftMenu();
 	}	
 	
 	public void setRightViewToCriteria() {
@@ -529,14 +530,14 @@ public class JSMAAMainFrame extends JFrame {
 		newSMAA2Item.setMnemonic('2');
 		newSMAA2Item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
-				newModel(new SMAAModel("SMAA-2 model"));
+				newModel(DefaultModels.getSMAA2Model());
 			}
 		});
 		JMenuItem newSMAATRIItem = new JMenuItem("SMAA-TRI");
 		newSMAATRIItem.setMnemonic('t');
 		newSMAATRIItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
-				newModel(new SMAATRIModel("SMAA-TRI model"));
+				newModel(DefaultModels.getSMAATRIModel());
 			}
 		});
 		
@@ -544,7 +545,7 @@ public class JSMAAMainFrame extends JFrame {
 		newMenu.add(newSMAATRIItem);
 		return newMenu;
 	}
-
+	
 	private JMenuItem createQuitItem() {
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
@@ -571,7 +572,8 @@ public class JSMAAMainFrame extends JFrame {
 		initWithModel(newModel);
 		setCurrentModelFile(null);
 		setModelUnsaved(true);
-		updateFrameTitle();				
+		updateFrameTitle();		
+		expandLeftMenu();
 	}
 
 	private boolean checkSaveCurrentModel() {
