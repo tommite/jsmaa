@@ -81,6 +81,7 @@ import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
+import fi.smaa.jsmaa.model.SMAATRIModel;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
@@ -234,8 +235,12 @@ public class JSMAAMainFrame extends JFrame {
 	}
 		
 	private void initLeftPanel() {
-		leftTreeModel = new LeftTreeModel(model);
-		leftTree = new JTree(new LeftTreeModel(model));
+		if (model instanceof SMAATRIModel) {
+			leftTreeModel = new LeftTreeModelSMAATRI((SMAATRIModel) model);			
+		} else {
+			leftTreeModel = new LeftTreeModel(model);
+		}
+		leftTree = new JTree(leftTreeModel);
 		leftTree.addTreeSelectionListener(new LeftTreeSelectionListener());
 		leftTree.setEditable(true);
 		JScrollPane leftScrollPane = new JScrollPane();
@@ -516,17 +521,27 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private JMenu createFileNewMenu() {
-		JMenu newMenu = new JMenu("New");
+		JMenu newMenu = new JMenu("New model");
 		newMenu.setMnemonic('n');
 		newMenu.setIcon(getIcon(FileNames.ICON_FILENEW));
 		
-		JMenuItem newItem = new JMenuItem("New model");
-		newItem.addActionListener(new AbstractAction() {
+		JMenuItem newSMAA2Item = new JMenuItem("SMAA-2");
+		newSMAA2Item.setMnemonic('2');
+		newSMAA2Item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
-				newModel();
+				newModel(new SMAAModel("SMAA-2 model"));
 			}
-		});		
-		newMenu.add(newItem);
+		});
+		JMenuItem newSMAATRIItem = new JMenuItem("SMAA-TRI");
+		newSMAATRIItem.setMnemonic('t');
+		newSMAATRIItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent arg0) {
+				newModel(new SMAATRIModel("SMAA-TRI model"));
+			}
+		});
+		
+		newMenu.add(newSMAA2Item);
+		newMenu.add(newSMAATRIItem);
 		return newMenu;
 	}
 
@@ -548,12 +563,12 @@ public class JSMAAMainFrame extends JFrame {
 		}
 	}
 
-	private void newModel() {
+	private void newModel(SMAAModel newModel) {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
-		this.model = new SMAAModel("new model");
-		initWithModel(model);
+		this.model = newModel;
+		initWithModel(newModel);
 		setCurrentModelFile(null);
 		setModelUnsaved(true);
 		updateFrameTitle();				

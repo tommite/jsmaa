@@ -77,7 +77,7 @@ public class SMAATRIModelTest {
 		mock.modelChanged(ModelChangeEvent.PROFILES);
 		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
 		replay(mock);
-		model.setProfiles(prof);
+		model.setCategories(prof);
 		verify(mock);
 		assertEquals(prof, model.getCategories());
 	}

@@ -36,19 +36,20 @@ import fi.smaa.jsmaa.model.SMAAModelListener;
 @SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
 	private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
-	private SMAAModel smaaModel;
+	
+	protected SMAAModel smaaModel;
 	
 	private static final int ALTERNATIVES = 0;
 	private static final int CRITERIA = 1;
 	private static final int PREFERENCES = 2;
 	private static final int RESULTS = 3;
 	
-	private String alternativesNode = "Alternatives";
-	private String criteriaNode = "Criteria";
-	private String resultsNode = "Results";
-	private String rankAccNode = "RankAcc";
-	private String centralWeightsNode = "CW";
-	private String preferencesNode = "Preferences";
+	protected String alternativesNode = "Alternatives";
+	protected String criteriaNode = "Criteria";
+	protected String resultsNode = "Results";
+	protected String rankAccNode = "RankAcc";
+	protected String centralWeightsNode = "CW";
+	protected String preferencesNode = "Preferences";
 	
 	public LeftTreeModel(SMAAModel smaaModel) throws NullPointerException {
 		if (smaaModel == null) {
