@@ -231,7 +231,13 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		for (Criterion c : criteria) {
 			if (c instanceof CardinalCriterion) {
 				for (Alternative a : alternatives) {
-					setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
+					try {
+						if (getMeasurement((CardinalCriterion) c, a) == null) {
+							setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
+						}
+					} catch (NoSuchValueException e) {
+						throw new IllegalStateException("ImpactMatrix in illegal state");
+					}
 				}
 			}
 		}

@@ -43,6 +43,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
 import fi.smaa.jsmaa.model.NoSuchAlternativeException;
 import fi.smaa.jsmaa.model.NoSuchCriterionException;
@@ -352,5 +353,19 @@ public class SMAAModelTest {
 		Criterion c = model.getCriteria().get(0);
 		c.setName("ccc");
 		verify(l);
+	}
+	
+	@Test
+	public void testAddCriterionRetainsMeasurements() throws Exception {
+		SMAAModel m = new SMAAModel("model");
+		Alternative a1 = new Alternative("a");
+		CardinalCriterion c1 = new CardinalCriterion("c1");
+		CardinalCriterion c2 = new CardinalCriterion("c2");
+		m.addAlternative(a1);
+		m.addCriterion(c1);
+		m.getImpactMatrix().setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));
+		m.addCriterion(c2);
+		assertEquals(new LogNormalMeasurement(0.0, 0.2),
+				m.getImpactMatrix().getMeasurement(c1, a1));
 	}
 }

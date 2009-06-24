@@ -38,6 +38,7 @@ import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.ImpactMatrixListener;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.InvalidIntervalException;
+import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.NoSuchAlternativeException;
 import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.NoSuchValueException;
@@ -273,6 +274,17 @@ public class ImpactMatrixTest {
 		
 		assertTrue(m.getAlternatives() != m2.getAlternatives());
 		assertTrue(m.getCriteria() != m2.getCriteria());
+	}
+	
+	@Test
+	public void testSetCriteriaKeepsMeasurements() throws Exception {
+		crit = new ArrayList<Criterion>();
+		crit.add(c1);
+		m = new ImpactMatrix(alts, crit);
+		m.setMeasurement(c1, a1, new LogNormalMeasurement(1.0, 0.2));
+		crit.add(c2);
+		m.setCriteria(crit);
+		assertEquals(new LogNormalMeasurement(1.0, 0.2), m.getMeasurement(c1, a1));
 	}
 
 }
