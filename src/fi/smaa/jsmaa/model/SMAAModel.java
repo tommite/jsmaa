@@ -38,6 +38,9 @@ public class SMAAModel extends Model {
 	
 	private static final long serialVersionUID = 6100076809211865658L;
 	
+	private List<Alternative> alternatives = new ArrayList<Alternative>();
+	private List<Criterion> criteria = new ArrayList<Criterion>();
+	
 	transient private List<SMAAModelListener> modelListeners = new ArrayList<SMAAModelListener>();
 	transient private ImpactMatrixListener impactListener = new ImpactListener();
 	transient private CriteriaListener critListener = new CriteriaListener();
@@ -45,7 +48,7 @@ public class SMAAModel extends Model {
 	public SMAAModel(String name) {
 		this.name = name;
 		setPreferenceInformation(new MissingPreferenceInformation(0));
-		impactMatrix = new ImpactMatrix();
+		impactMatrix = new ImpactMatrix(alternatives, criteria);
 		impactMatrix.addListener(impactListener);		
 	}
 
@@ -70,11 +73,12 @@ public class SMAAModel extends Model {
 	}
 
 	public List<Alternative> getAlternatives() {
-		return impactMatrix.getAlternatives();
+		return alternatives;
 	}
 	
 	public void setAlternatives(Collection<Alternative> alts) {
 		List<Alternative> altsList = new ArrayList<Alternative>(alts);
+		alternatives = altsList;
 		impactMatrix.setAlternatives(altsList);
 		fireModelChange(SMAAModelChangeType.ALTERNATIVES);
 	}
@@ -96,13 +100,14 @@ public class SMAAModel extends Model {
 	}
 
 	public List<Criterion> getCriteria() {
-		return impactMatrix.getCriteria();
+		return criteria;
 	}
 	
 	public void setCriteria(Collection<Criterion> criteria) {
 		impactMatrix.removeListener(impactListener);
 		List<Criterion> critList = new ArrayList<Criterion>(criteria);
 		disconnectConnectCriteriaListeners(getCriteria(), critList);
+		this.criteria = critList;
 		impactMatrix.setCriteria(critList);
 		preferences = new MissingPreferenceInformation(getCriteria().size());
 		impactMatrix.addListener(impactListener);
@@ -130,9 +135,13 @@ public class SMAAModel extends Model {
 		crit.add(cri);
 		setCriteria(crit);
 	}
+
+	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas) throws NoSuchAlternativeException, NoSuchCriterionException {
+		impactMatrix.setMeasurement(crit, alt, meas);
+	}
 	
-	public ImpactMatrix getImpactMatrix() {
-		return impactMatrix;
+	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) throws NoSuchAlternativeException, NoSuchCriterionException {
+		return impactMatrix.getMeasurement(crit, alt);
 	}
 	
 	@Override
@@ -141,10 +150,10 @@ public class SMAAModel extends Model {
 	}
 	
 	public String toStringDeep() {
-		String ret = name + " : " + impactMatrix.getAlternatives().size() + 
-			" alternatives - " + impactMatrix.getCriteria().size() + " criteria\n";
-		ret += "Alternatives: " + impactMatrix.getAlternatives() + "\n";
-		ret += "Criteria: " + impactMatrix.getCriteria() + "\n";
+		String ret = name + " : " + alternatives.size() + 
+			" alternatives - " + criteria.size() + " criteria\n";
+		ret += "Alternatives: " + alternatives + "\n";
+		ret += "Criteria: " + criteria + "\n";
 		ret += "Measurements:\n";
 		ret += impactMatrix.toString() + "\n";
 		return ret;
@@ -152,7 +161,7 @@ public class SMAAModel extends Model {
 	
 	public void deleteAlternative(Alternative a) {
 		List<Alternative> newAlts = new ArrayList<Alternative>();
-		newAlts.addAll(impactMatrix.getAlternatives());
+		newAlts.addAll(getAlternatives());
 		if (newAlts.remove(a)) {
 			setAlternatives(newAlts);
 		}
@@ -160,7 +169,7 @@ public class SMAAModel extends Model {
 	
 	public void deleteCriterion(Criterion c) {
 		List<Criterion> newCrit = new ArrayList<Criterion>();
-		newCrit.addAll(impactMatrix.getCriteria());
+		newCrit.addAll(getCriteria());
 		if (newCrit.remove(c)) {
 			setCriteria(newCrit);
 		}		
@@ -192,6 +201,8 @@ public class SMAAModel extends Model {
 	
 	public SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
+		model.setAlternatives(new ArrayList<Alternative>(alternatives));
+		model.setCriteria(new ArrayList<Criterion>(criteria));
 		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy();	
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 		return model;
@@ -199,7 +210,7 @@ public class SMAAModel extends Model {
 	
 	public void setMissingPreferences() {
 		setPreferenceInformation(
-				new MissingPreferenceInformation(impactMatrix.getCriteria().size()));
+				new MissingPreferenceInformation(getCriteria().size()));
 	}
 
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {

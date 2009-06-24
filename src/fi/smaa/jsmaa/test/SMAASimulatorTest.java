@@ -36,7 +36,6 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.InvalidIntervalException;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
@@ -97,17 +96,16 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testEqualRanks() throws InterruptedException, NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
-		ImpactMatrix im = model.getImpactMatrix();
 		// set intervals for cardinal criterion
-		im.setMeasurement(c1, alt1, new Interval(0.0, 0.0));
-		im.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
+		model.setMeasurement(c1, alt1, new Interval(0.0, 0.0));
+		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
 		// set measurements for gaussian criterion
-		im.setMeasurement(c2, alt1, new GaussianMeasurement(0.0, 0.0));
-		im.setMeasurement(c2, alt2, new GaussianMeasurement(0.0, 0.0));
+		model.setMeasurement(c2, alt1, new GaussianMeasurement(0.0, 0.0));
+		model.setMeasurement(c2, alt2, new GaussianMeasurement(0.0, 0.0));
 		
-		im.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
-		im.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
+		model.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
+		model.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
 				
 		SMAASimulator simulator = new SMAASimulator(model, 10000);
 		simulator.restart();
@@ -152,18 +150,17 @@ public class SMAASimulatorTest {
 	}
 
 	private void setCriteriaMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
-		ImpactMatrix im = model.getImpactMatrix();
 		// set interval measurements
-		im.setMeasurement(c1, alt1, new Interval(1.0, 1.0));
-		im.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
+		model.setMeasurement(c1, alt1, new Interval(1.0, 1.0));
+		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
 		// set interval measurements
-		im.setMeasurement(c2, alt1, new Interval(0.0, 0.0));
-		im.setMeasurement(c2, alt2, new Interval(1.0, 1.0));
+		model.setMeasurement(c2, alt1, new Interval(0.0, 0.0));
+		model.setMeasurement(c2, alt2, new Interval(1.0, 1.0));
 		
 		// set gaussian measurements
-		im.setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
-		im.setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
+		model.setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
+		model.setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
 	}
 	
 	@Test
@@ -192,37 +189,35 @@ public class SMAASimulatorTest {
 		model.addCriterion(insomnia);
 		model.addCriterion(nausea);
 		
-		ImpactMatrix m = model.getImpactMatrix();
+		model.setMeasurement(efficacy, fluox, new LogNormalMeasurement(0.0, 0.0));
+		model.setMeasurement(efficacy, parox, new LogNormalMeasurement(0.086, 0.056));
+		model.setMeasurement(efficacy, sert, new LogNormalMeasurement(0.095, 0.044));
+		model.setMeasurement(efficacy, ven, new LogNormalMeasurement(0.113, 0.048));
 		
-		m.setMeasurement(efficacy, fluox, new LogNormalMeasurement(0.0, 0.0));
-		m.setMeasurement(efficacy, parox, new LogNormalMeasurement(0.086, 0.056));
-		m.setMeasurement(efficacy, sert, new LogNormalMeasurement(0.095, 0.044));
-		m.setMeasurement(efficacy, ven, new LogNormalMeasurement(0.113, 0.048));
-		
-		m.setMeasurement(diarrhea, fluox, new GaussianMeasurement(11.7, 2.5));
-		m.setMeasurement(diarrhea, parox, new GaussianMeasurement(9.2, 1.86));
-		m.setMeasurement(diarrhea, sert, new GaussianMeasurement(15.4, 2.65));
-		m.setMeasurement(diarrhea, ven, new GaussianMeasurement(5.5, 2.32));
+		model.setMeasurement(diarrhea, fluox, new GaussianMeasurement(11.7, 2.5));
+		model.setMeasurement(diarrhea, parox, new GaussianMeasurement(9.2, 1.86));
+		model.setMeasurement(diarrhea, sert, new GaussianMeasurement(15.4, 2.65));
+		model.setMeasurement(diarrhea, ven, new GaussianMeasurement(5.5, 2.32));
 
-		m.setMeasurement(dizziness, fluox, new GaussianMeasurement(7.2, 1.45));
-		m.setMeasurement(dizziness, parox, new GaussianMeasurement(10.6, 1.58));
-		m.setMeasurement(dizziness, sert, new GaussianMeasurement(7.5, 1.48));
-		m.setMeasurement(dizziness, ven, new GaussianMeasurement(15.7, 4.44));
+		model.setMeasurement(dizziness, fluox, new GaussianMeasurement(7.2, 1.45));
+		model.setMeasurement(dizziness, parox, new GaussianMeasurement(10.6, 1.58));
+		model.setMeasurement(dizziness, sert, new GaussianMeasurement(7.5, 1.48));
+		model.setMeasurement(dizziness, ven, new GaussianMeasurement(15.7, 4.44));
 		
-		m.setMeasurement(headache, fluox, new GaussianMeasurement(16.6, 3.27));
-		m.setMeasurement(headache, parox, new GaussianMeasurement(21.2, 5.15));
-		m.setMeasurement(headache, sert, new GaussianMeasurement(20.2, 3.78));
-		m.setMeasurement(headache, ven, new GaussianMeasurement(12.8, 2.45));
+		model.setMeasurement(headache, fluox, new GaussianMeasurement(16.6, 3.27));
+		model.setMeasurement(headache, parox, new GaussianMeasurement(21.2, 5.15));
+		model.setMeasurement(headache, sert, new GaussianMeasurement(20.2, 3.78));
+		model.setMeasurement(headache, ven, new GaussianMeasurement(12.8, 2.45));
 		
-		m.setMeasurement(insomnia, fluox, new GaussianMeasurement(13.7, 1.89));
-		m.setMeasurement(insomnia, parox, new GaussianMeasurement(14.3, 2.93));
-		m.setMeasurement(insomnia, sert, new GaussianMeasurement(15.0, 3.21));
-		m.setMeasurement(insomnia, ven, new GaussianMeasurement(11.2, 3.98));
+		model.setMeasurement(insomnia, fluox, new GaussianMeasurement(13.7, 1.89));
+		model.setMeasurement(insomnia, parox, new GaussianMeasurement(14.3, 2.93));
+		model.setMeasurement(insomnia, sert, new GaussianMeasurement(15.0, 3.21));
+		model.setMeasurement(insomnia, ven, new GaussianMeasurement(11.2, 3.98));
 		
-		m.setMeasurement(nausea, fluox, new GaussianMeasurement(18.6, 1.79));
-		m.setMeasurement(nausea, parox, new GaussianMeasurement(18.3, 3.7));
-		m.setMeasurement(nausea, sert, new GaussianMeasurement(19.5, 2.6));
-		m.setMeasurement(nausea, ven, new GaussianMeasurement(31.0, 1.68));
+		model.setMeasurement(nausea, fluox, new GaussianMeasurement(18.6, 1.79));
+		model.setMeasurement(nausea, parox, new GaussianMeasurement(18.3, 3.7));
+		model.setMeasurement(nausea, sert, new GaussianMeasurement(19.5, 2.6));
+		model.setMeasurement(nausea, ven, new GaussianMeasurement(31.0, 1.68));
 		
 		assertEquals(0.98, efficacy.getScale().getStart(), 0.01);
 		assertEquals(1.23, efficacy.getScale().getEnd(), 0.01);

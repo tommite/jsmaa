@@ -23,14 +23,14 @@ import java.util.List;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.SMAAModel;
 
 public class UtilitySampler {
 	private List<Alternative> alts;
-	private ImpactMatrix m;
+	private SMAAModel m;
 	
-	public UtilitySampler(ImpactMatrix m, List<Alternative> alts) {
+	public UtilitySampler(SMAAModel m, List<Alternative> alts) {
 		assert(alts.size() > 0);
 		this.alts = alts;
 		this.m = m;

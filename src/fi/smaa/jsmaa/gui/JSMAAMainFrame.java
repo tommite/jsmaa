@@ -158,7 +158,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 	
 	public void setRightViewToCriterion(Criterion node) {
-		rightViewBuilder = new CriterionView(node, model.getImpactMatrix());
+		rightViewBuilder = new CriterionView(node, model);
 		rebuildRightPanel();
 	}	
 	

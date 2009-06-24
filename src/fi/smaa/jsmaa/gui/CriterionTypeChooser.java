@@ -28,28 +28,28 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.SMAAModel;
 
 @SuppressWarnings("serial")
 public class CriterionTypeChooser extends JComboBox {
 	
 	private static String[] types = {"Interval", "Gaussian", "LogNormal"};
 	
-	private ImpactMatrix matrix;
+	private SMAAModel model;
 	private Alternative alt;
 	private Criterion crit;
 
-	public CriterionTypeChooser(ImpactMatrix matrix, Alternative alt, Criterion crit) {
+	public CriterionTypeChooser(SMAAModel model, Alternative alt, Criterion crit) {
 		super(types);
-		if (matrix == null) {
+		if (model == null) {
 			throw new NullPointerException();
 		}
 		this.alt = alt;
 		this.crit = crit;
-		this.matrix = matrix;
+		this.model = model;
 		updateSelected();
 		addActionListener(new MyListener());
 	}
@@ -58,7 +58,7 @@ public class CriterionTypeChooser extends JComboBox {
 		if (crit instanceof CardinalCriterion) {
 			try {
 				CardinalMeasurement meas = 
-					matrix.getMeasurement((CardinalCriterion) crit, alt);
+					model.getMeasurement((CardinalCriterion) crit, alt);
 				if (meas instanceof Interval) {
 					setSelectedIndex(0);
 				} else if (meas instanceof LogNormalMeasurement) {
@@ -84,7 +84,7 @@ public class CriterionTypeChooser extends JComboBox {
 			throw new IllegalStateException("unknown measurement type");
 		}
 		try {
-			matrix.setMeasurement((CardinalCriterion) crit, alt, newMeas);
+			model.setMeasurement((CardinalCriterion) crit, alt, newMeas);
 		} catch (NoSuchValueException e) {
 			e.printStackTrace();
 		}

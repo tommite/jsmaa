@@ -82,7 +82,7 @@ public class SMAAModelTest {
 		model.setAlternatives(alts);
 		verify(mock);
 		assertEquals(alts, model.getAlternatives());
-		assertEquals(alts, model.getImpactMatrix().getAlternatives());
+		assertEquals(alts, model.getAlternatives());
 	}
 	
 	@Test
@@ -101,7 +101,6 @@ public class SMAAModelTest {
 		verify(mock);
 
 		assertEquals(crit, model.getCriteria());
-		assertEquals(crit, model.getImpactMatrix().getCriteria());		
 	}
 	
 	@Test
@@ -161,7 +160,7 @@ public class SMAAModelTest {
 		
 		assertEquals(alts2, model.getAlternatives());
 		
-		assertNotNull(model.getImpactMatrix().getMeasurement(c, alt2));
+		assertNotNull(model.getMeasurement(c, alt2));
 	}
 	
 	@Test
@@ -252,7 +251,6 @@ public class SMAAModelTest {
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());
 		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
-		assertFalse(model.getImpactMatrix() == model2.getImpactMatrix());
 	}
 
 	private void setupModel() throws NoSuchAlternativeException, NoSuchCriterionException {
@@ -264,7 +262,7 @@ public class SMAAModelTest {
 		model.addAlternative(a2);
 		model.addCriterion(c1);
 		model.addCriterion(c2);
-		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
+		model.setMeasurement(c1, a1, new Interval(0.0, 6.0));
 	}
 	
 	@Test
@@ -364,9 +362,9 @@ public class SMAAModelTest {
 		CardinalCriterion c2 = new CardinalCriterion("c2");
 		m.addAlternative(a1);
 		m.addCriterion(c1);
-		m.getImpactMatrix().setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));
+		m.setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));
 		m.addCriterion(c2);
 		assertEquals(new LogNormalMeasurement(0.0, 0.2),
-				m.getImpactMatrix().getMeasurement(c1, a1));
+				m.getMeasurement(c1, a1));
 	}
 }

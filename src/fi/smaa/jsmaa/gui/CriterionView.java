@@ -20,7 +20,6 @@ package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
 
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -35,17 +34,17 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.SMAAModel;
 
 public class CriterionView implements ViewBuilder {
 	private Criterion criterion;
-	private ImpactMatrix matrix;
+	private SMAAModel model;
 	
-	public CriterionView(Criterion crit, ImpactMatrix matrix) {
+	public CriterionView(Criterion crit, SMAAModel model) {
 		this.criterion = crit;
-		this.matrix = matrix;
+		this.model = model;
 	}
 
 
@@ -121,7 +120,7 @@ public class CriterionView implements ViewBuilder {
 //		}
 		
 		int index = 0;
-		for (Alternative a : matrix.getAlternatives()) {
+		for (Alternative a : model.getAlternatives()) {
 			LayoutUtil.addRow(layout);
 			row += 2;
 			builder.add(BasicComponentFactory.createLabel(
@@ -129,7 +128,7 @@ public class CriterionView implements ViewBuilder {
 					cc.xy(1, row));
 			if (criterion instanceof CardinalCriterion) {
 				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
-				CardinalMeasurement m = matrix.getMeasurement(cardCrit, a);
+				CardinalMeasurement m = model.getMeasurement(cardCrit, a);
 				JComponent measComp = null;
 				if (m instanceof Interval) {
 					Interval ival = (Interval) m;
@@ -140,7 +139,7 @@ public class CriterionView implements ViewBuilder {
 				             new PresentationModel<GaussianMeasurement>(gm));
 				}
 				builder.add(measComp, cc.xy(3, row));				
-				CriterionTypeChooser chooser = new CriterionTypeChooser(matrix, a, criterion);
+				CriterionTypeChooser chooser = new CriterionTypeChooser(model, a, criterion);
 				builder.add(chooser, cc.xy(5, row));			
 			}
 			index++;
