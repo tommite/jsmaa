@@ -108,6 +108,7 @@
 		<junit fork="yes" printsummary="withOutAndErr" haltonfailure="true">
 			<formatter type="xml"/>
 			<classpath>
+				<pathelement location="resource/" />
 				<pathelement location="bin/" />
 				<path refid="test.classpath" />	
 			</classpath>
