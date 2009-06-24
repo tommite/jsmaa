@@ -201,9 +201,17 @@ public class SMAAModel extends Model {
 	
 	public synchronized SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
-		model.setAlternatives(new ArrayList<Alternative>(alternatives));
-		model.setCriteria(new ArrayList<Criterion>(criteria));
-		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy();	
+		List<Alternative> alts = new ArrayList<Alternative>();
+		List<Criterion> crit = new ArrayList<Criterion>();
+		for (Alternative a : alternatives) {
+			alts.add(a.deepCopy());
+		}
+		for (Criterion c : criteria) {
+			crit.add(c.deepCopy());
+		}
+		model.setAlternatives(alts);
+		model.setCriteria(crit);
+		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(alts, crit);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 		return model;
 	}

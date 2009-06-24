@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.smaa.common.DeepCopiable;
-
-public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
+public class ImpactMatrix implements Serializable {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	private List<Criterion> criteria = new ArrayList<Criterion>();
@@ -302,19 +300,8 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			l.measurementTypeChanged();
 		}
 	}	
-		
-	/**
-	 * Doesn't deep copy each alternative and criterion.
-	 */
-	public synchronized ImpactMatrix deepCopy() {
-		List<Criterion> crit = new ArrayList<Criterion>();
-		List<Alternative> alts = new ArrayList<Alternative>();
-		for (Criterion c : criteria) {
-			crit.add(c);//.deepCopy());
-		}
-		for (Alternative a : alternatives) {
-			alts.add(a);//.deepCopy());
-		}
+
+	public synchronized ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
 		ImpactMatrix other = new ImpactMatrix(alts, crit);		
 
 		int cIndex = 0;
@@ -332,6 +319,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			}
 			cIndex++;
 		}
-		return other;
+		return other;		
 	}
 }
