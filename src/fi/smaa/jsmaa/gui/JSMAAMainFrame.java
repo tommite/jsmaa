@@ -580,7 +580,7 @@ public class JSMAAMainFrame extends JFrame {
 		this.model = newModel;
 		initWithModel(newModel);
 		setCurrentModelFile(null);
-		setModelUnsaved(true);
+		setModelUnsaved(false);
 		updateFrameTitle();		
 		expandLeftMenu();
 	}
