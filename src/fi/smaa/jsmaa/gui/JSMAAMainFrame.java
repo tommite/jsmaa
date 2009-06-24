@@ -298,6 +298,10 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode()}));
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode()}));
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getResultsNode()}));
+		if (leftTreeModel instanceof LeftTreeModelSMAATRI) {
+			LeftTreeModelSMAATRI sltModel = (LeftTreeModelSMAATRI) leftTreeModel;
+			leftTree.expandPath(new TreePath(new Object[]{sltModel.getRoot(), sltModel.getCategoriesNode()}));			
+		}
 	}
 	
 	public void setMinimalFrame() {

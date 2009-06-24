@@ -35,6 +35,10 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 		super(smaaModel);
 	}
 	
+	public Object getCategoriesNode() {
+		return categoriesNode;
+	}
+	
 	@Override
 	public Object getChild(Object parent, int index) {
 		if (parent == getRoot()) {
