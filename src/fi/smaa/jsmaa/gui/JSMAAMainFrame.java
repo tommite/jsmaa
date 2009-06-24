@@ -130,7 +130,8 @@ public class JSMAAMainFrame extends JFrame {
 		initFrame();
 		initComponents();
 		initWithModel(model);
-		updateFrameTitle();		
+		setModelUnsaved(false);
+		updateFrameTitle();
 		pack();	
 	}
 	
@@ -176,7 +177,7 @@ public class JSMAAMainFrame extends JFrame {
 
 	private void updateFrameTitle() {
 		String appString = getFrameTitleBase();
-		String file = "Untitled model";
+		String file = "Unsaved model";
 		
 		if (currentModelFile != null) {
 			try {
