@@ -61,6 +61,8 @@
             </pathconvert>
 
 			<jar destfile="dist/jsmaa.jar" basedir="bin" excludes="**/test/*">
+				<fileset dir="resource">
+				</fileset>
 				<manifest>
 					<attribute name="Main-Class" value="fi.smaa.jsmaa.JSMAAMain" />
 					<attribute name="Class-Path" value="${dist-class-path}" />
