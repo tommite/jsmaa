@@ -79,7 +79,7 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.SMAAModelChangeType;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("serial")
@@ -878,14 +878,14 @@ public class JSMAAMainFrame extends JFrame {
 
 	private class MySMAAModelListener implements SMAAModelListener {
 		
-		public void modelChanged(SMAAModelChangeType type) {
+		public void modelChanged(ModelChangeEvent type) {
 			setModelUnsaved(true);
 			buildNewSimulator();
-			if (type == SMAAModelChangeType.ALTERNATIVES) {
+			if (type == ModelChangeEvent.ALTERNATIVES) {
 				setRightViewToAlternatives();
-			} else if (type == SMAAModelChangeType.CRITERIA) {
+			} else if (type == ModelChangeEvent.CRITERIA) {
 				setRightViewToCriteria();
-			} else if (type != SMAAModelChangeType.MEASUREMENT) {
+			} else if (type != ModelChangeEvent.MEASUREMENT) {
 				rebuildRightPanel();
 			}
 			

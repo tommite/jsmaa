@@ -42,7 +42,7 @@ public class SMAAModel extends Model {
 	private List<Criterion> criteria = new ArrayList<Criterion>();
 	
 	transient private List<SMAAModelListener> modelListeners = new ArrayList<SMAAModelListener>();
-	transient private ImpactMatrixListener impactListener = new ImpactListener();
+	transient protected ImpactMatrixListener impactListener = new ImpactListener();
 	transient private CriteriaListener critListener = new CriteriaListener();
 	
 	public SMAAModel(String name) {
@@ -55,7 +55,7 @@ public class SMAAModel extends Model {
 	public void setPreferenceInformation(PreferenceInformation preferences) {
 		this.preferences = preferences;
 		preferences.addPropertyChangeListener(new PreferenceListener());
-		fireModelChange(SMAAModelChangeType.PREFERENCES);
+		fireModelChange(ModelChangeEvent.PREFERENCES);
 	}
 	
 	public void addModelListener(SMAAModelListener l) {
@@ -80,7 +80,7 @@ public class SMAAModel extends Model {
 		List<Alternative> altsList = new ArrayList<Alternative>(alts);
 		alternatives = altsList;
 		impactMatrix.setAlternatives(altsList);
-		fireModelChange(SMAAModelChangeType.ALTERNATIVES);
+		fireModelChange(ModelChangeEvent.ALTERNATIVES);
 	}
 
 	public void setName(String name) {
@@ -111,8 +111,8 @@ public class SMAAModel extends Model {
 		impactMatrix.setCriteria(critList);
 		preferences = new MissingPreferenceInformation(getCriteria().size());
 		impactMatrix.addListener(impactListener);
-		fireModelChange(SMAAModelChangeType.CRITERIA);
-		fireModelChange(SMAAModelChangeType.PREFERENCES);
+		fireModelChange(ModelChangeEvent.CRITERIA);
+		fireModelChange(ModelChangeEvent.PREFERENCES);
 	}
 
 	private void disconnectConnectCriteriaListeners(List<Criterion> oldCriteria,
@@ -224,7 +224,7 @@ public class SMAAModel extends Model {
 		preferences.addPropertyChangeListener(new PreferenceListener());		
 	}	
 	
-	private void fireModelChange(SMAAModelChangeType type) {
+	protected void fireModelChange(ModelChangeEvent type) {
 		for (SMAAModelListener l : modelListeners) {
 			l.modelChanged(type);
 		}
@@ -234,24 +234,24 @@ public class SMAAModel extends Model {
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
-				fireModelChange(SMAAModelChangeType.MEASUREMENT);
+				fireModelChange(ModelChangeEvent.MEASUREMENT);
 			} 
 		}
 	}
 	
 	private class ImpactListener implements ImpactMatrixListener {
 		public void measurementChanged() {
-			fireModelChange(SMAAModelChangeType.MEASUREMENT);			
+			fireModelChange(ModelChangeEvent.MEASUREMENT);			
 		}
 
 		public void measurementTypeChanged() {
-			fireModelChange(SMAAModelChangeType.MEASUREMENT_TYPE);
+			fireModelChange(ModelChangeEvent.MEASUREMENT_TYPE);
 		}
 	}
 	
 	private class PreferenceListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			fireModelChange(SMAAModelChangeType.PREFERENCES);			
+			fireModelChange(ModelChangeEvent.PREFERENCES);			
 		}		
 	}
 	

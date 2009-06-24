@@ -18,11 +18,11 @@
 
 package fi.smaa.jsmaa.model;
 
-public enum SMAAModelChangeType {
-	
+public enum ModelChangeEvent {
 	CRITERIA,
 	ALTERNATIVES,
 	MEASUREMENT_TYPE,
 	PREFERENCES,
-	MEASUREMENT
+	MEASUREMENT,
+	PROFILES
 }

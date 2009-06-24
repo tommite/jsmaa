@@ -19,5 +19,5 @@
 package fi.smaa.jsmaa.model;
 
 public interface SMAAModelListener {	
-	public void modelChanged(SMAAModelChangeType type);
+	public void modelChanged(ModelChangeEvent type);
 }

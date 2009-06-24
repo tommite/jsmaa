@@ -51,7 +51,7 @@ import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.SMAAModelChangeType;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 public class SMAAModelTest {
@@ -76,8 +76,8 @@ public class SMAAModelTest {
 		
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.ALTERNATIVES);
-		mock.modelChanged(SMAAModelChangeType.MEASUREMENT_TYPE);
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
 		replay(mock);
 		model.setAlternatives(alts);
 		verify(mock);
@@ -93,8 +93,8 @@ public class SMAAModelTest {
 		
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
-		mock.modelChanged(SMAAModelChangeType.PREFERENCES);
-		mock.modelChanged(SMAAModelChangeType.CRITERIA);		
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);
+		mock.modelChanged(ModelChangeEvent.CRITERIA);		
 		replay(mock);
 		
 		model.setCriteria(crit);
@@ -107,7 +107,7 @@ public class SMAAModelTest {
 	public void testSetPreferenceInformation() {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.PREFERENCES);		
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		replay(mock);
 		MissingPreferenceInformation pref = new MissingPreferenceInformation(model.getAlternatives().size());
 		model.setPreferenceInformation(pref);
@@ -124,7 +124,7 @@ public class SMAAModelTest {
 		ranks.add(new Rank(2));
 		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));		
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.PREFERENCES);		
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		expectLastCall().anyTimes();
 		replay(mock);
 		r1.setRank(2);
@@ -144,9 +144,9 @@ public class SMAAModelTest {
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.ALTERNATIVES);
-		mock.modelChanged(SMAAModelChangeType.MEASUREMENT_TYPE);
-		mock.modelChanged(SMAAModelChangeType.MEASUREMENT);
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT);
 		expectLastCall().anyTimes();
 		replay(mock);
 		
@@ -178,8 +178,8 @@ public class SMAAModelTest {
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.CRITERIA);
-		mock.modelChanged(SMAAModelChangeType.PREFERENCES);		
+		mock.modelChanged(ModelChangeEvent.CRITERIA);
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		replay(mock);
 		
 		List<Criterion> crit2 = new ArrayList<Criterion>();
@@ -202,8 +202,8 @@ public class SMAAModelTest {
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.ALTERNATIVES);		
-		mock.modelChanged(SMAAModelChangeType.MEASUREMENT_TYPE);		
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);		
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);		
 		replay(mock);
 		
 		List<Alternative> alts2 = new ArrayList<Alternative>();
@@ -226,8 +226,8 @@ public class SMAAModelTest {
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(SMAAModelChangeType.CRITERIA);
-		mock.modelChanged(SMAAModelChangeType.PREFERENCES);
+		mock.modelChanged(ModelChangeEvent.CRITERIA);
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);
 		replay(mock);
 		
 		List<Criterion> crit2 = new ArrayList<Criterion>();
@@ -298,7 +298,7 @@ public class SMAAModelTest {
 		
 		SMAAModelListener l = createMock(SMAAModelListener.class);
 		newModel.addModelListener(l);
-		l.modelChanged(SMAAModelChangeType.PREFERENCES);
+		l.modelChanged(ModelChangeEvent.PREFERENCES);
 		expectLastCall().anyTimes();
 		replay(l);
 		OrdinalPreferenceInformation pref = (OrdinalPreferenceInformation) newModel.getPreferenceInformation();
@@ -336,7 +336,7 @@ public class SMAAModelTest {
 		
 		SMAAModelListener l = createMock(SMAAModelListener.class);
 		newModel.addModelListener(l);
-		l.modelChanged(SMAAModelChangeType.MEASUREMENT);
+		l.modelChanged(ModelChangeEvent.MEASUREMENT);
 		replay(l);
 		CardinalCriterion c = (CardinalCriterion) newModel.getCriteria().get(0);
 		c.setAscending(false);

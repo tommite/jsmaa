@@ -27,7 +27,7 @@ import com.jgoodies.binding.value.AbstractValueModel;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.SMAAModelChangeType;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("serial")
@@ -71,12 +71,12 @@ public class SMAAModelPreferencePresentationModel extends PresentationModel<SMAA
 	}
 	
 	private class ModelChangeListener implements SMAAModelListener {
-		public void modelChanged(SMAAModelChangeType type) {
-			if (type == SMAAModelChangeType.PREFERENCES) {
+		public void modelChanged(ModelChangeEvent type) {
+			if (type == ModelChangeEvent.PREFERENCES) {
 				firePropertyChange(ORDINAL_ENABLED, 
 						null,
 						getBean().getPreferenceInformation() instanceof OrdinalPreferenceInformation);										
-			} else if (type == SMAAModelChangeType.CRITERIA) {
+			} else if (type == ModelChangeEvent.CRITERIA) {
 				initOrdinalRanks(getBean());
 			}
 		}
