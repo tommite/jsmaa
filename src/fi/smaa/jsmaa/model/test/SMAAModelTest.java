@@ -45,13 +45,10 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
-import fi.smaa.jsmaa.model.NoSuchAlternativeException;
-import fi.smaa.jsmaa.model.NoSuchCriterionException;
-import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 public class SMAAModelTest {
@@ -132,7 +129,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testAddAlternative() throws NoSuchAlternativeException, NoSuchCriterionException {
+	public void testAddAlternative() {
 		List<Alternative> alts = new ArrayList<Alternative>();
 		Alternative a1 = new Alternative("alt1");
 		alts.add(a1);
@@ -239,7 +236,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testDeepCopy() throws NoSuchValueException {
+	public void testDeepCopy() {
 		setupModel();
 		
 		SMAAModel model2 = model.deepCopy();
@@ -253,7 +250,7 @@ public class SMAAModelTest {
 		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
 	}
 
-	private void setupModel() throws NoSuchAlternativeException, NoSuchCriterionException {
+	private void setupModel() {
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");
 		CardinalCriterion c1 = new CardinalCriterion("c1");

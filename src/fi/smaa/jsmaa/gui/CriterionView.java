@@ -35,7 +35,6 @@ import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class CriterionView implements ViewBuilder {
@@ -73,12 +72,7 @@ public class CriterionView implements ViewBuilder {
 		
 		int row = 5;
 		row = buildScalePart(layout, builder, cc, row, fullWidth);
-		try {
-			buildMeasurementsPart(layout, fullWidth, builder, cc, row);
-		} catch (NoSuchValueException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		buildMeasurementsPart(layout, fullWidth, builder, cc, row);
 			
 		return builder.getPanel();
 	}
@@ -106,7 +100,7 @@ public class CriterionView implements ViewBuilder {
 	}
 
 	private void buildMeasurementsPart(FormLayout layout, int fullWidth,
-			PanelBuilder builder, CellConstraints cc, int row) throws NoSuchValueException {
+			PanelBuilder builder, CellConstraints cc, int row) {
 		row += 2;
 		builder.addSeparator("Measurements", cc.xyw(1, row, fullWidth));
 		row += 2;

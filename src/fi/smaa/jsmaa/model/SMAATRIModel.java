@@ -52,13 +52,11 @@ public class SMAATRIModel extends SMAAModel {
 	}
 		
 	public void setCategoryUpperBound(CardinalCriterion crit, 
-			Alternative category, CardinalMeasurement meas) 
-	throws NoSuchAlternativeException, NoSuchCriterionException {
+			Alternative category, CardinalMeasurement meas) {
 		profileMatrix.setMeasurement(crit, category, meas);
 	}
 	
-	public CardinalMeasurement getCategoryUpperBound(CardinalCriterion crit, Alternative category) 
-	throws NoSuchAlternativeException, NoSuchCriterionException {
+	public CardinalMeasurement getCategoryUpperBound(CardinalCriterion crit, Alternative category) {
 		return profileMatrix.getMeasurement(crit, category);
 	}
 	

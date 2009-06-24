@@ -23,7 +23,6 @@ import java.util.List;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class UtilitySampler {
@@ -36,7 +35,7 @@ public class UtilitySampler {
 		this.m = m;
 	}
 	
-	public void sample(Criterion crit, double[] target) throws NoSuchValueException {
+	public void sample(Criterion crit, double[] target) {
 		if (crit instanceof CardinalCriterion) {
 			sample((CardinalCriterion) crit, target);
 		} else {
@@ -45,7 +44,7 @@ public class UtilitySampler {
 	}
 
 
-	public void sample(CardinalCriterion c, double[] target) throws NoSuchValueException {
+	public void sample(CardinalCriterion c, double[] target) {
 		assert(target.length == alts.size());
 
 		for (int i=0;i<alts.size();i++) {

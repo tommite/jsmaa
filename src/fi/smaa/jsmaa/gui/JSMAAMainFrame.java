@@ -471,14 +471,7 @@ public class JSMAAMainFrame extends JFrame {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
 
-		JMenuItem newItem = new JMenuItem("New model");
-		newItem.setMnemonic('n');
-		newItem.setIcon(getIcon(FileNames.ICON_FILENEW));
-		newItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent arg0) {
-				newModel();
-			}
-		});
+		JMenu newItem = createFileNewMenu();
 		
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.setMnemonic('s');
@@ -520,6 +513,21 @@ public class JSMAAMainFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);		
 		return fileMenu;
+	}
+
+	private JMenu createFileNewMenu() {
+		JMenu newMenu = new JMenu("New");
+		newMenu.setMnemonic('n');
+		newMenu.setIcon(getIcon(FileNames.ICON_FILENEW));
+		
+		JMenuItem newItem = new JMenuItem("New model");
+		newItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent arg0) {
+				newModel();
+			}
+		});		
+		newMenu.add(newItem);
+		return newMenu;
 	}
 
 	private JMenuItem createQuitItem() {

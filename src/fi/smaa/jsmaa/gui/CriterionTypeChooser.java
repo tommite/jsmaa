@@ -30,7 +30,6 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
-import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 @SuppressWarnings("serial")
@@ -56,18 +55,14 @@ public class CriterionTypeChooser extends JComboBox {
 
 	private void updateSelected() {
 		if (crit instanceof CardinalCriterion) {
-			try {
-				CardinalMeasurement meas = 
-					model.getMeasurement((CardinalCriterion) crit, alt);
-				if (meas instanceof Interval) {
-					setSelectedIndex(0);
-				} else if (meas instanceof LogNormalMeasurement) {
-					setSelectedIndex(2);
-				} else if (meas instanceof GaussianMeasurement) {
-					setSelectedIndex(1);
-				}
-			} catch (NoSuchValueException e) {
-				e.printStackTrace();
+			CardinalMeasurement meas = 
+				model.getMeasurement((CardinalCriterion) crit, alt);
+			if (meas instanceof Interval) {
+				setSelectedIndex(0);
+			} else if (meas instanceof LogNormalMeasurement) {
+				setSelectedIndex(2);
+			} else if (meas instanceof GaussianMeasurement) {
+				setSelectedIndex(1);
 			}
 		}
 	}
@@ -83,11 +78,7 @@ public class CriterionTypeChooser extends JComboBox {
 		} else {
 			throw new IllegalStateException("unknown measurement type");
 		}
-		try {
-			model.setMeasurement((CardinalCriterion) crit, alt, newMeas);
-		} catch (NoSuchValueException e) {
-			e.printStackTrace();
-		}
+		model.setMeasurement((CardinalCriterion) crit, alt, newMeas);
 	}
 	
 	private class MyListener extends AbstractAction {

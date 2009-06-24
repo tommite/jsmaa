@@ -37,10 +37,7 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.InvalidIntervalException;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
-import fi.smaa.jsmaa.model.NoSuchAlternativeException;
-import fi.smaa.jsmaa.model.NoSuchCriterionException;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 
@@ -95,7 +92,7 @@ public class SMAASimulatorTest {
 	}	
 	
 	@Test
-	public void testEqualRanks() throws InterruptedException, NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+	public void testEqualRanks() throws InterruptedException {
 		// set intervals for cardinal criterion
 		model.setMeasurement(c1, alt1, new Interval(0.0, 0.0));
 		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
@@ -129,7 +126,7 @@ public class SMAASimulatorTest {
 	}
 	
 	@Test
-	public void testCorrectResults() throws InterruptedException, NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+	public void testCorrectResults() throws InterruptedException {
 		setCriteriaMeasurements();
 		
 		SMAASimulator simulator = new SMAASimulator(model, 10000);
@@ -149,7 +146,7 @@ public class SMAASimulatorTest {
 		
 	}
 
-	private void setCriteriaMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+	private void setCriteriaMeasurements() {
 		// set interval measurements
 		model.setMeasurement(c1, alt1, new Interval(1.0, 1.0));
 		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
@@ -164,7 +161,7 @@ public class SMAASimulatorTest {
 	}
 	
 	@Test
-	public void testCorrectResultsWithBRModel() throws NoSuchAlternativeException, NoSuchCriterionException, InterruptedException {
+	public void testCorrectResultsWithBRModel() throws InterruptedException {
 		Alternative parox = new Alternative("Paroxetine");
 		Alternative fluox = new Alternative("Fluoxetine");
 		Alternative sert = new Alternative("Sertraline");

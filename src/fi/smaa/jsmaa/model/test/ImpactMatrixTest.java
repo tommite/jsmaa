@@ -37,11 +37,7 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.ImpactMatrixListener;
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.InvalidIntervalException;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
-import fi.smaa.jsmaa.model.NoSuchAlternativeException;
-import fi.smaa.jsmaa.model.NoSuchCriterionException;
-import fi.smaa.jsmaa.model.NoSuchValueException;
 
 public class ImpactMatrixTest {
 	
@@ -118,7 +114,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testAddCriterionSetsMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException {
+	public void testAddCriterionSetsMeasurements() {
 		CardinalCriterion c = new CardinalCriterion("cx");
 		m.setCriteria(crit);
 		m.setAlternatives(alts);		
@@ -146,14 +142,14 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testSetCardinalMeasurement() throws NoSuchValueException {
+	public void testSetCardinalMeasurement() {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 0.2));
 		assertEquals(new Interval(0.0, 0.2), m.getMeasurement(c1, a1));
 	}
 	
 	@Test
-	public void testScalesSetCorrectly() throws NoSuchValueException {
+	public void testScalesSetCorrectly() {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 2.0));
 		m.setMeasurement(c1, a2, new GaussianMeasurement(0.0, 1.0));
@@ -163,7 +159,7 @@ public class ImpactMatrixTest {
 	
 	
 	@Test
-	public void testMeasurementListenerFires() throws NoSuchValueException {
+	public void testMeasurementListenerFires() {
 		ImpactMatrixListener mock = EasyMock.createMock(ImpactMatrixListener.class);
 		mock.measurementChanged();
 		EasyMock.expectLastCall().times(1);		
@@ -177,7 +173,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testCriterionNameChangePropagates() throws NoSuchValueException {
+	public void testCriterionNameChangePropagates() {
 		m.setCriteria(crit);
 		m.setAlternatives(alts);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
@@ -198,7 +194,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testCriterionNameChangeMaintainsMeasurements() throws NoSuchAlternativeException, NoSuchCriterionException {
+	public void testCriterionNameChangeMaintainsMeasurements() {
 		m.setCriteria(crit);
 		m.setAlternatives(alts);
 		m.setMeasurement(c1, a1, new Interval());
@@ -213,7 +209,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testAlternativeNameChangePropagates() throws NoSuchValueException {
+	public void testAlternativeNameChangePropagates() {
 		m.setCriteria(crit);
 		m.setAlternatives(alts);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
@@ -222,7 +218,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testScalesChangeOnMeasurementChange() throws NoSuchValueException {
+	public void testScalesChangeOnMeasurementChange() {
 		m = new ImpactMatrix(alts, crit);
 		Interval meas = new Interval(0.0, 2.0);
 		m.setMeasurement(c1, a1, meas);
@@ -231,7 +227,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testMeasurementListenerFiresOnSet() throws NoSuchValueException {
+	public void testMeasurementListenerFiresOnSet() {
 		ImpactMatrixListener mock = EasyMock.createMock(ImpactMatrixListener.class);
 		mock.measurementTypeChanged();
 		m = new ImpactMatrix(alts, crit);
@@ -243,7 +239,7 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
-	public void testEquals() throws NoSuchAlternativeException, NoSuchCriterionException, InvalidIntervalException {
+	public void testEquals() {
 		m = new ImpactMatrix(alts, crit);
 		ImpactMatrix m2 = new ImpactMatrix(alts, crit);
 		assertTrue(m.equals(m2));
@@ -264,7 +260,7 @@ public class ImpactMatrixTest {
 	}
 
 	@Test
-	public void testDeepCopy() throws NoSuchValueException {
+	public void testDeepCopy() {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy();

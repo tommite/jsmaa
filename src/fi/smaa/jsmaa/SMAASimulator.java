@@ -29,7 +29,6 @@ import fi.smaa.jsmaa.maut.UtilitySampler;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.NoSuchValueException;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -198,11 +197,7 @@ public class SMAASimulator {
 
 	private void sampleCriteria() {
 		for (int i=0;i<crits.size();i++) {
-			try {
-				sampler.sample(crits.get(i), measurements[i]);
-			} catch (NoSuchValueException e) {
-				e.printStackTrace();
-			}
+			sampler.sample(crits.get(i), measurements[i]);
 		}
 	}
 
