@@ -160,7 +160,11 @@ public class JSMAAMainFrame extends JFrame {
 	}
 	
 	public void setRightViewToCriterion(Criterion node) {
-		rightViewBuilder = new CriterionView(node, model);
+		if (model instanceof SMAATRIModel) {
+			rightViewBuilder = new CriterionViewWithProfiles(node, (SMAATRIModel) model);			
+		} else {
+			rightViewBuilder = new CriterionView(node, model);
+		}
 		rebuildRightPanel();
 	}	
 	

@@ -38,8 +38,8 @@ import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class CriterionView implements ViewBuilder {
-	private Criterion criterion;
-	private SMAAModel model;
+	protected Criterion criterion;
+	protected SMAAModel model;
 	
 	public CriterionView(Criterion crit, SMAAModel model) {
 		this.criterion = crit;
@@ -99,7 +99,7 @@ public class CriterionView implements ViewBuilder {
 		return row;
 	}
 
-	private void buildMeasurementsPart(FormLayout layout, int fullWidth,
+	protected int buildMeasurementsPart(FormLayout layout, int fullWidth,
 			PanelBuilder builder, CellConstraints cc, int row) {
 		row += 2;
 		builder.addSeparator("Measurements", cc.xyw(1, row, fullWidth));
@@ -138,5 +138,6 @@ public class CriterionView implements ViewBuilder {
 			}
 			index++;
 		}
+		return row;
 	}
 }
