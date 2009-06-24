@@ -21,6 +21,7 @@ package fi.smaa.jsmaa.test;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -73,6 +74,7 @@ public class SMAA2ResultsTest {
 	
 	@Test
 	public void testConfidenceFactors() {
+		fail();
 		boolean[] hit = new boolean[2];
 		for (int i=0;i<10;i++) {
 			results.confidenceUpdate(hit);
