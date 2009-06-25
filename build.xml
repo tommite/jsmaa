@@ -73,7 +73,7 @@
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src" excludes="**/*.launch, **/*.java"/>
+		<fileset dir="resource" />
         </copy>
     </target>
     <target name="clean">
