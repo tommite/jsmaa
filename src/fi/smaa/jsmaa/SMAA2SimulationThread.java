@@ -23,7 +23,6 @@ import java.util.Map;
 
 import fi.smaa.jsmaa.maut.UtilIndexPair;
 import fi.smaa.jsmaa.maut.UtilityFunction;
-import fi.smaa.jsmaa.maut.UtilitySampler;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
@@ -34,15 +33,10 @@ public class SMAA2SimulationThread extends SimulationThread {
 	
 	private SMAA2Results results;
 	private boolean[] confidenceHits;
-	private double[] weights;
-	private double[][] measurements;
 	private double[] utilities;
 	private Integer[] ranks;
-	private UtilitySampler sampler;
-	private SMAAModel model;
-
 	public SMAA2SimulationThread(SMAAModel model, int iterations) {
-		this.model = model;
+		super(model);
 		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 10);		
 		reset();
 		
@@ -153,24 +147,15 @@ public class SMAA2SimulationThread extends SimulationThread {
 		Arrays.fill(utilities, 0.0);
 	}
 
-	private void sampleCriteria() {
-		for (int i=0;i<model.getCriteria().size();i++) {
-			sampler.sample(model.getCriteria().get(i), measurements[i]);
-		}
-	}
-
 	private void generateWeights() {
 		weights = model.getPreferenceInformation().sampleWeights();
 	}
 	
 
 	public void reset() {
+		super.reset();
 		results.reset();
-		sampler = new UtilitySampler(model, model.getAlternatives());		
 		int numAlts = model.getAlternatives().size();
-		int numCrit = model.getCriteria().size();
-		weights = new double[numCrit];
-		measurements = new double[numCrit][numAlts];
 		utilities = new double[numAlts];
 		ranks = new Integer[numAlts];
 		confidenceHits = new boolean[numAlts];

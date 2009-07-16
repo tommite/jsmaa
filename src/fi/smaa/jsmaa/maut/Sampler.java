@@ -25,11 +25,11 @@ import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
-public class UtilitySampler {
+public class Sampler {
 	private List<Alternative> alts;
 	private SMAAModel m;
 	
-	public UtilitySampler(SMAAModel m, List<Alternative> alts) {
+	public Sampler(SMAAModel m, List<Alternative> alts) {
 		assert(alts.size() > 0);
 		this.alts = alts;
 		this.m = m;
