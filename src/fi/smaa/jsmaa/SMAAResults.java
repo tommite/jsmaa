@@ -29,10 +29,14 @@ public abstract class SMAAResults {
 
 	protected List<SMAAResultsListener> listeners = new ArrayList<SMAAResultsListener>();
 	protected List<Alternative> alternatives;
+	protected int updateInterval;
 	
-	protected SMAAResults(List<Alternative> alts) {
+	protected SMAAResults(List<Alternative> alts, int updateInterval) {
 		this.alternatives = alts;
+		this.updateInterval = updateInterval;
 	}
+	
+	public abstract void reset();
 
 	public void addResultsListener(SMAAResultsListener listener) {
 		if (!listeners.contains(listener)) {
@@ -49,7 +53,7 @@ public abstract class SMAAResults {
 			listener.resultsChanged();
 		}
 	}
-
+	
 	public List<Alternative> getAlternatives() {
 		return alternatives;
 	}

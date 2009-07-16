@@ -19,13 +19,42 @@
 package fi.smaa.jsmaa;
 
 import java.util.List;
+import java.util.Map;
 
 import fi.smaa.jsmaa.model.Alternative;
 
 public class SMAATRIResults extends SMAAResults {
+	
+	private Acceptabilities categoryAcceptabilities;
+	private int numCategories;
 		
-	public SMAATRIResults(List<Alternative> alts) {
-		super(alts);
+	public SMAATRIResults(List<Alternative> alts, int numCategories, int updateInterval) {
+		super(alts, updateInterval);
+		this.numCategories = numCategories;
+		reset();
 	}
 
+	public void reset() {
+		categoryAcceptabilities = new Acceptabilities(alternatives, numCategories);		
+	}
+	
+	public void update(Integer[] categories) {
+		assert(categories.length == alternatives.size());
+		
+		for (int altIndex=0;altIndex<categories.length;altIndex++) {
+			categoryAcceptabilities.hit(altIndex, categories[altIndex]);
+		}
+		
+		if (getIteration() % updateInterval == 0) {
+			fireResultsChanged();
+		}
+	}
+
+	public Integer getIteration() {
+		return new Integer(categoryAcceptabilities.getTotalHits(0));
+	}	
+	
+	public Map<Alternative, List<Double>> getCategoryAcceptabilities() {
+		return categoryAcceptabilities.getResults();
+	}	
 }

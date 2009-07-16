@@ -32,7 +32,6 @@ public class SMAA2Results extends SMAAResults {
 	private double[][] centralWeightAdds;
 	private Map<Integer, List<Double>> centralWeightVectors;
 	private static final int FIRSTRANK = 0;
-	private int updateInterval;
 	private List<Criterion> criteria;
 	private int[] confidenceHits;
 	private int confidenceIteration;
@@ -40,14 +39,9 @@ public class SMAA2Results extends SMAAResults {
 	private Acceptabilities rankAcceptabilities;
 	
 	public SMAA2Results(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
-		super(alternatives);
+		super(alternatives, updateInterval);
 		this.criteria = criteria;
-		this.updateInterval = updateInterval;
-		initialize();
-	}
-
-	public void reset() {
-		initialize();
+		reset();
 	}
 	
 	/**
@@ -60,7 +54,7 @@ public class SMAA2Results extends SMAAResults {
 		assert(weights.length == centralWeightAdds[0].length);
 
 		for (int altIndex=0;altIndex<ranks.length;altIndex++) {
-			rankAcceptabilities.rankHit(altIndex, ranks[altIndex]);
+			rankAcceptabilities.hit(altIndex, ranks[altIndex]);
 			if(ranks[altIndex] == FIRSTRANK) {
 				addCentralWeight(altIndex, weights);
 			}
@@ -161,7 +155,7 @@ public class SMAA2Results extends SMAAResults {
 		}
 	}
 
-	private void initialize() {
+	public void reset() {
 		int numAlts = alternatives.size();
 		int numCrit = criteria.size();
 		centralWeightAdds = new double[numAlts][numCrit];

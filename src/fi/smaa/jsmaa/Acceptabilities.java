@@ -52,7 +52,7 @@ public class Acceptabilities extends ResultsMap {
 		return (double) hits[altIndex][rank] / (double) totalIter;
 	}	
 	
-	public void rankHit(int altIndex, int resIndex) {
+	public void hit(int altIndex, int resIndex) {
 		hits[altIndex][resIndex]++;
 	}	
 	
