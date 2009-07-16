@@ -72,6 +72,7 @@ import fi.smaa.common.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.SMAA2SimulationThread;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.AbstractCriterion;
@@ -955,8 +956,9 @@ public class JSMAAMainFrame extends JFrame {
 			connectAlternativeNameAdapters(model, newModel);
 			connectCriteriaNameAdapters(model, newModel);
 			
-			simulator = new SMAASimulator(newModel, 10000);		
-			results = simulator.getResults();
+			SMAA2SimulationThread thread = new SMAA2SimulationThread(newModel, 10000);
+			simulator = new SMAASimulator(newModel, thread);	
+			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
 			if (rightViewBuilder instanceof CentralWeightsView) {
 				setRightViewToCentralWeights();
@@ -1021,7 +1023,7 @@ public class JSMAAMainFrame extends JFrame {
 		
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged() {
-			int amount = results.getRankAccIteration() * 100 / simulator.getTotalIterations();
+			int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
 			simulationProgress.setValue(amount);
 			if (amount < 100) {
 				simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");

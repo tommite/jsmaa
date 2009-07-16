@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.SMAA2SimulationThread;
 import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
@@ -68,13 +69,13 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testConstructor() {
-		SMAASimulator simulator = new SMAASimulator(model, 100);		
-		assertEquals(100, simulator.getTotalIterations().intValue());
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 100));		
+		assertEquals(201, simulator.getTotalIterations().intValue());
 	}
 	
 	@Test
 	public void testIsSimulatorRunning() throws InterruptedException {
-		SMAASimulator simulator = new SMAASimulator(model, Integer.MAX_VALUE);
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, Integer.MAX_VALUE));
 		assertFalse(simulator.isRunning());
 		simulator.restart();
 		Thread.sleep(1);
@@ -84,7 +85,7 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testStopSimulator() throws InterruptedException {
-		SMAASimulator simulator = new SMAASimulator(model, Integer.MAX_VALUE);
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, Integer.MAX_VALUE));
 		simulator.restart();
 		Thread.sleep(1);
 		simulator.stop();
@@ -104,13 +105,13 @@ public class SMAASimulatorTest {
 		model.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
 		model.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
 				
-		SMAASimulator simulator = new SMAASimulator(model, 10000);
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
 		simulator.restart();
 		do {
 			Thread.sleep(100);
 		} while (simulator.isRunning());
 
-		SMAA2Results results = simulator.getResults();
+		SMAA2Results results = (SMAA2Results) simulator.getResults();
 		
 		Map<Alternative, Map<Criterion, Double>> cw = results.getCentralWeightVectors();
 		Map<Criterion, Double> cw1 = cw.get(alt1);
@@ -129,13 +130,13 @@ public class SMAASimulatorTest {
 	public void testCorrectResults() throws InterruptedException {
 		setCriteriaMeasurements();
 		
-		SMAASimulator simulator = new SMAASimulator(model, 10000);
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
 		simulator.restart();
 		do {
 			Thread.sleep(100);
 		} while (simulator.isRunning());
 
-		SMAA2Results results = simulator.getResults();
+		SMAA2Results results = (SMAA2Results) simulator.getResults();
 		
 		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);
 		Map<Criterion, Double> cw2 = results.getCentralWeightVectors().get(alt2);
@@ -234,17 +235,17 @@ public class SMAASimulatorTest {
 		assertEquals(11.1, nausea.getScale().getStart(), 1.0);
 		assertEquals(34.0, nausea.getScale().getEnd(), 1.0);
 	
-		SMAASimulator sim = new SMAASimulator(model, 10000);
+		SMAASimulator sim = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
 		sim.restart();
 		while (sim.isRunning()) {
 			Thread.sleep(100);
 		}
 		
-		SMAA2Results res = sim.getResults();
+		SMAA2Results res = (SMAA2Results) sim.getResults();
 		Map<Alternative, Map<Criterion, Double>> cw = res.getCentralWeightVectors();
 		Map<Alternative, List<Double>> ra = res.getRankAcceptabilities();
 		Map<Alternative, Double> conf = res.getConfidenceFactors();
-		
+				
 		assertEquals(0.20, ra.get(fluox).get(0), 0.02);
 		assertEquals(0.28, ra.get(fluox).get(1), 0.02);
 		assertEquals(0.30, ra.get(fluox).get(2), 0.02);

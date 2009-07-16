@@ -21,7 +21,7 @@ package fi.smaa.jsmaa;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationThread extends Thread{
+public abstract class SimulationThread extends Thread{
 
 	private int iteration;
 	private SimulationPhase currentPhase;
@@ -32,8 +32,11 @@ public class SimulationThread extends Thread{
 	public SimulationThread() {
 		currentPhase = null;
 		iteration = 0;
-		go = true;
+		go = false;
 	}
+	
+	public abstract SMAAResults getResults();
+	public abstract void reset();
 	
 	public void addPhase(SimulationPhase phase, int iterations) {
 		assert(iterations > 0);
@@ -55,7 +58,7 @@ public class SimulationThread extends Thread{
 		go = false;
 	}
 
-	public int getTotalIteration() {
+	public int getTotalIterations() {
 		int total = 0;
 		for (Integer i : phaseIterations) {
 			total += i;
