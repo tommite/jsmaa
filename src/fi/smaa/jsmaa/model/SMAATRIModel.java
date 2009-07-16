@@ -52,8 +52,17 @@ public class SMAATRIModel extends SMAAModel {
 		return categories;
 	}
 		
-	public void setCriteria(Collection<Criterion> crit) {
+	/**
+	 * All criteria should be outranking-criteria.
+	 */
+	@Override
+	public synchronized void setCriteria(Collection<Criterion> crit) {
 		super.setCriteria(crit);
+		for (Criterion c : crit) {
+			if (!(c instanceof OutrankingCriterion)) {
+				throw new IllegalArgumentException("All criteria should be outranking-criteria");
+			}
+		}
 		profileMatrix.setCriteria(getCriteria());
 	}
 		

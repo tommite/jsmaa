@@ -19,40 +19,28 @@
 package fi.smaa.jsmaa.model;
 
 
+public class OutrankingCriterion extends DirectedCriterion {
 
-public class CardinalCriterion extends DirectedCriterion {
+	private static final long serialVersionUID = 2226047865113684859L;
 	
-	private static final long serialVersionUID = 306783908162696324L;
-	public final static String PROPERTY_SCALE = "scale";
-	private Interval scale = new Interval(0.0, 0.0);
-	
-	public CardinalCriterion(String name, Boolean ascending) {
+	private double indifferenceThreshold;
+	private double preferenceThreshold;
+
+	protected OutrankingCriterion(String name, boolean ascending, double indifferenceThreshold,
+			double preferenceThreshold) {
 		super(name, ascending);
+		this.indifferenceThreshold = indifferenceThreshold;
+		this.preferenceThreshold = preferenceThreshold;
 	}
-	
-	public CardinalCriterion(String name) {
-		super(name, true);
-	}	
 
-	public Interval getScale() {
-		return scale;
-	}
-	
-	public void setScale(Interval scale) {
-		Interval oldVal = this.scale;
-		this.scale = scale;
-		firePropertyChange(PROPERTY_SCALE, oldVal, this.scale);
-	}
-	
 	@Override
 	public String getTypeLabel() {
-		return "Cardinal";
+		return "Outranking";
 	}
 
-	public CardinalCriterion deepCopy() {
-		CardinalCriterion c = new CardinalCriterion(name, ascending);
-		c.setScale(scale);
-		return c;
+	public OutrankingCriterion deepCopy() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-		
+
 }
