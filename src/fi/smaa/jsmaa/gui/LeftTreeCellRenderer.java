@@ -27,7 +27,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import fi.smaa.common.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
@@ -49,7 +49,7 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				setIcon(loader.getIcon(FileNames.ICON_ALTERNATIVE));
 				setToolTipText("Alternative");
 			} else if (leaf && value instanceof AbstractCriterion) {
-				if (value instanceof CardinalCriterion) {
+				if (value instanceof ScaleCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_CARDINALCRITERION));
 					setToolTipText("Cardinal criterion");
 				} else if (value instanceof OrdinalCriterion) {

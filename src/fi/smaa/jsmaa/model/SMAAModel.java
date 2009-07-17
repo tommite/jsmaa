@@ -136,11 +136,11 @@ public class SMAAModel extends Model {
 		setCriteria(crit);
 	}
 
-	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas) {
+	public void setMeasurement(ScaleCriterion crit, Alternative alt, CardinalMeasurement meas) {
 		impactMatrix.setMeasurement(crit, alt, meas);
 	}
 	
-	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) {
+	public CardinalMeasurement getMeasurement(ScaleCriterion crit, Alternative alt) {
 		return impactMatrix.getMeasurement(crit, alt);
 	}
 	

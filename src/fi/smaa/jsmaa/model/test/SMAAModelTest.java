@@ -40,7 +40,7 @@ import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
@@ -85,8 +85,8 @@ public class SMAAModelTest {
 	@Test
 	public void testSetCriteria() {
 		List<Criterion> crit = new ArrayList<Criterion>();
-		crit.add(new CardinalCriterion("c1"));
-		crit.add(new CardinalCriterion("c2"));
+		crit.add(new ScaleCriterion("c1"));
+		crit.add(new ScaleCriterion("c2"));
 		
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
@@ -134,7 +134,7 @@ public class SMAAModelTest {
 		Alternative a1 = new Alternative("alt1");
 		alts.add(a1);
 		
-		CardinalCriterion c = new CardinalCriterion("crit");
+		ScaleCriterion c = new ScaleCriterion("crit");
 		List<Criterion> crit = new ArrayList<Criterion>();
 		crit.add(c);
 		model.setCriteria(crit);
@@ -169,7 +169,7 @@ public class SMAAModelTest {
 	@Test
 	public void testAddCriterion() {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		CardinalCriterion c1 = new CardinalCriterion("c1");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
 		crit.add(c1);
 		
 		model.setCriteria(crit);
@@ -181,7 +181,7 @@ public class SMAAModelTest {
 		
 		List<Criterion> crit2 = new ArrayList<Criterion>();
 		crit2.add(c1);
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		crit2.add(c2);		
 		model.addCriterion(c2);
 		verify(mock);
@@ -215,9 +215,9 @@ public class SMAAModelTest {
 	@Test
 	public void testDeleteCriterion() throws Exception {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		CardinalCriterion c1 = new CardinalCriterion("c1");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
 		crit.add(c1);
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		crit.add(c2);		
 		
 		model.setCriteria(crit);
@@ -253,8 +253,8 @@ public class SMAAModelTest {
 	private void setupModel() {
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		model.addAlternative(a1);
 		model.addAlternative(a2);
 		model.addCriterion(c1);
@@ -335,7 +335,7 @@ public class SMAAModelTest {
 		newModel.addModelListener(l);
 		l.modelChanged(ModelChangeEvent.MEASUREMENT);
 		replay(l);
-		CardinalCriterion c = (CardinalCriterion) newModel.getCriteria().get(0);
+		ScaleCriterion c = (ScaleCriterion) newModel.getCriteria().get(0);
 		c.setAscending(false);
 		verify(l);
 	}	
@@ -355,8 +355,8 @@ public class SMAAModelTest {
 	public void testAddCriterionRetainsMeasurements() throws Exception {
 		SMAAModel m = new SMAAModel("model");
 		Alternative a1 = new Alternative("a");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		m.addAlternative(a1);
 		m.addCriterion(c1);
 		m.setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));

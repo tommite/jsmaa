@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
@@ -42,8 +42,8 @@ import fi.smaa.jsmaa.model.LogNormalMeasurement;
 public class ImpactMatrixTest {
 	
 	private ImpactMatrix m;
-	private CardinalCriterion c1;
-	private CardinalCriterion c2;
+	private ScaleCriterion c1;
+	private ScaleCriterion c2;
 	private Alternative a1;
 	private Alternative a2;
 	private List<Alternative> alts;
@@ -51,8 +51,8 @@ public class ImpactMatrixTest {
 	
 	@Before
 	public void setUp() {
-		c1 = new CardinalCriterion("c1");
-		c2 = new CardinalCriterion("c2");
+		c1 = new ScaleCriterion("c1");
+		c2 = new ScaleCriterion("c2");
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");
 		alts = new ArrayList<Alternative>();
@@ -75,7 +75,7 @@ public class ImpactMatrixTest {
 	@Test
 	public void testParameterConstructor() {
 		List<Alternative> alts = Collections.singletonList(new Alternative("a"));
-		List<Criterion> crit = Collections.singletonList((Criterion) new CardinalCriterion("c"));
+		List<Criterion> crit = Collections.singletonList((Criterion) new ScaleCriterion("c"));
 		
 		ImpactMatrix m = new ImpactMatrix(alts, crit);
 		assertEquals(alts, m.getAlternatives());
@@ -106,7 +106,7 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testAddCriterion() {
-		Criterion c = new CardinalCriterion("c");
+		Criterion c = new ScaleCriterion("c");
 		m.addCriterion(c);
 		assertEquals(Collections.singletonList(c), m.getCriteria());
 		m.addCriterion(c);
@@ -115,7 +115,7 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testAddCriterionSetsMeasurements() {
-		CardinalCriterion c = new CardinalCriterion("cx");
+		ScaleCriterion c = new ScaleCriterion("cx");
 		m.setCriteria(crit);
 		m.setAlternatives(alts);		
 		m.addCriterion(c);
@@ -124,13 +124,13 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testDeleteCriterion() {
-		Criterion c = new CardinalCriterion("c");
+		Criterion c = new ScaleCriterion("c");
 		m.addCriterion(c);
 		m.deleteCriterion(c);
 		assertEquals(Collections.EMPTY_LIST, m.getCriteria());
 		m.deleteCriterion(c);
 		assertEquals(Collections.EMPTY_LIST, m.getCriteria());		
-		m.addCriterion(new CardinalCriterion("b"));
+		m.addCriterion(new ScaleCriterion("b"));
 		m.deleteCriterion(c);
 		assertEquals(1, m.getCriteria().size());		
 	}
@@ -280,7 +280,7 @@ public class ImpactMatrixTest {
 		assertEquals(c1.getClass(), nc1.getClass());
 		assertEquals(c2.getClass(), nc2.getClass());
 		
-		Interval ival = (Interval) m2.getMeasurement((CardinalCriterion) nc1, na1);
+		Interval ival = (Interval) m2.getMeasurement((ScaleCriterion) nc1, na1);
 		assertEquals(new Interval(0.0, 1.0), ival);
 	}
 	

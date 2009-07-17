@@ -34,7 +34,7 @@ import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAA2SimulationThread;
 import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
@@ -47,9 +47,9 @@ public class SMAASimulatorTest {
 	private SMAAModel model;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private CardinalCriterion c1 = new CardinalCriterion("c1");
-	private CardinalCriterion c2 = new CardinalCriterion("c2");
-	private CardinalCriterion c3 = new CardinalCriterion("c3");
+	private ScaleCriterion c1 = new ScaleCriterion("c1");
+	private ScaleCriterion c2 = new ScaleCriterion("c2");
+	private ScaleCriterion c3 = new ScaleCriterion("c3");
 	private Set<Alternative> alts;
 	private Set<Criterion> crit;		
 	
@@ -168,12 +168,12 @@ public class SMAASimulatorTest {
 		Alternative sert = new Alternative("Sertraline");
 		Alternative ven = new Alternative("Venlafaxine");
 		
-		CardinalCriterion efficacy = new CardinalCriterion("Efficacy", true);
-		CardinalCriterion diarrhea = new CardinalCriterion("Diarrhea", false);
-		CardinalCriterion dizziness = new CardinalCriterion("Dizziness", false);
-		CardinalCriterion headache = new CardinalCriterion("Headache", false);
-		CardinalCriterion insomnia = new CardinalCriterion("Insomnia", false);
-		CardinalCriterion nausea = new CardinalCriterion("Nausea", false);
+		ScaleCriterion efficacy = new ScaleCriterion("Efficacy", true);
+		ScaleCriterion diarrhea = new ScaleCriterion("Diarrhea", false);
+		ScaleCriterion dizziness = new ScaleCriterion("Dizziness", false);
+		ScaleCriterion headache = new ScaleCriterion("Headache", false);
+		ScaleCriterion insomnia = new ScaleCriterion("Insomnia", false);
+		ScaleCriterion nausea = new ScaleCriterion("Nausea", false);
 		
 		SMAAModel model = new SMAAModel("BRModel");
 		model.addAlternative(parox);
@@ -295,7 +295,7 @@ public class SMAASimulatorTest {
 		assertEquals(0.09, cw.get(ven).get(nausea), 0.02);
 		
 		assertEquals(0.48, conf.get(fluox), 0.02);
-		assertEquals(0.45, conf.get(parox), 0.02);
+		assertEquals(0.44, conf.get(parox), 0.02);
 		assertEquals(0.34, conf.get(sert), 0.02);
 		assertEquals(0.74, conf.get(ven), 0.02);
 		

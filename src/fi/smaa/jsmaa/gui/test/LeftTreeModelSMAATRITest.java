@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
 public class LeftTreeModelSMAATRITest {
@@ -36,7 +36,7 @@ public class LeftTreeModelSMAATRITest {
 	private SMAATRIModel smaaModel;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private CardinalCriterion crit1 = new CardinalCriterion("crit1");
+	private OutrankingCriterion crit1 = new OutrankingCriterion("crit1", true, 0.0, 1.0);
 	private Alternative cat1 = new Alternative("prof");
 	
 	@Before

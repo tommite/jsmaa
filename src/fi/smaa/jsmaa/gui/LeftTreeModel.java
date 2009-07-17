@@ -27,7 +27,7 @@ import javax.swing.tree.TreePath;
 
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
@@ -227,7 +227,7 @@ public class LeftTreeModel implements TreeModel{
 				((Alternative) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof AbstractCriterion) {
-			if (!smaaModel.getCriteria().contains(new CardinalCriterion((String)newValue))) {			
+			if (!smaaModel.getCriteria().contains(new ScaleCriterion((String)newValue))) {			
 				((AbstractCriterion) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof SMAAModel) {

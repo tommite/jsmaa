@@ -19,7 +19,7 @@
 package fi.smaa.jsmaa;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
@@ -33,8 +33,8 @@ public class DefaultModels {
 	}
 
 	private static void addDefaultCriteria(SMAAModel model) {
-		model.addCriterion(new CardinalCriterion("Criterion 1"));
-		model.addCriterion(new CardinalCriterion("Criterion 2"));
+		model.addCriterion(new ScaleCriterion("Criterion 1"));
+		model.addCriterion(new ScaleCriterion("Criterion 2"));
 	}
 
 	private static void addDefaultAlternatives(SMAAModel model) {

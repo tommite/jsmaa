@@ -28,11 +28,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
 public class CriterionViewWithProfiles extends CriterionView {
@@ -60,8 +60,8 @@ public class CriterionViewWithProfiles extends CriterionView {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
-			if (criterion instanceof CardinalCriterion) {
-				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
+			if (criterion instanceof OutrankingCriterion) {
+				OutrankingCriterion cardCrit = (OutrankingCriterion) criterion;
 				CardinalMeasurement m = triModel.getCategoryUpperBound(cardCrit, a);
 				JComponent measComp = null;
 				if (m instanceof Interval) {

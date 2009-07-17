@@ -30,7 +30,7 @@ import fi.smaa.common.gui.IntervalFormat;
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -79,20 +79,20 @@ public class CriterionView implements ViewBuilder {
 
 	private int buildScalePart(FormLayout layout, PanelBuilder builder,
 			CellConstraints cc, int row, int fullWidth) {
-		if (criterion instanceof CardinalCriterion) {
+		if (criterion instanceof ScaleCriterion) {
 			LayoutUtil.addRow(layout);
 			row += 2;
-			CardinalCriterion cardCrit = (CardinalCriterion) criterion;
-			PresentationModel<CardinalCriterion> pmc = new PresentationModel<CardinalCriterion>(cardCrit);
+			ScaleCriterion cardCrit = (ScaleCriterion) criterion;
+			PresentationModel<ScaleCriterion> pmc = new PresentationModel<ScaleCriterion>(cardCrit);
 			builder.addLabel("Scale:", cc.xy(1, row));
-			builder.add(BasicComponentFactory.createLabel(pmc.getModel(CardinalCriterion.PROPERTY_SCALE),
+			builder.add(BasicComponentFactory.createLabel(pmc.getModel(ScaleCriterion.PROPERTY_SCALE),
 					new IntervalFormat()),
 					cc.xyw(3, row, fullWidth - 2));
 			LayoutUtil.addRow(layout);
 			row += 2;
 			builder.addLabel("Ascending:", cc.xy(1, row));
 			builder.add(BasicComponentFactory.createCheckBox(
-					pmc.getModel(CardinalCriterion.PROPERTY_ASCENDING), null),
+					pmc.getModel(ScaleCriterion.PROPERTY_ASCENDING), null),
 					cc.xy(3, row)
 					);						
 		}
@@ -120,8 +120,8 @@ public class CriterionView implements ViewBuilder {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
-			if (criterion instanceof CardinalCriterion) {
-				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
+			if (criterion instanceof ScaleCriterion) {
+				ScaleCriterion cardCrit = (ScaleCriterion) criterion;
 				CardinalMeasurement m = model.getMeasurement(cardCrit, a);
 				JComponent measComp = null;
 				if (m instanceof Interval) {

@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.CriterionTypeChooser;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
@@ -35,7 +35,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 public class CriterionTypeChooserTest {
 
 	CriterionTypeChooser chooser;
-	private CardinalCriterion crit;
+	private ScaleCriterion crit;
 	private Alternative alt;
 	private SMAAModel model;
 	
@@ -65,8 +65,8 @@ public class CriterionTypeChooserTest {
 		model = new SMAAModel("model");
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		model.addAlternative(a1);
 		model.addAlternative(a2);
 		model.addCriterion(c1);

@@ -27,16 +27,16 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Interval;
 
 public class UtilityFunctionTest {
 	
-	private CardinalCriterion crit;
+	private ScaleCriterion crit;
 	
 	@Before
 	public void setUp() {
-		crit = new CardinalCriterion("crit");
+		crit = new ScaleCriterion("crit");
 		ArrayList<Alternative> alts = new ArrayList<Alternative>();
 		alts.add(new Alternative ("alt1"));
 		alts.add(new Alternative ("alt2"));

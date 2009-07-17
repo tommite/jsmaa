@@ -19,28 +19,50 @@
 package fi.smaa.jsmaa.model;
 
 
-public class OutrankingCriterion extends DirectedCriterion {
+public class OutrankingCriterion extends CardinalCriterion {
+	
+	public static final String PROPERTY_INDIFFERENCE_THRESHOLD = "indifferenceThreshold";
+	public static final String PROPERTY_PREFERENCE_THRESHOLD = "preferenceThreshold";
 
 	private static final long serialVersionUID = 2226047865113684859L;
 	
 	private double indifferenceThreshold;
 	private double preferenceThreshold;
 
-	protected OutrankingCriterion(String name, boolean ascending, double indifferenceThreshold,
+	public OutrankingCriterion(String name, boolean ascending, double indifferenceThreshold,
 			double preferenceThreshold) {
 		super(name, ascending);
 		this.indifferenceThreshold = indifferenceThreshold;
 		this.preferenceThreshold = preferenceThreshold;
 	}
+	
+	public double getIndifferenceThreshold() {
+		return indifferenceThreshold;
+	}
+
+	public void setIndifferenceThreshold(double indifferenceThreshold) {
+		double oldVal = this.indifferenceThreshold;
+		this.indifferenceThreshold = indifferenceThreshold;
+		firePropertyChange(PROPERTY_INDIFFERENCE_THRESHOLD, oldVal, this.indifferenceThreshold);
+	}
+
+	public double getPreferenceThreshold() {
+		return preferenceThreshold;
+	}
+
+	public void setPreferenceThreshold(double preferenceThreshold) {
+		double oldVal = this.preferenceThreshold;
+		this.preferenceThreshold = preferenceThreshold;
+		firePropertyChange(PROPERTY_PREFERENCE_THRESHOLD, oldVal, this.preferenceThreshold);		
+	}	
 
 	@Override
 	public String getTypeLabel() {
 		return "Outranking";
 	}
-
+	
 	public OutrankingCriterion deepCopy() {
-		// TODO Auto-generated method stub
-		return null;
+		return new OutrankingCriterion(name, ascending, indifferenceThreshold, preferenceThreshold);
 	}
 
 }

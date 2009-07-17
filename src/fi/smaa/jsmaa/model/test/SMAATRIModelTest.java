@@ -22,17 +22,21 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
@@ -41,12 +45,12 @@ public class SMAATRIModelTest {
 	private SMAATRIModel model;
 	private Alternative a1;
 	private Alternative a2;
-	private CardinalCriterion c2;
-	private CardinalCriterion c1;
+	private OutrankingCriterion c2;
+	private OutrankingCriterion c1;
 	private ArrayList<Alternative> alts;
 	private ArrayList<Criterion> crit;
 	private Alternative p1;
-	private ArrayList<Alternative> prof;
+	private ArrayList<Alternative> cats;
 	private Alternative p2;
 	
 	@Before
@@ -54,19 +58,19 @@ public class SMAATRIModelTest {
 		model = new SMAATRIModel("model");
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");
-		c1 = new CardinalCriterion("c1");
-		c2 = new CardinalCriterion("c2");
+		c1 = new OutrankingCriterion("c1", true, 0.0, 1.0);
+		c2 = new OutrankingCriterion("c2", true, 0.0, 1.0);
 		p1 = new Alternative("p1");
 		p2 = new Alternative("p2");
 		alts = new ArrayList<Alternative>();
 		crit = new ArrayList<Criterion>();
-		prof = new ArrayList<Alternative>();
+		cats = new ArrayList<Alternative>();
 		alts.add(a1);
 		alts.add(a2);
 		crit.add(c1);
 		crit.add(c2);
-		prof.add(p1);
-		prof.add(p2);
+		cats.add(p1);
+		cats.add(p2);
 		model.setAlternatives(alts);
 	}
 	
@@ -77,22 +81,30 @@ public class SMAATRIModelTest {
 		mock.modelChanged(ModelChangeEvent.PROFILES);
 		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
 		replay(mock);
-		model.setCategories(prof);
+		model.setCategories(cats);
 		verify(mock);
-		assertEquals(prof, model.getCategories());
+		assertEquals(cats, model.getCategories());
 	}
 	
 	@Test
 	public void testSerialization() throws Exception {
-		fail();
-		/*
+		model.setCriteria(crit);
+		model.setCategories(cats);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oout = new ObjectOutputStream(bos);
 		oout.writeObject(model);
 		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
-		SMAAModel newModel = (SMAAModel) in.readObject();
+		SMAATRIModel newModel = (SMAATRIModel) in.readObject();
 		assertEquals(model.getAlternatives().size(), newModel.getAlternatives().size());
 		assertEquals(model.getCriteria().size(), newModel.getCriteria().size());
-		*/
+		
+		SMAAModelListener l = createMock(SMAAModelListener.class);
+		newModel.addModelListener(l);
+		l.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
+		replay(l);
+		newModel.setCategoryUpperBound((OutrankingCriterion)newModel.getCriteria().get(0),
+				newModel.getCategories().iterator().next(),
+				new Interval(0.0, 1.0));
+		verify(l);		
 	}	
 }

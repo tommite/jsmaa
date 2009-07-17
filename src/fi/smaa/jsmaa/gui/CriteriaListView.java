@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.common.gui.IntervalFormat;
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -75,16 +75,16 @@ public class CriteriaListView implements ViewBuilder {
 					pm.getModel(Criterion.PROPERTY_TYPELABEL)),
 					cc.xy(3, row)
 					);
-			if (c instanceof CardinalCriterion) {
-				CardinalCriterion cardCrit = (CardinalCriterion) c;
-				PresentationModel<CardinalCriterion> cpm = new PresentationModel<CardinalCriterion>(cardCrit);
+			if (c instanceof ScaleCriterion) {
+				ScaleCriterion cardCrit = (ScaleCriterion) c;
+				PresentationModel<ScaleCriterion> cpm = new PresentationModel<ScaleCriterion>(cardCrit);
 				builder.add(BasicComponentFactory.createLabel(
-						cpm.getModel(CardinalCriterion.PROPERTY_SCALE),
+						cpm.getModel(ScaleCriterion.PROPERTY_SCALE),
 						new IntervalFormat()),
 						cc.xy(5, row)
 						);
 				builder.add(BasicComponentFactory.createCheckBox(
-						cpm.getModel(CardinalCriterion.PROPERTY_ASCENDING), null),
+						cpm.getModel(ScaleCriterion.PROPERTY_ASCENDING), null),
 						cc.xy(7, row)
 						);
 			}

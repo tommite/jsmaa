@@ -18,12 +18,12 @@
 
 package fi.smaa.jsmaa.maut;
 
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 
 public class UtilityFunction {
 	
-	public static double utility(CardinalCriterion crit, double val) {
+	public static double utility(ScaleCriterion crit, double val) {
 		boolean asc = crit.getAscending();
 		double overMin = val - crit.getScale().getStart();
 		

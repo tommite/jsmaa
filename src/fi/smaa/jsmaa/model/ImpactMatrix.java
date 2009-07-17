@@ -201,8 +201,8 @@ public class ImpactMatrix implements Serializable {
 			for (Criterion c : criteria) {
 				Map<Alternative, Measurement> map = measurements.get(c);
 				if (!map.keySet().contains(a)) {
-					if (c instanceof CardinalCriterion) {
-						setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
+					if (c instanceof ScaleCriterion) {
+						setMeasurementNoFires((ScaleCriterion)c, a, new Interval());
 					}
 				}
 			}
@@ -219,8 +219,8 @@ public class ImpactMatrix implements Serializable {
 			}
 		}
 		for (Criterion c : criteria) {
-			if (c instanceof CardinalCriterion) {
-				CardinalCriterion cc = (CardinalCriterion) c;
+			if (c instanceof ScaleCriterion) {
+				ScaleCriterion cc = (ScaleCriterion) c;
 				for (Alternative a : alternatives) {
 					if (getMeasurement(cc, a) == null) {
 						setMeasurementNoFires(cc, a, new Interval());
@@ -235,7 +235,7 @@ public class ImpactMatrix implements Serializable {
 
 	private void updateScales() {
 		for (Criterion c : criteria) {
-			if (c instanceof CardinalCriterion) {
+			if (c instanceof ScaleCriterion) {
 				Map<Alternative, Measurement> cMeas = measurements.get(c);
 				
 				ArrayList<Interval> ivals = new ArrayList<Interval>();
@@ -245,7 +245,7 @@ public class ImpactMatrix implements Serializable {
 				}
 				Interval scale = ivals.size() == 0 ? new Interval(0.0, 0.0) 
 					: Interval.enclosingInterval(ivals);
-				((CardinalCriterion) c).setScale(scale);
+				((ScaleCriterion) c).setScale(scale);
 			}
 		}
 	}
@@ -306,13 +306,13 @@ public class ImpactMatrix implements Serializable {
 
 		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
-			if (c instanceof CardinalCriterion) {
+			if (c instanceof ScaleCriterion) {
 				int aIndex = 0;				
 				for (Alternative a : getAlternatives()) {
 					CardinalMeasurement m = 
-						(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
+						(CardinalMeasurement) getMeasurement((ScaleCriterion) c, a)
 						.deepCopy();
-					other.setMeasurementNoFires((CardinalCriterion) crit.get(cIndex), 
+					other.setMeasurementNoFires((ScaleCriterion) crit.get(cIndex), 
 							alts.get(aIndex), m);
 					aIndex++;
 				}			

@@ -21,7 +21,7 @@ package fi.smaa.jsmaa.maut;
 import java.util.List;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -36,15 +36,15 @@ public class Sampler {
 	}
 	
 	public void sample(Criterion crit, double[] target) {
-		if (crit instanceof CardinalCriterion) {
-			sample((CardinalCriterion) crit, target);
+		if (crit instanceof ScaleCriterion) {
+			sample((ScaleCriterion) crit, target);
 		} else {
 			throw new IllegalArgumentException("Unknown criterion type");
 		}		
 	}
 
 
-	public void sample(CardinalCriterion c, double[] target) {
+	public void sample(ScaleCriterion c, double[] target) {
 		assert(target.length == alts.size());
 
 		for (int i=0;i<alts.size();i++) {

@@ -18,53 +18,34 @@
 
 package fi.smaa.jsmaa.model.test;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
+import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.Interval;
 
 public class CardinalCriterionTest {
 	
-	private CardinalCriterion criterion;
+	private CardinalCriterion crit;
 	
+	@SuppressWarnings("serial")
 	@Before
 	public void setUp() {
-		criterion = new CardinalCriterion("crit");
+		crit = new CardinalCriterion("crit", true) {
+			@Override
+			public String getTypeLabel() {
+				return null;
+			}
+			public Criterion deepCopy() {
+				return null;
+			}			
+		};
 	}
 	
-	@Test
-	public void test1Contructor() {
-		CardinalCriterion crit = new CardinalCriterion("c");
-		assertEquals("c", crit.getName());
-		assertEquals(true, crit.getAscending());
-	}
-	
-	@Test
-	public void test2Constructor() {
-		CardinalCriterion crit = new CardinalCriterion("c", false);
-		assertEquals("c", crit.getName());
-		assertEquals(false, crit.getAscending());
-	}
-
 	@Test
 	public void testSetAscending() {
-		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_ASCENDING, true, false);
-	}
-	
-	@Test
-	public void testSetScale() {
-		Interval oldScale = new Interval(0.0, 0.0);
-		Interval newScale = new Interval(0.0, 1.0);
-		JUnitUtil.testSetter(criterion, CardinalCriterion.PROPERTY_SCALE, oldScale, newScale);
-	}
-	
-	@Test
-	public void testGetTypeLabel() {
-		assertEquals("Cardinal", criterion.getTypeLabel());
+		JUnitUtil.testSetter(crit, CardinalCriterion.PROPERTY_ASCENDING, true, false);
 	}
 
 }

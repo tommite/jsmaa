@@ -77,7 +77,7 @@ import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -821,7 +821,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	protected void addCardinalCriterion() {
-		CardinalCriterion c = new CardinalCriterion(generateNextCriterionName());
+		ScaleCriterion c = new ScaleCriterion(generateNextCriterionName());
 		addCriterionAndStartRename(c);
 	}
 	

@@ -24,7 +24,7 @@ import java.util.Map;
 import fi.smaa.jsmaa.maut.UtilIndexPair;
 import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -133,8 +133,8 @@ public class SMAA2SimulationThread extends SimulationThread {
 	}
 
 	private double computePartialUtility(int critIndex, Criterion crit, int altIndex) {
-		if (crit instanceof CardinalCriterion) {
-			return UtilityFunction.utility(((CardinalCriterion)crit), measurements[critIndex][altIndex]);
+		if (crit instanceof ScaleCriterion) {
+			return UtilityFunction.utility(((ScaleCriterion)crit), measurements[critIndex][altIndex]);
 		} else if (crit instanceof OrdinalCriterion) {
 			// ordinal ones are directly as simulated partial utility function values
 			return measurements[critIndex][altIndex];

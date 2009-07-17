@@ -66,12 +66,12 @@ public class SMAATRIModel extends SMAAModel {
 		profileMatrix.setCriteria(getCriteria());
 	}
 		
-	public void setCategoryUpperBound(CardinalCriterion crit, 
+	public void setCategoryUpperBound(OutrankingCriterion crit, 
 			Alternative category, CardinalMeasurement meas) {
 		profileMatrix.setMeasurement(crit, category, meas);
 	}
 	
-	public CardinalMeasurement getCategoryUpperBound(CardinalCriterion crit, Alternative category) {
+	public CardinalMeasurement getCategoryUpperBound(OutrankingCriterion crit, Alternative category) {
 		return profileMatrix.getMeasurement(crit, category);
 	}
 	
