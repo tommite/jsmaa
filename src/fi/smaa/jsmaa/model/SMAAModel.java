@@ -33,8 +33,8 @@ public class SMAAModel extends Model {
 	public final static String PROPERTY_NAME = "name";
 	
 	private String name;
-	private PreferenceInformation preferences;
-	private ImpactMatrix impactMatrix;
+	protected PreferenceInformation preferences;
+	protected ImpactMatrix impactMatrix;
 	
 	private static final long serialVersionUID = 6100076809211865658L;
 	
@@ -136,11 +136,11 @@ public class SMAAModel extends Model {
 		setCriteria(crit);
 	}
 
-	public void setMeasurement(ScaleCriterion crit, Alternative alt, CardinalMeasurement meas) {
+	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas) {
 		impactMatrix.setMeasurement(crit, alt, meas);
 	}
 	
-	public CardinalMeasurement getMeasurement(ScaleCriterion crit, Alternative alt) {
+	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) {
 		return impactMatrix.getMeasurement(crit, alt);
 	}
 	

@@ -219,8 +219,8 @@ public class ImpactMatrix implements Serializable {
 			}
 		}
 		for (Criterion c : criteria) {
-			if (c instanceof ScaleCriterion) {
-				ScaleCriterion cc = (ScaleCriterion) c;
+			if (c instanceof CardinalCriterion) {
+				CardinalCriterion cc = (CardinalCriterion) c;
 				for (Alternative a : alternatives) {
 					if (getMeasurement(cc, a) == null) {
 						setMeasurementNoFires(cc, a, new Interval());
@@ -306,13 +306,13 @@ public class ImpactMatrix implements Serializable {
 
 		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
-			if (c instanceof ScaleCriterion) {
+			if (c instanceof CardinalCriterion) {
 				int aIndex = 0;				
 				for (Alternative a : getAlternatives()) {
 					CardinalMeasurement m = 
-						(CardinalMeasurement) getMeasurement((ScaleCriterion) c, a)
+						(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
 						.deepCopy();
-					other.setMeasurementNoFires((ScaleCriterion) crit.get(cIndex), 
+					other.setMeasurementNoFires((CardinalCriterion) crit.get(cIndex), 
 							alts.get(aIndex), m);
 					aIndex++;
 				}			

@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -36,6 +37,11 @@ public class DefaultModels {
 		model.addCriterion(new ScaleCriterion("Criterion 1"));
 		model.addCriterion(new ScaleCriterion("Criterion 2"));
 	}
+	
+	private static void addDefaultOutrankingCriteria(SMAAModel model) {
+		model.addCriterion(new OutrankingCriterion("Criterion 1", true, 0.0, 1.0));
+		model.addCriterion(new OutrankingCriterion("Criterion 2", true, 0.0, 1.0));
+	}	
 
 	private static void addDefaultAlternatives(SMAAModel model) {
 		model.addAlternative(new Alternative("Alternative 1"));
@@ -45,8 +51,8 @@ public class DefaultModels {
 
 	public static SMAATRIModel getSMAATRIModel() {
 		SMAATRIModel model = new SMAATRIModel("SMAA-TRI Model");
-		addDefaultAlternatives(model);
-		addDefaultCriteria(model);
+		addDefaultAlternatives(model);				
+		addDefaultOutrankingCriteria(model);
 		model.addCategory(new Alternative("Category 1"));
 		model.addCategory(new Alternative("Category 2"));
 		
