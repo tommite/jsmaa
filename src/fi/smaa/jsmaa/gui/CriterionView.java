@@ -75,6 +75,9 @@ public class CriterionView implements ViewBuilder {
 		if (criterion instanceof ScaleCriterion) {
 			row = buildScalePart(layout, builder, cc, row, fullWidth);
 		}
+		if (criterion instanceof CardinalCriterion) {
+			row = buildAscendingPart(layout, builder, cc, row, fullWidth);
+		}
 		buildMeasurementsPart(layout, fullWidth, builder, cc, row);
 			
 		return builder.getPanel();
@@ -82,23 +85,30 @@ public class CriterionView implements ViewBuilder {
 
 	private int buildScalePart(FormLayout layout, PanelBuilder builder,
 			CellConstraints cc, int row, int fullWidth) {
-		if (criterion instanceof ScaleCriterion) {
-			LayoutUtil.addRow(layout);
-			row += 2;
-			ScaleCriterion cardCrit = (ScaleCriterion) criterion;
-			PresentationModel<ScaleCriterion> pmc = new PresentationModel<ScaleCriterion>(cardCrit);
-			builder.addLabel("Scale:", cc.xy(1, row));
-			builder.add(BasicComponentFactory.createLabel(pmc.getModel(ScaleCriterion.PROPERTY_SCALE),
-					new IntervalFormat()),
-					cc.xyw(3, row, fullWidth - 2));
-			LayoutUtil.addRow(layout);
-			row += 2;
-			builder.addLabel("Ascending:", cc.xy(1, row));
-			builder.add(BasicComponentFactory.createCheckBox(
-					pmc.getModel(ScaleCriterion.PROPERTY_ASCENDING), null),
-					cc.xy(3, row)
-					);						
-		}
+		LayoutUtil.addRow(layout);
+		row += 2;
+		ScaleCriterion cardCrit = (ScaleCriterion) criterion;
+		PresentationModel<ScaleCriterion> pmc = new PresentationModel<ScaleCriterion>(cardCrit);
+		builder.addLabel("Scale:", cc.xy(1, row));
+		builder.add(BasicComponentFactory.createLabel(pmc.getModel(ScaleCriterion.PROPERTY_SCALE),
+				new IntervalFormat()),
+				cc.xyw(3, row, fullWidth - 2));
+		return row;
+	}
+
+
+	private int buildAscendingPart(FormLayout layout, PanelBuilder builder,
+			CellConstraints cc, int row, int fullWidth) {
+		CardinalCriterion cardCrit = (CardinalCriterion) criterion;
+		PresentationModel<CardinalCriterion> pmc = new PresentationModel<CardinalCriterion>(cardCrit);
+
+		LayoutUtil.addRow(layout);
+		row += 2;
+		builder.addLabel("Ascending:", cc.xy(1, row));
+		builder.add(BasicComponentFactory.createCheckBox(
+				pmc.getModel(ScaleCriterion.PROPERTY_ASCENDING), null),
+				cc.xy(3, row)
+		);
 		return row;
 	}
 
