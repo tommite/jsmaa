@@ -30,6 +30,7 @@ import fi.smaa.common.gui.IntervalFormat;
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
@@ -71,7 +72,9 @@ public class CriterionView implements ViewBuilder {
 		);
 		
 		int row = 5;
-		row = buildScalePart(layout, builder, cc, row, fullWidth);
+		if (criterion instanceof ScaleCriterion) {
+			row = buildScalePart(layout, builder, cc, row, fullWidth);
+		}
 		buildMeasurementsPart(layout, fullWidth, builder, cc, row);
 			
 		return builder.getPanel();
@@ -120,8 +123,8 @@ public class CriterionView implements ViewBuilder {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
-			if (criterion instanceof ScaleCriterion) {
-				ScaleCriterion cardCrit = (ScaleCriterion) criterion;
+			if (criterion instanceof CardinalCriterion) {
+				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
 				CardinalMeasurement m = model.getMeasurement(cardCrit, a);
 				JComponent measComp = null;
 				if (m instanceof Interval) {
