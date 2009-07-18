@@ -201,8 +201,8 @@ public class ImpactMatrix implements Serializable {
 			for (Criterion c : criteria) {
 				Map<Alternative, Measurement> map = measurements.get(c);
 				if (!map.keySet().contains(a)) {
-					if (c instanceof ScaleCriterion) {
-						setMeasurementNoFires((ScaleCriterion)c, a, new Interval());
+					if (c instanceof CardinalCriterion) {
+						setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
 					}
 				}
 			}

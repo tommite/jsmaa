@@ -27,8 +27,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import fi.smaa.common.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
-import fi.smaa.jsmaa.model.OrdinalCriterion;
 
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
@@ -52,9 +52,9 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				if (value instanceof ScaleCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_CARDINALCRITERION));
 					setToolTipText("Cardinal criterion");
-				} else if (value instanceof OrdinalCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));
-					setToolTipText("Ordinal criterion");					
+				} else if (value instanceof OutrankingCriterion) {
+					setIcon(loader.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
+					setToolTipText("Outranking criterion");					
 				}
 			} else if (value == model.getCentralWeightsNode()) {
 				setIcon(loader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
@@ -65,6 +65,10 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 			} else if (value == model.getPreferencesNode()) {
 				setIcon(loader.getIcon(FileNames.ICON_PREFERENCES));
 				setToolTipText("Preference information");
+			} else if (model instanceof LeftTreeModelSMAATRI &&
+					((LeftTreeModelSMAATRI) model).getCatAccNode() == value) {
+				setIcon(loader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+				setToolTipText("Category acceptability indices");													
 			} else {
 				setToolTipText(null); //no tool tip
 			}

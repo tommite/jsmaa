@@ -22,6 +22,8 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -106,5 +108,27 @@ public class SMAATRIModelTest {
 				newModel.getCategories().iterator().next(),
 				new Interval(0.0, 1.0));
 		verify(l);		
+	}	
+	
+	
+	@Test
+	public void testDeepCopy() {
+		SMAATRIModel model2 = model.deepCopy();
+	
+		assertEquals(model.getName(), model2.getName());
+		assertEquals(model.getAlternatives().size(), model2.getAlternatives().size());
+		assertEquals(model.getCriteria().size(), model2.getCriteria().size());
+		assertEquals(model.getCategories().size(), model2.getCategories().size());
+		
+		assertFalse(model.getAlternatives() == model2.getAlternatives());
+		assertFalse(model.getCriteria() == model2.getCriteria());
+		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
+		
+		for (int i=0;i<model2.getCategories().size()-1;i++) {
+			for (Criterion c : model2.getCriteria()) {
+				assertNotNull(model2.getCategoryUpperBound((OutrankingCriterion) c,
+						model2.getCategories().get(i)));
+			}
+		}
 	}	
 }

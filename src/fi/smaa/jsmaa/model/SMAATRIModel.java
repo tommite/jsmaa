@@ -83,4 +83,15 @@ public class SMAATRIModel extends SMAAModel {
 		i.defaultReadObject();
 		connectProfileListener();
 	}
+	
+	@Override
+	public SMAATRIModel deepCopy() {
+		SMAATRIModel model = new SMAATRIModel(getName());
+		super.deepCopyContents(model);
+		model.setCategories(getCategories());
+
+		model.profileMatrix = (ImpactMatrix) profileMatrix.deepCopy(
+				model.getAlternatives(), model.getCriteria());
+		return model;
+	}
 }

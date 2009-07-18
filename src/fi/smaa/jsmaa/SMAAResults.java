@@ -43,7 +43,7 @@ public abstract class SMAAResults {
 			listeners.add(listener);
 		}
 	}
-
+	
 	public void removeResultsListener(SMAAResultsListener listener) {
 		listeners.remove(listener);
 	}

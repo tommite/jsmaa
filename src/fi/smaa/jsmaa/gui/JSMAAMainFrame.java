@@ -73,8 +73,12 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAA2SimulationThread;
+import fi.smaa.jsmaa.SMAAResults;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.SMAASimulator;
+import fi.smaa.jsmaa.SMAATRIResults;
+import fi.smaa.jsmaa.SMAATRISimulationThread;
+import fi.smaa.jsmaa.SimulationThread;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ScaleCriterion;
@@ -94,7 +98,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JSplitPane splitPane;
 	private JTree leftTree;
 	private SMAAModel model;
-	private SMAA2Results results;
+	private SMAAResults results;
 	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private LeftTreeModel leftTreeModel;
@@ -232,12 +236,12 @@ public class JSMAAMainFrame extends JFrame {
 
 
 	private void setRightViewToCentralWeights() {		
-		rightViewBuilder = new CentralWeightsView(results);
+		rightViewBuilder = new CentralWeightsView((SMAA2Results) results);
 		rebuildRightPanel();
 	}
 	
 	private void setRightViewToRankAcceptabilities() {
-		rightViewBuilder = new RankAcceptabilitiesView(results);
+		rightViewBuilder = new RankAcceptabilitiesView((SMAA2Results) results);
 		rebuildRightPanel();
 	}
 		
@@ -270,7 +274,6 @@ public class JSMAAMainFrame extends JFrame {
 		leftTreeCritPopupMenu.add(createAddCardCritMenuItem());
 		
 		leftTree.addMouseListener(new MouseAdapter() {
-			@Override
 			public void mousePressed(MouseEvent evt) {
 				if (evt.isPopupTrigger()) {
 					int selRow = leftTree.getRowForLocation(evt.getX(), evt.getY());
@@ -956,14 +959,27 @@ public class JSMAAMainFrame extends JFrame {
 			connectAlternativeNameAdapters(model, newModel);
 			connectCriteriaNameAdapters(model, newModel);
 			
-			SMAA2SimulationThread thread = new SMAA2SimulationThread(newModel, 10000);
+			SimulationThread thread = null;
+			if (newModel instanceof SMAATRIModel) {
+				thread = new SMAATRISimulationThread((SMAATRIModel) newModel, 10000);				
+			} else {
+				thread = new SMAA2SimulationThread(newModel, 10000);
+			}
 			simulator = new SMAASimulator(newModel, thread);	
 			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
-			if (rightViewBuilder instanceof CentralWeightsView) {
-				setRightViewToCentralWeights();
-			} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
-				setRightViewToRankAcceptabilities();
+			if (newModel instanceof SMAATRIModel) {
+				if (rightViewBuilder instanceof CentralWeightsView) {
+					setRightViewToCategoryAcceptabilities();
+				} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
+					setRightViewToCategoryAcceptabilities();					
+				}
+			} else {
+				if (rightViewBuilder instanceof CentralWeightsView) {
+					setRightViewToCentralWeights();
+				} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
+					setRightViewToRankAcceptabilities();
+				}
 			}
 			simulationProgress.setValue(0);
 			simulator.restart();
@@ -981,6 +997,11 @@ public class JSMAAMainFrame extends JFrame {
 		}
 	}	
 	
+	public void setRightViewToCategoryAcceptabilities() {
+		rightViewBuilder = new CategoryAcceptabilitiesView((SMAATRIResults)results);
+		rebuildRightPanel();
+	}
+
 	private void connectCriteriaNameAdapters(SMAAModel model,
 			SMAAModel newModel) {
 		assert(model.getCriteria().size() == newModel.getCriteria().size());

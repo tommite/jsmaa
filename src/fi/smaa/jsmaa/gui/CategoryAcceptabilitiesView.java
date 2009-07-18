@@ -24,58 +24,65 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
-import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.model.Alternative;
 
-public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder {
+public class CategoryAcceptabilitiesView extends ResultsView {
 	
-	private JLabel[][] valCells;
-	
-	public RankAcceptabilitiesView(SMAA2Results results) {
+	private JLabel[][] valCells;	
+
+	public CategoryAcceptabilitiesView(SMAATRIResults results) {
 		super(results);
 	}
 
 	@Override
 	synchronized protected void fireResultsChanged() {
-		Map<Alternative, List<Double>> cws = ((SMAA2Results) results).getRankAcceptabilities();
+		SMAATRIResults triRes = (SMAATRIResults) results;
+		Map<Alternative, List<Double>> cws = triRes.getCategoryAcceptabilities();
 		
 		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
 			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
-			for (int rank=0;rank<getNumAlternatives();rank++) {
-				if (valCells[altIndex][rank] != null) {
-					valCells[altIndex][rank].setText(formatDouble(cw.get(rank)));
+			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
+				if (valCells[altIndex][catIndex] != null) {
+					valCells[altIndex][catIndex].setText(formatDouble(cw.get(catIndex)));
 				}
 			}
 		}
 		
 	}
 
+	private int getNumCategories() {
+		return ((SMAATRIResults) results).getCategories().size();		
+	}
+
 	synchronized public JComponent buildPanel() {
 		int numAlts = getNumAlternatives();
+		int numCats = getNumCategories();
 		
 		FormLayout layout = new FormLayout(
 				"pref",
 				"p, 3dlu, p");
 		
-		int[] groupCol = new int[numAlts];
+		int[] groupCol = new int[numCats];
 		
 		for (int i=0;i<numAlts;i++) {
 			LayoutUtil.addRow(layout);
+		}
+		
+		for (int i=0;i<numCats;i++) {
 			layout.appendColumn(ColumnSpec.decode("5dlu"));
 			layout.appendColumn(ColumnSpec.decode("center:pref"));
 			groupCol[i] = 3 + 2*i;
 		}
 		
-		layout.setColumnGroups(new int[][]{groupCol});
 		
+		layout.setColumnGroups(new int[][]{groupCol});
 
 		int fullWidth = 1 + numAlts * 2;
 		
@@ -83,7 +90,7 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Rank acceptabilities", cc.xyw(1, 1, fullWidth));
+		builder.addSeparator("Category acceptabilities", cc.xyw(1, 1, fullWidth));
 		
 		buildRankLabels(builder, 3, 3);
 		buildAlternativeLabels(builder, 5, 1, true);
@@ -95,15 +102,15 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 
 	private void buildRankAcceptabilitiesPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
-		valCells = new JLabel[getNumAlternatives()][getNumAlternatives()];
+		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
 		
 		int startRow = 5;
 		int startCol = 3;
 		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
-			for (int rank=0;rank<getNumAlternatives();rank++) {
+			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
 				JLabel label = new JLabel("NA");
-				valCells[altIndex][rank] = label;
-				builder.add(label, cc.xy(startCol + rank*2, startRow + altIndex*2));
+				valCells[altIndex][catIndex] = label;
+				builder.add(label, cc.xy(startCol + catIndex*2, startRow + altIndex*2));
 			}
 		}
 		
@@ -116,6 +123,6 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 			builder.add(label, cc.xy(startCol, row));
 				startCol += 2;
 		}		
-	}
+	}	
 
 }

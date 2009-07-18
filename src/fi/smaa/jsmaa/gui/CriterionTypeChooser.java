@@ -24,7 +24,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -54,9 +54,9 @@ public class CriterionTypeChooser extends JComboBox {
 	}
 
 	private void updateSelected() {
-		if (crit instanceof ScaleCriterion) {
+		if (crit instanceof CardinalCriterion) {
 			CardinalMeasurement meas = 
-				model.getMeasurement((ScaleCriterion) crit, alt);
+				model.getMeasurement((CardinalCriterion) crit, alt);
 			if (meas instanceof Interval) {
 				setSelectedIndex(0);
 			} else if (meas instanceof LogNormalMeasurement) {
@@ -78,7 +78,7 @@ public class CriterionTypeChooser extends JComboBox {
 		} else {
 			throw new IllegalStateException("unknown measurement type");
 		}
-		model.setMeasurement((ScaleCriterion) crit, alt, newMeas);
+		model.setMeasurement((CardinalCriterion) crit, alt, newMeas);
 	}
 	
 	private class MyListener extends AbstractAction {

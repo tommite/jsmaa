@@ -73,6 +73,7 @@ public abstract class SimulationThread extends Thread{
 				iteration++;
 			}
 		}
+		getResults().fireResultsChanged();
 		go = false;
 	}
 
@@ -107,5 +108,9 @@ public abstract class SimulationThread extends Thread{
 		for (int i=0;i<model.getCriteria().size();i++) {
 			sampler.sample(model.getCriteria().get(i), measurements[i]);
 		}
+	}
+
+	protected void generateWeights() {
+		weights = model.getPreferenceInformation().sampleWeights();
 	}
 }

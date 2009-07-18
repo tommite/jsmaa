@@ -30,6 +30,7 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	private static int RESULTS = 4;	
 	
 	private String categoriesNode = "Categories";
+	private String categoryAcceptabilitiesNode = "CatAcc";
 
 	public LeftTreeModelSMAATRI(SMAATRIModel smaaModel) throws NullPointerException {
 		super(smaaModel);
@@ -37,6 +38,10 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	
 	public Object getCategoriesNode() {
 		return categoriesNode;
+	}
+	
+	public Object getCatAccNode() {
+		return categoryAcceptabilitiesNode;
 	}
 	
 	@Override
@@ -51,7 +56,9 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 			}
 		} else if (parent == categoriesNode) {
 			return ((SMAATRIModel)smaaModel).getCategories().get(index);
-		}		
+		} else if (parent == resultsNode) {
+			return categoryAcceptabilitiesNode;
+		}
 		return super.getChild(parent, index);
 	}
 	
@@ -61,6 +68,8 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 			return 5;
 		} else if (parent == categoriesNode) {			
 			return ((SMAATRIModel) smaaModel).getCategories().size();
+		} else if (parent == resultsNode) {
+			return 1;
 		} else {
 			return super.getChildCount(parent);
 		}
@@ -70,6 +79,8 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	public boolean isLeaf(Object node) {
 		if (node instanceof Alternative &&
 				((SMAATRIModel)smaaModel).getCategories().contains(node)) {
+			return true;
+		} else if (node == categoryAcceptabilitiesNode) {
 			return true;
 		} else {
 			return super.isLeaf(node);

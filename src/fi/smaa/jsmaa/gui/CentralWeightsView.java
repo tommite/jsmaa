@@ -37,7 +37,7 @@ import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 
-public class CentralWeightsView extends ResultsView implements ViewBuilder {
+public class CentralWeightsView extends SMAA2ResultsView implements ViewBuilder {
 	
 	private JLabel[][] CWCells;
 	private JLabel[] CFCells;
@@ -48,7 +48,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
 	synchronized public JComponent buildPanel() {
 		int numAlts = getNumAlternatives();
-		int numCrit = getNumCriteria();
+		int numCrit = getCriteria().size();
 		
 		FormLayout layout = new FormLayout(
 				"pref, 5dlu, center:pref",
@@ -90,7 +90,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	private void buildCentralWeightPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
 		int numAlternatives = getNumAlternatives();
-		int numCriteria = getNumCriteria();
+		int numCriteria = getCriteria().size();
 		CWCells = new JLabel[numAlternatives][numCriteria];
 		CFCells = new JLabel[numAlternatives];
 		int startRow = 5;
@@ -112,7 +112,7 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 		CellConstraints cc = new CellConstraints();
 		int col = 5;
 		int row = 3;
-		for (Criterion c : results.getCriteria()) {
+		for (Criterion c : getCriteria()) {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Criterion>(c).getModel(Criterion.PROPERTY_NAME)),
 					cc.xy(col, row));
@@ -123,18 +123,18 @@ public class CentralWeightsView extends ResultsView implements ViewBuilder {
 	
 	synchronized public void fireResultsChanged() {
 		//change confidence factors
-		Map<Alternative, Double> cfs = results.getConfidenceFactors();
+		Map<Alternative, Double> cfs = ((SMAA2Results) results).getConfidenceFactors();
 		for (int altIndex = 0;altIndex<results.getAlternatives().size();altIndex++) {
 			CFCells[altIndex].setText(formatDouble(cfs.get(results.getAlternatives().get(altIndex))));
 		}
 		
 		//change central weights
-		Map<Alternative, Map<Criterion, Double>> cws = results.getCentralWeightVectors();
+		Map<Alternative, Map<Criterion, Double>> cws = ((SMAA2Results) results).getCentralWeightVectors();
 		
 		for (int altIndex=0;altIndex<results.getAlternatives().size();altIndex++) {
 			Map<Criterion, Double> cw = cws.get(results.getAlternatives().get(altIndex));
-			for (int critIndex=0;critIndex<results.getCriteria().size();critIndex++) {
-				CWCells[altIndex][critIndex].setText(formatDouble(cw.get(results.getCriteria().get(critIndex))));
+			for (int critIndex=0;critIndex<getCriteria().size();critIndex++) {
+				CWCells[altIndex][critIndex].setText(formatDouble(cw.get(getCriteria().get(critIndex))));
 			}
 		}
 	}

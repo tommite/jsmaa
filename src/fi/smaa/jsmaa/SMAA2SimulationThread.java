@@ -56,12 +56,6 @@ public class SMAA2SimulationThread extends SimulationThread {
 				results.confidenceUpdate(confidenceHits);
 			}
 		}, iterations);
-		addPhase(new SimulationPhase() {
-			public void iterate() {
-				results.fireResultsChanged();
-			}
-		}, 1);
-		
 	}
 	
 	public SMAA2Results getResults() {
@@ -146,11 +140,6 @@ public class SMAA2SimulationThread extends SimulationThread {
 	private void clearUtilities() {
 		Arrays.fill(utilities, 0.0);
 	}
-
-	private void generateWeights() {
-		weights = model.getPreferenceInformation().sampleWeights();
-	}
-	
 
 	public void reset() {
 		super.reset();

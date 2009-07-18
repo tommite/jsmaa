@@ -108,4 +108,15 @@ public class LeftTreeModelSMAATRITest {
 	public void testGetChildrenCategories() {
 		assertEquals(cat1, treeModel.getChild(getCategoriesNode(), 0));
 	}	
+	
+	@Test
+	public void testResultsNode() {
+		assertEquals(1, treeModel.getChildCount(getResultsNode()));
+		assertEquals(treeModel.getCatAccNode(), treeModel.getChild(getResultsNode(), 0));
+	}
+	
+	@Test
+	public void testCatAccNode() {
+		assertTrue(treeModel.isLeaf(treeModel.getCatAccNode()));
+	}
 }

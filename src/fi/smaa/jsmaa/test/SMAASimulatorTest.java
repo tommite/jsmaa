@@ -70,7 +70,7 @@ public class SMAASimulatorTest {
 	@Test
 	public void testConstructor() {
 		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 100));		
-		assertEquals(201, simulator.getTotalIterations().intValue());
+		assertEquals(200, simulator.getTotalIterations().intValue());
 	}
 	
 	@Test

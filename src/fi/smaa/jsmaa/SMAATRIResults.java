@@ -26,16 +26,16 @@ import fi.smaa.jsmaa.model.Alternative;
 public class SMAATRIResults extends SMAAResults {
 	
 	private Acceptabilities categoryAcceptabilities;
-	private int numCategories;
+	private List<Alternative> categories;
 		
-	public SMAATRIResults(List<Alternative> alts, int numCategories, int updateInterval) {
+	public SMAATRIResults(List<Alternative> alts, List<Alternative> categories, int updateInterval) {
 		super(alts, updateInterval);
-		this.numCategories = numCategories;
+		this.categories = categories;
 		reset();
 	}
 
 	public void reset() {
-		categoryAcceptabilities = new Acceptabilities(alternatives, numCategories);		
+		categoryAcceptabilities = new Acceptabilities(alternatives, categories.size());		
 	}
 	
 	public void update(Integer[] categories) {
@@ -57,4 +57,8 @@ public class SMAATRIResults extends SMAAResults {
 	public Map<Alternative, List<Double>> getCategoryAcceptabilities() {
 		return categoryAcceptabilities.getResults();
 	}	
+	
+	public List<Alternative> getCategories() {
+		return categories;
+	}
 }

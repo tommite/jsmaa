@@ -201,6 +201,11 @@ public class SMAAModel extends Model {
 	
 	public synchronized SMAAModel deepCopy() {
 		SMAAModel model = new SMAAModel(name);
+		deepCopyContents(model);
+		return model;
+	}
+
+	protected void deepCopyContents(SMAAModel model) {
 		List<Alternative> alts = new ArrayList<Alternative>();
 		List<Criterion> crit = new ArrayList<Criterion>();
 		for (Alternative a : alternatives) {
@@ -213,7 +218,6 @@ public class SMAAModel extends Model {
 		model.setCriteria(crit);
 		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(alts, crit);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
-		return model;
 	}
 	
 	public void setMissingPreferences() {

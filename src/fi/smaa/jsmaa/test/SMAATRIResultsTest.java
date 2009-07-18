@@ -44,15 +44,20 @@ public class SMAATRIResultsTest {
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
 	private List<Alternative> alts;
+	private List<Alternative> cats;
 	
 	@Before
 	public void setUp()  {
 		firstSecondCat = new Integer[]{0, 1};
 		secondThirdCat = new Integer[]{1, 2};
 		alts = new ArrayList<Alternative>();
+		cats = new ArrayList<Alternative>();
+		cats.add(new Alternative("cat1"));
+		cats.add(new Alternative("cat2"));
+		cats.add(new Alternative("cat3"));
 		alts.add(alt1);
 		alts.add(alt2);
-		results = new SMAATRIResults(alts, 3, 10);
+		results = new SMAATRIResults(alts, cats, 10);
 	}
 	
 	private void do10Hits() {		

@@ -32,11 +32,11 @@ public class SMAA2Results extends SMAAResults {
 	private double[][] centralWeightAdds;
 	private Map<Integer, List<Double>> centralWeightVectors;
 	private static final int FIRSTRANK = 0;
-	private List<Criterion> criteria;
 	private int[] confidenceHits;
 	private int confidenceIteration;
 	private List<Double> confidenceFactors;
 	private Acceptabilities rankAcceptabilities;
+	private List<Criterion> criteria;
 	
 	public SMAA2Results(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
 		super(alternatives, updateInterval);
