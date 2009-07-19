@@ -110,15 +110,27 @@ public class SMAATRIModelTest {
 		verify(l);		
 	}	
 	
+	@Test
+	public void testSetRule() {
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.PARAMETER);
+		replay(mock);
+		model.setRule(false);
+		verify(mock);
+		assertFalse(model.getRule());
+	}
 	
 	@Test
 	public void testDeepCopy() {
+		model.setRule(false);
 		SMAATRIModel model2 = model.deepCopy();
 	
 		assertEquals(model.getName(), model2.getName());
 		assertEquals(model.getAlternatives().size(), model2.getAlternatives().size());
 		assertEquals(model.getCriteria().size(), model2.getCriteria().size());
 		assertEquals(model.getCategories().size(), model2.getCategories().size());
+		assertFalse(model2.getRule());
 		
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());

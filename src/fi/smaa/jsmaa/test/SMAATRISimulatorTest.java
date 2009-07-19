@@ -18,6 +18,7 @@
 
 package fi.smaa.jsmaa.test;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.SMAASimulator;
+import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -62,12 +64,25 @@ public class SMAATRISimulatorTest {
 		model = new SMAATRIModel("model");
 		model.setAlternatives(alts);
 		model.setCriteria(crit);
+		model.setCategories(cats);
 	}
 	
 	@Test
 	public void testConstructor() {
 		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 100));		
 		assertEquals(100, simulator.getTotalIterations().intValue());
+	}
+	
+	@Test
+	public void testCorrectResults() throws InterruptedException {
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		simulator.restart();
+		while (simulator.isRunning()) {
+			Thread.sleep(10);
+		}
+		
+		SMAATRIResults res = (SMAATRIResults) simulator.getResults();
+		fail();
 	}
 	
 }

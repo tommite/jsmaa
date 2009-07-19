@@ -26,14 +26,25 @@ import java.util.List;
 
 public class SMAATRIModel extends SMAAModel {
 	
-	private static final long serialVersionUID = -8040983176716927197L;
+	private static final long serialVersionUID = -739020656344899318L;
 	private ImpactMatrix profileMatrix;
 	private List<Alternative> categories = new ArrayList<Alternative>();
+	private boolean optimistic;
 
 	public SMAATRIModel(String name) {
 		super(name);
 		profileMatrix = new ImpactMatrix();
+		optimistic = true;
 		connectProfileListener();
+	}
+	
+	public void setRule(boolean optimistic) {
+		this.optimistic = optimistic;
+		fireModelChange(ModelChangeEvent.PARAMETER);
+	}
+	
+	public boolean getRule() {
+		return optimistic;
 	}
 	
 	public void setCategories(List<Alternative> categories) {
@@ -89,7 +100,7 @@ public class SMAATRIModel extends SMAAModel {
 		SMAATRIModel model = new SMAATRIModel(getName());
 		super.deepCopyContents(model);
 		model.setCategories(getCategories());
-
+		model.setRule(optimistic);
 		model.profileMatrix = (ImpactMatrix) profileMatrix.deepCopy(
 				model.getAlternatives(), model.getCriteria());
 		return model;

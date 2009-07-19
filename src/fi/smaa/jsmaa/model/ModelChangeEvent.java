@@ -24,5 +24,6 @@ public enum ModelChangeEvent {
 	MEASUREMENT_TYPE,
 	PREFERENCES,
 	MEASUREMENT,
-	PROFILES
+	PROFILES,
+	PARAMETER // technical parameter changes
 }
