@@ -216,7 +216,7 @@ public class JSMAAMainFrame extends JFrame {
 
 	private void initComponents() {
 	   splitPane = new JSplitPane();
-	   splitPane.setResizeWeight(0.0);	   
+	   splitPane.setResizeWeight(0.1);	   
 	   splitPane.setDividerSize(2);
 	   splitPane.setDividerLocation(-1);
 	   rightPane = new JScrollPane();
