@@ -69,4 +69,5 @@ public class SMAATRISimulatorTest {
 		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 100));		
 		assertEquals(100, simulator.getTotalIterations().intValue());
 	}
+	
 }
