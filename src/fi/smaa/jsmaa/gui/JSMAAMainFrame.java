@@ -160,9 +160,14 @@ public class JSMAAMainFrame extends JFrame {
 	}
 	
 	public void setRightViewToAlternatives() {
-		rightViewBuilder = new AlternativeInfoView(model);
+		rightViewBuilder = new AlternativeInfoView(model.getAlternatives(), "Alternatives");
 		rebuildRightPanel();
 	}
+
+	public void setRightViewToCategories() {
+		rightViewBuilder = new AlternativeInfoView(((SMAATRIModel) model).getCategories(), "Categories");
+		rebuildRightPanel();
+	}	
 	
 	public void setRightViewToCriterion(Criterion node) {
 		if (model instanceof SMAATRIModel) {
@@ -356,7 +361,7 @@ public class JSMAAMainFrame extends JFrame {
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				//
+				setRightViewToCategories();
 			}			
 		});
 				
@@ -984,6 +989,10 @@ public class JSMAAMainFrame extends JFrame {
 			} else if (leftTreeModel instanceof LeftTreeModelSMAATRI &&
 				((LeftTreeModelSMAATRI) leftTreeModel).getCatAccNode() == node) {
 				setRightViewToCategoryAcceptabilities();
+				setEditMenuItemsEnabled(false);
+			} else if (leftTreeModel instanceof LeftTreeModelSMAATRI &&
+				((LeftTreeModelSMAATRI) leftTreeModel).getCategoriesNode() == node) {
+				setRightViewToCategories();
 				setEditMenuItemsEnabled(false);
 			} else {
 				setEditMenuItemsEnabled(false);

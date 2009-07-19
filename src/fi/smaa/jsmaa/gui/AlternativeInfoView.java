@@ -18,8 +18,9 @@
 
 package fi.smaa.jsmaa.gui;
 
-import javax.swing.JComponent;
+import java.util.List;
 
+import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -30,13 +31,14 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.SMAAModel;
 
 public class AlternativeInfoView implements ViewBuilder {
-	private SMAAModel model;
+	private List<Alternative> alts;
+	private String header;
 	
-	public AlternativeInfoView(SMAAModel model) {
-		this.model = model;
+	public AlternativeInfoView(List<Alternative> alts, String header) {
+		this.alts = alts;
+		this.header = header;
 	}
 
 	public JComponent buildPanel() {
@@ -50,11 +52,11 @@ public class AlternativeInfoView implements ViewBuilder {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Alternatives", cc.xyw(1,1, fullWidth));
+		builder.addSeparator(header, cc.xyw(1,1, fullWidth));
 
 		int row = 3;
 		
-		for (Alternative a : model.getAlternatives()) {
+		for (Alternative a : alts) {
 			LayoutUtil.addRow(layout);
 		
 			builder.add(BasicComponentFactory.createLabel(
