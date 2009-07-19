@@ -512,13 +512,20 @@ public class JSMAAMainFrame extends JFrame {
 
 
 	private void confirmDeleteAlternative(Alternative alternative) {
+		// if isn't contained in alternatives, must be category
+		boolean isAlt = model.getAlternatives().contains(alternative);
+		String typeName = isAlt ? "alternative" : "category";
 		int conf = JOptionPane.showConfirmDialog(this, 
-				"Do you really want to delete alternative " + alternative + "?",
+				"Do you really want to delete " + typeName + " " + alternative + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
 				getIcon(FileNames.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
-			model.deleteAlternative(alternative);
+			if (isAlt) {
+				model.deleteAlternative(alternative);
+			} else {
+				((SMAATRIModel) model).deleteCategory(alternative);
+			}
 		}
 	}
 

@@ -61,6 +61,11 @@ public class ElectreTri {
 	public Map<Alternative, Alternative> compute() {
 		Map<Alternative, Alternative> resMap = new HashMap<Alternative, Alternative>();
 		
+		if (categories.size() == 1) {
+			for (Alternative a : alts) {
+				resMap.put(a, categories.get(0));
+			}
+		}
 		for (Alternative a : alts) {
 			if (optimistic) {
 				// from the top upper bound

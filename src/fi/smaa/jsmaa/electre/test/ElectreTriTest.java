@@ -104,6 +104,18 @@ public class ElectreTriTest {
 	}
 	
 	@Test
+	public void test1Category() {
+		cats.clear();
+		cats.add(cat1);
+		ubounds.clear();
+		tri = new ElectreTri(alts, crit, cats, meas, ubounds, weights, lambda, true);		
+		Map<Alternative, Alternative> res = tri.compute();
+		assertTrue(res.entrySet().size() == 2);
+		assertEquals(cat1, res.get(a1));
+		assertEquals(cat1, res.get(a2));
+	}	
+	
+	@Test
 	public void testOptimisticRule() {
 		tri.setRule(true);
 		Map<Alternative, Alternative> res = tri.compute();

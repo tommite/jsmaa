@@ -76,6 +76,21 @@ public class SMAATRISimulatorTest {
 	}
 	
 	@Test
+	public void testOneCategory() throws InterruptedException {
+		model.deleteCategory(cat1);
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		simulator.restart();
+		while (simulator.isRunning()) {
+			Thread.sleep(10);
+		}
+		
+		SMAATRIResults res = (SMAATRIResults) simulator.getResults();
+		Map<Alternative, List<Double>> accs = res.getCategoryAcceptabilities();		
+		assertEquals(1.0, accs.get(alt1).get(0), 0.00001);
+		assertEquals(1.0, accs.get(alt2).get(0), 0.00001);
+	}
+	
+	@Test
 	public void testConstructor() {
 		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 100));		
 		assertEquals(100, simulator.getTotalIterations().intValue());
