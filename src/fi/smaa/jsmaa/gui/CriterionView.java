@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
+import javax.swing.text.DefaultFormatter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -31,12 +32,13 @@ import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class CriterionView implements ViewBuilder {
 	protected Criterion criterion;
@@ -72,15 +74,46 @@ public class CriterionView implements ViewBuilder {
 		);
 		
 		int row = 5;
+		
 		if (criterion instanceof ScaleCriterion) {
 			row = buildScalePart(layout, builder, cc, row, fullWidth);
 		}
 		if (criterion instanceof CardinalCriterion) {
 			row = buildAscendingPart(layout, builder, cc, row, fullWidth);
 		}
+		if (criterion instanceof OutrankingCriterion) {
+			row = buildThresholdsPart(layout, builder, cc, row, fullWidth);			
+		}		
 		buildMeasurementsPart(layout, fullWidth, builder, cc, row);
 			
 		return builder.getPanel();
+	}
+
+	private int buildThresholdsPart(FormLayout layout, PanelBuilder builder,
+			CellConstraints cc, int row, int fullWidth) {
+		LayoutUtil.addRow(layout);
+		row += 2;
+		OutrankingCriterion outrCrit = (OutrankingCriterion) criterion;
+		PresentationModel<OutrankingCriterion> pmc = new PresentationModel<OutrankingCriterion>(outrCrit);
+		builder.addSeparator("Thresholds", cc.xyw(1, row, fullWidth));
+		
+		LayoutUtil.addRow(layout);
+		row += 2;
+		builder.addLabel("Indifference:", cc.xy(1, row));
+		builder.add(BasicComponentFactory.createFormattedTextField(
+				pmc.getModel(OutrankingCriterion.PROPERTY_INDIFFERENCE_THRESHOLD),
+				new DefaultFormatter()),
+				cc.xy(3, row));
+		
+		LayoutUtil.addRow(layout);
+		row += 2;
+		builder.addLabel("Preference:", cc.xy(1, row));
+		builder.add(BasicComponentFactory.createFormattedTextField(
+				pmc.getModel(OutrankingCriterion.PROPERTY_PREFERENCE_THRESHOLD),
+				new DefaultFormatter()),
+				cc.xy(3, row));		
+		
+		return row;
 	}
 
 	private int buildScalePart(FormLayout layout, PanelBuilder builder,

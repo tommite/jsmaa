@@ -965,7 +965,7 @@ public class JSMAAMainFrame extends JFrame {
 			} else {
 				thread = new SMAA2SimulationThread(newModel, 10000);
 			}
-			simulator = new SMAASimulator(newModel, thread);	
+			simulator = new SMAASimulator(newModel, thread);
 			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
 			if (newModel instanceof SMAATRIModel) {
