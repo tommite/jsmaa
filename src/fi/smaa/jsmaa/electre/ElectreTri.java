@@ -23,15 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class ElectreTri {
 	
 	private List<Alternative> alts;
 	private List<OutrankingCriterion> crit;
-	private Map<Alternative, Map<Criterion, Double>> measurements;
-	private Map<Alternative, Map<Criterion, Double>> categoryUpperBounds;
+	private Map<Alternative, Map<OutrankingCriterion, Double>> measurements;
+	private Map<Alternative, Map<OutrankingCriterion, Double>> categoryUpperBounds;
 	private boolean optimistic;
 	private double lambda;
 	private double[] weights;
@@ -39,8 +38,8 @@ public class ElectreTri {
 
 	public ElectreTri(List<Alternative> alts, List<OutrankingCriterion> crit,
 			List<Alternative> categories,
-			Map<Alternative, Map<Criterion, Double>> measurements,
-			Map<Alternative, Map<Criterion, Double>> categoryUpperBounds,
+			Map<Alternative, Map<OutrankingCriterion, Double>> measurements,
+			Map<Alternative, Map<OutrankingCriterion, Double>> categoryUpperBounds,
 			double[] weights,
 			double lambda,
 			boolean optimistic) {
@@ -94,8 +93,8 @@ public class ElectreTri {
 		return resMap;
 	}
 	
-	private boolean outranks(Map<Criterion, Double> alt,
-			Map<Criterion, Double> toAlt) {
+	private boolean outranks(Map<OutrankingCriterion, Double> alt,
+			Map<OutrankingCriterion, Double> toAlt) {
 		assert(alt.entrySet().size() == toAlt.entrySet().size());
 		assert(alt.entrySet().size() == weights.length);
 		
@@ -109,8 +108,8 @@ public class ElectreTri {
 		return concordance >= lambda;
 	}
 
-	private boolean preferred(Map<Criterion, Double> alt,
-			Map<Criterion, Double> toAlt) {
+	private boolean preferred(Map<OutrankingCriterion, Double> alt,
+			Map<OutrankingCriterion, Double> toAlt) {
 		assert(alt.entrySet().size() == toAlt.entrySet().size());
 		assert(alt.entrySet().size() == weights.length);		
 

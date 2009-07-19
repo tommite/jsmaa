@@ -18,12 +18,12 @@
 
 package fi.smaa.jsmaa.test;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
@@ -34,6 +34,7 @@ import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
@@ -65,6 +66,13 @@ public class SMAATRISimulatorTest {
 		model.setAlternatives(alts);
 		model.setCriteria(crit);
 		model.setCategories(cats);
+		model.setMeasurement(c1, alt1, new ExactMeasurement(2.0));
+		model.setMeasurement(c2, alt1, new ExactMeasurement(2.0));
+		model.setMeasurement(c1, alt2, new ExactMeasurement(0.0));
+		model.setMeasurement(c2, alt2, new ExactMeasurement(0.0));
+		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(1.0));
+		model.setCategoryUpperBound(c2, cat1, new ExactMeasurement(1.0));
+		model.setRule(true);
 	}
 	
 	@Test
@@ -81,8 +89,14 @@ public class SMAATRISimulatorTest {
 			Thread.sleep(10);
 		}
 		
-		SMAATRIResults res = (SMAATRIResults) simulator.getResults();
-		fail();
+		SMAATRIResults res = (SMAATRIResults) simulator.getResults();		
+		Map<Alternative, List<Double>> accs = res.getCategoryAcceptabilities();
+		
+		assertEquals(0.0, accs.get(alt1).get(0), 0.00001);
+		assertEquals(1.0, accs.get(alt1).get(1), 0.00001);
+		
+		assertEquals(1.0, accs.get(alt2).get(0), 0.00001);
+		assertEquals(0.0, accs.get(alt2).get(1), 0.00001);	
 	}
 	
 }

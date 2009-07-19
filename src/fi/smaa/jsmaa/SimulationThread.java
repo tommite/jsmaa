@@ -109,6 +109,11 @@ public abstract class SimulationThread extends Thread{
 			sampler.sample(model.getCriteria().get(i), measurements[i]);
 		}
 	}
+	
+	protected double[] getMeasurements(int critIndex) {
+		assert(critIndex >= 0 && critIndex < measurements.length);
+		return measurements[critIndex];
+	}
 
 	protected void generateWeights() {
 		weights = model.getPreferenceInformation().sampleWeights();

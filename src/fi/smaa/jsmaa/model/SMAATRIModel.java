@@ -30,17 +30,32 @@ public class SMAATRIModel extends SMAAModel {
 	private ImpactMatrix profileMatrix;
 	private List<Alternative> categories = new ArrayList<Alternative>();
 	private boolean optimistic;
+	private double lambda;
+	public static final double DEFAULT_LAMBDA_VALUE = 0.7;
+	
+	public static final String PROPERTY_RULE = "rule";
+	public static final String PROPERTY_LAMBDA = "lambda";
 
 	public SMAATRIModel(String name) {
 		super(name);
 		profileMatrix = new ImpactMatrix();
 		optimistic = true;
+		lambda = DEFAULT_LAMBDA_VALUE; 
 		connectProfileListener();
 	}
 	
 	public void setRule(boolean optimistic) {
 		this.optimistic = optimistic;
 		fireModelChange(ModelChangeEvent.PARAMETER);
+	}
+	
+	public void setLambda(double lambda) {
+		this.lambda = lambda;
+		fireModelChange(ModelChangeEvent.PARAMETER);
+	}
+	
+	public double getLambda() {
+		return lambda;
 	}
 	
 	public boolean getRule() {

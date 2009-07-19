@@ -18,7 +18,8 @@
 
 package fi.smaa.jsmaa.electre.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,6 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.electre.ElectreTri;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class ElectreTriTest {
@@ -49,8 +49,8 @@ public class ElectreTriTest {
 	private double[] weights;
 	private double lambda = 0.7;
 	private ElectreTri tri;
-	private Map<Alternative, Map<Criterion, Double>> meas;
-	private Map<Alternative, Map<Criterion, Double>> ubounds;
+	private Map<Alternative, Map<OutrankingCriterion, Double>> meas;
+	private Map<Alternative, Map<OutrankingCriterion, Double>> ubounds;
 	
 	@Before
 	public void setUp() {
@@ -73,9 +73,9 @@ public class ElectreTriTest {
 		crit.add(c1);
 		crit.add(c2);
 		weights = new double[] {0.4, 0.4, 0.2};
-		meas = new HashMap<Alternative, Map<Criterion, Double>>();
-		Map<Criterion, Double> a1meas = new HashMap<Criterion, Double>();
-		Map<Criterion, Double> a2meas = new HashMap<Criterion, Double>();
+		meas = new HashMap<Alternative, Map<OutrankingCriterion, Double>>();
+		Map<OutrankingCriterion, Double> a1meas = new HashMap<OutrankingCriterion, Double>();
+		Map<OutrankingCriterion, Double> a2meas = new HashMap<OutrankingCriterion, Double>();
 		
 		a1meas.put(c1, 1.0);
 		a1meas.put(c2, 2.0);
@@ -87,9 +87,9 @@ public class ElectreTriTest {
 		meas.put(a1, a1meas);
 		meas.put(a2, a2meas);
 		
-		ubounds = new HashMap<Alternative, Map<Criterion, Double>>();
-		Map<Criterion, Double> cat1meas = new HashMap<Criterion, Double>();
-		Map<Criterion, Double> cat2meas = new HashMap<Criterion, Double>();		
+		ubounds = new HashMap<Alternative, Map<OutrankingCriterion, Double>>();
+		Map<OutrankingCriterion, Double> cat1meas = new HashMap<OutrankingCriterion, Double>();
+		Map<OutrankingCriterion, Double> cat2meas = new HashMap<OutrankingCriterion, Double>();		
 		cat1meas.put(c1, 0.0);
 		cat1meas.put(c2, 0.0);
 		cat1meas.put(c3, 5.0);

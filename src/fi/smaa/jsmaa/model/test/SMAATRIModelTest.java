@@ -122,6 +122,22 @@ public class SMAATRIModelTest {
 	}
 	
 	@Test
+	public void testSetLambda() {
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.PARAMETER);
+		replay(mock);
+		model.setLambda(0.9);
+		verify(mock);
+		assertEquals(0.9, model.getLambda(), 0.000001);
+	}	
+	
+	@Test
+	public void testConstructorCorrectLambda() {
+		assertEquals(SMAATRIModel.DEFAULT_LAMBDA_VALUE, model.getLambda(), 0.00001);
+	}
+	
+	@Test
 	public void testDeepCopy() {
 		model.setRule(false);
 		SMAATRIModel model2 = model.deepCopy();
@@ -131,6 +147,7 @@ public class SMAATRIModelTest {
 		assertEquals(model.getCriteria().size(), model2.getCriteria().size());
 		assertEquals(model.getCategories().size(), model2.getCategories().size());
 		assertFalse(model2.getRule());
+		assertEquals(model.getLambda(), model2.getLambda(), 0.00001);
 		
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());
