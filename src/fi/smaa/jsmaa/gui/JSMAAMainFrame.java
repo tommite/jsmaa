@@ -113,13 +113,6 @@ public class JSMAAMainFrame extends JFrame {
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
-	private JMenu fileMenu;
-	private JMenu editMenu;
-	private JMenu critMenu;
-	private JMenu altMenu;
-	private JMenu resultsMenu;
-	private JMenu helpMenu;
-	private JMenuBar menuBar;
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super("SMAA");
@@ -149,6 +142,12 @@ public class JSMAAMainFrame extends JFrame {
 				setModelUnsaved(true);
 			}
 		});
+		if (model instanceof SMAATRIModel) {
+			setJMenuBar(createSMAATRIMenuBar());
+		} else {
+			setJMenuBar(createSMAA2MenuBar());
+		}
+		pack();
 		buildNewSimulator();
 		setRightViewToCriteria();
 		leftTreeFocusCriteria();
@@ -216,13 +215,10 @@ public class JSMAAMainFrame extends JFrame {
 	   splitPane.setDividerLocation(-1);
 	   rightPane = new JScrollPane();
 	   splitPane.setRightComponent(rightPane);
-
 	   
 	   getContentPane().setLayout(new BorderLayout());
 	   getContentPane().add("Center", splitPane);
 	   getContentPane().add("South", createToolBar());
-	   createMenuBar();
-	   setJMenuBar(menuBar);
 	}
 	
 	private JComponent createToolBar() {
@@ -310,38 +306,65 @@ public class JSMAAMainFrame extends JFrame {
 	}
 	
 	public void setMinimalFrame() {
-		menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
-		fileMenu = createFileMenu(true);
-		menuBar.add(fileMenu);
-		menuBar.add(resultsMenu);
+		menuBar.add(createFileMenu(true));
+		menuBar.add(createResultsMenu());
 		menuBar.add(Box.createHorizontalGlue());
-		menuBar.add(helpMenu);
+		menuBar.add(createHelpMenu());
 		setJMenuBar(menuBar);
 		setTitle(getFrameTitleBase());
 	}
-
-	private void createMenuBar() {
-		menuBar = new JMenuBar();
+	
+	private JMenuBar createSMAATRIMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
 		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 		
-		fileMenu = createFileMenu(false);
-		editMenu = createEditMenu();
-		critMenu = createCriteriaMenu();	
-		altMenu = createAlternativeMenu();
-		resultsMenu = createResultsMenu();
-		helpMenu = createHelpMenu();
-		
-		menuBar.add(fileMenu);
-		menuBar.add(editMenu);
-		menuBar.add(critMenu);
-		menuBar.add(altMenu);
-		menuBar.add(resultsMenu);
+		menuBar.add(createFileMenu(false));
+		menuBar.add(createEditMenu());
+		menuBar.add(createCriteriaMenu());
+		menuBar.add(createAlternativeMenu());
+		menuBar.add(createCategoriesMenu());
+		menuBar.add(createResultsSMAATRIMenu());
 		menuBar.add(Box.createHorizontalGlue());
-		menuBar.add(helpMenu);
+		menuBar.add(createHelpMenu());
+
+		return menuBar;
+	}	
+
+	private JMenuBar createSMAA2MenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
+		
+		menuBar.add(createFileMenu(false));
+		menuBar.add(createEditMenu());
+		menuBar.add(createCriteriaMenu());
+		menuBar.add(createAlternativeMenu());
+		menuBar.add(createResultsMenu());
+		menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(createHelpMenu());
+		return menuBar;
 	}
 
+	private JMenu createCategoriesMenu() {
+		JMenu categoryMenu = new JMenu("Categories");
+		categoryMenu.setMnemonic('t');
+		JMenuItem showItem = new JMenuItem("Show");
+		showItem.setMnemonic('s');
+		JMenuItem addCatButton = createAddCatMenuItem();
+		
+		showItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				//
+			}			
+		});
+				
+		categoryMenu.add(showItem);
+		categoryMenu.addSeparator();
+		categoryMenu.add(addCatButton);
+		return categoryMenu;
+	}
 
 	private JMenu createHelpMenu() {
 		JMenu menu = new JMenu("Help");
@@ -394,6 +417,23 @@ public class JSMAAMainFrame extends JFrame {
 		return resultsMenu;
 	}
 
+	private JMenu createResultsSMAATRIMenu() {
+		JMenu resultsMenu = new JMenu("Results");
+		resultsMenu.setMnemonic('r');
+		JMenuItem racsItem = new JMenuItem("Rank acceptability indices", 
+				getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+		racsItem.setMnemonic('r');
+				
+		racsItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				setRightViewToCategoryAcceptabilities();
+			}			
+		});
+		
+		resultsMenu.add(racsItem);
+		return resultsMenu;
+	}
+	
 
 	private JMenu createEditMenu() {
 		JMenu editMenu = new JMenu("Edit");
@@ -768,6 +808,17 @@ public class JSMAAMainFrame extends JFrame {
 		return item;
 	}
 
+	private JMenuItem createAddCatMenuItem() {
+		JMenuItem item = new JMenuItem("Add new");
+		item.setMnemonic('n');
+		item.setIcon(getIcon(FileNames.ICON_ADD));
+		item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCategory();
+			}
+		});
+		return item;
+	}	
 
 	private JMenu createCriteriaMenu() {
 		JMenu criteriaMenu = new JMenu("Criteria");
@@ -822,6 +873,12 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.setSelectionPath(leftTreeModel.getPathForAlternative(a));
 		leftTree.startEditingAtPath(leftTreeModel.getPathForAlternative(a));			
 	}
+	
+	private void addCategoryAndStartRename(Alternative a) {
+		((SMAATRIModel) model).addCategory(a);
+		leftTree.setSelectionPath(((LeftTreeModelSMAATRI) leftTreeModel).getPathForCategory(a));
+		leftTree.startEditingAtPath(((LeftTreeModelSMAATRI) leftTreeModel).getPathForCategory(a));			
+	}	
 
 	protected void addCardinalCriterion() {
 		ScaleCriterion c = new ScaleCriterion(generateNextCriterionName());
@@ -872,6 +929,27 @@ public class JSMAAMainFrame extends JFrame {
 			index++;
 		}
 	}
+	
+	protected void addCategory() {
+		Collection<Alternative> cats = ((SMAATRIModel) model).getCategories();
+		
+		int index = 1;
+		while (true) {
+			Alternative newCat = new Alternative("Category " + index);
+			boolean found = false; 
+			for (Alternative cat : cats) {
+				if (cat.getName().equals(newCat.getName())) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				addCategoryAndStartRename(newCat);
+				return;
+			}
+			index++;
+		}
+	}	
 	
 	private class LeftTreeSelectionListener implements TreeSelectionListener {
 		public void valueChanged(TreeSelectionEvent e) {

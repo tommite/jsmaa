@@ -235,7 +235,7 @@ public class LeftTreeModel implements TreeModel{
 		}
 	}
 
-	private void fireTreeChange() {
+	protected void fireTreeChange() {
 		for (TreeModelListener l : treeModelListeners) {
 			l.treeStructureChanged( new TreeModelEvent(this, new Object[] { this.getRoot() }));
 		}

@@ -20,7 +20,11 @@ package fi.smaa.jsmaa.gui;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.TreePath;
+
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
 public class LeftTreeModelSMAATRI extends LeftTreeModel {
@@ -34,6 +38,14 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 
 	public LeftTreeModelSMAATRI(SMAATRIModel smaaModel) throws NullPointerException {
 		super(smaaModel);
+		
+		smaaModel.addModelListener(new SMAAModelListener() {
+			public void modelChanged(ModelChangeEvent type) {
+				if (type == ModelChangeEvent.PROFILES) {
+					fireTreeChange();
+				}
+			}
+		});		
 	}
 	
 	public Object getCategoriesNode() {
@@ -43,6 +55,10 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	public Object getCatAccNode() {
 		return categoryAcceptabilitiesNode;
 	}
+	
+	public TreePath getPathForCategory(Alternative cat) {
+		return new TreePath(new Object[]{smaaModel, categoriesNode, cat});
+	}	
 	
 	@Override
 	public Object getChild(Object parent, int index) {
@@ -85,6 +101,19 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 		} else {
 			return super.isLeaf(node);
 		}
+	}
+	
+	@Override
+	public void valueForPathChanged(TreePath path, Object newValue) {
+		Object obj = path.getLastPathComponent();
+		
+		if (obj instanceof Alternative) {
+			if (((SMAATRIModel) smaaModel).getCategories().contains(obj)) {
+				((Alternative) obj).setName((String) newValue);				
+				return;
+			}
+		}
+		super.valueForPathChanged(path, newValue);
 	}
 
 	@Override
