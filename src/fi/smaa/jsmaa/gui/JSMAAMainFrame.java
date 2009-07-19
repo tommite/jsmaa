@@ -420,7 +420,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JMenu createResultsSMAATRIMenu() {
 		JMenu resultsMenu = new JMenu("Results");
 		resultsMenu.setMnemonic('r');
-		JMenuItem racsItem = new JMenuItem("Rank acceptability indices", 
+		JMenuItem racsItem = new JMenuItem("Category acceptability indices", 
 				getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 		racsItem.setMnemonic('r');
 				
