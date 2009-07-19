@@ -903,6 +903,10 @@ public class JSMAAMainFrame extends JFrame {
 			} else if (node == leftTreeModel.getPreferencesNode()) {
 				setRightViewToPreferences();
 				setEditMenuItemsEnabled(false);
+			} else if (leftTreeModel instanceof LeftTreeModelSMAATRI &&
+				((LeftTreeModelSMAATRI) leftTreeModel).getCatAccNode() == node) {
+				setRightViewToCategoryAcceptabilities();
+				setEditMenuItemsEnabled(false);
 			} else {
 				setEditMenuItemsEnabled(false);
 			}

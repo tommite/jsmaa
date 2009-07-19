@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -84,7 +86,7 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		
 		layout.setColumnGroups(new int[][]{groupCol});
 
-		int fullWidth = 1 + numAlts * 2;
+		int fullWidth = 1 + numCats * 2;
 		
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
@@ -92,15 +94,15 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		
 		builder.addSeparator("Category acceptabilities", cc.xyw(1, 1, fullWidth));
 		
-		buildRankLabels(builder, 3, 3);
+		buildCategoryLabels(builder, 3, 3);
 		buildAlternativeLabels(builder, 5, 1, true);
-		buildRankAcceptabilitiesPart(builder);
+		buildCategoryAcceptabilitiesPart(builder);
 		
 		fireResultsChanged();		
 		return builder.getPanel();
 	}
 
-	private void buildRankAcceptabilitiesPart(PanelBuilder builder) {
+	private void buildCategoryAcceptabilitiesPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
 		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
 		
@@ -116,10 +118,13 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		
 	}
 
-	private void buildRankLabels(PanelBuilder builder, int row, int startCol) {
+	private void buildCategoryLabels(PanelBuilder builder, int row, int startCol) {
 		CellConstraints cc = new CellConstraints();
-		for (int i=1;i<=getNumAlternatives();i++) {
-			JLabel label = new JLabel('r' + new Integer(i).toString());
+		SMAATRIResults triRes = (SMAATRIResults) results;		
+		for (int i=0;i<triRes.getCategories().size();i++) {
+			Alternative cat = triRes.getCategories().get(i);
+			JLabel label = BasicComponentFactory.createLabel(new PresentationModel<Alternative>(cat).getModel(
+					Alternative.PROPERTY_NAME));
 			builder.add(label, cc.xy(startCol, row));
 				startCol += 2;
 		}		
