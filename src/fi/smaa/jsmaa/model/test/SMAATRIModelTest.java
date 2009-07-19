@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +81,7 @@ public class SMAATRIModelTest {
 	public void testSetProfiles() {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.modelChanged(ModelChangeEvent.PROFILES);
+		mock.modelChanged(ModelChangeEvent.CATEGORIES);
 		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
 		replay(mock);
 		model.setCategories(cats);
@@ -160,4 +161,27 @@ public class SMAATRIModelTest {
 			}
 		}
 	}	
+	
+	@Test
+	public void testDeleteCategory() {
+		List<Alternative> alts = new ArrayList<Alternative>();
+		Alternative c1 = new Alternative("cat1");
+		alts.add(c1);
+		Alternative c2 = new Alternative("cat2");
+		alts.add(c2);				
+		model.setCategories(alts);
+		SMAAModelListener mock = createMock(SMAAModelListener.class);
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.CATEGORIES);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
+		replay(mock);
+		
+		List<Alternative> cats2 = new ArrayList<Alternative>();
+		cats2.add(c1);
+
+		model.deleteCategory(c2);
+		verify(mock);
+		
+		assertEquals(cats2, model.getCategories());				
+	}
 }

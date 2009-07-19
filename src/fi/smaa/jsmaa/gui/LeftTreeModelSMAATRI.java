@@ -41,7 +41,7 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 		
 		smaaModel.addModelListener(new SMAAModelListener() {
 			public void modelChanged(ModelChangeEvent type) {
-				if (type == ModelChangeEvent.PROFILES) {
+				if (type == ModelChangeEvent.CATEGORIES) {
 					fireTreeChange();
 				}
 			}

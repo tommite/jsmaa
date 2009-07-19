@@ -65,13 +65,19 @@ public class SMAATRIModel extends SMAAModel {
 	public void setCategories(List<Alternative> categories) {
 		this.categories = categories;
 		profileMatrix.setAlternatives(this.categories);
-		fireModelChange(ModelChangeEvent.PROFILES);
+		fireModelChange(ModelChangeEvent.CATEGORIES);
 	}
 	
 	public void addCategory(Alternative cat) {
 		List<Alternative> newCats = new ArrayList<Alternative>(categories);
 		newCats.add(cat);
 		setCategories(newCats);
+	}
+	
+	public void deleteCategory(Alternative cat) {
+		List<Alternative> newCats = new ArrayList<Alternative>(categories);
+		newCats.remove(cat);
+		setCategories(newCats);		
 	}
 	
 	public List<Alternative> getCategories() {
