@@ -132,5 +132,4 @@ public class ElectreTriTest {
 		assertEquals(cat2, res.get(a1));
 		assertEquals(cat2, res.get(a2));
 	}
-	
 }

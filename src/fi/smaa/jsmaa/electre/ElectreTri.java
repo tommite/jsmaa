@@ -89,7 +89,7 @@ public class ElectreTri {
 						resMap.put(a, categories.get(i));
 						break;
 					}
-					if (i == categories.size()-1) {
+					if (i == categories.size()-2) {
 						resMap.put(a, cat);
 					}
 				}

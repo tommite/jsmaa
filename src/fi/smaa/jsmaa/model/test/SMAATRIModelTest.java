@@ -100,7 +100,7 @@ public class SMAATRIModelTest {
 		SMAATRIModel newModel = (SMAATRIModel) in.readObject();
 		assertEquals(model.getAlternatives().size(), newModel.getAlternatives().size());
 		assertEquals(model.getCriteria().size(), newModel.getCriteria().size());
-		
+
 		SMAAModelListener l = createMock(SMAAModelListener.class);
 		newModel.addModelListener(l);
 		l.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
@@ -108,7 +108,15 @@ public class SMAATRIModelTest {
 		newModel.setCategoryUpperBound((OutrankingCriterion)newModel.getCriteria().get(0),
 				newModel.getCategories().iterator().next(),
 				new Interval(0.0, 1.0));
-		verify(l);		
+		verify(l);
+		
+		newModel.removeModelListener(l);
+		SMAAModelListener l2 = createMock(SMAAModelListener.class);
+		newModel.addModelListener(l2);
+		l2.modelChanged(ModelChangeEvent.PARAMETER);
+		replay(l2);
+		newModel.getLambda().setStart(0.55);
+		verify(l2);				
 	}	
 	
 	@Test
@@ -123,19 +131,19 @@ public class SMAATRIModelTest {
 	}
 	
 	@Test
-	public void testSetLambda() {
+	public void testLambdaFires() {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
 		mock.modelChanged(ModelChangeEvent.PARAMETER);
 		replay(mock);
-		model.setLambda(0.9);
+		model.getLambda().setEnd(0.9);
 		verify(mock);
-		assertEquals(0.9, model.getLambda(), 0.000001);
+		assertEquals(0.9, model.getLambda().getEnd(), 0.000001);
 	}	
 	
 	@Test
 	public void testConstructorCorrectLambda() {
-		assertEquals(SMAATRIModel.DEFAULT_LAMBDA_VALUE, model.getLambda(), 0.00001);
+		assertEquals(new Interval(0.6, 0.85), model.getLambda());
 	}
 	
 	@Test
@@ -148,7 +156,7 @@ public class SMAATRIModelTest {
 		assertEquals(model.getCriteria().size(), model2.getCriteria().size());
 		assertEquals(model.getCategories().size(), model2.getCategories().size());
 		assertFalse(model2.getRule());
-		assertEquals(model.getLambda(), model2.getLambda(), 0.00001);
+		assertEquals(model.getLambda(), model2.getLambda());
 		
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());

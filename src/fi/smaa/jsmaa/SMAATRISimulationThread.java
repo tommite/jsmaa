@@ -96,7 +96,7 @@ public class SMAATRISimulationThread extends SimulationThread {
 		}
 		
 		ElectreTri tri = new ElectreTri(mod.getAlternatives(), ocrits,
-				mod.getCategories(), meas, upperBounds, weights, mod.getLambda(), mod.getRule());
+				mod.getCategories(), meas, upperBounds, weights, mod.getLambda().sample(), mod.getRule());
 		
 		sortRes = tri.compute();
 	}

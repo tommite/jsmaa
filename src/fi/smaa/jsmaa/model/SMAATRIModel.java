@@ -18,6 +18,8 @@
 
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -30,8 +32,8 @@ public class SMAATRIModel extends SMAAModel {
 	private ImpactMatrix profileMatrix;
 	private List<Alternative> categories = new ArrayList<Alternative>();
 	private boolean optimistic;
-	private double lambda;
-	public static final double DEFAULT_LAMBDA_VALUE = 0.7;
+	private Interval lambda;
+	private transient LambdaListener lambdaListener;
 	
 	public static final String PROPERTY_RULE = "rule";
 	public static final String PROPERTY_LAMBDA = "lambda";
@@ -40,21 +42,17 @@ public class SMAATRIModel extends SMAAModel {
 		super(name);
 		profileMatrix = new ImpactMatrix();
 		optimistic = true;
-		lambda = DEFAULT_LAMBDA_VALUE; 
+		lambda = new Interval(0.6, 0.85);
 		connectProfileListener();
+		connectLambdaListener();
 	}
 	
 	public void setRule(boolean optimistic) {
 		this.optimistic = optimistic;
 		fireModelChange(ModelChangeEvent.PARAMETER);
 	}
-	
-	public void setLambda(double lambda) {
-		this.lambda = lambda;
-		fireModelChange(ModelChangeEvent.PARAMETER);
-	}
-	
-	public double getLambda() {
+		
+	public Interval getLambda() {
 		return lambda;
 	}
 	
@@ -110,10 +108,22 @@ public class SMAATRIModel extends SMAAModel {
 	private void connectProfileListener() {
 		profileMatrix.addListener(impactListener);	
 	}
+	
+	private void connectLambdaListener() {
+		lambdaListener = new LambdaListener();
+		lambda.addPropertyChangeListener(lambdaListener);
+	}	
 
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		i.defaultReadObject();
 		connectProfileListener();
+		connectLambdaListener();
+	}
+	
+	private class LambdaListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			fireModelChange(ModelChangeEvent.PARAMETER);
+		}
 	}
 	
 	@Override

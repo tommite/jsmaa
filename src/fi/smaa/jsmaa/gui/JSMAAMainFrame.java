@@ -997,6 +997,9 @@ public class JSMAAMainFrame extends JFrame {
 			} else if (node == leftTreeModel.getModelNode()) {
 				editRenameItem.setEnabled(true);
 				editDeleteItem.setEnabled(false);
+				if (model instanceof SMAATRIModel) {
+					setRightViewToTechParameterView();
+				}
 			} else if (node == leftTreeModel.getPreferencesNode()) {
 				setRightViewToPreferences();
 				setEditMenuItemsEnabled(false);
@@ -1018,6 +1021,11 @@ public class JSMAAMainFrame extends JFrame {
 		editDeleteItem.setEnabled(enable);
 		editRenameItem.setEnabled(enable);
 	}			
+
+	public void setRightViewToTechParameterView() {
+		rightViewBuilder = new TechnicalParameterView((SMAATRIModel) model);
+		rebuildRightPanel();	
+	}
 
 	private class MySMAAModelListener implements SMAAModelListener {
 		
