@@ -29,7 +29,7 @@ import fi.smaa.jsmaa.model.Interval;
 public class IntervalValueModel extends AbstractVetoableValueModel {
 	
 	private static final long serialVersionUID = -5651105205219639989L;
-	private boolean start;
+	protected boolean start;
 	private Interval interval;
 	private JComponent parent;
 	private static final String INPUT_ERROR = "Input error";	
@@ -45,17 +45,19 @@ public class IntervalValueModel extends AbstractVetoableValueModel {
 	public boolean proposedChange(Object oldVal, Object newVal) {
 		if (start) {
 			if ((Double) newVal > interval.getEnd()) {
-				JOptionPane.showMessageDialog(parent, "Interval [start, end]: start has to be smaller than end",
-				INPUT_ERROR, JOptionPane.ERROR_MESSAGE);
+				errorMessage("Interval [start, end]: start has to be smaller than end");
 				return false;
 			}
 		} else { // end
 			if ((Double) newVal < interval.getStart()) {
-				JOptionPane.showMessageDialog(parent, "Interval [start, end]: end has to be larger than start",
-						INPUT_ERROR, JOptionPane.ERROR_MESSAGE);
+				errorMessage("Interval [start, end]: end has to be larger than start");
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	protected void errorMessage(String msg) {
+		JOptionPane.showMessageDialog(parent, msg, INPUT_ERROR, JOptionPane.ERROR_MESSAGE);		
 	}
 }

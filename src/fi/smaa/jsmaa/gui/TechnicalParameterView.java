@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -53,7 +54,17 @@ public class TechnicalParameterView implements ViewBuilder {
 		
 		builder.addLabel("Lambda interval", cc.xy(1, 3));
 		
-		builder.add(new IntervalPanel(null, new PresentationModel<Interval>(model.getLambda())),
+		
+		Interval range = new Interval(0.5, 1.0);
+		String msg = "Lambda must be within range ";
+		
+		PresentationModel<Interval> imodel = new PresentationModel<Interval>(model.getLambda());
+		IntervalPanel lambdaPanel = new IntervalPanel(
+				new ConstrainedIntervalValueModel(null, model.getLambda(), 
+						imodel.getModel(Interval.PROPERTY_START), true, range, msg),
+				new ConstrainedIntervalValueModel(null, model.getLambda(), 
+						imodel.getModel(Interval.PROPERTY_END), false, range, msg));				
+		builder.add(lambdaPanel,
 				cc.xy(3, 3));
 		
 		builder.addLabel("Exploitation rule", cc.xy(1, 5));

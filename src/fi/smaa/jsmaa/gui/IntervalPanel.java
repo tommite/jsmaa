@@ -38,6 +38,14 @@ public class IntervalPanel extends JPanel {
 		ValueModel startModel = new IntervalValueModel(parent, model.getBean(), model.getModel(Interval.PROPERTY_START), true);
 		ValueModel endModel = new IntervalValueModel(parent, model.getBean(), model.getModel(Interval.PROPERTY_END), false);
 				
+		init(startModel, endModel);
+	}
+		
+	public IntervalPanel(ValueModel startModel, ValueModel endModel) {
+		init(startModel, endModel);
+	}
+
+	private void init(ValueModel startModel, ValueModel endModel) {
 		setLayout(new FlowLayout());		
 
 		JTextField startField = BasicComponentFactory.createFormattedTextField(
