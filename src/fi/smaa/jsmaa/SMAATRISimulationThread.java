@@ -34,12 +34,15 @@ public class SMAATRISimulationThread extends SimulationThread {
 	private SMAATRIResults results;
 	private Map<Alternative, Alternative> sortRes;
 
-	public SMAATRISimulationThread(SMAATRIModel model, int iterations) {
-		super(model);
-		results = new SMAATRIResults(model.getAlternatives(), model.getCategories(), 10);
+	public SMAATRISimulationThread(SMAATRIModel triModel, int iterations) {
+		super(triModel);
+		results = new SMAATRIResults(triModel.getAlternatives(), triModel.getCategories(), 10);
 		
 		addPhase(new SimulationPhase() {
 			public void iterate() {
+				if (((SMAATRIModel) model).getCategories().size() == 0) {
+					return;
+				}
 				generateWeights();
 				sampleCriteria();
 				sortAlternatives();

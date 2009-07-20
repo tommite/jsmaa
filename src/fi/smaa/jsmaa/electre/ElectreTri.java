@@ -65,6 +65,7 @@ public class ElectreTri {
 			for (Alternative a : alts) {
 				resMap.put(a, categories.get(0));
 			}
+			return resMap;
 		}
 		for (Alternative a : alts) {
 			if (optimistic) {
