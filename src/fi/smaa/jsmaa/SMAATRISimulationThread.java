@@ -44,11 +44,18 @@ public class SMAATRISimulationThread extends SimulationThread {
 					return;
 				}
 				generateWeights();
+				sampleThresholds();
 				sampleCriteria();
 				sortAlternatives();
 				updateHits();
 			}
 		}, iterations);
+	}
+
+	protected void sampleThresholds() {
+		for (Criterion c : model.getCriteria()) {
+			((OutrankingCriterion)c).sampleThresholds();
+		}
 	}
 
 	private void updateHits() {

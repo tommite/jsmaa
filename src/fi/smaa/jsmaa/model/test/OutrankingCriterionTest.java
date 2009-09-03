@@ -20,10 +20,14 @@ package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.*;
 
+import java.beans.PropertyChangeListener;
+
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class OutrankingCriterionTest {
@@ -32,18 +36,44 @@ public class OutrankingCriterionTest {
 	
 	@Before
 	public void setUp() {
-		crit = new OutrankingCriterion("crit", true, 0.0, 0.5);
+		crit = new OutrankingCriterion("crit", true, new Interval(0.0, 0.0),
+				new Interval(0.5, 0.5));
 	}
 	
 	@Test
-	public void testSetIndifferenceThreshold() {
-		JUnitUtil.testSetter(crit, OutrankingCriterion.PROPERTY_INDIFFERENCE_THRESHOLD, 0.0, 1.0);		
+	public void testSetIndifMeasurement() {
+		JUnitUtil.testSetter(crit, OutrankingCriterion.PROPERTY_INDIF_MEASUREMENT, 
+				new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 	}
 	
 	@Test
-	public void testSetPreferenceThreshold() {
-		JUnitUtil.testSetter(crit, OutrankingCriterion.PROPERTY_PREFERENCE_THRESHOLD, 0.5, 1.0);		
+	public void testSetPrefMeasurement() {
+		JUnitUtil.testSetter(crit, OutrankingCriterion.PROPERTY_PREF_MEASUREMENT,
+				new Interval(0.5, 0.5), new Interval(1.0, 1.0));
 	}
+	
+	@Test
+	public void testIndifMeasurementChange() {
+		Interval ival = new Interval(0.0, 0.1);
+		crit.setIndifMeasurement(ival);
+		PropertyChangeListener mock = JUnitUtil.mockListener(crit, OutrankingCriterion.PROPERTY_INDIF_MEASUREMENT,
+				null, new Interval(0.0, 0.2));
+		crit.addPropertyChangeListener(mock);
+		ival.setEnd(0.2);
+		EasyMock.verify(mock);
+	}
+	
+	
+	@Test
+	public void testPrefMeasurementChange() {
+		Interval ival = new Interval(0.0, 0.1);
+		crit.setPrefMeasurement(ival);
+		PropertyChangeListener mock = JUnitUtil.mockListener(crit, OutrankingCriterion.PROPERTY_PREF_MEASUREMENT,
+				null, new Interval(0.0, 0.2));
+		crit.addPropertyChangeListener(mock);
+		ival.setEnd(0.2);
+		EasyMock.verify(mock);
+	}	
 	
 	@Test
 	public void testGetTypeLabel() {
@@ -53,8 +83,8 @@ public class OutrankingCriterionTest {
 	@Test
 	public void testDeepCopy() {
 		OutrankingCriterion c = crit.deepCopy();
-		assertEquals(crit.getIndifferenceThreshold(), c.getIndifferenceThreshold(), 0.000001);
-		assertEquals(crit.getPreferenceThreshold(), c.getPreferenceThreshold(), 0.000001);
+		assertEquals(crit.getIndifMeasurement(), c.getIndifMeasurement());
+		assertEquals(crit.getPrefMeasurement(), c.getPrefMeasurement());
 		assertEquals(crit.getName(), c.getName());
 		assertEquals(crit.getAscending(), c.getAscending());
 	}

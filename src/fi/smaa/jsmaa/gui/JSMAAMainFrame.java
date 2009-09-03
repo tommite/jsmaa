@@ -81,6 +81,7 @@ import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.SimulationThread;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
@@ -896,7 +897,8 @@ public class JSMAAMainFrame extends JFrame {
 	protected void addCardinalCriterion() {
 		Criterion c = null;
 		if (model instanceof SMAATRIModel) {
-			c = new OutrankingCriterion(generateNextCriterionName(), true, 0.0, 1.0);
+			c = new OutrankingCriterion(generateNextCriterionName(), true, 
+					new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		} else {
 			c = new ScaleCriterion(generateNextCriterionName());			
 		}

@@ -61,8 +61,8 @@ public class SMAATRIModelTest {
 		model = new SMAATRIModel("model");
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");
-		c1 = new OutrankingCriterion("c1", true, 0.0, 1.0);
-		c2 = new OutrankingCriterion("c2", true, 0.0, 1.0);
+		c1 = new OutrankingCriterion("c1", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
+		c2 = new OutrankingCriterion("c2", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		p1 = new Alternative("p1");
 		p2 = new Alternative("p2");
 		alts = new ArrayList<Alternative>();

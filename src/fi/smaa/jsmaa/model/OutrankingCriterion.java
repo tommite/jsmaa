@@ -18,43 +18,64 @@
 
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class OutrankingCriterion extends CardinalCriterion {
-	
-	public static final String PROPERTY_INDIFFERENCE_THRESHOLD = "indifferenceThreshold";
-	public static final String PROPERTY_PREFERENCE_THRESHOLD = "preferenceThreshold";
+
+public final class OutrankingCriterion extends CardinalCriterion {
+	public static final String PROPERTY_INDIF_MEASUREMENT = "indifMeasurement";
+	public static final String PROPERTY_PREF_MEASUREMENT = "prefMeasurement";
 
 	private static final long serialVersionUID = 2226047865113684859L;
 	
 	private double indifferenceThreshold;
 	private double preferenceThreshold;
+	private CardinalMeasurement indifMeasurement;
+	private CardinalMeasurement prefMeasurement;
 
-	public OutrankingCriterion(String name, boolean ascending, double indifferenceThreshold,
-			double preferenceThreshold) {
+	public OutrankingCriterion(String name, boolean ascending, CardinalMeasurement indifMeasurement,
+			CardinalMeasurement prefMeasurement) {
 		super(name, ascending);
-		this.indifferenceThreshold = indifferenceThreshold;
-		this.preferenceThreshold = preferenceThreshold;
+		setIndifMeasurement(indifMeasurement);
+		setPrefMeasurement(prefMeasurement);
+		indifferenceThreshold = indifMeasurement.sample();
+		preferenceThreshold = prefMeasurement.sample();		
+	}
+	
+	public void sampleThresholds() {
+		indifferenceThreshold = indifMeasurement.sample();
+		preferenceThreshold = prefMeasurement.sample();
 	}
 	
 	public double getIndifferenceThreshold() {
 		return indifferenceThreshold;
 	}
 
-	public void setIndifferenceThreshold(double indifferenceThreshold) {
-		double oldVal = this.indifferenceThreshold;
-		this.indifferenceThreshold = indifferenceThreshold;
-		firePropertyChange(PROPERTY_INDIFFERENCE_THRESHOLD, oldVal, this.indifferenceThreshold);
+	public void setIndifMeasurement(CardinalMeasurement indifMeasurement) {
+		CardinalMeasurement oldVal = this.indifMeasurement;
+		this.indifMeasurement = indifMeasurement;
+		this.indifMeasurement.addPropertyChangeListener(new IndifListener());		
+		firePropertyChange(PROPERTY_INDIF_MEASUREMENT, oldVal, this.indifMeasurement);
+	}
+	
+	public void setPrefMeasurement(CardinalMeasurement prefMeasurement) {
+		CardinalMeasurement oldVal = this.prefMeasurement;
+		this.prefMeasurement = prefMeasurement;
+		this.prefMeasurement.addPropertyChangeListener(new PrefListener());
+		firePropertyChange(PROPERTY_PREF_MEASUREMENT, oldVal, this.prefMeasurement);
+	}	
+	
+	public CardinalMeasurement getIndifMeasurement() {
+		return indifMeasurement;
+	}
+	
+	public CardinalMeasurement getPrefMeasurement() {
+		return prefMeasurement;
 	}
 
 	public double getPreferenceThreshold() {
 		return preferenceThreshold;
 	}
-
-	public void setPreferenceThreshold(double preferenceThreshold) {
-		double oldVal = this.preferenceThreshold;
-		this.preferenceThreshold = preferenceThreshold;
-		firePropertyChange(PROPERTY_PREFERENCE_THRESHOLD, oldVal, this.preferenceThreshold);		
-	}	
 
 	@Override
 	public String getTypeLabel() {
@@ -62,7 +83,20 @@ public class OutrankingCriterion extends CardinalCriterion {
 	}
 	
 	public OutrankingCriterion deepCopy() {
-		return new OutrankingCriterion(name, ascending, indifferenceThreshold, preferenceThreshold);
+		return new OutrankingCriterion(name, ascending, (CardinalMeasurement)indifMeasurement.deepCopy(),
+				(CardinalMeasurement)prefMeasurement.deepCopy());
 	}
+	
+	private class PrefListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			firePropertyChange(PROPERTY_PREF_MEASUREMENT, null, getPrefMeasurement());
+		}
+	}
+	
+	private class IndifListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			firePropertyChange(PROPERTY_INDIF_MEASUREMENT, null, getIndifMeasurement());
+		}
+	}	
 
 }

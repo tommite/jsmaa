@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.electre.OutrankingFunction;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class OutrankingFunctionTest {
@@ -32,7 +33,9 @@ public class OutrankingFunctionTest {
 	
 	@Before
 	public void setUp() {
-		c = new OutrankingCriterion("crit", true, 1.0, 2.0);
+		c = new OutrankingCriterion("crit", true, new Interval(1.0, 1.0), 
+				new Interval(2.0, 2.0));
+		c.sampleThresholds();
 	}
 	
 

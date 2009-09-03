@@ -19,10 +19,10 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
-import javax.swing.text.DefaultFormatter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -94,24 +94,39 @@ public class CriterionView implements ViewBuilder {
 		LayoutUtil.addRow(layout);
 		row += 2;
 		OutrankingCriterion outrCrit = (OutrankingCriterion) criterion;
-		PresentationModel<OutrankingCriterion> pmc = new PresentationModel<OutrankingCriterion>(outrCrit);
 		builder.addSeparator("Thresholds", cc.xyw(1, row, fullWidth));
+
+		PresentationModel<Interval> indifModel = new PresentationModel<Interval>((Interval) outrCrit.getIndifMeasurement());
+		PresentationModel<Interval> prefModel = new PresentationModel<Interval>((Interval) outrCrit.getPrefMeasurement());
+		String dominatorText = "Preference threshold must dominate indifference threshold (be equal or larger than)";
+
+		ValueModel indifStartModel = new IntervalValueModel(null, indifModel.getBean(), 
+				indifModel.getModel(Interval.PROPERTY_START), true);
+		ValueModel indifEndModel = new DominatedIntervalValueModel(null, indifModel.getBean(), 
+				indifModel.getModel(Interval.PROPERTY_END), 
+				false, prefModel.getBean(), dominatorText);
+		
+		ValueModel prefStartModel = new DominatorIntervalValueModel(null, prefModel.getBean(), 
+				prefModel.getModel(Interval.PROPERTY_START), true,
+				indifModel.getBean(), dominatorText);
+		ValueModel prefEndModel = new IntervalValueModel(null, prefModel.getBean(), 
+				prefModel.getModel(Interval.PROPERTY_END), false);
+		
+
+		IntervalPanel indifPanel = new IntervalPanel(indifStartModel, indifEndModel);
+		IntervalPanel prefPanel = new IntervalPanel(prefStartModel, prefEndModel);
 		
 		LayoutUtil.addRow(layout);
 		row += 2;
 		builder.addLabel("Indifference:", cc.xy(1, row));
-		builder.add(BasicComponentFactory.createFormattedTextField(
-				pmc.getModel(OutrankingCriterion.PROPERTY_INDIFFERENCE_THRESHOLD),
-				new DefaultFormatter()),
-				cc.xy(3, row));
-		
+		builder.add(indifPanel, cc.xy(3, row));				
+		builder.addLabel("Interval", cc.xy(5, row));
+				
 		LayoutUtil.addRow(layout);
 		row += 2;
-		builder.addLabel("Preference:", cc.xy(1, row));
-		builder.add(BasicComponentFactory.createFormattedTextField(
-				pmc.getModel(OutrankingCriterion.PROPERTY_PREFERENCE_THRESHOLD),
-				new DefaultFormatter()),
-				cc.xy(3, row));		
+		builder.addLabel("Preference:", cc.xy(1, row));		
+		builder.add(prefPanel, cc.xy(3, row));				
+		builder.addLabel("Interval", cc.xy(5, row));
 		
 		return row;
 	}
@@ -169,15 +184,7 @@ public class CriterionView implements ViewBuilder {
 			if (criterion instanceof CardinalCriterion) {
 				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
 				CardinalMeasurement m = model.getMeasurement(cardCrit, a);
-				JComponent measComp = null;
-				if (m instanceof Interval) {
-					Interval ival = (Interval) m;
-					measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
-				} else if (m instanceof GaussianMeasurement) {
-					GaussianMeasurement gm = (GaussianMeasurement) m;
-				    measComp = ComponentBuilder.createGaussianMeasurementPanel(
-				             new PresentationModel<GaussianMeasurement>(gm));
-				}
+				JComponent measComp = getMeasurementComponent(m);
 				builder.add(measComp, cc.xy(3, row));				
 				CriterionTypeChooser chooser = new CriterionTypeChooser(model, a, criterion);
 				builder.add(chooser, cc.xy(5, row));			
@@ -185,5 +192,19 @@ public class CriterionView implements ViewBuilder {
 			index++;
 		}
 		return row;
+	}
+
+
+	private JComponent getMeasurementComponent(CardinalMeasurement m) {
+		JComponent measComp = null;
+		if (m instanceof Interval) {
+			Interval ival = (Interval) m;
+			measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
+		} else if (m instanceof GaussianMeasurement) {
+			GaussianMeasurement gm = (GaussianMeasurement) m;
+		    measComp = ComponentBuilder.createGaussianMeasurementPanel(
+		             new PresentationModel<GaussianMeasurement>(gm));
+		}
+		return measComp;
 	}
 }

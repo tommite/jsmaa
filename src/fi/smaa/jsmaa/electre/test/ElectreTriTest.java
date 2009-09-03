@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.electre.ElectreTri;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class ElectreTriTest {
@@ -59,9 +60,9 @@ public class ElectreTriTest {
 		cat1 = new Alternative("cat1");
 		cat2 = new Alternative("cat2");
 		cat3 = new Alternative("cat3");
-		c1 = new OutrankingCriterion("c1", true, 0.0, 1.0);
-		c2 = new OutrankingCriterion("c2", true, 0.0, 1.0);
-		c3 = new OutrankingCriterion("c3", true, 0.0, 1.0);
+		c1 = new OutrankingCriterion("c1", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
+		c2 = new OutrankingCriterion("c2", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
+		c3 = new OutrankingCriterion("c3", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		alts = new ArrayList<Alternative>();
 		cats = new ArrayList<Alternative>();
 		crit = new ArrayList<OutrankingCriterion>();

@@ -35,6 +35,7 @@ import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
@@ -43,8 +44,10 @@ public class SMAATRISimulatorTest {
 	private SMAATRIModel model;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private OutrankingCriterion c1 = new OutrankingCriterion("c1", true, 0.0, 1.0);
-	private OutrankingCriterion c2 = new OutrankingCriterion("c2", true, 0.0, 1.0);
+	private OutrankingCriterion c1 = new OutrankingCriterion("c1", true, 
+			new Interval(0.0, 0.0), new Interval(1.0, 1.0));
+	private OutrankingCriterion c2 = new OutrankingCriterion("c2", true,
+			new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 	private Alternative cat1 = new Alternative("cat1");
 	private Alternative cat2 = new Alternative("cat2");
 	private Set<Alternative> alts;

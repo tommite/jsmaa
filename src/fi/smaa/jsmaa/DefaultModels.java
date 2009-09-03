@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -39,8 +40,10 @@ public class DefaultModels {
 	}
 	
 	private static void addDefaultOutrankingCriteria(SMAAModel model) {
-		model.addCriterion(new OutrankingCriterion("Criterion 1", true, 0.0, 1.0));
-		model.addCriterion(new OutrankingCriterion("Criterion 2", true, 0.0, 1.0));
+		model.addCriterion(new OutrankingCriterion("Criterion 1", true, 
+				new Interval(0.0, 0.0), new Interval(1.0, 1.0)));
+		model.addCriterion(new OutrankingCriterion("Criterion 2", true, 
+				new Interval(0.0, 0.0), new Interval(1.0, 1.0)));
 	}	
 
 	private static void addDefaultAlternatives(SMAAModel model) {

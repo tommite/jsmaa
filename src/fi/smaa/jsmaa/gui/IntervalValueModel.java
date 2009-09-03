@@ -30,7 +30,7 @@ public class IntervalValueModel extends AbstractVetoableValueModel {
 	
 	private static final long serialVersionUID = -5651105205219639989L;
 	protected boolean start;
-	private Interval interval;
+	protected Interval interval;
 	private JComponent parent;
 	private static final String INPUT_ERROR = "Input error";	
 	
