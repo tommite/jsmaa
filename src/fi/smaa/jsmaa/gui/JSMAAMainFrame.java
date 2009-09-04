@@ -156,7 +156,6 @@ public class JSMAAMainFrame extends JFrame {
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
 			Interval lambda = ((SMAATRIModel) model).getLambda().deepCopy();
-			System.out.println(lambda);
 			lambdaSlider.setLowValue((int)(lambda.getStart() * 100.0));
 			lambdaSlider.setHighValue((int)(lambda.getEnd() * 100.0));
 			updateLambdaLabel();
