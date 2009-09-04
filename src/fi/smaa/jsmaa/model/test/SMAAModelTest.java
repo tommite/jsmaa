@@ -40,7 +40,6 @@ import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
@@ -50,6 +49,7 @@ import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class SMAAModelTest {
 	

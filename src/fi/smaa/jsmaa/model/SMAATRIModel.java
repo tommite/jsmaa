@@ -55,7 +55,7 @@ public class SMAATRIModel extends SMAAModel {
 	public Interval getLambda() {
 		return lambda;
 	}
-	
+		
 	public boolean getRule() {
 		return optimistic;
 	}

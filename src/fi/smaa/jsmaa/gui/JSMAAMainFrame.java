@@ -21,6 +21,7 @@ package fi.smaa.jsmaa.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -45,13 +46,14 @@ import java.util.Queue;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -59,6 +61,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -67,6 +71,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
+import com.jidesoft.swing.RangeSlider;
 
 import fi.smaa.common.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
@@ -81,15 +86,15 @@ import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.SimulationThread;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.OutrankingCriterion;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.OrdinalCriterion;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.OrdinalCriterion;
+import fi.smaa.jsmaa.model.OutrankingCriterion;
+import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
@@ -115,6 +120,10 @@ public class JSMAAMainFrame extends JFrame {
 	private Queue<BuildSimulatorRun> buildQueue
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
+	private JToolBar toolBar;
+	private RangeSlider lambdaSlider;
+	private JPanel lambdaPanel;
+	private JLabel lambdaRangeLabel;
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super("SMAA");
@@ -146,8 +155,15 @@ public class JSMAAMainFrame extends JFrame {
 		});
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
+			Interval lambda = ((SMAATRIModel) model).getLambda().deepCopy();
+			System.out.println(lambda);
+			lambdaSlider.setLowValue((int)(lambda.getStart() * 100.0));
+			lambdaSlider.setHighValue((int)(lambda.getEnd() * 100.0));
+			updateLambdaLabel();
+			toolBar.add(lambdaPanel);
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
+			toolBar.remove(lambdaPanel);
 		}
 		pack();
 		buildNewSimulator();
@@ -225,18 +241,51 @@ public class JSMAAMainFrame extends JFrame {
 	   
 	   getContentPane().setLayout(new BorderLayout());
 	   getContentPane().add("Center", splitPane);
-	   getContentPane().add("South", createToolBar());
+	   toolBar = createToolBar();
+	   getContentPane().add("South", toolBar);
 	}
 	
-	private JComponent createToolBar() {
+	private JToolBar createToolBar() {
 		simulationProgress = new JProgressBar();	
 		simulationProgress.setStringPainted(true);
 		JToolBar bar = new JToolBar();
 		bar.add(simulationProgress);
 		bar.setFloatable(false);
+		
+		createLambdaPanel();
 		return bar;
 	}
 
+	private void createLambdaPanel() {
+		lambdaSlider = new RangeSlider(50, 100, 65, 85);
+		lambdaSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				fireLambdaSliderChanged();
+			}
+		});
+		lambdaPanel = new JPanel();
+		lambdaPanel.add(lambdaSlider, BorderLayout.CENTER);
+		JPanel lowPanel = new JPanel();
+		lambdaPanel.add(new JLabel("Lambda range"), BorderLayout.NORTH);
+		lambdaPanel.add(lowPanel, BorderLayout.SOUTH);
+		lowPanel.setLayout(new FlowLayout());
+		lambdaRangeLabel = new JLabel();
+		lowPanel.add(lambdaRangeLabel);
+		updateLambdaLabel();
+	}
+
+
+	private void updateLambdaLabel() {
+		lambdaRangeLabel.setText("[" + lambdaSlider.getLowValue() / 100.0 + "-"
+				+lambdaSlider.getHighValue() / 100.0+ "]");
+	}
+
+	protected void fireLambdaSliderChanged() {
+		Interval lambda = ((SMAATRIModel) model).getLambda();
+		lambda.setStart(lambdaSlider.getLowValue() / 100.0);
+		lambda.setEnd(lambdaSlider.getHighValue() / 100.0);
+		updateLambdaLabel();
+	}
 
 	private void setRightViewToCentralWeights() {		
 		rightViewBuilder = new CentralWeightsView((SMAA2Results) results);

@@ -88,7 +88,7 @@ public class SMAATRIModelTest {
 		verify(mock);
 		assertEquals(cats, model.getCategories());
 	}
-	
+		
 	@Test
 	public void testSerialization() throws Exception {
 		model.setCriteria(crit);
