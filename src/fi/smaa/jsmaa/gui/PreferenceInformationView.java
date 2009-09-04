@@ -49,7 +49,7 @@ public class PreferenceInformationView implements ViewBuilder {
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, pref, 3dlu, pref",
+				"right:pref, 3dlu, pref, 3dlu, left:pref:grow",
 				"p, 3dlu, p, 3dlu, p" );
 		
 		int fullWidth = 5;

@@ -43,7 +43,7 @@ public class AlternativeInfoView implements ViewBuilder {
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"pref",
+				"left:pref:grow",
 				"p" );
 		
 		int fullWidth = 1;
