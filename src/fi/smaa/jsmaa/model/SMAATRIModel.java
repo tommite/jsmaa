@@ -134,6 +134,8 @@ public class SMAATRIModel extends SMAAModel {
 		model.setRule(optimistic);
 		model.profileMatrix = (ImpactMatrix) profileMatrix.deepCopy(
 				model.getCategories(), model.getCriteria());
+		model.getLambda().setStart(getLambda().getStart());
+		model.getLambda().setEnd(getLambda().getEnd());
 		return model;
 	}	
 }

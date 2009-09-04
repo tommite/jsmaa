@@ -281,8 +281,10 @@ public class JSMAAMainFrame extends JFrame {
 
 	protected void fireLambdaSliderChanged() {
 		Interval lambda = ((SMAATRIModel) model).getLambda();
-		lambda.setStart(lambdaSlider.getLowValue() / 100.0);
-		lambda.setEnd(lambdaSlider.getHighValue() / 100.0);
+		double lowVal = lambdaSlider.getLowValue() / 100.0;
+		double highVal = lambdaSlider.getHighValue() / 100.0;
+		lambda.setStart(lowVal);
+		lambda.setEnd(highVal);
 		updateLambdaLabel();
 	}
 

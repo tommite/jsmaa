@@ -149,6 +149,8 @@ public class SMAATRIModelTest {
 	@Test
 	public void testDeepCopy() {
 		model.setRule(false);
+		model.getLambda().setStart(0.55);
+		model.getLambda().setEnd(0.56);
 		SMAATRIModel model2 = model.deepCopy();
 	
 		assertEquals(model.getName(), model2.getName());
