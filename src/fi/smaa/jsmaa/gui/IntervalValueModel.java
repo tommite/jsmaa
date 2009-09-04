@@ -19,26 +19,21 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
-import com.jgoodies.binding.value.AbstractVetoableValueModel;
 import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.model.Interval;
 
-public class IntervalValueModel extends AbstractVetoableValueModel {
+public class IntervalValueModel extends MultiVetoableValueModel {
 	
 	private static final long serialVersionUID = -5651105205219639989L;
 	protected boolean start;
 	protected Interval interval;
-	private JComponent parent;
-	private static final String INPUT_ERROR = "Input error";	
 	
 	protected IntervalValueModel(JComponent parent, Interval interval, ValueModel subject, boolean start) {
-		super(subject);
+		super(parent, subject);
 		this.start = start;
 		this.interval = interval;
-		this.parent = parent;
 	}
 
 	@Override
@@ -54,10 +49,6 @@ public class IntervalValueModel extends AbstractVetoableValueModel {
 				return false;
 			}
 		}
-		return true;
-	}
-	
-	protected void errorMessage(String msg) {
-		JOptionPane.showMessageDialog(parent, msg, INPUT_ERROR, JOptionPane.ERROR_MESSAGE);		
+		return super.proposedChange(oldVal, newVal);
 	}
 }

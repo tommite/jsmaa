@@ -102,16 +102,17 @@ public class CriterionView implements ViewBuilder {
 
 		ValueModel indifStartModel = new IntervalValueModel(null, indifModel.getBean(), 
 				indifModel.getModel(Interval.PROPERTY_START), true);
-		ValueModel indifEndModel = new DominatedIntervalValueModel(null, indifModel.getBean(), 
-				indifModel.getModel(Interval.PROPERTY_END), 
-				false, prefModel.getBean(), dominatorText);
+		IntervalValueModel indifEndModel = new IntervalValueModel(null, indifModel.getBean(), 
+				indifModel.getModel(Interval.PROPERTY_END), false);
 		
-		ValueModel prefStartModel = new DominatorIntervalValueModel(null, prefModel.getBean(), 
-				prefModel.getModel(Interval.PROPERTY_START), true,
-				indifModel.getBean(), dominatorText);
+		indifEndModel.addVetoer(new RangeVetoer(prefModel.getBean(), dominatorText, false));
+		
+		IntervalValueModel prefStartModel = new IntervalValueModel(null, prefModel.getBean(), 
+				prefModel.getModel(Interval.PROPERTY_START), true);
 		ValueModel prefEndModel = new IntervalValueModel(null, prefModel.getBean(), 
 				prefModel.getModel(Interval.PROPERTY_END), false);
 		
+		prefStartModel.addVetoer(new RangeVetoer(indifModel.getBean(), dominatorText, true));
 
 		IntervalPanel indifPanel = new IntervalPanel(indifStartModel, indifEndModel);
 		IntervalPanel prefPanel = new IntervalPanel(prefStartModel, prefEndModel);

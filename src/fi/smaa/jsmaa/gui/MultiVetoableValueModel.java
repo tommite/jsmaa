@@ -14,41 +14,50 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package fi.smaa.jsmaa.gui;
 
-import javax.swing.JComponent;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+
+import com.jgoodies.binding.value.AbstractVetoableValueModel;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.model.Interval;
-
 @SuppressWarnings("serial")
-public class DominatorIntervalValueModel extends IntervalValueModel {
+public abstract class MultiVetoableValueModel extends AbstractVetoableValueModel {
+	
+	private List<Vetoer> vetoers;
+	private JComponent parent;
+	protected static final String INPUT_ERROR = "Input error";		
 
-	private Interval dominated;
-	private String dominatorText;
-
-	protected DominatorIntervalValueModel(JComponent parent, Interval interval,
-			ValueModel subject, boolean start, Interval dominated, String dominatorText) {
-		super(parent, interval, subject, start);
-		this.dominated = dominated;
-		this.dominatorText = dominatorText;
+	public MultiVetoableValueModel(JComponent parent, ValueModel subject) {
+		super(subject);
+		this.parent = parent;
+		vetoers = new ArrayList<Vetoer>();
 	}
-
+	
+	public void addVetoer(Vetoer vetoer) {
+		vetoers.add(vetoer);
+	}
+	
 	@Override
 	public boolean proposedChange(Object oldVal, Object newVal) {
-		if (!super.proposedChange(oldVal, newVal)) {
-			return false;
-		}
-		if (start) {
-			if ((Double) newVal < dominated.getEnd()) {
-				errorMessage(dominatorText);
+		for (Vetoer v : vetoers) {
+			if (!v.check(oldVal, newVal)) {
+				if (v.getErrorMessage(newVal) != null) {
+					errorMessage(v.getErrorMessage(newVal));
+				}
 				return false;
 			}
 		}
 		return true;
 	}
 
+	protected void errorMessage(String msg) {
+		JOptionPane.showMessageDialog(parent, msg, INPUT_ERROR, JOptionPane.ERROR_MESSAGE);		
+	}
 }
