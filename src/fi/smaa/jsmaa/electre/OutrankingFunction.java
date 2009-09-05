@@ -16,9 +16,24 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model;
+package fi.smaa.jsmaa.electre;
 
-@SuppressWarnings("serial")
-public class NoSuchValueException extends Exception {
+import fi.smaa.jsmaa.model.OutrankingCriterion;
 
+public class OutrankingFunction {
+
+	public static double concordance(OutrankingCriterion crit, double outranker, double outranked) {
+		double diff = outranked - outranker;
+		if (!crit.getAscending()) {
+			diff = 0.0 - diff;
+		}
+		if (diff >= crit.getPreferenceThreshold()) {
+			return 0.0;
+		} else if (diff <= crit.getIndifferenceThreshold()) {
+			return 1.0;
+		} else {	
+			return (diff - crit.getIndifferenceThreshold()) / 
+				(crit.getPreferenceThreshold() - crit.getIndifferenceThreshold()); 
+		}
+	}		
 }

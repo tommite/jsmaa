@@ -18,11 +18,6 @@
 
 package fi.smaa.jsmaa.model;
 
-public interface SMAAModelListener {
-	
-	public void alternativesChanged();
-	public void criteriaChanged();
-	public void preferencesChanged();
-	public void measurementsChanged();
-	public void measurementTypeChanged();
+public interface SMAAModelListener {	
+	public void modelChanged(ModelChangeEvent type);
 }

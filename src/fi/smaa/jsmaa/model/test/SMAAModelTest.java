@@ -40,18 +40,16 @@ import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
-import fi.smaa.jsmaa.model.NoSuchAlternativeException;
-import fi.smaa.jsmaa.model.NoSuchCriterionException;
-import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class SMAAModelTest {
 	
@@ -75,39 +73,38 @@ public class SMAAModelTest {
 		
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);
-		mock.alternativesChanged();
-		mock.measurementTypeChanged();
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
 		replay(mock);
 		model.setAlternatives(alts);
 		verify(mock);
 		assertEquals(alts, model.getAlternatives());
-		assertEquals(alts, model.getImpactMatrix().getAlternatives());
+		assertEquals(alts, model.getAlternatives());
 	}
 	
 	@Test
 	public void testSetCriteria() {
 		List<Criterion> crit = new ArrayList<Criterion>();
-		crit.add(new CardinalCriterion("c1"));
-		crit.add(new CardinalCriterion("c2"));
+		crit.add(new ScaleCriterion("c1"));
+		crit.add(new ScaleCriterion("c2"));
 		
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
 		model.addModelListener(mock);		
-		mock.preferencesChanged();
-		mock.criteriaChanged();
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);
+		mock.modelChanged(ModelChangeEvent.CRITERIA);		
 		replay(mock);
 		
 		model.setCriteria(crit);
 		verify(mock);
 
 		assertEquals(crit, model.getCriteria());
-		assertEquals(crit, model.getImpactMatrix().getCriteria());		
 	}
 	
 	@Test
 	public void testSetPreferenceInformation() {
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
-		model.addModelListener(mock);		
-		mock.preferencesChanged();
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		replay(mock);
 		MissingPreferenceInformation pref = new MissingPreferenceInformation(model.getAlternatives().size());
 		model.setPreferenceInformation(pref);
@@ -124,7 +121,7 @@ public class SMAAModelTest {
 		ranks.add(new Rank(2));
 		model.setPreferenceInformation(new OrdinalPreferenceInformation(ranks));		
 		model.addModelListener(mock);
-		mock.preferencesChanged();
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		expectLastCall().anyTimes();
 		replay(mock);
 		r1.setRank(2);
@@ -132,21 +129,21 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testAddAlternative() throws NoSuchAlternativeException, NoSuchCriterionException {
+	public void testAddAlternative() {
 		List<Alternative> alts = new ArrayList<Alternative>();
 		Alternative a1 = new Alternative("alt1");
 		alts.add(a1);
 		
-		CardinalCriterion c = new CardinalCriterion("crit");
+		ScaleCriterion c = new ScaleCriterion("crit");
 		List<Criterion> crit = new ArrayList<Criterion>();
 		crit.add(c);
 		model.setCriteria(crit);
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
-		model.addModelListener(mock);		
-		mock.alternativesChanged();
-		mock.measurementTypeChanged();
-		mock.measurementsChanged();
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT);
 		expectLastCall().anyTimes();
 		replay(mock);
 		
@@ -160,7 +157,7 @@ public class SMAAModelTest {
 		
 		assertEquals(alts2, model.getAlternatives());
 		
-		assertNotNull(model.getImpactMatrix().getMeasurement(c, alt2));
+		assertNotNull(model.getMeasurement(c, alt2));
 	}
 	
 	@Test
@@ -172,19 +169,19 @@ public class SMAAModelTest {
 	@Test
 	public void testAddCriterion() {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		CardinalCriterion c1 = new CardinalCriterion("c1");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
 		crit.add(c1);
 		
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
-		model.addModelListener(mock);		
-		mock.criteriaChanged();
-		mock.preferencesChanged();
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.CRITERIA);
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);		
 		replay(mock);
 		
 		List<Criterion> crit2 = new ArrayList<Criterion>();
 		crit2.add(c1);
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		crit2.add(c2);		
 		model.addCriterion(c2);
 		verify(mock);
@@ -201,9 +198,9 @@ public class SMAAModelTest {
 		alts.add(a2);				
 		model.setAlternatives(alts);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
-		model.addModelListener(mock);		
-		mock.alternativesChanged();
-		mock.measurementTypeChanged();
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.ALTERNATIVES);		
+		mock.modelChanged(ModelChangeEvent.MEASUREMENT_TYPE);		
 		replay(mock);
 		
 		List<Alternative> alts2 = new ArrayList<Alternative>();
@@ -218,16 +215,16 @@ public class SMAAModelTest {
 	@Test
 	public void testDeleteCriterion() throws Exception {
 		Set<Criterion> crit = new HashSet<Criterion>();
-		CardinalCriterion c1 = new CardinalCriterion("c1");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
 		crit.add(c1);
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		crit.add(c2);		
 		
 		model.setCriteria(crit);
 		SMAAModelListener mock = createMock(SMAAModelListener.class);
-		model.addModelListener(mock);		
-		mock.criteriaChanged();
-		mock.preferencesChanged();
+		model.addModelListener(mock);
+		mock.modelChanged(ModelChangeEvent.CRITERIA);
+		mock.modelChanged(ModelChangeEvent.PREFERENCES);
 		replay(mock);
 		
 		List<Criterion> crit2 = new ArrayList<Criterion>();
@@ -239,7 +236,7 @@ public class SMAAModelTest {
 	}
 	
 	@Test
-	public void testDeepCopy() throws NoSuchValueException {
+	public void testDeepCopy() {
 		setupModel();
 		
 		SMAAModel model2 = model.deepCopy();
@@ -251,19 +248,18 @@ public class SMAAModelTest {
 		assertFalse(model.getAlternatives() == model2.getAlternatives());
 		assertFalse(model.getCriteria() == model2.getCriteria());
 		assertFalse(model.getPreferenceInformation() == model2.getPreferenceInformation());
-		assertFalse(model.getImpactMatrix() == model2.getImpactMatrix());
 	}
 
-	private void setupModel() throws NoSuchAlternativeException, NoSuchCriterionException {
+	private void setupModel() {
 		Alternative a1 = new Alternative("a1");
 		Alternative a2 = new Alternative("a2");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		model.addAlternative(a1);
 		model.addAlternative(a2);
 		model.addCriterion(c1);
 		model.addCriterion(c2);
-		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
+		model.setMeasurement(c1, a1, new Interval(0.0, 6.0));
 	}
 	
 	@Test
@@ -298,8 +294,8 @@ public class SMAAModelTest {
 		SMAAModel newModel = (SMAAModel) in.readObject();
 		
 		SMAAModelListener l = createMock(SMAAModelListener.class);
-		newModel.addModelListener(l);		
-		l.preferencesChanged();
+		newModel.addModelListener(l);
+		l.modelChanged(ModelChangeEvent.PREFERENCES);
 		expectLastCall().anyTimes();
 		replay(l);
 		OrdinalPreferenceInformation pref = (OrdinalPreferenceInformation) newModel.getPreferenceInformation();
@@ -336,10 +332,10 @@ public class SMAAModelTest {
 		SMAAModel newModel = (SMAAModel) in.readObject();
 		
 		SMAAModelListener l = createMock(SMAAModelListener.class);
-		newModel.addModelListener(l);		
-		l.measurementsChanged();
+		newModel.addModelListener(l);
+		l.modelChanged(ModelChangeEvent.MEASUREMENT);
 		replay(l);
-		CardinalCriterion c = (CardinalCriterion) newModel.getCriteria().get(0);
+		ScaleCriterion c = (ScaleCriterion) newModel.getCriteria().get(0);
 		c.setAscending(false);
 		verify(l);
 	}	
@@ -359,13 +355,13 @@ public class SMAAModelTest {
 	public void testAddCriterionRetainsMeasurements() throws Exception {
 		SMAAModel m = new SMAAModel("model");
 		Alternative a1 = new Alternative("a");
-		CardinalCriterion c1 = new CardinalCriterion("c1");
-		CardinalCriterion c2 = new CardinalCriterion("c2");
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		ScaleCriterion c2 = new ScaleCriterion("c2");
 		m.addAlternative(a1);
 		m.addCriterion(c1);
-		m.getImpactMatrix().setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));
+		m.setMeasurement(c1, a1, new LogNormalMeasurement(0.0, 0.2));
 		m.addCriterion(c2);
 		assertEquals(new LogNormalMeasurement(0.0, 0.2),
-				m.getImpactMatrix().getMeasurement(c1, a1));
+				m.getMeasurement(c1, a1));
 	}
 }

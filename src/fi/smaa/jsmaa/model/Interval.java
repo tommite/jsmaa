@@ -127,5 +127,9 @@ public class Interval extends CardinalMeasurement {
 	public double sample() {
 		return getStart() + RandomUtil.createUnif01() * (getEnd() - getStart());
 	}
+	
+	public boolean includes(Double val) {
+		return val >= getStart() && val <= getEnd();
+	}
 
 }

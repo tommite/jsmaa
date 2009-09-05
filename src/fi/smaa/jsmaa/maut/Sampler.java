@@ -22,21 +22,21 @@ import java.util.List;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ImpactMatrix;
-import fi.smaa.jsmaa.model.NoSuchValueException;
+import fi.smaa.jsmaa.model.SMAAModel;
 
-public class UtilitySampler {
+public class Sampler {
 	private List<Alternative> alts;
-	private ImpactMatrix m;
+	private SMAAModel m;
 	
-	public UtilitySampler(ImpactMatrix m, List<Alternative> alts) {
+	public Sampler(SMAAModel m, List<Alternative> alts) {
 		assert(alts.size() > 0);
 		this.alts = alts;
 		this.m = m;
 	}
 	
-	public void sample(Criterion crit, double[] target) throws NoSuchValueException {
+	public void sample(Criterion crit, double[] target) {
 		if (crit instanceof CardinalCriterion) {
 			sample((CardinalCriterion) crit, target);
 		} else {
@@ -45,12 +45,12 @@ public class UtilitySampler {
 	}
 
 
-	public void sample(CardinalCriterion c, double[] target) throws NoSuchValueException {
+	public void sample(CardinalCriterion c, double[] target) {
 		assert(target.length == alts.size());
 
-		for (int i=0;i<alts.size();i++) {
-			
-			target[i] = m.getMeasurement(c, alts.get(i)).sample();
+		for (int i=0;i<target.length;i++) {
+			CardinalMeasurement meas = m.getMeasurement(c, alts.get(i));
+			target[i] = meas.sample();
 		}
 	}
 

@@ -35,7 +35,7 @@ import org.junit.Test;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 
 public class SMAA2ResultsTest {
@@ -48,9 +48,9 @@ public class SMAA2ResultsTest {
 	private Integer[] secondFirst;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private CardinalCriterion c1 = new CardinalCriterion("c1");
-	private CardinalCriterion c2 = new CardinalCriterion("c2");
-	private CardinalCriterion c3 = new CardinalCriterion("c3");
+	private ScaleCriterion c1 = new ScaleCriterion("c1");
+	private ScaleCriterion c2 = new ScaleCriterion("c2");
+	private ScaleCriterion c3 = new ScaleCriterion("c3");
 	private List<Alternative> alts;
 	private List<Criterion> crit;	
 	

@@ -16,9 +16,21 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.model;
+package fi.smaa.jsmaa.gui;
 
-@SuppressWarnings("serial")
-public class NoSuchCriterionException extends NoSuchValueException {
+import java.util.List;
 
+import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.model.Criterion;
+
+public abstract class SMAA2ResultsView extends ResultsView {
+
+	public SMAA2ResultsView(SMAA2Results results) {
+		super(results);
+	}
+	
+	protected List<Criterion> getCriteria() {
+		return ((SMAA2Results) results).getCriteria();
+	}
+	
 }

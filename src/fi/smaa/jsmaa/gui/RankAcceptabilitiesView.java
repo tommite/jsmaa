@@ -45,7 +45,7 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 
 	@Override
 	synchronized protected void fireResultsChanged() {
-		Map<Alternative, List<Double>> cws = results.getRankAcceptabilities();
+		Map<Alternative, List<Double>> cws = ((SMAA2Results) results).getRankAcceptabilities();
 		
 		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
 			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));

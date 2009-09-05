@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class LeftTreeModelTest {
@@ -37,7 +37,7 @@ public class LeftTreeModelTest {
 	private SMAAModel smaaModel;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
-	private CardinalCriterion crit1 = new CardinalCriterion("crit1");
+	private ScaleCriterion crit1 = new ScaleCriterion("crit1");
 	
 	@Before
 	public void setUp() {

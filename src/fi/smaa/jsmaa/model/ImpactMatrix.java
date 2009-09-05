@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.smaa.common.DeepCopiable;
-
-public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
+public class ImpactMatrix implements Serializable {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	private List<Criterion> criteria = new ArrayList<Criterion>();
@@ -91,12 +89,11 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		thisListeners.remove(l);
 	}	
 	
-	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas)
-	throws NoSuchAlternativeException, NoSuchCriterionException {
+	public void setMeasurement(CardinalCriterion crit, Alternative alt, CardinalMeasurement meas) {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
 		}
-		checkExistAlternativeAndCriterion(crit, alt);
+		assertExistAlternativeAndCriterion(crit, alt);
 		setMeasurementNoFires(crit, alt, meas);
 		fireMeasurementTypeChanged();
 	}
@@ -108,9 +105,8 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		updateScales();
 	}
 	
-	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) 
-	throws NoSuchAlternativeException, NoSuchCriterionException {
-		checkExistAlternativeAndCriterion(crit, alt);
+	public CardinalMeasurement getMeasurement(CardinalCriterion crit, Alternative alt) {
+		assertExistAlternativeAndCriterion(crit, alt);
 		return (CardinalMeasurement) measurements.get(crit).get(alt);
 	}
 	
@@ -200,7 +196,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 	}
 
 	public synchronized void setAlternatives(List<Alternative> alternatives) {
-		disconnectConnectAlternativeListeners(this.alternatives, alternatives);
 		this.alternatives = alternatives;
 		for (Alternative a : alternatives) {
 			for (Criterion c : criteria) {
@@ -216,11 +211,6 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		fireMeasurementTypeChanged();
 	}
 
-	private void disconnectConnectAlternativeListeners(
-			List<Alternative> oldAlts, List<Alternative> newAlts) {
-	}
-	
-
 	public synchronized void setCriteria(List<Criterion> criteria) {
 		this.criteria = new ArrayList<Criterion>(criteria);		
 		for (Criterion c : criteria) {
@@ -230,13 +220,10 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 		}
 		for (Criterion c : criteria) {
 			if (c instanceof CardinalCriterion) {
+				CardinalCriterion cc = (CardinalCriterion) c;
 				for (Alternative a : alternatives) {
-					try {
-						if (getMeasurement((CardinalCriterion) c, a) == null) {
-							setMeasurementNoFires((CardinalCriterion)c, a, new Interval());
-						}
-					} catch (NoSuchValueException e) {
-						throw new IllegalStateException("ImpactMatrix in illegal state");
+					if (getMeasurement(cc, a) == null) {
+						setMeasurementNoFires(cc, a, new Interval());
 					}
 				}
 			}
@@ -248,7 +235,7 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 
 	private void updateScales() {
 		for (Criterion c : criteria) {
-			if (c instanceof CardinalCriterion) {
+			if (c instanceof ScaleCriterion) {
 				Map<Alternative, Measurement> cMeas = measurements.get(c);
 				
 				ArrayList<Interval> ivals = new ArrayList<Interval>();
@@ -258,20 +245,14 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 				}
 				Interval scale = ivals.size() == 0 ? new Interval(0.0, 0.0) 
 					: Interval.enclosingInterval(ivals);
-				((CardinalCriterion) c).setScale(scale);
+				((ScaleCriterion) c).setScale(scale);
 			}
 		}
 	}
 	
-	private void checkExistAlternativeAndCriterion(Criterion crit,
-			Alternative alt) throws NoSuchCriterionException,
-			NoSuchAlternativeException {
-		if (!criteria.contains(crit)) {
-			throw new NoSuchCriterionException();
-		}
-		if (!alternatives.contains(alt)) {
-			throw new NoSuchAlternativeException();
-		}
+	private void assertExistAlternativeAndCriterion(Criterion crit, Alternative alt)  {
+		assert(criteria.contains(crit));
+		assert(alternatives.contains(alt));
 	}	
 		
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
@@ -319,19 +300,8 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			l.measurementTypeChanged();
 		}
 	}	
-		
-	/**
-	 * Doesn't deep copy each alternative and criterion.
-	 */
-	public synchronized ImpactMatrix deepCopy() {
-		List<Criterion> crit = new ArrayList<Criterion>();
-		List<Alternative> alts = new ArrayList<Alternative>();
-		for (Criterion c : criteria) {
-			crit.add(c.deepCopy());
-		}
-		for (Alternative a : alternatives) {
-			alts.add(a.deepCopy());
-		}
+
+	public synchronized ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
 		ImpactMatrix other = new ImpactMatrix(alts, crit);		
 
 		int cIndex = 0;
@@ -339,20 +309,16 @@ public class ImpactMatrix implements DeepCopiable<ImpactMatrix>, Serializable {
 			if (c instanceof CardinalCriterion) {
 				int aIndex = 0;				
 				for (Alternative a : getAlternatives()) {
-					try {
-						CardinalMeasurement m = 
-							(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
-							.deepCopy();
-						other.setMeasurement((CardinalCriterion) crit.get(cIndex), 
-								alts.get(aIndex), m);
-					} catch (NoSuchValueException e) {
-						throw new RuntimeException("invalid object state");
-					}
+					CardinalMeasurement m = 
+						(CardinalMeasurement) getMeasurement((CardinalCriterion) c, a)
+						.deepCopy();
+					other.setMeasurementNoFires((CardinalCriterion) crit.get(cIndex), 
+							alts.get(aIndex), m);
 					aIndex++;
 				}			
 			}
 			cIndex++;
 		}
-		return other;
+		return other;		
 	}
 }

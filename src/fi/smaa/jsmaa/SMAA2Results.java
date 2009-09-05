@@ -27,40 +27,21 @@ import java.util.Map;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 
-public class SMAA2Results {
+public class SMAA2Results extends SMAAResults {
 
-	private int[][] rankHits;
 	private double[][] centralWeightAdds;
 	private Map<Integer, List<Double>> centralWeightVectors;
-	private Map<Integer, List<Double>> rankAcceptabilities;
 	private static final int FIRSTRANK = 0;
-	private List<SMAAResultsListener> listeners = new ArrayList<SMAAResultsListener>();
-	private int updateInterval;
-	private List<Alternative> alternatives;
-	private List<Criterion> criteria;
 	private int[] confidenceHits;
 	private int confidenceIteration;
 	private List<Double> confidenceFactors;
+	private Acceptabilities rankAcceptabilities;
+	private List<Criterion> criteria;
 	
 	public SMAA2Results(List<Alternative> alternatives, List<Criterion> criteria, int updateInterval) {
-		this.alternatives = alternatives;
+		super(alternatives, updateInterval);
 		this.criteria = criteria;
-		this.updateInterval = updateInterval;
-		initialize();
-	}
-
-	public void reset() {
-		initialize();
-	}
-	
-	public void addResultsListener(SMAAResultsListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
-	}
-	
-	public void removeResultsListener(SMAAResultsListener listener) {
-		listeners.remove(listener);
+		reset();
 	}
 	
 	/**
@@ -69,11 +50,11 @@ public class SMAA2Results {
 	 * @param weights
 	 */
 	public void update(Integer[] ranks, double[] weights) {
-		assert(ranks.length == rankHits.length);
+		assert(ranks.length == rankAcceptabilities.getLength());
 		assert(weights.length == centralWeightAdds[0].length);
 
 		for (int altIndex=0;altIndex<ranks.length;altIndex++) {
-			rankHit(altIndex, ranks[altIndex]);
+			rankAcceptabilities.hit(altIndex, ranks[altIndex]);
 			if(ranks[altIndex] == FIRSTRANK) {
 				addCentralWeight(altIndex, weights);
 			}
@@ -108,18 +89,8 @@ public class SMAA2Results {
 		return (double) confidenceHits[altIndex] / (double) confidenceIteration;
 	}
 
-	public void fireResultsChanged() {
-		for (SMAAResultsListener listener : listeners) {
-			listener.resultsChanged();
-		}
-	}
-
 	public Integer getRankAccIteration() {
-		int num = 1;
-		for (int i=0;i<rankHits[0].length;i++) {
-			num += rankHits[0][i];
-		}
-		return new Integer(num);
+		return new Integer(rankAcceptabilities.getTotalHits(0));
 	}
 
 	public Map<Alternative, Map<Criterion, Double>> getCentralWeightVectors() {
@@ -145,24 +116,11 @@ public class SMAA2Results {
 	}
 
 	public Map<Alternative, List<Double>> getRankAcceptabilities() {
-		return transformMap(rankAcceptabilities);
+		return rankAcceptabilities.getResults();
 	}
 	
 	public List<Criterion> getCriteria() {
 		return criteria;
-	}
-	
-	public List<Alternative> getAlternatives() {
-		return alternatives;
-	}
-	
-	private Map<Alternative, List<Double>> transformMap(
-			Map<Integer, List<Double>> map) {
-		Map<Alternative, List<Double>> cw = new HashMap<Alternative, List<Double>>();		
-		for (Integer index : map.keySet()) {
-			cw.put(alternatives.get(index), map.get(index));
-		}
-		return cw;
 	}
 	
 	private void initializeCentralWeightVectors() {
@@ -170,7 +128,7 @@ public class SMAA2Results {
 	}
 	
 	private void initializeRankAcceptabilities() {
-		rankAcceptabilities = createAlternativeMapWithNans(alternatives.size());
+		rankAcceptabilities = new Acceptabilities(alternatives, alternatives.size());
 	}
 	
 	private void initializeConfidenceFactors() {
@@ -197,10 +155,9 @@ public class SMAA2Results {
 		}
 	}
 
-	private void initialize() {
+	public void reset() {
 		int numAlts = alternatives.size();
 		int numCrit = criteria.size();
-		rankHits = new int[numAlts][numAlts];
 		centralWeightAdds = new double[numAlts][numCrit];
 		confidenceHits = new int[numAlts];
 		confidenceIteration = 0;
@@ -211,43 +168,18 @@ public class SMAA2Results {
 
 	private void calculateRankAccsAndCentralWeights() {
 		calculateCentralWeightVectors();
-		calculateRankAcceptabilities();
 	}
 
-	private void calculateRankAcceptabilities() {
-		for (Integer altIndex : rankAcceptabilities.keySet()) {
-			List<Double> vec = rankAcceptabilities.get(altIndex);
-			for (int i=0;i<vec.size();i++) {
-				vec.set(i, calculateRankAcceptability(altIndex, i));
-			}
-		}
-	}
-
-	private double calculateRankAcceptability(Integer altIndex, int rank) {
-		int totalIter = 0;
-		for (int i=0;i<rankHits[altIndex].length;i++) {
-			totalIter += rankHits[altIndex][i];
-		}
-		return (double) rankHits[altIndex][rank] / (double) totalIter;
-	}
 
 	private void calculateCentralWeightVectors() {
 		for(Integer altIndex : centralWeightVectors.keySet()) {
 			List<Double> vec = centralWeightVectors.get(altIndex);
-			if (rankHits[altIndex][FIRSTRANK] > 0) {
+			if (rankAcceptabilities.getHits(altIndex,FIRSTRANK) > 0) {
 				for (int i=0;i<vec.size();i++) {
-					vec.set(i, centralWeightAdds[altIndex][i] / rankHits[altIndex][FIRSTRANK]);
+					vec.set(i, centralWeightAdds[altIndex][i] / 
+							rankAcceptabilities.getHits(altIndex, FIRSTRANK));
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Ranks start from 0
-	 * @param altIndex
-	 * @param rank
-	 */
-	private void rankHit(int altIndex, int rank) {
-		rankHits[altIndex][rank]++;
 	}
 }

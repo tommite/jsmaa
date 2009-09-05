@@ -27,27 +27,29 @@ import javax.swing.tree.TreePath;
 
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
 	private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
-	private SMAAModel smaaModel;
+	
+	protected SMAAModel smaaModel;
 	
 	private static final int ALTERNATIVES = 0;
 	private static final int CRITERIA = 1;
 	private static final int PREFERENCES = 2;
 	private static final int RESULTS = 3;
 	
-	private String alternativesNode = "Alternatives";
-	private String criteriaNode = "Criteria";
-	private String resultsNode = "Results";
-	private String rankAccNode = "RankAcc";
-	private String centralWeightsNode = "CW";
-	private String preferencesNode = "Preferences";
+	protected String alternativesNode = "Alternatives";
+	protected String criteriaNode = "Criteria";
+	protected String resultsNode = "Results";
+	protected String rankAccNode = "RankAcc";
+	protected String centralWeightsNode = "CW";
+	protected String preferencesNode = "Preferences";
 	
 	public LeftTreeModel(SMAAModel smaaModel) throws NullPointerException {
 		if (smaaModel == null) {
@@ -55,17 +57,11 @@ public class LeftTreeModel implements TreeModel{
 		}
 		this.smaaModel = smaaModel;
 		smaaModel.addModelListener(new SMAAModelListener() {
-			public void alternativesChanged() {
-				fireTreeChange();
-			}
-			public void criteriaChanged() {
-				fireTreeChange();
-			}
-			public void measurementsChanged() {				
-			}
-			public void preferencesChanged() {
-			}
-			public void measurementTypeChanged() {
+			public void modelChanged(ModelChangeEvent type) {
+				if (type == ModelChangeEvent.ALTERNATIVES ||
+						type == ModelChangeEvent.CRITERIA) {
+					fireTreeChange();
+				}
 			}
 		});
 	}
@@ -231,7 +227,7 @@ public class LeftTreeModel implements TreeModel{
 				((Alternative) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof AbstractCriterion) {
-			if (!smaaModel.getCriteria().contains(new CardinalCriterion((String)newValue))) {			
+			if (!smaaModel.getCriteria().contains(new ScaleCriterion((String)newValue))) {			
 				((AbstractCriterion) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof SMAAModel) {
@@ -239,7 +235,7 @@ public class LeftTreeModel implements TreeModel{
 		}
 	}
 
-	private void fireTreeChange() {
+	protected void fireTreeChange() {
 		for (TreeModelListener l : treeModelListeners) {
 			l.treeStructureChanged( new TreeModelEvent(this, new Object[] { this.getRoot() }));
 		}

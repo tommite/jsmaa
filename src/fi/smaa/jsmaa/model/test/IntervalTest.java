@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.common.test;
+package fi.smaa.jsmaa.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -116,5 +116,13 @@ public class IntervalTest {
 			assertTrue(in.sample() <= 0.1);
 			assertTrue(in.sample() >= 0.0);
 		}
+	}
+	
+	@Test
+	public void testIncludesDouble() {
+		Interval in = new Interval(0.0, 1.0);
+		assertTrue(in.includes(0.5));
+		assertFalse(in.includes(-0.5));
+		assertFalse(in.includes(1.5));
 	}
 }

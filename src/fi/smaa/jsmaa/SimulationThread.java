@@ -21,18 +21,39 @@ package fi.smaa.jsmaa;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationThread extends Thread{
+import fi.smaa.jsmaa.maut.Sampler;
+import fi.smaa.jsmaa.model.SMAAModel;
+
+public abstract class SimulationThread extends Thread{
 
 	private int iteration;
 	private SimulationPhase currentPhase;
 	private boolean go;
 	private List<SimulationPhase> phases = new ArrayList<SimulationPhase>();
 	private List<Integer> phaseIterations = new ArrayList<Integer>();
+	protected double[][] measurements;
+	protected SMAAModel model;
+	protected Sampler sampler;
+	protected double[] weights;
 
-	public SimulationThread() {
+	public SimulationThread(SMAAModel model) {
+		this.model = model;
 		currentPhase = null;
 		iteration = 0;
-		go = true;
+		go = false;
+		initialize();
+	}
+	
+	private void initialize() {
+		weights = new double[model.getCriteria().size()];		
+		measurements = new double[model.getCriteria().size()][model.getAlternatives().size()];
+		sampler = new Sampler(model, model.getAlternatives());		
+	}
+	
+	public abstract SMAAResults getResults();
+	
+	public void reset() {
+		initialize();
 	}
 	
 	public void addPhase(SimulationPhase phase, int iterations) {
@@ -52,10 +73,11 @@ public class SimulationThread extends Thread{
 				iteration++;
 			}
 		}
+		getResults().fireResultsChanged();
 		go = false;
 	}
 
-	public int getTotalIteration() {
+	public int getTotalIterations() {
 		int total = 0;
 		for (Integer i : phaseIterations) {
 			total += i;
@@ -80,5 +102,20 @@ public class SimulationThread extends Thread{
 	
 	public boolean isRunning() {
 		return go;
+	}
+
+	protected void sampleCriteria() {
+		for (int i=0;i<model.getCriteria().size();i++) {
+			sampler.sample(model.getCriteria().get(i), measurements[i]);
+		}
+	}
+	
+	protected double[] getMeasurements(int critIndex) {
+		assert(critIndex >= 0 && critIndex < measurements.length);
+		return measurements[critIndex];
+	}
+
+	protected void generateWeights() {
+		weights = model.getPreferenceInformation().sampleWeights();
 	}
 }
