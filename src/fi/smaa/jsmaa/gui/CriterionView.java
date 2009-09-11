@@ -19,6 +19,9 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
+import javax.swing.text.DefaultFormatter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -34,6 +37,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -198,7 +202,15 @@ public class CriterionView implements ViewBuilder {
 
 	private JComponent getMeasurementComponent(CardinalMeasurement m) {
 		JComponent measComp = null;
-		if (m instanceof Interval) {
+		if (m instanceof ExactMeasurement) {
+			ExactMeasurement em = (ExactMeasurement) m;
+			JFormattedTextField tf = BasicComponentFactory.createFormattedTextField(
+					new PresentationModel<ExactMeasurement>(em).getModel(ExactMeasurement.PROPERTY_VALUE),
+					new DefaultFormatter());
+			
+			tf.setHorizontalAlignment(JTextField.CENTER);
+			measComp = tf;
+		} else if (m instanceof Interval) {
 			Interval ival = (Interval) m;
 			measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
 		} else if (m instanceof GaussianMeasurement) {

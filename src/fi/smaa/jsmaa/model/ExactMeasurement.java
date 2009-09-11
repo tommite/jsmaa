@@ -30,7 +30,7 @@ public class ExactMeasurement extends CardinalMeasurement {
 		this.val = val;
 	}
 	
-	public double getValue() {
+	public Double getValue() {
 		return val;
 	}
 	
