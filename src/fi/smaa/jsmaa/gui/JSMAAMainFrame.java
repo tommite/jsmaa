@@ -1088,6 +1088,11 @@ public class JSMAAMainFrame extends JFrame {
 				setRightViewToAlternatives();
 			} else if (type == ModelChangeEvent.CRITERIA) {
 				setRightViewToCriteria();
+			} else if (type == ModelChangeEvent.PARAMETER) {
+				if (model instanceof SMAATRIModel) {
+					lambdaSlider.setLowValue((int) (((SMAATRIModel) model).getLambda().getStart() * 100.0));
+					lambdaSlider.setHighValue((int) (((SMAATRIModel) model).getLambda().getEnd() * 100.0));
+				}
 			} else if (type != ModelChangeEvent.MEASUREMENT) {
 				rebuildRightPanel();
 			}
