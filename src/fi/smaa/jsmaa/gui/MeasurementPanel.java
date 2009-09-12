@@ -47,6 +47,8 @@ public class MeasurementPanel extends JPanel {
 	
 	private ValueHolder holder;
 	
+	private MeasurementType[] allowedValues;
+	
 	public enum MeasurementType {
 		EXACT("Exact"),
 		INTERVAL("Interval"),
@@ -70,12 +72,22 @@ public class MeasurementPanel extends JPanel {
 	}
 	
 	public MeasurementPanel(ValueHolder measurementHolder) {
+		allowedValues = MeasurementType.values();
 		this.holder = measurementHolder;
 		holder.addPropertyChangeListener(new HolderListener());
 		
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		rebuildPanel();
 	}
+	
+	public MeasurementPanel(ValueHolder measurementHolder, MeasurementType[] allowedValues) {
+		this.allowedValues = allowedValues;
+		this.holder = measurementHolder;
+		holder.addPropertyChangeListener(new HolderListener());
+		
+		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+		rebuildPanel();
+	}	
 
 	private class HolderListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -92,7 +104,7 @@ public class MeasurementPanel extends JPanel {
 
 	private JComboBox buildChooserPanel() {
 		ValueModel valueModel = new ChooserValueModel();
-		SelectionInList<MeasurementType> selInList = new SelectionInList<MeasurementType>(MeasurementType.values(), valueModel);
+		SelectionInList<MeasurementType> selInList = new SelectionInList<MeasurementType>(allowedValues, valueModel);
 		return BasicComponentFactory.createComboBox(selInList);
 	}
 

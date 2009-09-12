@@ -35,6 +35,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.MeasurementPanel.MeasurementType;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
@@ -89,8 +90,9 @@ public class CardinalPreferencesView implements ViewBuilder {
 	}
 
 	private JComponent createMeasurementComponent(Criterion c) {
+		MeasurementType[] mvals = new MeasurementType[] { MeasurementType.EXACT, MeasurementType.INTERVAL };
 		ValueHolder holder = values.get(c);
-		MeasurementPanel vpanel = new MeasurementPanel(holder); 
+		MeasurementPanel vpanel = new MeasurementPanel(holder, mvals); 
 		return vpanel;
 	}
 	
