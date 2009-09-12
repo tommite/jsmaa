@@ -18,12 +18,9 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-
 import fi.smaa.common.RandomUtil;
 
-public class MissingPreferenceInformation implements PreferenceInformation, Serializable {
+public class MissingPreferenceInformation extends PreferenceInformation {
 	private static final long serialVersionUID = -8477410889345079220L;
 	transient private double[] tmparr;
 	private int numCrit;
@@ -55,11 +52,5 @@ public class MissingPreferenceInformation implements PreferenceInformation, Seri
 		}
 		MissingPreferenceInformation mo = (MissingPreferenceInformation) other;
 		return numCrit == mo.numCrit;
-	}
-
-	public void addPropertyChangeListener(PropertyChangeListener arg0) {
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener arg0) {
 	}
 }

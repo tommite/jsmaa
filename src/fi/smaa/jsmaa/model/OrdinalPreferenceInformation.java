@@ -28,7 +28,7 @@ import java.util.List;
 
 import fi.smaa.common.RandomUtil;
 
-public class OrdinalPreferenceInformation implements PreferenceInformation {
+public class OrdinalPreferenceInformation extends PreferenceInformation {
 	
 	private static final long serialVersionUID = -8011596971699184854L;
 	transient private double[] tmparr;
@@ -36,7 +36,6 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 	private List<Rank> ranks;
 	
 	transient private RankListener rankListener = new RankListener();
-	transient private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
 	
 	private void writeObject(ObjectOutputStream o) throws IOException {
 		o.defaultWriteObject();
@@ -45,7 +44,6 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		i.defaultReadObject();
 		rankListener = new RankListener();
-		listeners = new ArrayList<PropertyChangeListener>();
 		connectRankListeners();
 	}	
 	
@@ -96,17 +94,7 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 		}
 		return new OrdinalPreferenceInformation(myranks);
 	}
-	
-	public void addPropertyChangeListener(PropertyChangeListener l) {
-		if (!listeners.contains(l)) {
-			listeners.add(l);
-		}
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener l) {
-		listeners.remove(l);
-	}
-	
+		
 	private class RankListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(Rank.PROPERTY_RANK)) {
@@ -117,9 +105,7 @@ public class OrdinalPreferenceInformation implements PreferenceInformation {
 					ensureRanks(r, oldVal, newVal);
 				}
 			}
-			for (PropertyChangeListener l : listeners) {
-				l.propertyChange(evt);
-			}
+			firePreferencesChanged();
 		}		
 	}
 

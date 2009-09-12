@@ -53,4 +53,13 @@ public class ExactMeasurement extends CardinalMeasurement {
 	public ExactMeasurement deepCopy() {
 		return new ExactMeasurement(val);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof ExactMeasurement)) {
+			return false;
+		}
+		ExactMeasurement em = (ExactMeasurement)o;
+		return em.getValue().equals(getValue());
+	}
 }

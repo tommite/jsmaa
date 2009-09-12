@@ -18,30 +18,6 @@
 
 package fi.smaa.jsmaa.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import fi.smaa.common.DeepCopiable;
-
-@SuppressWarnings("serial")
-public abstract class PreferenceInformation implements DeepCopiable<PreferenceInformation>, Serializable {
-	
-	protected List<PreferenceListener> listeners = new ArrayList<PreferenceListener>();
-		
-	public abstract double[] sampleWeights();
-	
-	public void addPreferenceListener(PreferenceListener list) {
-		listeners.add(list);
-	}
-	
-	public void removePreferenceListener(PreferenceListener list) {
-		listeners.remove(list);
-	}
-	
-	protected void firePreferencesChanged() {
-		for (PreferenceListener l : listeners) {
-			l.preferencesChanged();
-		}
-	}
+public interface PreferenceListener {
+	public void preferencesChanged();
 }

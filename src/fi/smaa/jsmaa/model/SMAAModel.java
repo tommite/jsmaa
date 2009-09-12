@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +55,7 @@ public class SMAAModel extends Model {
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
 		this.preferences = preferences;
-		preferences.addPropertyChangeListener(new PreferenceListener());
+		preferences.addPreferenceListener(new MyPreferenceListener());
 		fireModelChange(ModelChangeEvent.PREFERENCES);
 	}
 	
@@ -233,7 +234,7 @@ public class SMAAModel extends Model {
 		i.defaultReadObject();
 		impactMatrix.addListener(impactListener);
 		connectCriteriaListeners(getCriteria());
-		preferences.addPropertyChangeListener(new PreferenceListener());		
+		preferences.addPreferenceListener(new MyPreferenceListener());		
 	}	
 	
 	protected void fireModelChange(ModelChangeEvent type) {
@@ -261,9 +262,11 @@ public class SMAAModel extends Model {
 		}
 	}
 	
-	private class PreferenceListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			fireModelChange(ModelChangeEvent.PREFERENCES);			
+	private class MyPreferenceListener implements PreferenceListener, Serializable {
+		private static final long serialVersionUID = 9084801400903300047L;
+
+		public void preferencesChanged() {
+			fireModelChange(ModelChangeEvent.PREFERENCES);					
 		}		
 	}
 	

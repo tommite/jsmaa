@@ -18,30 +18,78 @@
 
 package fi.smaa.jsmaa.model.test;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
+import fi.smaa.jsmaa.model.PreferenceListener;
 import fi.smaa.jsmaa.model.Rank;
 
 public class OrdinalPreferenceInformationTest {
+	
+	private OrdinalPreferenceInformation pref;
 
-	@Test
-	public void testCorrectSampling() {
+	@Before
+	public void setUp() {
 		List<Rank> ranks = new ArrayList<Rank>();
 		ranks.add(new Rank(1));
 		ranks.add(new Rank(3));
 		ranks.add(new Rank(2));
-		OrdinalPreferenceInformation pref = new OrdinalPreferenceInformation(ranks);		
-
+		pref = new OrdinalPreferenceInformation(ranks);
+	}
+	
+	@Test
+	public void testCorrectSampling() {
 		double[] w = pref.sampleWeights();
 		assertEquals(3, w.length);
 		assertTrue(w[0] > w[1]);
 		assertTrue(w[0] > w[2]);
 		assertTrue(w[2] > w[1]);
 	}
+	
+	@Test
+	public void testDeepCopy() {
+		OrdinalPreferenceInformation pref2 = pref.deepCopy();
+		assertEquals(3, pref2.getRanks().size());
+		assertEquals(new Rank(1), pref2.getRanks().get(0));
+		assertEquals(new Rank(3), pref2.getRanks().get(1));
+		assertEquals(new Rank(2), pref2.getRanks().get(2));
+		
+		PreferenceListener mock = createMock(PreferenceListener.class);
+		mock.preferencesChanged();
+		mock.preferencesChanged();		
+		pref2.addPreferenceListener(mock);		
+		replay(mock);
+		pref2.getRanks().get(0).setRank(2);
+		verify(mock);
+	}
+	
+	@Test
+	public void testRankChangeUpdatesOtherRank() {
+		PreferenceListener mock = createMock(PreferenceListener.class);
+		mock.preferencesChanged();
+		mock.preferencesChanged();		
+		pref.addPreferenceListener(mock);		
+		replay(mock);
+		pref.getRanks().get(0).setRank(2);
+		verify(mock);
+		assertEquals(new Integer(1), pref.getRanks().get(2).getRank());
+	}
+	
+	@Test
+	public void testSerializationConnectsListeners() throws Exception {
+		OrdinalPreferenceInformation p = JUnitUtil.serializeObject(pref);
+		p.getRanks().get(0).setRank(2);
+		assertEquals(new Integer(1), p.getRanks().get(2).getRank());		
+	}	
 }

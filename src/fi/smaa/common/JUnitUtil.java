@@ -30,10 +30,13 @@ import static org.junit.Assert.fail;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import com.jgoodies.binding.beans.Model;
 
@@ -52,6 +55,19 @@ public class JUnitUtil {
 			
 		assertEquals(newValue, desc);
 		verify(mock);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <B> B serializeObject(B b) throws Exception {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(bos);
+		
+		oos.writeObject(b);
+		
+		ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+		ObjectInputStream ois = new ObjectInputStream(bis);
+		
+		return (B) ois.readObject();
 	}
 
 

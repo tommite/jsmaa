@@ -38,4 +38,11 @@ public class ExactMeasurementTest {
 		JUnitUtil.testSetter(new ExactMeasurement(0.0), ExactMeasurement.PROPERTY_VALUE,
 				new Double(0.0), new Double(2.0));
 	}
+	
+	@Test
+	public void testEquals() {
+		assertFalse(new ExactMeasurement(0.0).equals(new ExactMeasurement(1.0)));
+		assertFalse(new ExactMeasurement(0.0).equals(null));
+		assertTrue(new ExactMeasurement(0.0).equals(new ExactMeasurement(0.0)));
+	}
 }
