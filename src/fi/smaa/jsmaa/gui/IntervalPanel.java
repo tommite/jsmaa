@@ -46,7 +46,7 @@ public class IntervalPanel extends JPanel {
 	}
 
 	private void init(ValueModel startModel, ValueModel endModel) {
-		setLayout(new FlowLayout());		
+		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 5));		
 
 		JTextField startField = BasicComponentFactory.createFormattedTextField(
 				startModel,

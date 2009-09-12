@@ -123,11 +123,11 @@ public class CriterionView implements ViewBuilder {
 		JPanel outIndifPanel = new JPanel();		
 		JPanel outPrefPanel = new JPanel();		
 		IntervalPanel indifPanel = new IntervalPanel(indifStartModel, indifEndModel);
-		outIndifPanel.setLayout(new FlowLayout());
+		outIndifPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		outIndifPanel.add(indifPanel);
 		outIndifPanel.add(new JLabel("(interval)"));
 		IntervalPanel prefPanel = new IntervalPanel(prefStartModel, prefEndModel);
-		outPrefPanel.setLayout(new FlowLayout());
+		outPrefPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		outPrefPanel.add(prefPanel);
 		outPrefPanel.add(new JLabel("(interval)"));		
 		
