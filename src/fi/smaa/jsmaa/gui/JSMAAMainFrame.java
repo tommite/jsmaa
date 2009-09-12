@@ -46,6 +46,7 @@ import java.util.Queue;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -125,6 +126,8 @@ public class JSMAAMainFrame extends JFrame {
 	private RangeSlider lambdaSlider;
 	private JPanel lambdaPanel;
 	private JLabel lambdaRangeLabel;
+	private JToolBar topToolBar;
+	private JButton addCatButton;
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super("SMAA");
@@ -160,10 +163,12 @@ public class JSMAAMainFrame extends JFrame {
 			lambdaSlider.setLowValue((int)(lambda.getStart() * 100.0));
 			lambdaSlider.setHighValue((int)(lambda.getEnd() * 100.0));
 			updateLambdaLabel();
+			addCatButton.setVisible(true);
 			toolBar.add(lambdaPanel);
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
 			toolBar.remove(lambdaPanel);
+			addCatButton.setVisible(false);			
 		}
 		pack();
 		buildNewSimulator();
@@ -243,8 +248,42 @@ public class JSMAAMainFrame extends JFrame {
 	   getContentPane().add("Center", splitPane);
 	   toolBar = createToolBar();
 	   getContentPane().add("South", toolBar);
+	   topToolBar = createTopToolbar();
+	   getContentPane().add("North", topToolBar);
 	}
 	
+	private JToolBar createTopToolbar() {
+		JToolBar bar = new JToolBar();
+		bar.setFloatable(false);
+		// TODO
+		JButton addButton = new JButton(getIcon(FileNames.ICON_ADDALTERNATIVE));
+		addButton.setToolTipText("Add alternative");
+		addButton.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addAlternative();
+			}
+		});
+		bar.add(addButton);
+		JButton addCritButton = new JButton(getIcon(FileNames.ICON_ADDCRITERION));
+		addCritButton.setToolTipText("Add criterion");
+		addCritButton.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCriterion();
+			}
+		});
+		bar.add(addCritButton);
+		
+		addCatButton = new JButton(getIcon(FileNames.ICON_ADD));
+		addCatButton.setToolTipText("Add category");
+		addCatButton.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCategory();
+			}
+		});
+		bar.add(addCatButton);
+		return bar;
+	}
+
 	private JToolBar createToolBar() {
 		simulationProgress = new JProgressBar();	
 		simulationProgress.setStringPainted(true);
@@ -863,7 +902,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JMenuItem createAddAltMenuItem() {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setMnemonic('n');
-		item.setIcon(getIcon(FileNames.ICON_ADD));
+		item.setIcon(getIcon(FileNames.ICON_ADDALTERNATIVE));
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));		
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -899,29 +938,19 @@ public class JSMAAMainFrame extends JFrame {
 		
 		JMenuItem addCardItem = createAddCardCritMenuItem();
 		
-		JMenuItem addOrdinalItem = new JMenuItem("Add ordinal");
-		addOrdinalItem.setMnemonic('o');
-		addOrdinalItem.setIcon(getIcon(FileNames.ICON_ADD));		
-		addOrdinalItem.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addOrdinalCriterion();
-			}			
-		});
-		
 		criteriaMenu.add(showItem);
 		criteriaMenu.addSeparator();
 		criteriaMenu.add(addCardItem);
-		//toolBarAddCritMenu.add(addOrdinalButton);			
 		return criteriaMenu;
 	}
 
 	private JMenuItem createAddCardCritMenuItem() {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setMnemonic('c');
-		item.setIcon(getIcon(FileNames.ICON_CARDINALCRITERION));
+		item.setIcon(getIcon(FileNames.ICON_ADDCRITERION));
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				addCardinalCriterion();
+				addCriterion();
 			}			
 		});
 		return item;
@@ -945,7 +974,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.startEditingAtPath(((LeftTreeModelSMAATRI) leftTreeModel).getPathForCategory(a));			
 	}	
 
-	protected void addCardinalCriterion() {
+	protected void addCriterion() {
 		Criterion c = null;
 		if (model instanceof SMAATRIModel) {
 			c = new OutrankingCriterion(generateNextCriterionName(), true, 

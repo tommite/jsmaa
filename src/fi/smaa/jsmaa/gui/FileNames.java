@@ -35,4 +35,6 @@ public class FileNames {
 	public static final String ICON_SAVEAS = "saveas.gif";
 	public static final String ICON_FILENEW = "filenew.gif";
 	public static final String ICON_HOME = "home.gif";
+	public static final String ICON_ADDALTERNATIVE = "add_alternative.gif";
+	public static final String ICON_ADDCRITERION = "add_criterion.gif";
 }
