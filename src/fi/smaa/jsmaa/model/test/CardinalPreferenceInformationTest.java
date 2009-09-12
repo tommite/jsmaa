@@ -85,7 +85,7 @@ public class CardinalPreferenceInformationTest {
 		info.addPreferenceListener(list);
 		list.preferencesChanged();
 		replay(list);
-		((Interval) info.getMeasurement(crit)).setEnd(2.0);
+		((ExactMeasurement) info.getMeasurement(crit)).setValue(2.0);
 		verify(list);
 	}
 	
@@ -122,7 +122,7 @@ public class CardinalPreferenceInformationTest {
 		i2.addPreferenceListener(list);
 		list.preferencesChanged();
 		replay(list);
-		((Interval)i2.getMeasurement(i2.getCriteria().get(0))).setEnd(2.0);
+		((ExactMeasurement)i2.getMeasurement(i2.getCriteria().get(0))).setValue(2.0);
 		verify(list);
 	}
 }
