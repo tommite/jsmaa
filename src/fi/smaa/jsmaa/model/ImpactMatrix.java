@@ -110,23 +110,6 @@ public class ImpactMatrix implements Serializable {
 		return (CardinalMeasurement) measurements.get(crit).get(alt);
 	}
 	
-	/*
-	public void setMeasurement(OrdinalCriterion crit, Alternative alt, Rank meas)
-	throws NoSuchAlternativeException, NoSuchCriterionException {
-		checkExistAlternativeAndCriterion(crit, alt);
-		measurements.get(crit).put(alt, meas);
-	}
-	*/	
-	
-	/*
-	public Rank getMeasurement(OrdinalCriterion crit, Alternative alt) 
-	throws NoSuchAlternativeException, NoSuchCriterionException {
-		checkExistAlternativeAndCriterion(crit, alt);
-		return (Rank) measurements.get(crit).get(alt);
-	}	
-	*/	
-
-
 	/**
 	 * Deletes an alternative. If alternative doesn't exist, does nothing.
 	 * @param alt Alternative to delete.

@@ -99,11 +99,17 @@ public class ElectreTri {
 		return resMap;
 	}
 	
-	private boolean outranks(Map<OutrankingCriterion, Double> alt,
+	public boolean outranks(Map<OutrankingCriterion, Double> alt,
 			Map<OutrankingCriterion, Double> toAlt) {
 		assert(alt.entrySet().size() == toAlt.entrySet().size());
 		assert(alt.entrySet().size() == weights.length);
 		
+		double concordance = concordance(alt, toAlt);
+		return concordance >= lambda;
+	}
+
+	public double concordance(Map<OutrankingCriterion, Double> alt,
+			Map<OutrankingCriterion, Double> toAlt) {
 		double concordance = 0.0;
 		for (int i=0;i<crit.size();i++) {
 			OutrankingCriterion c = crit.get(i);
@@ -111,10 +117,11 @@ public class ElectreTri {
 			Double toAltVal = toAlt.get(c);
 			concordance += OutrankingFunction.concordance(c, altVal, toAltVal) * weights[i];
 		}
-		return concordance >= lambda;
+		return concordance;
 	}
+	
 
-	private boolean preferred(Map<OutrankingCriterion, Double> alt,
+	public boolean preferred(Map<OutrankingCriterion, Double> alt,
 			Map<OutrankingCriterion, Double> toAlt) {
 		assert(alt.entrySet().size() == toAlt.entrySet().size());
 		assert(alt.entrySet().size() == weights.length);		

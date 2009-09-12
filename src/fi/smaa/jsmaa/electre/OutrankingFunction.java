@@ -27,10 +27,11 @@ public class OutrankingFunction {
 		if (!crit.getAscending()) {
 			diff = 0.0 - diff;
 		}
-		if (diff >= crit.getPreferenceThreshold()) {
-			return 0.0;
-		} else if (diff <= crit.getIndifferenceThreshold()) {
+		
+		if (diff <= crit.getIndifferenceThreshold()) {
 			return 1.0;
+		} else if (diff >= crit.getPreferenceThreshold()) {
+			return 0.0;
 		} else {	
 			return (diff - crit.getIndifferenceThreshold()) / 
 				(crit.getPreferenceThreshold() - crit.getIndifferenceThreshold()); 

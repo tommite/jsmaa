@@ -20,6 +20,7 @@ package fi.smaa.jsmaa.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 
 
 public final class OutrankingCriterion extends CardinalCriterion {
@@ -32,7 +33,7 @@ public final class OutrankingCriterion extends CardinalCriterion {
 	private double preferenceThreshold;
 	private CardinalMeasurement indifMeasurement;
 	private CardinalMeasurement prefMeasurement;
-
+	
 	public OutrankingCriterion(String name, boolean ascending, CardinalMeasurement indifMeasurement,
 			CardinalMeasurement prefMeasurement) {
 		super(name, ascending);
@@ -41,7 +42,7 @@ public final class OutrankingCriterion extends CardinalCriterion {
 		indifferenceThreshold = indifMeasurement.sample();
 		preferenceThreshold = prefMeasurement.sample();		
 	}
-	
+		
 	public void sampleThresholds() {
 		indifferenceThreshold = indifMeasurement.sample();
 		preferenceThreshold = prefMeasurement.sample();
@@ -87,13 +88,17 @@ public final class OutrankingCriterion extends CardinalCriterion {
 				(CardinalMeasurement)prefMeasurement.deepCopy());
 	}
 	
-	private class PrefListener implements PropertyChangeListener {
+	private class PrefListener implements PropertyChangeListener, Serializable {
+		private static final long serialVersionUID = -2064991382287461823L;
+
 		public void propertyChange(PropertyChangeEvent evt) {
 			firePropertyChange(PROPERTY_PREF_MEASUREMENT, null, getPrefMeasurement());
 		}
 	}
 	
-	private class IndifListener implements PropertyChangeListener {
+	private class IndifListener implements PropertyChangeListener, Serializable {
+		private static final long serialVersionUID = -5202261775299851878L;
+
 		public void propertyChange(PropertyChangeEvent evt) {
 			firePropertyChange(PROPERTY_INDIF_MEASUREMENT, null, getIndifMeasurement());
 		}

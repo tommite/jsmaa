@@ -18,11 +18,11 @@
 
 package fi.smaa.jsmaa.model.test;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import java.beans.PropertyChangeListener;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,25 +54,23 @@ public class OutrankingCriterionTest {
 	
 	@Test
 	public void testIndifMeasurementChange() {
-		Interval ival = new Interval(0.0, 0.1);
-		crit.setIndifMeasurement(ival);
+		Interval ival = (Interval) crit.getIndifMeasurement();
 		PropertyChangeListener mock = JUnitUtil.mockListener(crit, OutrankingCriterion.PROPERTY_INDIF_MEASUREMENT,
 				null, new Interval(0.0, 0.2));
 		crit.addPropertyChangeListener(mock);
 		ival.setEnd(0.2);
-		EasyMock.verify(mock);
+		verify(mock);
 	}
 	
 	
 	@Test
 	public void testPrefMeasurementChange() {
-		Interval ival = new Interval(0.0, 0.1);
-		crit.setPrefMeasurement(ival);
+		Interval ival = (Interval) crit.getPrefMeasurement();
 		PropertyChangeListener mock = JUnitUtil.mockListener(crit, OutrankingCriterion.PROPERTY_PREF_MEASUREMENT,
-				null, new Interval(0.0, 0.2));
+				null, new Interval(0.5, 1.0));
 		crit.addPropertyChangeListener(mock);
-		ival.setEnd(0.2);
-		EasyMock.verify(mock);
+		ival.setEnd(1.0);
+		verify(mock);
 	}	
 	
 	@Test
@@ -88,4 +86,30 @@ public class OutrankingCriterionTest {
 		assertEquals(crit.getName(), c.getName());
 		assertEquals(crit.getAscending(), c.getAscending());
 	}
+	
+	@Test
+	public void testSerializationReconnectsPrefListener() throws Exception {
+		OutrankingCriterion c = JUnitUtil.serializeObject(crit);
+		
+		Interval ival = (Interval) c.getPrefMeasurement();
+		PropertyChangeListener mock = JUnitUtil.mockListener(c, OutrankingCriterion.PROPERTY_PREF_MEASUREMENT, 
+				null, new Interval(0.5, 1.0));		
+		c.addPropertyChangeListener(mock);
+		ival.setEnd(1.0);
+		verify(mock);
+	}
+	
+	@Test
+	public void testSerializationReconnectsIndifListener() throws Exception {
+		OutrankingCriterion c = JUnitUtil.serializeObject(crit);
+		
+		Interval ival = (Interval) c.getIndifMeasurement();
+		PropertyChangeListener mock = JUnitUtil.mockListener(c, OutrankingCriterion.PROPERTY_INDIF_MEASUREMENT, 
+				null, new Interval(0.0, 1.0));		
+		c.addPropertyChangeListener(mock);
+		ival.setEnd(1.0);
+		verify(mock);
+	}
+	
+	
 }

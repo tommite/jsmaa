@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.electre.OutrankingFunction;
+import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
@@ -64,4 +65,17 @@ public class OutrankingFunctionTest {
 		c.setAscending(false);
 		assertEquals(0.5, OutrankingFunction.concordance(c, 0.0, -1.5), 0.0000001);		
 	}
+	
+	@Test
+	public void testOutranksEqual() {
+		c = new OutrankingCriterion("crit", true, new ExactMeasurement(0.0), new ExactMeasurement(0.0));
+		assertEquals(1.0, OutrankingFunction.concordance(c, 10.0, 10.0), 0.000001);
+	}
+	
+	@Test
+	public void testGreater() {
+		c = new OutrankingCriterion("crit", true, new ExactMeasurement(0.05), new ExactMeasurement(0.1));
+		assertEquals(1.0, OutrankingFunction.concordance(c, 9.7, 8.0), 0.000001);		
+	}
+		
 }
