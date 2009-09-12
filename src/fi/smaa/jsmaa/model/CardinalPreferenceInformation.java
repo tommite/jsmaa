@@ -48,7 +48,7 @@ public class CardinalPreferenceInformation extends PreferenceInformation {
 	
 	private void initMeasurements() {
 		for (Criterion c : criteria) {
-			setMeasurement(c, new Interval(0.0, 1.0));
+			setMeasurement(c, new ExactMeasurement(0.0));
 		}
 	}
 
