@@ -145,13 +145,16 @@ public class SMAATRIModel extends SMAAModel {
 	}
 	
 	@Override
-	public SMAATRIModel deepCopy() {
+	synchronized public SMAATRIModel deepCopy() {
 		SMAATRIModel model = new SMAATRIModel(getName());
 		super.deepCopyContents(model);
-		model.setCategories(getCategories());
-		model.setRule(optimistic);
-		model.profileMatrix = (ImpactMatrix) profileMatrix.deepCopy(
-				model.getCategories(), model.getCriteria());
+		List<Alternative> cats = new ArrayList<Alternative>();
+		for (Alternative cat : categories) {
+			cats.add(cat.deepCopy());
+		}
+		model.categories = cats;
+		model.profileMatrix = profileMatrix.deepCopy(model.getCategories(), model.getCriteria());
+		model.setRule(optimistic);		
 		model.getLambda().setStart(getLambda().getStart());
 		model.getLambda().setEnd(getLambda().getEnd());
 		return model;

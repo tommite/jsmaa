@@ -302,7 +302,14 @@ public class ImpactMatrix implements Serializable {
 	}	
 
 	public synchronized ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
-		ImpactMatrix other = new ImpactMatrix(alts, crit);		
+		if (getAlternatives().size() != alts.size()) {
+			throw new IllegalArgumentException("ImpactMatrix.deepCopy() : getAlternatives().size() != alts.size()");
+		}
+		if (getCriteria().size() != crit.size()) {
+			throw new IllegalArgumentException("ImpactMatrix.deepCopy() : getCriteria().size() != crit.size()");
+		}
+		
+		ImpactMatrix other = new ImpactMatrix(alts, crit);	
 
 		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
