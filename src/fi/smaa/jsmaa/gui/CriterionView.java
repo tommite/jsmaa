@@ -18,13 +18,14 @@
 
 package fi.smaa.jsmaa.gui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-import javax.swing.text.DefaultFormatter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -37,8 +38,6 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ExactMeasurement;
-import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -56,10 +55,10 @@ public class CriterionView implements ViewBuilder {
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, pref, 3dlu, left:pref:grow",
-				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p" );
+				"right:pref, 3dlu, left:pref:grow",
+				"p, 3dlu, p, 3dlu, p, 3dlu, p" );
 		
-		int fullWidth = 5;
+		int fullWidth = 3;
 
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
@@ -125,13 +124,11 @@ public class CriterionView implements ViewBuilder {
 		row += 2;
 		builder.addLabel("Indifference:", cc.xy(1, row));
 		builder.add(indifPanel, cc.xy(3, row));				
-		builder.addLabel("Interval", cc.xy(5, row));
 				
 		LayoutUtil.addRow(layout);
 		row += 2;
 		builder.addLabel("Preference:", cc.xy(1, row));		
 		builder.add(prefPanel, cc.xy(3, row));				
-		builder.addLabel("Interval", cc.xy(5, row));
 		
 		return row;
 	}
@@ -169,16 +166,7 @@ public class CriterionView implements ViewBuilder {
 			PanelBuilder builder, CellConstraints cc, int row) {
 		row += 2;
 		builder.addSeparator("Measurements", cc.xyw(1, row, fullWidth));
-		row += 2;
-		builder.addLabel("Value", cc.xy(3, row, "center, center"));
-		builder.addLabel("Type", cc.xy(5, row));
-		
-		
-//		List<JComboBox> rankSelectors = null;		
-//		if (criterion instanceof OrdinalCriterion) {
-//			 rankSelectors = new RankSelectorGroup((OrdinalCriterion) criterion).getSelectors();
-//		}
-		
+				
 		int index = 0;
 		for (Alternative a : model.getAlternatives()) {
 			LayoutUtil.addRow(layout);
@@ -187,12 +175,9 @@ public class CriterionView implements ViewBuilder {
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
 			if (criterion instanceof CardinalCriterion) {
-				CardinalCriterion cardCrit = (CardinalCriterion) criterion;
-				CardinalMeasurement m = model.getMeasurement(cardCrit, a);
-				JComponent measComp = getMeasurementComponent(m);
-				builder.add(measComp, cc.xy(3, row));				
-				CriterionTypeChooser chooser = new CriterionTypeChooser(model, a, criterion);
-				builder.add(chooser, cc.xy(5, row));			
+				ValueHolder holder = createMeasurementHolder(a);
+				MeasurementPanel mpanel = new MeasurementPanel(holder);
+				builder.add(mpanel, cc.xyw(3, row, fullWidth-2));				
 			}
 			index++;
 		}
@@ -200,24 +185,19 @@ public class CriterionView implements ViewBuilder {
 	}
 
 
-	private JComponent getMeasurementComponent(CardinalMeasurement m) {
-		JComponent measComp = null;
-		if (m instanceof ExactMeasurement) {
-			ExactMeasurement em = (ExactMeasurement) m;
-			JFormattedTextField tf = BasicComponentFactory.createFormattedTextField(
-					new PresentationModel<ExactMeasurement>(em).getModel(ExactMeasurement.PROPERTY_VALUE),
-					new DefaultFormatter());
-			
-			tf.setHorizontalAlignment(JTextField.CENTER);
-			measComp = tf;
-		} else if (m instanceof Interval) {
-			Interval ival = (Interval) m;
-			measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
-		} else if (m instanceof GaussianMeasurement) {
-			GaussianMeasurement gm = (GaussianMeasurement) m;
-		    measComp = ComponentBuilder.createGaussianMeasurementPanel(
-		             new PresentationModel<GaussianMeasurement>(gm));
+	private ValueHolder createMeasurementHolder(Alternative a) {
+		ValueHolder holder = new ValueHolder(model.getMeasurement((CardinalCriterion) criterion, a));
+		holder.addPropertyChangeListener(new HolderListener(a));
+		return holder;
+	}
+	
+	private class HolderListener implements PropertyChangeListener {
+		private Alternative a;
+		public HolderListener(Alternative a) {
+			this.a = a;
 		}
-		return measComp;
+		public void propertyChange(PropertyChangeEvent evt) {
+			model.setMeasurement((CardinalCriterion) criterion, a, (CardinalMeasurement)evt.getNewValue());
+		}
 	}
 }

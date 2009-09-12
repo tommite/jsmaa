@@ -18,24 +18,21 @@
 
 package fi.smaa.jsmaa.gui;
 
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-import javax.swing.text.DefaultFormatter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ExactMeasurement;
-import fi.smaa.jsmaa.model.GaussianMeasurement;
-import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
@@ -64,33 +61,30 @@ public class CriterionViewWithProfiles extends CriterionView {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
+			
 			if (criterion instanceof OutrankingCriterion) {
-				OutrankingCriterion cardCrit = (OutrankingCriterion) criterion;
-				CardinalMeasurement m = triModel.getCategoryUpperBound(cardCrit, a);
-				JComponent measComp = null;
-				if (m instanceof ExactMeasurement) {
-					ExactMeasurement em = (ExactMeasurement) m;
-					JFormattedTextField tf = BasicComponentFactory.createFormattedTextField(
-							new PresentationModel<ExactMeasurement>(em).getModel(ExactMeasurement.PROPERTY_VALUE),
-							new DefaultFormatter());
-					
-					tf.setHorizontalAlignment(JTextField.CENTER);
-					measComp = tf;					
-				} else if (m instanceof Interval) {
-					Interval ival = (Interval) m;
-					measComp = new IntervalPanel(null, new PresentationModel<Interval>(ival));
-				} else if (m instanceof GaussianMeasurement) {
-					GaussianMeasurement gm = (GaussianMeasurement) m;
-				    measComp = ComponentBuilder.createGaussianMeasurementPanel(
-				             new PresentationModel<GaussianMeasurement>(gm));
-				}
-				builder.add(measComp, cc.xy(3, row));				
-				CriterionTypeChooser chooser = new CriterionTypeChooser(triModel, a, criterion);
-				builder.add(chooser, cc.xy(5, row));			
+				ValueHolder holder = createMeasurementHolder(a);
+				MeasurementPanel mpanel = new MeasurementPanel(holder);
+				builder.add(mpanel, cc.xy(3, row));				
 			}
 			index++;
 		}
 		return row;
 	}	
-
+	
+	private ValueHolder createMeasurementHolder(Alternative prof) {
+		ValueHolder holder = new ValueHolder(((SMAATRIModel)model).getCategoryUpperBound((OutrankingCriterion) criterion, prof));
+		holder.addPropertyChangeListener(new HolderListener(prof));
+		return holder;
+	}
+	
+	private class HolderListener implements PropertyChangeListener {
+		private Alternative profile;
+		public HolderListener(Alternative profile) {
+			this.profile = profile;
+		}
+		public void propertyChange(PropertyChangeEvent evt) {
+			model.setMeasurement((CardinalCriterion) criterion, profile, (CardinalMeasurement)evt.getNewValue());
+		}
+	}
 }
