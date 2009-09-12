@@ -31,6 +31,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel.PreferenceType;
+import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -43,7 +44,7 @@ public class PreferenceInformationView implements ViewBuilder {
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, pref",
+				"right:pref, 3dlu, left:pref:grow",
 				"p, 3dlu, p, 3dlu, p");
 		
 		int fullWidth = 3;
@@ -56,14 +57,8 @@ public class PreferenceInformationView implements ViewBuilder {
 		
 		builder.addSeparator("Preferences", cc.xyw(1, 1, fullWidth));
 		
-		PreferenceType[] typeList = new PreferenceType[] {
-				PreferenceType.MISSING,
-				PreferenceType.CARDINAL,
-				PreferenceType.ORDINAL
-		};
-		
 		SelectionInList<PreferenceType> typeSelInList 
-			= new SelectionInList<PreferenceType>(typeList, preferenceTypeModel);
+			= new SelectionInList<PreferenceType>(PreferenceType.values(), preferenceTypeModel);
 		
 
 		JComboBox preferenceTypeBox = BasicComponentFactory.createComboBox(typeSelInList);
@@ -75,6 +70,10 @@ public class PreferenceInformationView implements ViewBuilder {
 			SMAAModel smodel = model.getBean();
 			OrdinalPreferencesView oview = new OrdinalPreferencesView(smodel.getCriteria(),
 					(OrdinalPreferenceInformation) smodel.getPreferenceInformation());
+			builder.add(oview.buildPanel(), cc.xyw(1, 5, fullWidth));
+		} else if (model.getPreferenceType() == PreferenceType.CARDINAL) {
+			CardinalPreferencesView oview = new CardinalPreferencesView(
+					(CardinalPreferenceInformation) model.getBean().getPreferenceInformation());
 			builder.add(oview.buildPanel(), cc.xyw(1, 5, fullWidth));
 		}
 		return builder.getPanel();

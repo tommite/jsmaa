@@ -20,6 +20,8 @@ package fi.smaa.jsmaa.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,16 +31,24 @@ public class CardinalPreferenceInformation extends PreferenceInformation {
 	private static final long serialVersionUID = 5119910625472241337L;
 	private List<Criterion> criteria;
 	private Map<Criterion, CardinalMeasurement> prefs = new HashMap<Criterion, CardinalMeasurement>();
-	private MeasurementListener measListener = new MeasurementListener();
+	private transient MeasurementListener measListener = new MeasurementListener();
 
 	public CardinalPreferenceInformation(List<Criterion> criteria) {
 		this.criteria = criteria;
 		initMeasurements();
 	}
 	
+	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
+		i.defaultReadObject();
+		measListener = new MeasurementListener();
+		for (Criterion c : criteria) {
+			prefs.get(c).addPropertyChangeListener(measListener);
+		}
+	}	
+	
 	private void initMeasurements() {
 		for (Criterion c : criteria) {
-			prefs.put(c, new Interval(0.0, 1.0));
+			setMeasurement(c, new Interval(0.0, 1.0));
 		}
 	}
 

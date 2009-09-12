@@ -30,9 +30,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.PreferenceListener;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
@@ -78,6 +80,16 @@ public class CardinalPreferenceInformationTest {
 	}
 	
 	@Test
+	public void testInitialMeasurementsFire() {
+		PreferenceListener list = createMock(PreferenceListener.class);
+		info.addPreferenceListener(list);
+		list.preferencesChanged();
+		replay(list);
+		((Interval) info.getMeasurement(crit)).setEnd(2.0);
+		verify(list);
+	}
+	
+	@Test
 	public void testSampleWeights() {
 		info.setMeasurement(crit, new ExactMeasurement(2.0));
 		double[] w = info.sampleWeights();
@@ -101,6 +113,16 @@ public class CardinalPreferenceInformationTest {
 		replay(list);
 		((ExactMeasurement) info2.getMeasurement(info2.getCriteria().get(0))).setValue(3.0);
 		verify(list);		
-		
 	}	
+	
+	@Test
+	public void testSerializationConnectsListeners() throws Exception {
+		CardinalPreferenceInformation i2 = JUnitUtil.serializeObject(info);
+		PreferenceListener list = createMock(PreferenceListener.class);
+		i2.addPreferenceListener(list);
+		list.preferencesChanged();
+		replay(list);
+		((Interval)i2.getMeasurement(i2.getCriteria().get(0))).setEnd(2.0);
+		verify(list);
+	}
 }
