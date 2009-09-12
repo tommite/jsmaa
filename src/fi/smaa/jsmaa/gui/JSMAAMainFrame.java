@@ -84,6 +84,7 @@ import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.SimulationThread;
+import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -197,7 +198,7 @@ public class JSMAAMainFrame extends JFrame {
 	
 	public void setRightViewToPreferences() {
 		rightViewBuilder = new PreferenceInformationView(
-				new SMAAModelPreferencePresentationModel(model));
+				new PreferencePresentationModel(model));
 		rebuildRightPanel();
 	}	
 

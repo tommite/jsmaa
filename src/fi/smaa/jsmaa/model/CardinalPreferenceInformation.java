@@ -33,8 +33,15 @@ public class CardinalPreferenceInformation extends PreferenceInformation {
 
 	public CardinalPreferenceInformation(List<Criterion> criteria) {
 		this.criteria = criteria;
+		initMeasurements();
 	}
 	
+	private void initMeasurements() {
+		for (Criterion c : criteria) {
+			prefs.put(c, new Interval(0.0, 1.0));
+		}
+	}
+
 	public List<Criterion> getCriteria() {
 		return criteria;
 	}
