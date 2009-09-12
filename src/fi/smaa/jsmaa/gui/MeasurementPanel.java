@@ -46,7 +46,6 @@ import fi.smaa.jsmaa.model.LogNormalMeasurement;
 public class MeasurementPanel extends JPanel {
 	
 	private ValueHolder holder;
-	private JPanel valuePanel = new JPanel();
 	
 	public enum MeasurementType {
 		EXACT("Exact"),
@@ -74,27 +73,21 @@ public class MeasurementPanel extends JPanel {
 		this.holder = measurementHolder;
 		holder.addPropertyChangeListener(new HolderListener());
 		
-		setLayout(new FlowLayout());
+		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		rebuildPanel();
 	}
 
 	private class HolderListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
-			rebuildValuePanel();
+			rebuildPanel();
 		}		
 	}
 
 	public void rebuildPanel() {
 		removeAll();
-		valuePanel.add(buildValuePanel());
-		add(valuePanel);
+		add(buildValuePanel());
 		add(buildChooserPanel());
-	}
-
-	public void rebuildValuePanel() {
-		valuePanel.removeAll();
-		valuePanel.add(buildValuePanel());
-		valuePanel.revalidate();
+		revalidate();
 	}
 
 	private JComboBox buildChooserPanel() {

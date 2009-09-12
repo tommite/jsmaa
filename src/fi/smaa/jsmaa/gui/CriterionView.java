@@ -18,10 +18,13 @@
 
 package fi.smaa.jsmaa.gui;
 
+import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -117,18 +120,26 @@ public class CriterionView implements ViewBuilder {
 		
 		prefStartModel.addVetoer(new RangeVetoer(indifModel.getBean(), dominatorText, true));
 
+		JPanel outIndifPanel = new JPanel();		
+		JPanel outPrefPanel = new JPanel();		
 		IntervalPanel indifPanel = new IntervalPanel(indifStartModel, indifEndModel);
+		outIndifPanel.setLayout(new FlowLayout());
+		outIndifPanel.add(indifPanel);
+		outIndifPanel.add(new JLabel("(interval)"));
 		IntervalPanel prefPanel = new IntervalPanel(prefStartModel, prefEndModel);
+		outPrefPanel.setLayout(new FlowLayout());
+		outPrefPanel.add(prefPanel);
+		outPrefPanel.add(new JLabel("(interval)"));		
 		
 		LayoutUtil.addRow(layout);
 		row += 2;
 		builder.addLabel("Indifference:", cc.xy(1, row));
-		builder.add(indifPanel, cc.xy(3, row));				
+		builder.add(outIndifPanel, cc.xy(3, row));				
 				
 		LayoutUtil.addRow(layout);
 		row += 2;
 		builder.addLabel("Preference:", cc.xy(1, row));		
-		builder.add(prefPanel, cc.xy(3, row));				
+		builder.add(outPrefPanel, cc.xy(3, row));				
 		
 		return row;
 	}
