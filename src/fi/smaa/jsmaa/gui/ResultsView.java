@@ -27,7 +27,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.SMAAResults;
 import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
@@ -57,10 +56,6 @@ public abstract class ResultsView implements ViewBuilder {
 		}
 	}
 
-	public void setResults(SMAA2Results results) {
-		this.results = results;
-		results.addResultsListener(new MyResultsListener());		
-	}
 
 	protected class MyResultsListener implements SMAAResultsListener {
 		public void resultsChanged() {

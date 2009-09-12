@@ -24,18 +24,16 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
-import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Alternative;
 
-public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder {
+public class RankAcceptabilitiesView extends ResultsView {
 	
 	private JLabel[][] valCells;
 	
@@ -55,7 +53,6 @@ public class RankAcceptabilitiesView extends ResultsView implements ViewBuilder 
 				}
 			}
 		}
-		
 	}
 
 	synchronized public JComponent buildPanel() {

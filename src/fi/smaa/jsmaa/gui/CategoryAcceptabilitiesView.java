@@ -56,7 +56,6 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 				}
 			}
 		}
-		
 	}
 
 	private int getNumCategories() {
