@@ -34,7 +34,6 @@ import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
-import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.PreferenceListener;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
