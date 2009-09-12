@@ -38,7 +38,7 @@ public class SMAATRIResults extends SMAAResults {
 		categoryAcceptabilities = new Acceptabilities(alternatives, categories.size());		
 	}
 	
-	public void update(Integer[] categories) {
+	synchronized public void update(Integer[] categories) {
 		assert(categories.length == alternatives.size());
 		
 		for (int altIndex=0;altIndex<categories.length;altIndex++) {

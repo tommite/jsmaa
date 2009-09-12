@@ -1122,6 +1122,9 @@ public class JSMAAMainFrame extends JFrame {
 				if (model instanceof SMAATRIModel) {
 					lambdaSlider.setLowValue((int) (((SMAATRIModel) model).getLambda().getStart() * 100.0));
 					lambdaSlider.setHighValue((int) (((SMAATRIModel) model).getLambda().getEnd() * 100.0));
+					if (rightViewBuilder instanceof CategoryAcceptabilitiesView) {
+						setRightViewToCategoryAcceptabilities();
+					}
 				}
 			} else if (type != ModelChangeEvent.MEASUREMENT) {
 				rebuildRightPanel();
