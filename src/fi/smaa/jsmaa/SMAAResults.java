@@ -38,17 +38,17 @@ public abstract class SMAAResults {
 	
 	public abstract void reset();
 
-	public void addResultsListener(SMAAResultsListener listener) {
+	synchronized public void addResultsListener(SMAAResultsListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 	
-	public void removeResultsListener(SMAAResultsListener listener) {
+	synchronized public void removeResultsListener(SMAAResultsListener listener) {
 		listeners.remove(listener);
 	}
 
-	protected void fireResultsChanged() {
+	synchronized protected void fireResultsChanged() {
 		for (SMAAResultsListener listener : listeners) {
 			listener.resultsChanged();
 		}
