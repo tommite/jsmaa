@@ -1,7 +1,14 @@
 README for JSMAA
 ================
 JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) methodology.
-Currently only SMAA-2 for utility-theory based decision analysis is implemented.
+Currently is implemented:
+-SMAA-2 for utility-theory based decision analysis (ranking / choosing problem statement).
+-SMAA-TRI for outranking based sorting problems.
+
+Versions
+========
+0.4 : Adds SMAA-TRI, uncertainty individually for measurements, cardinal preference information, graph output, and various other minor improvements.
+0.2 : Initial release implementing SMAA-2. 
 
 License
 =======
@@ -17,5 +24,7 @@ Contact
 =======
 Contact me by email at t dot p dot tervonen at rug dot nl.
 
-May 2009
+More information can be found at http://www.smaa.fi.
+
+September 2009
 Tommi Tervonen
