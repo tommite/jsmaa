@@ -18,6 +18,10 @@
 
 package fi.smaa.jsmaa;
 
-public interface SimulationPhase {
-	public void iterate() throws IterationException;
+@SuppressWarnings("serial")
+public class IterationException extends Exception {
+
+	public IterationException(String reason) {
+		super(reason);
+	}
 }

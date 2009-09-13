@@ -23,6 +23,7 @@ import java.util.List;
 
 import fi.smaa.jsmaa.maut.Sampler;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.WeightGenerationException;
 
 public abstract class SimulationThread extends Thread{
 
@@ -69,7 +70,13 @@ public abstract class SimulationThread extends Thread{
 			iteration = 1;
 			int currentTotalIters = phaseIterations.get(i);
 			while (go && iteration <= currentTotalIters) {
-				currentPhase.iterate();
+				try {
+					currentPhase.iterate();
+				} catch (IterationException e) {
+					go = false;
+					getResults().fireResultsChanged(e);
+					return;
+				}
 				iteration++;
 			}
 		}
@@ -115,7 +122,7 @@ public abstract class SimulationThread extends Thread{
 		return measurements[critIndex];
 	}
 
-	protected void generateWeights() {
+	protected void generateWeights() throws WeightGenerationException {
 		weights = model.getPreferenceInformation().sampleWeights();
 	}
 }

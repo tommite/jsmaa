@@ -39,7 +39,7 @@ public class SMAATRISimulationThread extends SimulationThread {
 		results = new SMAATRIResults(triModel.getAlternatives(), triModel.getCategories(), 10);
 		
 		addPhase(new SimulationPhase() {
-			public void iterate() {
+			public void iterate() throws IterationException {
 				if (((SMAATRIModel) model).getCategories().size() == 0) {
 					return;
 				}

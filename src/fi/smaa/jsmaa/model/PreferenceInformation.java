@@ -29,7 +29,7 @@ public abstract class PreferenceInformation implements DeepCopiable<PreferenceIn
 	
 	protected List<PreferenceListener> listeners = new ArrayList<PreferenceListener>();
 		
-	public abstract double[] sampleWeights();
+	public abstract double[] sampleWeights() throws WeightGenerationException;
 	
 	public void addPreferenceListener(PreferenceListener list) {
 		listeners.add(list);

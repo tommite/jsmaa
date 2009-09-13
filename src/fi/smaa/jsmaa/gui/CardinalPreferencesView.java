@@ -90,7 +90,7 @@ public class CardinalPreferencesView implements ViewBuilder {
 	}
 
 	private JComponent createMeasurementComponent(Criterion c) {
-		MeasurementType[] mvals = new MeasurementType[] { MeasurementType.EXACT };
+		MeasurementType[] mvals = new MeasurementType[] { MeasurementType.EXACT, MeasurementType.INTERVAL };
 		ValueHolder holder = values.get(c);
 		MeasurementPanel vpanel = new MeasurementPanel(holder, mvals); 
 		return vpanel;

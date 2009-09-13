@@ -61,6 +61,9 @@ public abstract class ResultsView implements ViewBuilder {
 		public void resultsChanged() {
 			fireResultsChanged();
 		}
+
+		public void resultsChanged(Exception e) {
+		}
 	}
 	
 	protected abstract void fireResultsChanged();

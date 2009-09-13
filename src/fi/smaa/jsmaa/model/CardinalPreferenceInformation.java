@@ -26,9 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fi.smaa.common.RandomUtil;
+
 public class CardinalPreferenceInformation extends PreferenceInformation {
 	
 	private static final long serialVersionUID = 5119910625472241337L;
+	private static final int MAXGENITERS = 1000;
 	private List<Criterion> criteria;
 	private Map<Criterion, CardinalMeasurement> prefs = new HashMap<Criterion, CardinalMeasurement>();
 	private transient MeasurementListener measListener = new MeasurementListener();
@@ -70,12 +73,65 @@ public class CardinalPreferenceInformation extends PreferenceInformation {
 		return prefs.get(c);
 	}
 
-	public double[] sampleWeights() {
+	public double[] sampleWeights() throws WeightGenerationException {
 		double[] weights = new double[criteria.size()];
+		
+		double lowerBounds = 0.0;
+		int numIntervalCriteria = 0;
 		for (int i=0;i<weights.length;i++) {
-			weights[i] = prefs.get(criteria.get(i)).sample();
+			CardinalMeasurement meas = prefs.get(criteria.get(i));
+			if (meas instanceof Interval) {
+				numIntervalCriteria++;
+			}
+			lowerBounds += meas.getRange().getStart();
 		}
+		if (lowerBounds > 1.0) {
+			throw new WeightGenerationException("weight lower bounds over 1.0");
+		}
+		
+		double[] tmpArr = new double[numIntervalCriteria];
+		
+		for (int iter=0;iter<MAXGENITERS;iter++) {
+			if (numIntervalCriteria > 0) {
+				RandomUtil.createSumToRand(tmpArr, 1.0 - lowerBounds);
+			}
+
+			int currentInterval = 0;
+			boolean overUpperBound = false;
+			for (int i=0;i<weights.length;i++) {
+				CardinalMeasurement meas = prefs.get(criteria.get(i));
+				if (meas instanceof ExactMeasurement) {
+					weights[i] = ((ExactMeasurement) meas).getValue();
+				} else if (meas instanceof Interval) {
+					weights[i] = meas.getRange().getStart() + tmpArr[currentInterval];
+					if (weights[i] > meas.getRange().getEnd()) {
+						overUpperBound = true;
+						break;
+					}				
+					currentInterval++;
+				} else {
+					throw new RuntimeException("unknown weight constraint type");
+				}
+			}
+			
+			if (!overUpperBound && checkSumTo1(weights)) {
+				break;
+			}
+			
+			if (iter == (MAXGENITERS-1)) {
+				throw new WeightGenerationException("infeasible weight constraints");
+			}
+		}
+		
 		return weights;
+	}
+
+	private boolean checkSumTo1(double[] weights) {
+		double sum = 0.0;
+		for (double d : weights) {
+			sum += d;
+		}
+		return sum == 1.0;
 	}
 
 	public CardinalPreferenceInformation deepCopy() {

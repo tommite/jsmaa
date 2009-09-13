@@ -41,7 +41,7 @@ public class SMAA2SimulationThread extends SimulationThread {
 		reset();
 		
 		addPhase(new SimulationPhase() {
-			public void iterate() {
+			public void iterate() throws IterationException {
 				generateWeights();
 				sampleCriteria();
 				aggregate();
@@ -50,7 +50,7 @@ public class SMAA2SimulationThread extends SimulationThread {
 			}
 		}, iterations);
 		addPhase(new SimulationPhase() {
-			public void iterate() {
+			public void iterate() throws IterationException {
 				sampleCriteria();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);

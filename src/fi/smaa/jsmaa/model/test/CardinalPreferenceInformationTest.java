@@ -34,8 +34,10 @@ import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.PreferenceListener;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.model.WeightGenerationException;
 
 public class CardinalPreferenceInformationTest {
 	
@@ -84,16 +86,43 @@ public class CardinalPreferenceInformationTest {
 		info.addPreferenceListener(list);
 		list.preferencesChanged();
 		replay(list);
-		((ExactMeasurement) info.getMeasurement(crit)).setValue(2.0);
+		((ExactMeasurement) info.getMeasurement(crit)).setValue(1.0);
 		verify(list);
 	}
 	
+	@Test(expected=WeightGenerationException.class)
+	public void testSampleOverUppberBoundWeightsThrows() throws WeightGenerationException {
+		info.setMeasurement(crit, new Interval(0.0, 0.4));
+		info.sampleWeights();
+	}
+	
+	@Test(expected=WeightGenerationException.class)
+	public void testSampleInfeasibleWeightsThrows() throws WeightGenerationException {
+		info.setMeasurement(crit, new ExactMeasurement(0.2));
+		info.sampleWeights();
+	}	
+	
 	@Test
-	public void testSampleWeights() {
-		info.setMeasurement(crit, new ExactMeasurement(2.0));
+	public void testSampleWeights() throws Exception {
+		info.setMeasurement(crit, new ExactMeasurement(1.0));
 		double[] w = info.sampleWeights();
 		assertEquals(1, w.length);
-		assertEquals(2.0, w[0], 0.0000001);
+		assertEquals(1.0, w[0], 0.0000001);
+	}
+	
+	@Test
+	public void testSampleBothExactAndInterval() throws Exception {
+		List<Criterion> list = new ArrayList<Criterion>();
+		ScaleCriterion c1 = new ScaleCriterion("c1");
+		list.add(c1);
+		ScaleCriterion c2 = new ScaleCriterion("c2");
+		list.add(c2);
+		info = new CardinalPreferenceInformation(list);
+		info.setMeasurement(c1, new Interval(0.0, 1.0));
+		info.setMeasurement(c2, new ExactMeasurement(0.2));
+		double[] w = info.sampleWeights();
+		assertEquals(0.8, w[0], 0.000001);
+		assertEquals(0.2, w[1], 0.000001);
 	}
 	
 	@Test

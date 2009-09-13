@@ -16,8 +16,15 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa;
+package fi.smaa.jsmaa.model;
 
-public interface SimulationPhase {
-	public void iterate() throws IterationException;
+import fi.smaa.jsmaa.IterationException;
+
+@SuppressWarnings("serial")
+public class WeightGenerationException extends IterationException {
+	
+	public WeightGenerationException(String reason) {
+		super(reason);
+	}
+
 }

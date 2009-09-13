@@ -65,5 +65,11 @@ public abstract class SMAAResults {
 		}
 		return cw;
 	}
+
+	synchronized protected void fireResultsChanged(IterationException e) {
+		for (SMAAResultsListener listener : listeners) {
+			listener.resultsChanged(e);
+		}		
+	}
 	
 }

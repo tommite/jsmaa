@@ -1255,5 +1255,11 @@ public class JSMAAMainFrame extends JFrame {
 				simulationProgress.setString("Simulation complete.");
 			}
 		}
+
+		public void resultsChanged(Exception e) {
+			int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
+			simulationProgress.setValue(amount);
+			simulationProgress.setString("Error in simulation : " + e.getMessage());
+		}
 	}
 }

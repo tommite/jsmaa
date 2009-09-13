@@ -20,4 +20,5 @@ package fi.smaa.jsmaa;
 
 public interface SMAAResultsListener {
 	public void resultsChanged();
+	public void resultsChanged(Exception e);
 }
