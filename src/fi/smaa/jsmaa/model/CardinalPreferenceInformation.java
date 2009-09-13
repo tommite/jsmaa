@@ -31,7 +31,7 @@ import fi.smaa.common.RandomUtil;
 public class CardinalPreferenceInformation extends PreferenceInformation {
 	
 	private static final long serialVersionUID = 5119910625472241337L;
-	private static final int MAXGENITERS = 1000;
+	private static final int MAXGENITERS = 10000;
 	private List<Criterion> criteria;
 	private Map<Criterion, CardinalMeasurement> prefs = new HashMap<Criterion, CardinalMeasurement>();
 	private transient MeasurementListener measListener = new MeasurementListener();
@@ -113,17 +113,12 @@ public class CardinalPreferenceInformation extends PreferenceInformation {
 					throw new RuntimeException("unknown weight constraint type");
 				}
 			}
-			
+
 			if (!overUpperBound && checkSumTo1(weights)) {
-				break;
-			}
-			
-			if (iter == (MAXGENITERS-1)) {
-				throw new WeightGenerationException("infeasible weight constraints");
+				return weights;
 			}
 		}
-		
-		return weights;
+		throw new WeightGenerationException("infeasible weight constraints");
 	}
 
 	private boolean checkSumTo1(double[] weights) {

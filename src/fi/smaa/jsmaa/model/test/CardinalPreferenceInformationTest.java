@@ -153,4 +153,71 @@ public class CardinalPreferenceInformationTest {
 		((ExactMeasurement)i2.getMeasurement(i2.getCriteria().get(0))).setValue(2.0);
 		verify(list);
 	}
+	
+	@Test
+	public void testSmaaTRIPaperWeightConstraints() throws Exception {
+		ScaleCriterion g11 = new ScaleCriterion("g11");
+		ScaleCriterion g12 = new ScaleCriterion("g12");
+		ScaleCriterion g13 = new ScaleCriterion("g13");
+		ScaleCriterion g14 = new ScaleCriterion("g14");
+		ScaleCriterion g15 = new ScaleCriterion("g15");
+		ScaleCriterion g21 = new ScaleCriterion("g21");
+		ScaleCriterion g22 = new ScaleCriterion("g22");
+		ScaleCriterion g23 = new ScaleCriterion("g23");
+		ScaleCriterion g24 = new ScaleCriterion("g24");
+		ScaleCriterion g251 = new ScaleCriterion("g251");
+		List<Criterion> crit = new ArrayList<Criterion>();
+		crit.add(g11);
+		crit.add(g12);
+		crit.add(g13);
+		crit.add(g14);
+		crit.add(g15);
+		crit.add(g21);
+		crit.add(g22);
+		crit.add(g23);
+		crit.add(g24);
+		crit.add(g251);
+		info = new CardinalPreferenceInformation(crit);
+		info.setMeasurement(g11, new Interval(0.06, 0.15));
+		info.setMeasurement(g12, new Interval(0.0, 0.04));
+		info.setMeasurement(g13, new Interval(0.0, 0.04));
+		info.setMeasurement(g14, new Interval(0.0, 0.04));
+		info.setMeasurement(g15, new Interval(0.06, 0.15));
+		info.setMeasurement(g21, new Interval(0.0, 0.04));
+		info.setMeasurement(g22, new Interval(0.0, 0.04));
+		info.setMeasurement(g23, new Interval(0.33, 0.54));
+		info.setMeasurement(g24, new Interval(0.0, 0.04));
+		info.setMeasurement(g251, new Interval(0.15, 0.28));
+		
+		double[] w = info.sampleWeights();
+		assertTrue(w[0] >= 0.06);
+		assertTrue(w[0] <= 0.15);
+		
+		assertTrue(w[1] >= 0.0);
+		assertTrue(w[1] <= 0.04);
+
+		assertTrue(w[2] >= 0.0);
+		assertTrue(w[2] <= 0.04);
+
+		assertTrue(w[3] >= 0.0);
+		assertTrue(w[3] <= 0.04);
+		
+		assertTrue(w[4] >= 0.06);
+		assertTrue(w[4] <= 0.15);
+		
+		assertTrue(w[5] >= 0.0);
+		assertTrue(w[5] <= 0.04);
+
+		assertTrue(w[6] >= 0.0);
+		assertTrue(w[6] <= 0.04);
+
+		assertTrue(w[7] >= 0.33);
+		assertTrue(w[7] <= 0.54);
+		
+		assertTrue(w[8] >= 0.0);
+		assertTrue(w[8] <= 0.04);
+
+		assertTrue(w[9] >= 0.15);
+		assertTrue(w[9] <= 0.28);
+	}
 }
