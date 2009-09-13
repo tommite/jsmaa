@@ -23,6 +23,13 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -32,6 +39,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 
@@ -50,7 +58,7 @@ public class CentralWeightsView extends SMAA2ResultsView {
 		
 		FormLayout layout = new FormLayout(
 				"pref, 5dlu, center:pref",
-				"p, 3dlu, p");
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");
 		
 		int[] groupCol = new int[numCrit];
 		
@@ -59,7 +67,11 @@ public class CentralWeightsView extends SMAA2ResultsView {
 		}
 		for (int i=0;i<numCrit;i++) {
 			layout.appendColumn(ColumnSpec.decode("5dlu"));
-			layout.appendColumn(ColumnSpec.decode("center:pref"));
+			if (i == numCrit -1) {
+				layout.appendColumn(ColumnSpec.decode("left:pref:grow"));				
+			} else {
+				layout.appendColumn(ColumnSpec.decode("center:pref"));
+			}
 			groupCol[i] = 5 + 2*i;			
 		}
 		
@@ -79,13 +91,27 @@ public class CentralWeightsView extends SMAA2ResultsView {
 		
 		buildCriteriaLabels(builder);
 		buildAlternativeLabels(builder, 5, 1, true);
-		buildCentralWeightPart(builder);
+		int row = buildCentralWeightPart(builder);
+		builder.addSeparator("", cc.xyw(1, row, fullWidth));
+		buildFigurePart(builder, row+2, fullWidth);		
 		
 		fireResultsChanged();		
 		return builder.getPanel();
 	}
+	
+	private void buildFigurePart(PanelBuilder builder, int row, int fullWidth) {
+		CellConstraints cc = new CellConstraints();
+		CategoryDataset dataset = new CentralWeightsDataset((SMAA2Results) results);
+		final JFreeChart chart = ChartFactory.createLineChart(
+                "", "Criterion", "Central Weight",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
+		chart.getCategoryPlot().setRenderer(renderer);
+		ChartPanel chartPanel = new ChartPanel(chart);		
+		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
+	}	
 
-	private void buildCentralWeightPart(PanelBuilder builder) {
+	private int buildCentralWeightPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
 		int numAlternatives = getNumAlternatives();
 		int numCriteria = getCriteria().size();
@@ -104,6 +130,7 @@ public class CentralWeightsView extends SMAA2ResultsView {
 				builder.add(label, cc.xy(startCol + critIndex * 2, startRow + altIndex * 2));
 			}
 		}
+		return startRow + (numAlternatives * 2);
 	}
 
 	private void buildCriteriaLabels(PanelBuilder builder) {

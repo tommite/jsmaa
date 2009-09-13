@@ -109,6 +109,7 @@ public class RankAcceptabilitiesView extends ResultsView {
 		final JFreeChart chart = ChartFactory.createStackedBarChart(
                 "", "Alternative", "Rank Acceptability",
                 dataset, PlotOrientation.VERTICAL, true, true, false);
+		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 		ChartPanel chartPanel = new ChartPanel(chart);		
 		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
 	}	
