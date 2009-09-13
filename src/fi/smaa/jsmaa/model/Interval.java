@@ -132,4 +132,8 @@ public class Interval extends CardinalMeasurement {
 		return val >= getStart() && val <= getEnd();
 	}
 
+	public Double getMiddle() {
+		return (getStart() + getEnd()) / 2.0;
+	}
+
 }

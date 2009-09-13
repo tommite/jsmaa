@@ -150,14 +150,38 @@ public class MeasurementPanel extends JPanel {
 
 		public void setValue(Object newValue) {
 			MeasurementType type = (MeasurementType) newValue;
+
+			Interval oldBounds = null;
+			if (holder.getValue() instanceof GaussianMeasurement) {
+				Double mean = ((GaussianMeasurement) holder.getValue()).getMean();
+				oldBounds = new Interval(mean, mean);
+			} else if (holder.getValue() instanceof CardinalMeasurement) {
+				oldBounds = ((CardinalMeasurement) holder.getValue()).getRange();
+			}
 			if (type == MeasurementType.EXACT) {
-				holder.setValue(new ExactMeasurement(0.0));
+				if (oldBounds != null) {
+					holder.setValue(new ExactMeasurement(oldBounds.getMiddle()));					
+				} else {
+					holder.setValue(new ExactMeasurement(0.0));
+				}
 			} else if (type == MeasurementType.INTERVAL) {
-				holder.setValue(new Interval(0.0, 1.0));
+				if (oldBounds != null) {
+					holder.setValue(oldBounds.deepCopy());					
+				} else {
+					holder.setValue(new Interval(0.0, 1.0));
+				}
 			} else if (type == MeasurementType.LOGNORMAL) {
-				holder.setValue(new LogNormalMeasurement(0.0, 0.0));
+				if (oldBounds != null) {
+					holder.setValue(new LogNormalMeasurement(oldBounds.getMiddle(), 0.0));
+				} else {
+					holder.setValue(new LogNormalMeasurement(0.0, 0.0));
+				}
 			} else if (type == MeasurementType.GAUSSIAN) {
-				holder.setValue(new GaussianMeasurement(1.0, 0.0));
+				if (oldBounds != null) {
+					holder.setValue(new GaussianMeasurement(oldBounds.getMiddle(), 0.0));
+				} else {
+					holder.setValue(new GaussianMeasurement(1.0, 0.0));
+				}
 			} else {
 				throw new RuntimeException("unknown measurement type");
 			}

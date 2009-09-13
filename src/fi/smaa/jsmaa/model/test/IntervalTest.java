@@ -125,4 +125,9 @@ public class IntervalTest {
 		assertFalse(in.includes(-0.5));
 		assertFalse(in.includes(1.5));
 	}
+	
+	@Test
+	public void testGetMiddle() {
+		assertEquals(new Double(0.5), new Interval(0.0, 1.0).getMiddle());
+	}
 }
