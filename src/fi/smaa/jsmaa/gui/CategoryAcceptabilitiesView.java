@@ -24,6 +24,12 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -33,11 +39,12 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.jsmaa.SMAATRIResults;
+import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
 
 public class CategoryAcceptabilitiesView extends ResultsView {
 	
-	private JLabel[][] valCells;	
+	private JLabel[][] valCells;
 
 	public CategoryAcceptabilitiesView(SMAATRIResults results) {
 		super(results);
@@ -68,7 +75,7 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p");
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");
 		
 		int[] groupCol = new int[numCats];
 		
@@ -95,18 +102,32 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		
 		buildCategoryLabels(builder, 3, 3);
 		buildAlternativeLabels(builder, 5, 1, true);
-		buildCategoryAcceptabilitiesPart(builder);
+		int row = buildCategoryAcceptabilitiesPart(builder);
 		
+		builder.addSeparator("", cc.xyw(1, row, fullWidth));
+		
+		buildFigurePart(builder, row+2, fullWidth);
 		fireResultsChanged();		
 		return builder.getPanel();
 	}
 
-	private void buildCategoryAcceptabilitiesPart(PanelBuilder builder) {
+	private void buildFigurePart(PanelBuilder builder, int row, int fullWidth) {
+		CellConstraints cc = new CellConstraints();
+		CategoryDataset dataset = new CategoryAcceptabilitiesDataset((SMAATRIResults) results);
+		final JFreeChart chart = ChartFactory.createStackedBarChart(
+                "", "Alternative", "Category Acceptability",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartPanel = new ChartPanel(chart);		
+		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
+	}
+
+	private int buildCategoryAcceptabilitiesPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
 		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
 		
 		int startRow = 5;
 		int startCol = 3;
+
 		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
 			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
 				JLabel label = new JLabel("NA");
@@ -114,7 +135,7 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 				builder.add(label, cc.xy(startCol + catIndex*2, startRow + altIndex*2));
 			}
 		}
-		
+		return startRow + getNumAlternatives() * 2;
 	}
 
 	private void buildCategoryLabels(PanelBuilder builder, int row, int startCol) {

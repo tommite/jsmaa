@@ -18,16 +18,16 @@
 
 package fi.smaa.jsmaa;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import fi.smaa.jsmaa.model.Alternative;
 
 public abstract class SMAAResults {
 
-	protected List<SMAAResultsListener> listeners = new ArrayList<SMAAResultsListener>();
+	protected ConcurrentLinkedQueue<SMAAResultsListener> listeners = new ConcurrentLinkedQueue<SMAAResultsListener>();
 	protected List<Alternative> alternatives;
 	protected int updateInterval;
 	
@@ -38,17 +38,17 @@ public abstract class SMAAResults {
 	
 	public abstract void reset();
 
-	synchronized public void addResultsListener(SMAAResultsListener listener) {
+	public void addResultsListener(SMAAResultsListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 	
-	synchronized public void removeResultsListener(SMAAResultsListener listener) {
+	public void removeResultsListener(SMAAResultsListener listener) {
 		listeners.remove(listener);
 	}
 
-	synchronized protected void fireResultsChanged() {
+	protected void fireResultsChanged() {
 		for (SMAAResultsListener listener : listeners) {
 			listener.resultsChanged();
 		}
@@ -66,7 +66,7 @@ public abstract class SMAAResults {
 		return cw;
 	}
 
-	synchronized protected void fireResultsChanged(IterationException e) {
+	protected void fireResultsChanged(IterationException e) {
 		for (SMAAResultsListener listener : listeners) {
 			listener.resultsChanged(e);
 		}		
