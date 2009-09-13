@@ -255,7 +255,18 @@ public class JSMAAMainFrame extends JFrame {
 	private JToolBar createTopToolbar() {
 		JToolBar bar = new JToolBar();
 		bar.setFloatable(false);
-		// TODO
+
+		JButton topBarSaveButton = new JButton(getIcon(FileNames.ICON_SAVEFILE));
+		topBarSaveButton.setToolTipText("Add alternative");
+		topBarSaveButton.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
+		bar.add(topBarSaveButton);
+		Bindings.bind(topBarSaveButton, "enabled", new PresentationModel<JSMAAMainFrame>(this).getModel(PROPERTY_MODELUNSAVED));		
+		bar.addSeparator();
+
 		JButton addButton = new JButton(getIcon(FileNames.ICON_ADDALTERNATIVE));
 		addButton.setToolTipText("Add alternative");
 		addButton.addActionListener(new AbstractAction() {
