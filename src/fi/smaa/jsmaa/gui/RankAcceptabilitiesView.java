@@ -24,6 +24,12 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -31,6 +37,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
 
 public class RankAcceptabilitiesView extends ResultsView {
@@ -60,14 +67,18 @@ public class RankAcceptabilitiesView extends ResultsView {
 		
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p");
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");
 		
 		int[] groupCol = new int[numAlts];
 		
 		for (int i=0;i<numAlts;i++) {
 			LayoutUtil.addRow(layout);
 			layout.appendColumn(ColumnSpec.decode("5dlu"));
-			layout.appendColumn(ColumnSpec.decode("center:pref"));
+			if (i == numAlts -1) {
+				layout.appendColumn(ColumnSpec.decode("left:pref:grow"));
+			} else {
+				layout.appendColumn(ColumnSpec.decode("center:pref"));				
+			}
 			groupCol[i] = 3 + 2*i;
 		}
 		
@@ -84,13 +95,25 @@ public class RankAcceptabilitiesView extends ResultsView {
 		
 		buildRankLabels(builder, 3, 3);
 		buildAlternativeLabels(builder, 5, 1, true);
-		buildRankAcceptabilitiesPart(builder);
+		int row = buildRankAcceptabilitiesPart(builder);
+		builder.addSeparator("", cc.xyw(1, row, fullWidth));
+		buildFigurePart(builder, row+2, fullWidth);
 		
 		fireResultsChanged();		
 		return builder.getPanel();
 	}
 
-	private void buildRankAcceptabilitiesPart(PanelBuilder builder) {
+	private void buildFigurePart(PanelBuilder builder, int row, int fullWidth) {
+		CellConstraints cc = new CellConstraints();
+		CategoryDataset dataset = new RankAcceptabilitiesDataset((SMAA2Results) results);
+		final JFreeChart chart = ChartFactory.createStackedBarChart(
+                "", "Alternative", "Rank Acceptability",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartPanel = new ChartPanel(chart);		
+		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
+	}	
+
+	private int buildRankAcceptabilitiesPart(PanelBuilder builder) {
 		CellConstraints cc = new CellConstraints();
 		valCells = new JLabel[getNumAlternatives()][getNumAlternatives()];
 		
@@ -103,7 +126,7 @@ public class RankAcceptabilitiesView extends ResultsView {
 				builder.add(label, cc.xy(startCol + rank*2, startRow + altIndex*2));
 			}
 		}
-		
+		return startRow + (getNumAlternatives() * 2);
 	}
 
 	private void buildRankLabels(PanelBuilder builder, int row, int startCol) {
