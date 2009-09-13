@@ -188,7 +188,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	public void setRightViewToCategories() {
-		rightViewBuilder = new AlternativeInfoView(((SMAATRIModel) model).getCategories(), "Categories");
+		rightViewBuilder = new AlternativeInfoView(((SMAATRIModel) model).getCategories(), "Categories (in ascending order, top = worst)");
 		rebuildRightPanel();
 	}	
 	
