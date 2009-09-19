@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa;
+package fi.smaa.jsmaa.simulator;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import fi.smaa.common.DeepCopiable;
 
 @SuppressWarnings("serial")
 public abstract class PreferenceInformation implements DeepCopiable<PreferenceInformation>, Serializable {

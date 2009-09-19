@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.test;
+package fi.smaa.jsmaa.simulator.test;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -32,11 +32,11 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAA2Results;
-import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
 public class SMAA2ResultsTest {
 	

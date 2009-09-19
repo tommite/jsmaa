@@ -16,8 +16,12 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.common;
+package fi.smaa.jsmaa.simulator;
 
-public interface DeepCopiable<T> {
-	public T deepCopy();
+@SuppressWarnings("serial")
+public class IterationException extends Exception {
+
+	public IterationException(String reason) {
+		super(reason);
+	}
 }

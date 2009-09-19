@@ -26,12 +26,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset.Rank;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 public class RankAcceptabilitiesDataSetTest {
 	

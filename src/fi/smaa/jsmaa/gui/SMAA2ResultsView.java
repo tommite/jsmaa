@@ -20,8 +20,8 @@ package fi.smaa.jsmaa.gui;
 
 import java.util.List;
 
-import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 public abstract class SMAA2ResultsView extends ResultsView {
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.jfree.data.UnknownKeyException;
 
-import fi.smaa.jsmaa.SMAATRIResults;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("unchecked")
 public class CategoryAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAATRIResults> {

@@ -74,17 +74,9 @@ import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 import com.jidesoft.swing.RangeSlider;
 
-import fi.smaa.common.ImageLoader;
+import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.DefaultModels;
-import fi.smaa.jsmaa.SMAA2Results;
-import fi.smaa.jsmaa.SMAA2SimulationThread;
-import fi.smaa.jsmaa.SMAAResults;
-import fi.smaa.jsmaa.SMAAResultsListener;
-import fi.smaa.jsmaa.SMAASimulator;
-import fi.smaa.jsmaa.SMAATRIResults;
-import fi.smaa.jsmaa.SMAATRISimulationThread;
-import fi.smaa.jsmaa.SimulationThread;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
@@ -97,6 +89,14 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
+import fi.smaa.jsmaa.simulator.SMAAResults;
+import fi.smaa.jsmaa.simulator.SMAAResultsListener;
+import fi.smaa.jsmaa.simulator.SMAASimulator;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
+import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
+import fi.smaa.jsmaa.simulator.SimulationThread;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {

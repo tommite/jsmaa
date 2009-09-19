@@ -16,34 +16,8 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.common.gui;
+package fi.smaa.jsmaa.simulator;
 
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
-
-import fi.smaa.jsmaa.model.Interval;
-
-
-public class IntervalFormat extends Format {
-
-	private static final long serialVersionUID = -147400705393837897L;
-
-	@Override
-	public StringBuffer format(Object obj, StringBuffer toAppendTo,
-			FieldPosition pos) {
-		Interval interval = (Interval) obj;
-		if (interval != null) {
-			toAppendTo.append(interval.toString());
-		}
-		// TODO fix to be "correct"
-		return toAppendTo;
-	}
-
-	@Override
-	public Object parseObject(String source, ParsePosition pos) {
-		// TODO implement
-		return null;
-	}
-
+public interface SimulationPhase {
+	public void iterate() throws IterationException;
 }

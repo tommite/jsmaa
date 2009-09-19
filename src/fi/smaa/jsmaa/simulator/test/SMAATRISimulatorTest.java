@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.test;
+package fi.smaa.jsmaa.simulator.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,15 +29,15 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAASimulator;
-import fi.smaa.jsmaa.SMAATRIResults;
-import fi.smaa.jsmaa.SMAATRISimulationThread;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
+import fi.smaa.jsmaa.simulator.SMAASimulator;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
+import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 
 public class SMAATRISimulatorTest {
 

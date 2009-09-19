@@ -16,8 +16,8 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa;
+package fi.smaa.jsmaa.model;
 
-public interface SimulationPhase {
-	public void iterate() throws IterationException;
+public interface DeepCopiable<T> {
+	public T deepCopy();
 }

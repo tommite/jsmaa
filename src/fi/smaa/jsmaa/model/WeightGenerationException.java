@@ -18,7 +18,7 @@
 
 package fi.smaa.jsmaa.model;
 
-import fi.smaa.jsmaa.IterationException;
+import fi.smaa.jsmaa.simulator.IterationException;
 
 @SuppressWarnings("serial")
 public class WeightGenerationException extends IterationException {

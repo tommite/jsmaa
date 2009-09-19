@@ -38,9 +38,9 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
-import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class CategoryAcceptabilitiesView extends ResultsView {
 	

@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.jfree.data.category.CategoryDataset;
 
-import fi.smaa.jsmaa.SMAAResults;
+import fi.smaa.jsmaa.simulator.SMAAResults;
 
 @SuppressWarnings("unchecked")
 public abstract class AlternativeColumnCategoryDataset<R extends SMAAResults> extends SMAADataSet<R> implements CategoryDataset {

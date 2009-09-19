@@ -27,9 +27,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.SMAAResults;
-import fi.smaa.jsmaa.SMAAResultsListener;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.simulator.SMAAResults;
+import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
 public abstract class ResultsView implements ViewBuilder {
 

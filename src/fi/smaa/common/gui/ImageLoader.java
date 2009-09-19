@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.common;
+package fi.smaa.common.gui;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;

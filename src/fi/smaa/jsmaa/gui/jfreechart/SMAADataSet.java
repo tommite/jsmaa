@@ -26,8 +26,8 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 
-import fi.smaa.jsmaa.SMAAResults;
-import fi.smaa.jsmaa.SMAAResultsListener;
+import fi.smaa.jsmaa.simulator.SMAAResults;
+import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
 public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsListener, Dataset {
 

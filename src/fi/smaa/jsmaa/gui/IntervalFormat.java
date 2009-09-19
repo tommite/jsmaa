@@ -16,21 +16,34 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.common.gui;
+package fi.smaa.jsmaa.gui;
 
-import javax.swing.JComboBox;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.AbstractValueModel;
+import fi.smaa.jsmaa.model.Interval;
 
-public class AuxComponentFactory {
 
-	public static <T> JComboBox createBoundComboBox(T[] values, AbstractValueModel model) {
-		SelectionInList<T> typeSelectionInList =
-			new SelectionInList<T>(values, model);
-		JComboBox type = BasicComponentFactory.createComboBox(typeSelectionInList);
-		return type;
+public class IntervalFormat extends Format {
+
+	private static final long serialVersionUID = -147400705393837897L;
+
+	@Override
+	public StringBuffer format(Object obj, StringBuffer toAppendTo,
+			FieldPosition pos) {
+		Interval interval = (Interval) obj;
+		if (interval != null) {
+			toAppendTo.append(interval.toString());
+		}
+		// TODO fix to be "correct"
+		return toAppendTo;
+	}
+
+	@Override
+	public Object parseObject(String source, ParsePosition pos) {
+		// TODO implement
+		return null;
 	}
 
 }

@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.test;
+package fi.smaa.jsmaa.simulator.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,9 +30,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAA2Results;
-import fi.smaa.jsmaa.SMAA2SimulationThread;
-import fi.smaa.jsmaa.SMAASimulator;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
@@ -40,6 +37,9 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
+import fi.smaa.jsmaa.simulator.SMAASimulator;
 
 
 public class SMAASimulatorTest {

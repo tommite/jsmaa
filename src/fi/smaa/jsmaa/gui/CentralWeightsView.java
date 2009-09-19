@@ -38,10 +38,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
-import fi.smaa.jsmaa.SMAA2Results;
 import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 public class CentralWeightsView extends SMAA2ResultsView {
 	

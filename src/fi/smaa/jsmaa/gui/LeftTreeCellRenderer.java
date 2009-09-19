@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import fi.smaa.common.ImageLoader;
+import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.OutrankingCriterion;

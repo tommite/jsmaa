@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.test;
+package fi.smaa.jsmaa.simulator.test;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -31,9 +31,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAAResultsListener;
-import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.simulator.SMAAResultsListener;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class SMAATRIResultsTest {
 

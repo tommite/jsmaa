@@ -32,9 +32,9 @@ import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
 
-import fi.smaa.jsmaa.SMAATRIResults;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class CategoryAcceptabilitiesDatasetTest {
 	

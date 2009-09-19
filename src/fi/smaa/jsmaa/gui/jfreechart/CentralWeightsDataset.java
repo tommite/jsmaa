@@ -23,7 +23,7 @@ import java.util.List;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 
-import fi.smaa.jsmaa.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 @SuppressWarnings("unchecked")
 public class CentralWeightsDataset extends SMAADataSet<SMAA2Results> implements CategoryDataset{

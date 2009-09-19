@@ -16,12 +16,11 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa;
+package fi.smaa.jsmaa.simulator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fi.smaa.jsmaa.maut.Sampler;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.WeightGenerationException;
 

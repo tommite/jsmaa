@@ -20,7 +20,6 @@ package fi.smaa.jsmaa.model;
 
 import com.jgoodies.binding.beans.Observable;
 
-import fi.smaa.common.DeepCopiable;
 
 public interface Criterion extends Observable, DeepCopiable<Criterion>, Comparable<Criterion> {
 
