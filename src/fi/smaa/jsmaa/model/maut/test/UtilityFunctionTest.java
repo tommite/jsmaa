@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.maut.test;
+package fi.smaa.jsmaa.model.maut.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.maut.UtilityFunction;
 
 public class UtilityFunctionTest {
 	

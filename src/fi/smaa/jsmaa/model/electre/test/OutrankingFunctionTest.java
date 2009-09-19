@@ -16,17 +16,17 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.electre.test;
+package fi.smaa.jsmaa.model.electre.test;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.electre.OutrankingFunction;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
+import fi.smaa.jsmaa.model.electre.OutrankingFunction;
 
 public class OutrankingFunctionTest {
 	

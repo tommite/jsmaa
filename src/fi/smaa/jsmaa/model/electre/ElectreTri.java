@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.electre;
+package fi.smaa.jsmaa.model.electre;
 
 import java.util.HashMap;
 import java.util.List;

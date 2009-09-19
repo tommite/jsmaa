@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.electre;
+package fi.smaa.jsmaa.model.electre;
 
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 

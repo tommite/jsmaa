@@ -21,13 +21,13 @@ package fi.smaa.jsmaa.simulator;
 import java.util.Arrays;
 import java.util.Map;
 
-import fi.smaa.jsmaa.maut.UtilIndexPair;
-import fi.smaa.jsmaa.maut.UtilityFunction;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.maut.UtilIndexPair;
+import fi.smaa.jsmaa.model.maut.UtilityFunction;
 
 public class SMAA2SimulationThread extends SimulationThread {
 	

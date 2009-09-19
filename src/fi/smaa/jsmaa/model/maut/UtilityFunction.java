@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.maut;
+package fi.smaa.jsmaa.model.maut;
 
 import fi.smaa.jsmaa.model.ScaleCriterion;
 

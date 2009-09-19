@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.smaa.jsmaa.electre.ElectreTri;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
+import fi.smaa.jsmaa.model.electre.ElectreTri;
 
 public class SMAATRISimulationThread extends SimulationThread {
 	
