@@ -1,7 +1,9 @@
 <projectDescription>
   <name>jsmaa</name>
   <comment/>
-  <projects/>
+  <projects>
+    <project>jsmaa-lib</project>
+  </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>

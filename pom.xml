@@ -22,6 +22,16 @@
 				<directory>${basedir}/resource</directory>
 			</resource>
 		</resources>
+		
+	<plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.5</source>
+                <target>1.5</target>
+            </configuration>
+        </plugin>
+	</plugins>		
 	</build>
 	<dependencies>
 		<dependency>
@@ -61,5 +71,10 @@
     		<artifactId>jfreechart</artifactId>
     		<version>1.0.0</version>
 		</dependency> 		
+		<dependency>
+			<groupId>fi.smaa</groupId>
+			<artifactId>jsmaa-lib</artifactId>
+			<version>0.4</version>
+		</dependency>
 	</dependencies>
 </project>
