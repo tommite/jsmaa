@@ -92,7 +92,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>jfreechart</groupId>
+			<groupId>jfree</groupId>
 	    	<artifactId>jfreechart</artifactId>
 	    	<version>1.0.0</version>
 		</dependency> 		
