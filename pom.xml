@@ -28,10 +28,24 @@
 		<plugins>
 	        	<plugin>
 		        	<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-			                <source>1.5</source>
-		                	<target>1.5</target>
-		            	</configuration>
+					<configuration>
+			    		<source>1.5</source>
+		                <target>1.5</target>
+		            </configuration>
+	        	</plugin>
+	        	
+	        	<plugin>
+	        		<artifactId>maven-assembly-plugin</artifactId>
+        			<configuration>
+          				<descriptorRefs>
+            				<descriptorRef>jar-with-dependencies</descriptorRef>
+          				</descriptorRefs>
+          				<archive>
+	            			<manifest>
+              					<mainClass>fi.smaa.jsmaa.JSMAAMain</mainClass>
+            				</manifest>
+          				</archive>
+        			</configuration>
 	        	</plugin>
 		</plugins>		
 	</build>
@@ -70,8 +84,8 @@
 		</dependency>
 		<dependency>
 			<groupId>jfreechart</groupId>
-	    		<artifactId>jfreechart</artifactId>
-	    		<version>1.0.0</version>
+	    	<artifactId>jfreechart</artifactId>
+	    	<version>1.0.0</version>
 		</dependency> 		
 		<dependency>
 			<groupId>fi.smaa</groupId>
