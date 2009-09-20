@@ -11,6 +11,5 @@
   </buildSpec>
   <natures>
     <nature>org.eclipse.jdt.core.javanature</nature>
-    <nature>org.datanucleus.ide.eclipse.projectnature</nature>
   </natures>
 </projectDescription>

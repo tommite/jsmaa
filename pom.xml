@@ -12,26 +12,28 @@
   			<url>http://download.java.net/maven/2/</url>
   			<layout>default</layout>
 		</repository>
+		
+    		<repository>
+	      		<id>smaa.fi</id>
+	      		<name>smaa.fi mvn repository</name>
+	      		<layout>default</layout>
+	      		<url>http://smaa.fi/mvn</url>
+	      		<snapshots>
+	        		<enabled>false</enabled>
+	      		</snapshots>
+	    	</repository>
 	</repositories>
 
 	<build>
-		<sourceDirectory>${basedir}/src</sourceDirectory>
-		<outputDirectory>${basedir}/bin</outputDirectory>
-		<resources>
-			<resource>
-				<directory>${basedir}/resource</directory>
-			</resource>
-		</resources>
-		
-	<plugins>
-        <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>1.5</source>
-                <target>1.5</target>
-            </configuration>
-        </plugin>
-	</plugins>		
+		<plugins>
+	        	<plugin>
+		        	<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+			                <source>1.5</source>
+		                	<target>1.5</target>
+		            	</configuration>
+	        	</plugin>
+		</plugins>		
 	</build>
 	<dependencies>
 		<dependency>
@@ -67,9 +69,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>jfreechart</groupId>
-    		<artifactId>jfreechart</artifactId>
-    		<version>1.0.0</version>
+			<groupId>jfreechart</groupId>
+	    		<artifactId>jfreechart</artifactId>
+	    		<version>1.0.0</version>
 		</dependency> 		
 		<dependency>
 			<groupId>fi.smaa</groupId>

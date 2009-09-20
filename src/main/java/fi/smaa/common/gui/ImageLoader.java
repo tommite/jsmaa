@@ -18,6 +18,7 @@
 
 package fi.smaa.common.gui;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ImageLoader {
 	private String imagePath;
 	
 	public ImageLoader(String imagePath) {
-		this.imagePath = imagePath;
+		this.imagePath = imagePath + File.separator;
 		icons = new HashMap<String, Icon>();
 	}
 	

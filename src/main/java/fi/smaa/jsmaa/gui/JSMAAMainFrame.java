@@ -115,7 +115,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JScrollPane rightPane;
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;
-	private ImageLoader imageLoader = new ImageLoader("/gfx/");
+	private ImageLoader imageLoader = new ImageLoader("/fi/smaa/jsmaa/gui");
 	private File currentModelFile;
 	private Boolean modelUnsaved = true;
 	private SMAAModelListener modelListener = new MySMAAModelListener();

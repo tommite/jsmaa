@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui.test;
+package fi.smaa.common.gui.test;
 
 import static org.junit.Assert.*;
 
@@ -34,7 +34,7 @@ public class ImageLoaderTest {
 
 	@Before
 	public void setUp() {
-		loader = new ImageLoader("/gfx/");
+		loader = new ImageLoader("/fi/smaa/jsmaa/gui");
 	}
 	
 	@Test
