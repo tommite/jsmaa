@@ -13,7 +13,7 @@ Versions
 
 License
 =======
-JSMAA is (c) Tommi Tervonen and licensed under GPL(3). See copying for more details.
+JSMAA is (c) Tommi Tervonen and licensed under GPL(3). See LICENSE.txt for more details.
 Icons are taken from Eclipse, and are (c) Eclipse foundations and of their corresponding authors.
 
 Contact
