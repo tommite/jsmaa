@@ -62,6 +62,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -145,6 +146,7 @@ public class JSMAAMainFrame extends JFrame {
 		initWithModel(model);
 		setModelUnsaved(false);
 		updateFrameTitle();
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 		pack();	
 	}
 	
