@@ -1141,6 +1141,8 @@ public class JSMAAMainFrame extends JFrame {
 						setRightViewToCategoryAcceptabilities();
 					}
 				}
+			} else if (type == ModelChangeEvent.PREFERENCES) {
+				// do nothing
 			} else if (type != ModelChangeEvent.MEASUREMENT) {
 				rebuildRightPanel();
 			}
