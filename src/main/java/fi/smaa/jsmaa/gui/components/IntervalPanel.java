@@ -18,12 +18,7 @@
 
 package fi.smaa.jsmaa.gui.components;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.FlowLayout;
-import java.awt.FocusTraversalPolicy;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -47,9 +42,9 @@ public class IntervalPanel extends JPanel {
 				
 		init(startModel, endModel);
 		
-		addFocusListener(new MyFocusListener());
+		addFocusListener(new FocusTransferrer(endField));
 		setFocusTraversalPolicyProvider(true);
-		setFocusTraversalPolicy(new MyFocusTraversalPolicy());
+		setFocusTraversalPolicy(new TwoComponentFocusTraversalPolicy(endField, startField));
 	}
 		
 	public IntervalPanel(ValueModel startModel, ValueModel endModel) {
@@ -72,46 +67,5 @@ public class IntervalPanel extends JPanel {
 		endField.setColumns(5);
 		add(startField);
 		add(endField);
-	}
-	
-	private class MyFocusTraversalPolicy extends FocusTraversalPolicy {
-		@Override
-		public Component getComponentAfter(Container container,
-				Component component) {
-			return getOtherComponent(component);
-		}
-		private Component getOtherComponent(Component component) {
-			if (component == startField) {
-				return endField;
-			} else if (component == endField) {
-				return startField;
-			}
-			return null;
-		}
-		@Override
-		public Component getComponentBefore(Container container,
-				Component component) {
-			return getOtherComponent(component);
-		}
-		@Override
-		public Component getDefaultComponent(Container container) {
-			return endField;
-		}
-		@Override
-		public Component getFirstComponent(Container container) {
-			return endField;
-		}
-		@Override
-		public Component getLastComponent(Container container) {
-			return startField;
-		}
-	}
-
-	private class MyFocusListener implements FocusListener {
-		public void focusGained(FocusEvent e) {
-			endField.requestFocusInWindow();
-		}
-		public void focusLost(FocusEvent e) {
-		}
 	}
 }

@@ -16,13 +16,16 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 @SuppressWarnings("serial")
 public class GaussianMeasurementPanel extends JPanel {
 
+	private JTextField meanField;
+	private JTextField stDevField;
+
 	public GaussianMeasurementPanel(JComponent parent, PresentationModel<GaussianMeasurement> m) {
 		setLayout(new FlowLayout());
 
-		JTextField meanField = BasicComponentFactory.createFormattedTextField(
+		meanField = BasicComponentFactory.createFormattedTextField(
 				m.getModel(GaussianMeasurement.PROPERTY_MEAN),
 				new DefaultFormatter());
-		JTextField stDevField = BasicComponentFactory.createFormattedTextField(
+		stDevField = BasicComponentFactory.createFormattedTextField(
 				new StdevValueModel(parent, m.getModel(GaussianMeasurement.PROPERTY_STDEV)), 
 				new DefaultFormatter());
 
@@ -33,5 +36,10 @@ public class GaussianMeasurementPanel extends JPanel {
 		add(meanField);
 		add(new JLabel("\u00B1"));
 		add(stDevField);		
+		
+		addFocusListener(new FocusTransferrer(meanField));
+		setFocusTraversalPolicyProvider(true);
+		setFocusTraversalPolicy(new TwoComponentFocusTraversalPolicy(meanField, stDevField));
 	}
+	
 }

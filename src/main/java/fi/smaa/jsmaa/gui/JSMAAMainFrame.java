@@ -1144,7 +1144,7 @@ public class JSMAAMainFrame extends JFrame {
 				}
 			} else if (type == ModelChangeEvent.PREFERENCES) {
 				// do nothing
-			} else if (type != ModelChangeEvent.MEASUREMENT) {
+			} else if (type != ModelChangeEvent.MEASUREMENT && type != ModelChangeEvent.MEASUREMENT_TYPE) {
 				rebuildRightPanel();
 			}
 			
