@@ -19,9 +19,11 @@
 package fi.smaa.jsmaa.gui;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -51,6 +53,8 @@ public class MeasurementPanel extends JPanel {
 	private ValueHolder holder;
 	
 	private MeasurementType[] allowedValues;
+
+	private JComponent valuePanel;
 	
 	public enum MeasurementType {
 		EXACT("Exact"),
@@ -100,7 +104,8 @@ public class MeasurementPanel extends JPanel {
 
 	public void rebuildPanel() {
 		removeAll();
-		add(buildValuePanel());
+		valuePanel = buildValuePanel();
+		add(valuePanel);
 		add(buildChooserPanel());
 		revalidate();
 	}
@@ -116,6 +121,11 @@ public class MeasurementPanel extends JPanel {
 		};
 		// just to enable to tool tip text
 		comboBox.setToolTipText("a");
+		comboBox.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				valuePanel.requestFocusInWindow();
+			}
+		});
 		Bindings.bind(comboBox, selInList);
 		return comboBox;
 	}

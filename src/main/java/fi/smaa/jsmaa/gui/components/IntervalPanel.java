@@ -18,7 +18,12 @@
 
 package fi.smaa.jsmaa.gui.components;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.FocusTraversalPolicy;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -33,12 +38,18 @@ import fi.smaa.jsmaa.model.Interval;
 
 public class IntervalPanel extends JPanel {
 	private static final long serialVersionUID = -5571531046764331786L;
+	private JTextField startField;
+	private JTextField endField;
 		
 	public IntervalPanel(JComponent parent, PresentationModel<Interval> model) {
 		ValueModel startModel = new IntervalValueModel(parent, model.getBean(), model.getModel(Interval.PROPERTY_START), true);
 		ValueModel endModel = new IntervalValueModel(parent, model.getBean(), model.getModel(Interval.PROPERTY_END), false);
 				
 		init(startModel, endModel);
+		
+		addFocusListener(new MyFocusListener());
+		setFocusTraversalPolicyProvider(true);
+		setFocusTraversalPolicy(new MyFocusTraversalPolicy());
 	}
 		
 	public IntervalPanel(ValueModel startModel, ValueModel endModel) {
@@ -48,10 +59,10 @@ public class IntervalPanel extends JPanel {
 	private void init(ValueModel startModel, ValueModel endModel) {
 		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 5));		
 
-		JTextField startField = BasicComponentFactory.createFormattedTextField(
+		startField = BasicComponentFactory.createFormattedTextField(
 				startModel,
 				new DefaultFormatter());
-		JTextField endField = BasicComponentFactory.createFormattedTextField(
+		endField = BasicComponentFactory.createFormattedTextField(
 				endModel,
 				new DefaultFormatter());
 
@@ -61,5 +72,46 @@ public class IntervalPanel extends JPanel {
 		endField.setColumns(5);
 		add(startField);
 		add(endField);
+	}
+	
+	private class MyFocusTraversalPolicy extends FocusTraversalPolicy {
+		@Override
+		public Component getComponentAfter(Container container,
+				Component component) {
+			return getOtherComponent(component);
+		}
+		private Component getOtherComponent(Component component) {
+			if (component == startField) {
+				return endField;
+			} else if (component == endField) {
+				return startField;
+			}
+			return null;
+		}
+		@Override
+		public Component getComponentBefore(Container container,
+				Component component) {
+			return getOtherComponent(component);
+		}
+		@Override
+		public Component getDefaultComponent(Container container) {
+			return endField;
+		}
+		@Override
+		public Component getFirstComponent(Container container) {
+			return endField;
+		}
+		@Override
+		public Component getLastComponent(Container container) {
+			return startField;
+		}
+	}
+
+	private class MyFocusListener implements FocusListener {
+		public void focusGained(FocusEvent e) {
+			endField.requestFocusInWindow();
+		}
+		public void focusLost(FocusEvent e) {
+		}
 	}
 }
