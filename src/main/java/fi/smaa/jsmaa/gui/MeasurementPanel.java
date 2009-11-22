@@ -31,6 +31,7 @@ import javax.swing.text.DefaultFormatter;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
@@ -105,7 +106,27 @@ public class MeasurementPanel extends JPanel {
 	private JComboBox buildChooserPanel() {
 		ValueModel valueModel = new ChooserValueModel();
 		SelectionInList<MeasurementType> selInList = new SelectionInList<MeasurementType>(allowedValues, valueModel);
-		return BasicComponentFactory.createComboBox(selInList);
+		JComboBox comboBox = new JComboBox() {
+			@Override
+			public String getToolTipText() {
+				return getChooserTooltipText();
+			}
+		};
+		// just to enable to tool tip text
+		comboBox.setToolTipText("a");
+		Bindings.bind(comboBox, selInList);
+		return comboBox;
+	}
+
+	protected String getChooserTooltipText() {
+		if (holder.getValue() instanceof Interval) {
+			return "Interval is input as [min, max]";
+		} else if (holder.getValue() instanceof LogNormalMeasurement) {
+			return "Log-normal distributed measurement is input as ln(mean) \u00B1 ln(stdev)";
+		} else if (holder.getValue() instanceof GaussianMeasurement) {
+			return "Gaussian distributed measurement is input as mean \u00B1 stdev";
+		}
+		return null;
 	}
 
 	private JComponent buildValuePanel() {
