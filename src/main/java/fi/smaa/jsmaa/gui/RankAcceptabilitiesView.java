@@ -134,6 +134,7 @@ public class RankAcceptabilitiesView extends ResultsView {
 		CellConstraints cc = new CellConstraints();
 		for (int i=1;i<=getNumAlternatives();i++) {
 			JLabel label = new JLabel('r' + new Integer(i).toString());
+			label.setToolTipText("Rank " + new Integer(i).toString());
 			builder.add(label, cc.xy(startCol, row));
 				startCol += 2;
 		}		

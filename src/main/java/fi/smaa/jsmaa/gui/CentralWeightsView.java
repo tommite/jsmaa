@@ -83,7 +83,7 @@ public class CentralWeightsView extends SMAA2ResultsView {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Central weight vectors", cc.xyw(1, 1, fullWidth));
+		builder.addSeparator("Central weight vectors and confidence factors", cc.xyw(1, 1, fullWidth));
 		
 		JLabel cfLabel = new JLabel("CF");
 		cfLabel.setToolTipText("Confidence factor");
