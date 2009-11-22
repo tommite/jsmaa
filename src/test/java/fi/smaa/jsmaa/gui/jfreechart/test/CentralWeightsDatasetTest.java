@@ -21,6 +21,7 @@ package fi.smaa.jsmaa.gui.jfreechart.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -71,13 +72,13 @@ public class CentralWeightsDatasetTest {
 	
 	@Test
 	public void testGetRowIndex() {
-		assertEquals(1, data.getRowIndex(a2));
-		assertEquals(-1, data.getRowIndex(new Alternative("aaa")));
+		assertEquals(0, data.getRowIndex(a2));
+		assertEquals(-1, data.getRowIndex(a1));
 	}
 	
 	@Test
 	public void testGetRowKey() {
-		assertEquals(a2, data.getRowKey(1));		
+		assertEquals(a2, data.getRowKey(0));		
 	}
 	
 	@Test(expected=ArrayIndexOutOfBoundsException.class)
@@ -87,28 +88,24 @@ public class CentralWeightsDatasetTest {
 	
 	@Test
 	public void testGetRowKeys() {
-		assertEquals(alts, data.getRowKeys());
+		assertEquals(Collections.singletonList(a2), data.getRowKeys());
 	}
 	
 	@Test
 	public void testGetValue() {
-		assertEquals(Double.NaN, data.getValue(a1, c1));
-		assertEquals(Double.NaN, data.getValue(a1, c2));
 		assertEquals(new Double(0.2), data.getValue(a2, c1));
 		assertEquals(new Double(0.8), data.getValue(a2, c2));
 	}
 	
 	@Test
 	public void testGetRowCount() {
-		assertEquals(alts.size(), data.getRowCount());
+		assertEquals(1, data.getRowCount());
 	}
 	
 	@Test
 	public void testGetValueInts() {
-		assertEquals(Double.NaN, data.getValue(0, 0));
-		assertEquals(Double.NaN, data.getValue(0, 1));
-		assertEquals(new Double(0.2), data.getValue(1, 0));
-		assertEquals(new Double(0.8), data.getValue(1, 1));
+		assertEquals(new Double(0.2), data.getValue(0, 0));
+		assertEquals(new Double(0.8), data.getValue(0, 1));
 	}
 	
 	@Test

@@ -18,11 +18,15 @@
 
 package fi.smaa.jsmaa.gui.jfreechart;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 
+import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 @SuppressWarnings("unchecked")
@@ -48,22 +52,34 @@ public class CentralWeightsDataset extends SMAADataSet<SMAA2Results> implements 
 	}
 
 	public int getRowIndex(Comparable alt) {
-		return results.getAlternatives().indexOf(alt);
+		return getAlternativesWithCentralWeights().indexOf(alt);
+	}
+
+	private List<Alternative> getAlternativesWithCentralWeights() {
+		List<Alternative> alts = new ArrayList<Alternative>();
+		for (Alternative a : results.getAlternatives()) {
+			Map<Criterion, Double> cws = results.getCentralWeightVectors().get(a);
+			if (!cws.entrySet().iterator().next().getValue().equals(Double.NaN)) {
+				alts.add(a);
+			}
+		}
+		return alts;
 	}
 
 	public Comparable getRowKey(int altIndex) {
-		if (altIndex < 0 || altIndex >= results.getAlternatives().size()) {
+		List<Alternative> alts = getAlternativesWithCentralWeights();
+		if (altIndex < 0 || altIndex >= alts.size()) {
 			throw new ArrayIndexOutOfBoundsException();
 		}
-		return results.getAlternatives().get(altIndex);
+		return alts.get(altIndex);
 	}
 
 	public List getRowKeys() {
-		return results.getAlternatives();
+		return getAlternativesWithCentralWeights();
 	}
 
 	public Number getValue(Comparable alt, Comparable crit) {
-		if (!results.getAlternatives().contains(alt)) {
+		if (!getAlternativesWithCentralWeights().contains(alt)) {
 			throw new UnknownKeyException("unknown alt");
 		}
 		if (!results.getCriteria().contains(crit)){ 
@@ -77,10 +93,10 @@ public class CentralWeightsDataset extends SMAADataSet<SMAA2Results> implements 
 	}
 
 	public int getRowCount() {
-		return results.getAlternatives().size();
+		return getAlternativesWithCentralWeights().size();
 	}
 
 	public Number getValue(int altIndex, int critIndex) {
-		return getValue(results.getAlternatives().get(altIndex), results.getCriteria().get(critIndex));
+		return getValue(getAlternativesWithCentralWeights().get(altIndex), results.getCriteria().get(critIndex));
 	}
 }
