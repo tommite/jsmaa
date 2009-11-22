@@ -16,21 +16,22 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.components;
 
 import javax.swing.JComponent;
 
 import com.jgoodies.binding.value.ValueModel;
 
+import fi.smaa.jsmaa.gui.MultiVetoableValueModel;
 import fi.smaa.jsmaa.model.Interval;
 
+@SuppressWarnings("serial")
 public class IntervalValueModel extends MultiVetoableValueModel {
 	
-	private static final long serialVersionUID = -5651105205219639989L;
 	protected boolean start;
 	protected Interval interval;
 	
-	protected IntervalValueModel(JComponent parent, Interval interval, ValueModel subject, boolean start) {
+	public IntervalValueModel(JComponent parent, Interval interval, ValueModel subject, boolean start) {
 		super(parent, subject);
 		this.start = start;
 		this.interval = interval;

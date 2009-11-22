@@ -27,6 +27,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.IntervalPanel;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 

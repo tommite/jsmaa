@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 
 import com.jgoodies.binding.value.ValueModel;
 
+import fi.smaa.jsmaa.gui.components.IntervalValueModel;
 import fi.smaa.jsmaa.model.Interval;
 
 public class ConstrainedIntervalValueModel extends IntervalValueModel {

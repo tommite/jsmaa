@@ -37,6 +37,8 @@ import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
+import fi.smaa.jsmaa.gui.components.GaussianMeasurementPanel;
+import fi.smaa.jsmaa.gui.components.IntervalPanel;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -145,8 +147,7 @@ public class MeasurementPanel extends JPanel {
 			measComp = new IntervalPanel(this, new PresentationModel<Interval>(ival));
 		} else if (m instanceof GaussianMeasurement) {
 			GaussianMeasurement gm = (GaussianMeasurement) m;
-		    measComp = ComponentBuilder.createGaussianMeasurementPanel(
-		             new PresentationModel<GaussianMeasurement>(gm));
+		    measComp = new GaussianMeasurementPanel(this, new PresentationModel<GaussianMeasurement>(gm));
 		} else {
 			throw new RuntimeException("unknown measurement type");
 		}
