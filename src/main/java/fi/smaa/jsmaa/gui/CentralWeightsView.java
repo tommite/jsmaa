@@ -57,7 +57,7 @@ public class CentralWeightsView extends SMAA2ResultsView {
 		int numCrit = getCriteria().size();
 		
 		FormLayout layout = new FormLayout(
-				"pref, 5dlu, center:pref",
+				"pref, 5dlu, center:pref:grow",
 				"p, 3dlu, p, 3dlu, p, 3dlu, p");
 		
 		int[] groupCol = new int[numCrit];

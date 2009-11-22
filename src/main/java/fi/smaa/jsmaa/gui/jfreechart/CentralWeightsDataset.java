@@ -21,6 +21,8 @@ package fi.smaa.jsmaa.gui.jfreechart;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
@@ -59,7 +61,8 @@ public class CentralWeightsDataset extends SMAADataSet<SMAA2Results> implements 
 		List<Alternative> alts = new ArrayList<Alternative>();
 		for (Alternative a : results.getAlternatives()) {
 			Map<Criterion, Double> cws = results.getCentralWeightVectors().get(a);
-			if (!cws.entrySet().iterator().next().getValue().equals(Double.NaN)) {
+			Set<Entry<Criterion, Double>> entrySet = cws.entrySet();
+			if (!entrySet.isEmpty() && !entrySet.iterator().next().getValue().equals(Double.NaN)) {
 				alts.add(a);
 			}
 		}
