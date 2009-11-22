@@ -102,7 +102,7 @@ import fi.smaa.jsmaa.simulator.SimulationThread;
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
 	
-	public static final String VERSION = "0.6";
+	public static final String VERSION = "0.4.1";
 	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	private static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	private JSplitPane splitPane;
