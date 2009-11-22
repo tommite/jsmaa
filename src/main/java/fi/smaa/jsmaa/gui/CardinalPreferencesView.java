@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
@@ -36,6 +37,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.MeasurementPanel.MeasurementType;
+import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
@@ -73,6 +75,7 @@ public class CardinalPreferencesView implements ViewBuilder {
 		
 		int row = 3;
 		int i=0;
+		JComponent firstComp = null;
 		for (Criterion c : pref.getCriteria()) {
 			row += 2;
 			LayoutUtil.addRow(layout);
@@ -84,9 +87,16 @@ public class CardinalPreferencesView implements ViewBuilder {
 			builder.add(label, cc.xy(1, row));
 			JComponent measurementComp = createMeasurementComponent(c);
 			builder.add(measurementComp, cc.xy(3, row));
+			if (firstComp == null) {
+				firstComp = measurementComp;
+			}
 			i++;
 		}		
-		return builder.getPanel();
+		JPanel panel = builder.getPanel();
+		if (firstComp != null) {
+			panel.addFocusListener(new FocusTransferrer(firstComp));
+		}
+		return panel;
 	}
 
 	private JComponent createMeasurementComponent(Criterion c) {

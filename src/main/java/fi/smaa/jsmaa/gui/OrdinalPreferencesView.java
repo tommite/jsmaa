@@ -23,6 +23,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
@@ -32,6 +33,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 
@@ -75,6 +77,10 @@ public class OrdinalPreferencesView implements ViewBuilder {
 			i++;
 		}
 		
-		return builder.getPanel();
+		JPanel panel = builder.getPanel();
+		if (!selectorGroup.getSelectors().isEmpty()) {
+			panel.addFocusListener(new FocusTransferrer(selectorGroup.getSelectors().get(0)));
+		}
+		return panel;
 	}
 }

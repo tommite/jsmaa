@@ -18,6 +18,9 @@
 
 package fi.smaa.jsmaa.gui;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
@@ -37,11 +40,13 @@ import fi.smaa.jsmaa.model.SMAAModel;
 
 public class PreferenceInformationView implements ViewBuilder {
 	private PreferencePresentationModel model;
+	private JComponent prefPanel;
 	
 	public PreferenceInformationView(PreferencePresentationModel model) {
 		this.model = model;
 	}
 
+	@SuppressWarnings("serial")
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"right:pref, 3dlu, left:pref:grow",
@@ -66,16 +71,29 @@ public class PreferenceInformationView implements ViewBuilder {
 
 		builder.addLabel("Preference information", cc.xyw(3, 3, fullWidth-2));
 
+		prefPanel = null;
 		if (model.getPreferenceType() == PreferenceType.ORDINAL) {
 			SMAAModel smodel = model.getBean();
 			OrdinalPreferencesView oview = new OrdinalPreferencesView(smodel.getCriteria(),
 					(OrdinalPreferenceInformation) smodel.getPreferenceInformation());
-			builder.add(oview.buildPanel(), cc.xyw(1, 5, fullWidth));
+			prefPanel = oview.buildPanel();
 		} else if (model.getPreferenceType() == PreferenceType.CARDINAL) {
 			CardinalPreferencesView oview = new CardinalPreferencesView(
 					(CardinalPreferenceInformation) model.getBean().getPreferenceInformation());
-			builder.add(oview.buildPanel(), cc.xyw(1, 5, fullWidth));
+			prefPanel = oview.buildPanel();
 		}
+		if (prefPanel != null) {
+			builder.add(prefPanel, cc.xyw(1, 5, fullWidth));
+		}
+		
+		preferenceTypeBox.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (prefPanel != null) {
+					prefPanel.requestFocusInWindow();
+				}
+			}
+		});
+		
 		return builder.getPanel();
 	}
 }

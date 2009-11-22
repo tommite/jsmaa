@@ -39,6 +39,7 @@ import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
+import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.gui.components.GaussianMeasurementPanel;
 import fi.smaa.jsmaa.gui.components.IntervalPanel;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
@@ -55,6 +56,8 @@ public class MeasurementPanel extends JPanel {
 	private MeasurementType[] allowedValues;
 
 	private JComponent valuePanel;
+
+	private JComboBox chooserPanel;
 	
 	public enum MeasurementType {
 		EXACT("Exact"),
@@ -81,20 +84,25 @@ public class MeasurementPanel extends JPanel {
 	public MeasurementPanel(ValueHolder measurementHolder) {
 		allowedValues = MeasurementType.values();
 		this.holder = measurementHolder;
-		holder.addPropertyChangeListener(new HolderListener());
-		
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+				
+		init();
 		rebuildPanel();
 	}
 	
 	public MeasurementPanel(ValueHolder measurementHolder, MeasurementType[] allowedValues) {
 		this.allowedValues = allowedValues;
 		this.holder = measurementHolder;
-		holder.addPropertyChangeListener(new HolderListener());
 		
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+		init();
 		rebuildPanel();
 	}	
+	
+	public void init() {
+		holder.addPropertyChangeListener(new HolderListener());		
+		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));		
+		chooserPanel = buildChooserPanel();		
+		addFocusListener(new FocusTransferrer(chooserPanel));
+	}
 
 	private class HolderListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -106,7 +114,7 @@ public class MeasurementPanel extends JPanel {
 		removeAll();
 		valuePanel = buildValuePanel();
 		add(valuePanel);
-		add(buildChooserPanel());
+		add(chooserPanel);
 		revalidate();
 	}
 
