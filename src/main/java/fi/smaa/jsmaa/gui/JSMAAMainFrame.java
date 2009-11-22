@@ -174,7 +174,6 @@ public class JSMAAMainFrame extends JFrame {
 		}
 		pack();
 		buildNewSimulator();
-		setRightViewToCriteria();
 		leftTreeFocusCriteria();
 		expandLeftMenu();
 	}	
@@ -467,7 +466,7 @@ public class JSMAAMainFrame extends JFrame {
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToCategories();
+				leftTreeFocusCategories();
 			}			
 		});
 				
@@ -475,6 +474,11 @@ public class JSMAAMainFrame extends JFrame {
 		categoryMenu.addSeparator();
 		categoryMenu.add(addCatButton);
 		return categoryMenu;
+	}
+
+	protected void leftTreeFocusCategories() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), ((LeftTreeModelSMAATRI) leftTreeModel).getCategoriesNode() }));
 	}
 
 	private JMenu createHelpMenu() {
@@ -513,13 +517,13 @@ public class JSMAAMainFrame extends JFrame {
 		
 		cwItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToCentralWeights();
+				leftTreeFocusCentralWeights();
 			}
 		});
 		
 		racsItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToRankAcceptabilities();
+				leftTreeFocusRankAcceptabilities();
 			}			
 		});
 		
@@ -527,6 +531,16 @@ public class JSMAAMainFrame extends JFrame {
 		resultsMenu.add(racsItem);
 		return resultsMenu;
 	}
+
+	protected void leftTreeFocusCentralWeights() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getResultsNode(), leftTreeModel.getCentralWeightsNode() }));		
+	}
+	
+	protected void leftTreeFocusRankAcceptabilities() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getResultsNode(), leftTreeModel.getRankAcceptabilitiesNode() }));		
+	}	
 
 	private JMenu createResultsSMAATRIMenu() {
 		JMenu resultsMenu = new JMenu("Results");
@@ -537,7 +551,7 @@ public class JSMAAMainFrame extends JFrame {
 				
 		racsItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToCategoryAcceptabilities();
+				leftTreeFocusCategoryAcceptabilities();
 			}			
 		});
 		
@@ -545,6 +559,12 @@ public class JSMAAMainFrame extends JFrame {
 		return resultsMenu;
 	}
 	
+
+	protected void leftTreeFocusCategoryAcceptabilities() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getResultsNode(), 
+						((LeftTreeModelSMAATRI)leftTreeModel).getCatAccNode() }));		
+	}
 
 	private JMenu createEditMenu() {
 		JMenu editMenu = new JMenu("Edit");
@@ -903,7 +923,7 @@ public class JSMAAMainFrame extends JFrame {
 		
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToAlternatives();
+				leftTreeFocusAlternatives();
 			}			
 		});
 				
@@ -911,6 +931,11 @@ public class JSMAAMainFrame extends JFrame {
 		alternativeMenu.addSeparator();
 		alternativeMenu.add(addAltButton);
 		return alternativeMenu;
+	}
+
+	protected void leftTreeFocusAlternatives() {
+		leftTree.setSelectionPath(new TreePath(
+				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode() }));
 	}
 
 	private JMenuItem createAddAltMenuItem() {
@@ -946,7 +971,7 @@ public class JSMAAMainFrame extends JFrame {
 		showItem.setIcon(getIcon(FileNames.ICON_CRITERIALIST));
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				setRightViewToCriteria();
+				leftTreeFocusCriteria();
 			}
 		});		
 		
