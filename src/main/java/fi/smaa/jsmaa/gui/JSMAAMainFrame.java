@@ -244,6 +244,7 @@ public class JSMAAMainFrame extends JFrame {
 	   splitPane.setDividerSize(2);
 	   splitPane.setDividerLocation(-1);
 	   rightPane = new JScrollPane();
+	   rightPane.getVerticalScrollBar().setUnitIncrement(16);		   
 	   splitPane.setRightComponent(rightPane);
 	   
 	   getContentPane().setLayout(new BorderLayout());
