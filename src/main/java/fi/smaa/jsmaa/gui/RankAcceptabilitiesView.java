@@ -30,6 +30,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
+import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -63,6 +65,26 @@ public class RankAcceptabilitiesView extends ResultsView {
 	}
 
 	synchronized public JComponent buildPanel() {
+		
+		FormLayout layout = new FormLayout(
+				"pref",
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");
+		
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();
+		
+		builder.addSeparator("Rank acceptabilities", cc.xy(1, 1));
+		builder.add(buildAcceptabilitiesPart(), cc.xy(1, 3));
+
+		builder.addSeparator("", cc.xy(1, 5));
+		builder.add(buildFigurePart(), cc.xy(1, 7));
+		
+		fireResultsChanged();		
+		return builder.getPanel();
+	}
+
+	private JComponent buildAcceptabilitiesPart() {
 		int numAlts = getNumAlternatives();
 		
 		FormLayout layout = new FormLayout(
@@ -82,62 +104,51 @@ public class RankAcceptabilitiesView extends ResultsView {
 			groupCol[i] = 3 + 2*i;
 		}
 		
-		layout.setColumnGroups(new int[][]{groupCol});
-		
-
-		int fullWidth = 1 + numAlts * 2;
-		
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
-		CellConstraints cc = new CellConstraints();
+		int startCol = 3;
 		
-		builder.addSeparator("Rank acceptabilities", cc.xyw(1, 1, fullWidth));
+		CellConstraints cc1 = new CellConstraints();
+		for (int i=1;i<=getNumAlternatives();i++) {
+			JLabel label = new JLabel('r' + new Integer(i).toString());
+			label.setToolTipText("Rank " + new Integer(i).toString());
+			builder.add(label, cc1.xy(startCol, 1));
+				startCol += 2;
+		}
+		int startRow = 3;
+		int startCol1 = 1;
+		CellConstraints cc2 = new CellConstraints();
+		for (Alternative alt : results.getAlternatives()) {
+			builder.add(BasicComponentFactory.createLabel(
+					new PresentationModel<Alternative>(alt).getModel(Alternative.PROPERTY_NAME)),
+					cc2.xy(startCol1, startRow));
+			if (true) {
+				startRow += 2;
+			} else {
+				startCol1 += 2;
+			}
+		}
+		CellConstraints cc3 = new CellConstraints();
+		valCells = new JLabel[getNumAlternatives()][getNumAlternatives()];
 		
-		buildRankLabels(builder, 3, 3);
-		buildAlternativeLabels(builder, 5, 1, true);
-		int row = buildRankAcceptabilitiesPart(builder);
-		builder.addSeparator("", cc.xyw(1, row, fullWidth));
-		buildFigurePart(builder, row+2, fullWidth);
-		
-		fireResultsChanged();		
+		int startRow1 = 3;
+		int startCol2 = 3;
+		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
+			for (int rank=0;rank<getNumAlternatives();rank++) {
+				JLabel label = new JLabel("NA");
+				valCells[altIndex][rank] = label;
+				builder.add(label, cc3.xy(startCol2 + rank*2, startRow1 + altIndex*2));
+			}
+		}
 		return builder.getPanel();
 	}
 
-	private void buildFigurePart(PanelBuilder builder, int row, int fullWidth) {
-		CellConstraints cc = new CellConstraints();
+	private JComponent buildFigurePart() {
 		CategoryDataset dataset = new RankAcceptabilitiesDataset((SMAA2Results) results);
 		final JFreeChart chart = ChartFactory.createStackedBarChart(
                 "", "Alternative", "Rank Acceptability",
                 dataset, PlotOrientation.VERTICAL, true, true, false);
 		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-		ChartPanel chartPanel = new ChartPanel(chart);		
-		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
-	}	
-
-	private int buildRankAcceptabilitiesPart(PanelBuilder builder) {
-		CellConstraints cc = new CellConstraints();
-		valCells = new JLabel[getNumAlternatives()][getNumAlternatives()];
-		
-		int startRow = 5;
-		int startCol = 3;
-		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
-			for (int rank=0;rank<getNumAlternatives();rank++) {
-				JLabel label = new JLabel("NA");
-				valCells[altIndex][rank] = label;
-				builder.add(label, cc.xy(startCol + rank*2, startRow + altIndex*2));
-			}
-		}
-		return startRow + (getNumAlternatives() * 2);
+		ChartPanel chartPanel = new ChartPanel(chart);
+		return chartPanel;
 	}
-
-	private void buildRankLabels(PanelBuilder builder, int row, int startCol) {
-		CellConstraints cc = new CellConstraints();
-		for (int i=1;i<=getNumAlternatives();i++) {
-			JLabel label = new JLabel('r' + new Integer(i).toString());
-			label.setToolTipText("Rank " + new Integer(i).toString());
-			builder.add(label, cc.xy(startCol, row));
-				startCol += 2;
-		}		
-	}
-
 }

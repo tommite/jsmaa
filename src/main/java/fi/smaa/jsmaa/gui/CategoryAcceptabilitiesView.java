@@ -70,12 +70,31 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 	}
 
 	synchronized public JComponent buildPanel() {
+		FormLayout layout = new FormLayout(
+				"pref",
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");		
+		
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();	
+		
+		builder.addSeparator("Category acceptabilities", cc.xy(1, 1));
+		builder.add(buildAcceptabilitiesPart(), cc.xy(1, 3));
+	
+		builder.addSeparator("", cc.xy(1, 5));	
+		builder.add(buildFigurePart(), cc.xy(1, 7));
+		
+		fireResultsChanged();		
+		return builder.getPanel();
+	}
+
+	private JComponent buildAcceptabilitiesPart() {
 		int numAlts = getNumAlternatives();
 		int numCats = getNumCategories();
 		
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p, 3dlu, p, 3dlu, p");
+				"p");
 		
 		int[] groupCol = new int[numCats];
 		
@@ -89,66 +108,60 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 			groupCol[i] = 3 + 2*i;
 		}
 		
-		
 		layout.setColumnGroups(new int[][]{groupCol});
 
-		int fullWidth = 1 + numCats * 2;
-		
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
-		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Category acceptabilities", cc.xyw(1, 1, fullWidth));
+		// cat labels
+		CellConstraints cc1 = new CellConstraints();
+		SMAATRIResults triRes = (SMAATRIResults) results;
 		
-		buildCategoryLabels(builder, 3, 3);
-		buildAlternativeLabels(builder, 5, 1, true);
-		int row = buildCategoryAcceptabilitiesPart(builder);
+		int startCol = 3;
+		for (int i=0;i<triRes.getCategories().size();i++) {
+			Alternative cat = triRes.getCategories().get(i);
+			JLabel label = BasicComponentFactory.createLabel(new PresentationModel<Alternative>(cat).getModel(
+					Alternative.PROPERTY_NAME));
+			builder.add(label, cc1.xy(startCol, 1));
+				startCol += 2;
+		}
+		int startRow = 3;
+		int startCol1 = 1;
+		CellConstraints cc2 = new CellConstraints();
+		for (Alternative alt : results.getAlternatives()) {
+			builder.add(BasicComponentFactory.createLabel(
+					new PresentationModel<Alternative>(alt).getModel(Alternative.PROPERTY_NAME)),
+					cc2.xy(startCol1, startRow));
+			if (true) {
+				startRow += 2;
+			} else {
+				startCol1 += 2;
+			}
+		}
+		CellConstraints cc3 = new CellConstraints();
+		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
 		
-		builder.addSeparator("", cc.xyw(1, row, fullWidth));
+		int startRow1 = 3;
+		int startCol2 = 3;
 		
-		buildFigurePart(builder, row+2, fullWidth);
-		fireResultsChanged();		
+		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
+			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
+				JLabel label = new JLabel("NA");
+				valCells[altIndex][catIndex] = label;
+				builder.add(label, cc3.xy(startCol2 + catIndex*2, startRow1 + altIndex*2));
+			}
+		}
+		
 		return builder.getPanel();
 	}
 
-	private void buildFigurePart(PanelBuilder builder, int row, int fullWidth) {
-		CellConstraints cc = new CellConstraints();
+	private JComponent buildFigurePart() {
 		CategoryDataset dataset = new CategoryAcceptabilitiesDataset((SMAATRIResults) results);
 		final JFreeChart chart = ChartFactory.createStackedBarChart(
                 "", "Alternative", "Category Acceptability",
                 dataset, PlotOrientation.VERTICAL, true, true, false);
 		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);		
-		ChartPanel chartPanel = new ChartPanel(chart);		
-		builder.add(chartPanel, cc.xyw(1, row, fullWidth));
+		ChartPanel chartPanel = new ChartPanel(chart);
+		return chartPanel;
 	}
-
-	private int buildCategoryAcceptabilitiesPart(PanelBuilder builder) {
-		CellConstraints cc = new CellConstraints();
-		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
-		
-		int startRow = 5;
-		int startCol = 3;
-
-		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
-			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
-				JLabel label = new JLabel("NA");
-				valCells[altIndex][catIndex] = label;
-				builder.add(label, cc.xy(startCol + catIndex*2, startRow + altIndex*2));
-			}
-		}
-		return startRow + getNumAlternatives() * 2;
-	}
-
-	private void buildCategoryLabels(PanelBuilder builder, int row, int startCol) {
-		CellConstraints cc = new CellConstraints();
-		SMAATRIResults triRes = (SMAATRIResults) results;		
-		for (int i=0;i<triRes.getCategories().size();i++) {
-			Alternative cat = triRes.getCategories().get(i);
-			JLabel label = BasicComponentFactory.createLabel(new PresentationModel<Alternative>(cat).getModel(
-					Alternative.PROPERTY_NAME));
-			builder.add(label, cc.xy(startCol, row));
-				startCol += 2;
-		}		
-	}	
 
 }
