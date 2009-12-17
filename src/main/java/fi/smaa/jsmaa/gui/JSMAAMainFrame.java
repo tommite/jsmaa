@@ -69,6 +69,12 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
@@ -78,7 +84,16 @@ import com.jidesoft.swing.RangeSlider;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.DefaultModels;
+import fi.smaa.jsmaa.gui.components.CentralWeightCellRenderer;
+import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
+import fi.smaa.jsmaa.gui.components.ResultsTable;
+import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
+import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
+import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
+import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
+import fi.smaa.jsmaa.gui.presentation.CentralWeightTableModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
+import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -341,13 +356,45 @@ public class JSMAAMainFrame extends JFrame {
 		updateLambdaLabel();
 	}
 
-	private void setRightViewToCentralWeights() {		
-		rightViewBuilder = new CentralWeightsView((SMAA2Results) results);
+	private void setRightViewToCentralWeights() {	
+		CategoryDataset dataset = new CentralWeightsDataset((SMAA2Results) results);
+		final JFreeChart chart = ChartFactory.createLineChart(
+                "", "Criterion", "Central Weight",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
+		chart.getCategoryPlot().setRenderer(renderer);
+		
+		ResultsTable table = new ResultsTable(new CentralWeightTableModel((SMAA2Results) results));
+		table.setDefaultRenderer(Object.class, new CentralWeightCellRenderer());
+		rightViewBuilder = new ResultsView("Central weight vectors", 
+				table, chart);
 		rebuildRightPanel();
 	}
 	
+	
+	public void setRightViewToCategoryAcceptabilities() {
+		CategoryDataset dataset = new CategoryAcceptabilitiesDataset((SMAATRIResults) results);
+		final JFreeChart chart = ChartFactory.createStackedBarChart(
+                "", "Alternative", "Category Acceptability",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
+		ResultsTable table = new ResultsTable(new CategoryAcceptabilityTableModel((SMAATRIResults) results));		
+		table.setDefaultRenderer(Object.class, new ResultsCellRenderer());		
+		rightViewBuilder = new ResultsView("Category acceptability indices",
+				table, chart);
+		rebuildRightPanel();
+	}	
+	
 	private void setRightViewToRankAcceptabilities() {
-		rightViewBuilder = new RankAcceptabilitiesView((SMAA2Results) results);
+		CategoryDataset dataset = new RankAcceptabilitiesDataset((SMAA2Results) results);
+		final JFreeChart chart = ChartFactory.createStackedBarChart(
+                "", "Alternative", "Rank Acceptability",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
+		ResultsTable table = new ResultsTable(new RankAcceptabilityTableModel((SMAA2Results) results));
+		table.setDefaultRenderer(Object.class, new ResultsCellRenderer());		
+		rightViewBuilder = new ResultsView("Rank acceptability indices", 
+				table, chart);
 		rebuildRightPanel();
 	}
 		
@@ -1163,7 +1210,7 @@ public class JSMAAMainFrame extends JFrame {
 				if (model instanceof SMAATRIModel) {
 					lambdaSlider.setLowValue((int) (((SMAATRIModel) model).getLambda().getStart() * 100.0));
 					lambdaSlider.setHighValue((int) (((SMAATRIModel) model).getLambda().getEnd() * 100.0));
-					if (rightViewBuilder instanceof CategoryAcceptabilitiesView) {
+					if (rightViewBuilder instanceof ResultsView) {
 						setRightViewToCategoryAcceptabilities();
 					}
 				}
@@ -1214,19 +1261,6 @@ public class JSMAAMainFrame extends JFrame {
 			simulator = new SMAASimulator(newModel, thread);
 			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
-			if (newModel instanceof SMAATRIModel) {
-				if (rightViewBuilder instanceof CentralWeightsView) {
-					setRightViewToCategoryAcceptabilities();
-				} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
-					setRightViewToCategoryAcceptabilities();					
-				}
-			} else {
-				if (rightViewBuilder instanceof CentralWeightsView) {
-					setRightViewToCentralWeights();
-				} else if (rightViewBuilder instanceof RankAcceptabilitiesView) {
-					setRightViewToRankAcceptabilities();
-				}
-			}
 			simulationProgress.setValue(0);
 			simulator.restart();
 			checkStartNewSimulator();
@@ -1242,11 +1276,6 @@ public class JSMAAMainFrame extends JFrame {
 			mAlt.addPropertyChangeListener(new AlternativeNameUpdater(nmAlt));
 		}
 	}	
-	
-	public void setRightViewToCategoryAcceptabilities() {
-		rightViewBuilder = new CategoryAcceptabilitiesView((SMAATRIResults)results);
-		rebuildRightPanel();
-	}
 
 	private void connectCriteriaNameAdapters(SMAAModel model,
 			SMAAModel newModel) {

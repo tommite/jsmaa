@@ -14,73 +14,58 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 package fi.smaa.jsmaa.gui;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.BasicComponentFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.simulator.SMAAResults;
-import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
-public abstract class ResultsView implements ViewBuilder {
+public class ResultsView implements ViewBuilder {
 
-	protected SMAAResults results;
-	protected NumberFormat format;	
+	private JTable table;
+	private JFreeChart chart;
+	private String title;
+
+	public ResultsView(String title, JTable table, JFreeChart chart) {
+		this.title = title;
+		this.chart = chart;
+		this.table = table;
+	}
+
+	synchronized public JComponent buildPanel() {
+		FormLayout layout = new FormLayout(
+				"pref",
+				"p, 3dlu, p, 3dlu, p, 3dlu, p");		
+		
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();	
+		
+		builder.addSeparator(title, cc.xy(1, 1));
+		JScrollPane spane = new JScrollPane(table);
+		builder.add(spane, cc.xy(1, 3));
 	
-	public ResultsView(SMAAResults results) {
-		this.results = results;
-		setupFormat();
-		results.addResultsListener(new MyResultsListener());		
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		builder.addSeparator("", cc.xy(1, 5));	
+		builder.add(buildFigurePart(), cc.xy(1, 7));
+		
+		return builder.getPanel();
 	}
 
-	public void buildAlternativeLabels(PanelBuilder builder, int startRow, int startCol, boolean vertical) {
-		CellConstraints cc = new CellConstraints();
-		for (Alternative alt : results.getAlternatives()) {
-			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Alternative>(alt).getModel(Alternative.PROPERTY_NAME)),
-					cc.xy(startCol, startRow));
-			if (vertical) {
-				startRow += 2;
-			} else {
-				startCol += 2;
-			}
-		}
+	private JComponent buildFigurePart() {		
+		ChartPanel chartPanel = new ChartPanel(chart);
+		return chartPanel;
 	}
 
-
-	protected class MyResultsListener implements SMAAResultsListener {
-		public void resultsChanged() {
-			fireResultsChanged();
-		}
-
-		public void resultsChanged(Exception e) {
-		}
-	}
-	
-	protected abstract void fireResultsChanged();
-
-	protected int getNumAlternatives() {
-		int numAlts = results.getAlternatives().size();
-		return numAlts;
-	}
-
-	protected void setupFormat() {
-		format = DecimalFormat.getInstance();
-		format.setMaximumFractionDigits(2);
-	}
-
-	protected String formatDouble(Double val) {
-		String stringVal = val == null ? "NA" : val.equals(Double.NaN) ? "NA " : format.format(val);
-		return stringVal;
-	}
-	
 }
