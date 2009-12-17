@@ -18,11 +18,11 @@
 
 package fi.smaa.jsmaa.gui;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.JComponent;
-import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -30,43 +30,24 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.common.gui.LayoutUtil;
+import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.EnhancedTableHeader;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
-import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
-public class CategoryAcceptabilitiesView extends ResultsView {
-	
-	private JLabel[][] valCells;
+public class CategoryAcceptabilitiesView implements ViewBuilder {
+
+	private CategoryAcceptabilityTableModel model;
+	private SMAATRIResults results;
 
 	public CategoryAcceptabilitiesView(SMAATRIResults results) {
-		super(results);
-	}
-
-	@Override
-	synchronized protected void fireResultsChanged() {
-		SMAATRIResults triRes = (SMAATRIResults) results;
-		Map<Alternative, List<Double>> cws = triRes.getCategoryAcceptabilities();
-		
-		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
-			List<Double> cw = cws.get(results.getAlternatives().get(altIndex));
-			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
-				if (valCells[altIndex][catIndex] != null) {
-					valCells[altIndex][catIndex].setText(formatDouble(cw.get(catIndex)));
-				}
-			}
-		}
-	}
-
-	private int getNumCategories() {
-		return ((SMAATRIResults) results).getCategories().size();		
+		this.results = results;
+		model = new CategoryAcceptabilityTableModel((SMAATRIResults)results);		
 	}
 
 	synchronized public JComponent buildPanel() {
@@ -79,77 +60,24 @@ public class CategoryAcceptabilitiesView extends ResultsView {
 		CellConstraints cc = new CellConstraints();	
 		
 		builder.addSeparator("Category acceptabilities", cc.xy(1, 1));
-		builder.add(buildAcceptabilitiesPart(), cc.xy(1, 3));
+		
+		JTable table = new JTable(model);
+		table.setTableHeader(new EnhancedTableHeader(table.getColumnModel(), table));
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		table.setDefaultRenderer(table.getColumnClass(0), renderer);
+		DefaultTableCellRenderer headerRend = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+		headerRend.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
+		JScrollPane spane = new JScrollPane(table);
+		builder.add(spane, cc.xy(1, 3));
 	
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		builder.addSeparator("", cc.xy(1, 5));	
 		builder.add(buildFigurePart(), cc.xy(1, 7));
-		
-		fireResultsChanged();		
-		return builder.getPanel();
-	}
-
-	private JComponent buildAcceptabilitiesPart() {
-		int numAlts = getNumAlternatives();
-		int numCats = getNumCategories();
-		
-		FormLayout layout = new FormLayout(
-				"pref",
-				"p");
-		
-		int[] groupCol = new int[numCats];
-		
-		for (int i=0;i<numAlts;i++) {
-			LayoutUtil.addRow(layout);
-		}
-		
-		for (int i=0;i<numCats;i++) {
-			layout.appendColumn(ColumnSpec.decode("5dlu"));
-			layout.appendColumn(ColumnSpec.decode("center:pref"));
-			groupCol[i] = 3 + 2*i;
-		}
-		
-		layout.setColumnGroups(new int[][]{groupCol});
-
-		PanelBuilder builder = new PanelBuilder(layout);
-		
-		// cat labels
-		CellConstraints cc1 = new CellConstraints();
-		SMAATRIResults triRes = (SMAATRIResults) results;
-		
-		int startCol = 3;
-		for (int i=0;i<triRes.getCategories().size();i++) {
-			Alternative cat = triRes.getCategories().get(i);
-			JLabel label = BasicComponentFactory.createLabel(new PresentationModel<Alternative>(cat).getModel(
-					Alternative.PROPERTY_NAME));
-			builder.add(label, cc1.xy(startCol, 1));
-				startCol += 2;
-		}
-		int startRow = 3;
-		int startCol1 = 1;
-		CellConstraints cc2 = new CellConstraints();
-		for (Alternative alt : results.getAlternatives()) {
-			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Alternative>(alt).getModel(Alternative.PROPERTY_NAME)),
-					cc2.xy(startCol1, startRow));
-			if (true) {
-				startRow += 2;
-			} else {
-				startCol1 += 2;
-			}
-		}
-		CellConstraints cc3 = new CellConstraints();
-		valCells = new JLabel[getNumAlternatives()][getNumCategories()];
-		
-		int startRow1 = 3;
-		int startCol2 = 3;
-		
-		for (int altIndex=0;altIndex<getNumAlternatives();altIndex++) {
-			for (int catIndex=0;catIndex<getNumCategories();catIndex++) {
-				JLabel label = new JLabel("NA");
-				valCells[altIndex][catIndex] = label;
-				builder.add(label, cc3.xy(startCol2 + catIndex*2, startRow1 + altIndex*2));
-			}
-		}
 		
 		return builder.getPanel();
 	}
