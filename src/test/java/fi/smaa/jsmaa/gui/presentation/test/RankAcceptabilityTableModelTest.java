@@ -36,7 +36,7 @@ public class RankAcceptabilityTableModelTest {
 		res = new SMAA2Results(alts, crit, 1);
 		
 		Integer[] ranks = new Integer[] { 0, 1};
-		double[] weights = new double[]{0.5, 0.5};
+		double[] weights = new double[]{0.5, 0.5, 0.0};
 		
 		res.update(ranks, weights);
 		

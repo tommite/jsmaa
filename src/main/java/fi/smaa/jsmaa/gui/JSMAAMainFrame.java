@@ -83,6 +83,7 @@ import com.jidesoft.swing.RangeSlider;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.gui.components.CentralWeightCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
@@ -117,7 +118,7 @@ import fi.smaa.jsmaa.simulator.SimulationThread;
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
 	
-	public static final String VERSION = "0.4.1";
+	public static final String VERSION = AppInfo.getAppVersion();
 	private static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	private static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	private JSplitPane splitPane;
@@ -146,7 +147,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JButton addCatButton;
 	
 	public JSMAAMainFrame(SMAAModel model) {
-		super("SMAA");
+		super(AppInfo.getAppName());
 		this.model = model;
 		startGui();
 	}
@@ -244,7 +245,7 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void initFrame() {		
-		setPreferredSize(new Dimension(800, 500));
+		setPreferredSize(new Dimension(1000, 800));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);		
 	}
 		
@@ -543,9 +544,9 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void showAboutDialog() {
-		String title = "About JSMAA";
+		String title = "About "+AppInfo.getAppName();
 		String msg = getFrameTitleBase();
-		msg += "\nJSMAA is open source and licensed under GPLv3.\n";
+		msg += "\n"+AppInfo.getAppName()+" is open source and licensed under GPLv3.\n";
 		msg += "\t- and can be distributed freely!\n";
 		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
 		JOptionPane.showMessageDialog(this, msg, title,
