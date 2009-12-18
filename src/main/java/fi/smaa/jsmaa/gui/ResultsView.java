@@ -43,7 +43,7 @@ public class ResultsView implements ViewBuilder {
 		this.table = table;
 	}
 
-	synchronized public JComponent buildPanel() {
+	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"pref",
 				"p, 3dlu, p, 3dlu, p, 3dlu, p");		
