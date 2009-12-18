@@ -45,6 +45,7 @@ import java.util.Queue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
+import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -414,6 +415,10 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.setCellEditor(new LeftTreeCellEditor(model, leftTree, renderer));
 		leftTree.setCellRenderer(renderer);
 		
+		leftTree.setDragEnabled(true);
+		leftTree.setTransferHandler(new LeftTreeTransferHandler(leftTreeModel));
+		leftTree.setDropMode(DropMode.INSERT);
+		
 		final JPopupMenu leftTreeEditPopupMenu = new JPopupMenu();
 		final JMenuItem leftTreeRenameItem = createRenameMenuItem();
 		leftTreeEditPopupMenu.add(leftTreeRenameItem);
@@ -451,6 +456,7 @@ public class JSMAAMainFrame extends JFrame {
 			}
 		});
 	}
+	
 		
 	private void expandLeftMenu() {
 		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode()}));

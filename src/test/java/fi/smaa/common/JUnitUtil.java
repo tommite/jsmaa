@@ -45,6 +45,8 @@ import java.util.Set;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 
 import com.jgoodies.binding.beans.Model;
 import com.jgoodies.binding.beans.Observable;
@@ -95,6 +97,13 @@ public class JUnitUtil {
 		replay(mock);
 		return mock;
 	}
+	
+	public static TreeModelListener mockTableModelListener(TreeModelEvent expected) {
+		TreeModelListener mock = createMock(TreeModelListener.class);
+		mock.treeStructureChanged((TreeModelEvent)eqEventObject(expected));
+		replay(mock);
+		return mock;
+	}	
 	
 	private static Method getGetterMethod(Observable source, String propertyName)
 			throws NoSuchMethodException {

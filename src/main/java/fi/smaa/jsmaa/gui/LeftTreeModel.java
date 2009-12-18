@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -182,6 +183,26 @@ public class LeftTreeModel implements TreeModel{
 
 	public Object getRoot() {
 		return smaaModel;
+	}
+	
+	public void moveCriterion(Criterion toMove, int newIndex) 
+		throws IndexOutOfBoundsException {
+		if (newIndex < 0 || newIndex >= smaaModel.getCriteria().size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		int oldIndex = smaaModel.getCriteria().indexOf(toMove);
+		if (oldIndex == newIndex) {
+			return;
+		}
+		if (oldIndex < 0) {
+			throw new IllegalArgumentException("unknown criterion to move");
+		}
+		List<Criterion> newCrit = new ArrayList<Criterion>(smaaModel.getCriteria());
+		Criterion toMoveCrit = newCrit.get(newIndex);
+		newCrit.set(newIndex, toMove);
+		newCrit.set(oldIndex, toMoveCrit);
+		
+		smaaModel.setCriteria(newCrit);
 	}
 
 	public boolean isLeaf(Object node) {
