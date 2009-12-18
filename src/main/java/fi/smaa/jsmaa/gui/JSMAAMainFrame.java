@@ -85,7 +85,6 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
-import fi.smaa.jsmaa.gui.components.CentralWeightCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
@@ -366,7 +365,7 @@ public class JSMAAMainFrame extends JFrame {
 		chart.getCategoryPlot().setRenderer(renderer);
 		
 		ResultsTable table = new ResultsTable(new CentralWeightTableModel((SMAA2Results) results));
-		table.setDefaultRenderer(Object.class, new CentralWeightCellRenderer());
+		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
 		rightViewBuilder = new ResultsView("Central weight vectors", 
 				table, chart);
 		rebuildRightPanel();
@@ -380,7 +379,7 @@ public class JSMAAMainFrame extends JFrame {
                 dataset, PlotOrientation.VERTICAL, true, true, false);
 		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 		ResultsTable table = new ResultsTable(new CategoryAcceptabilityTableModel((SMAATRIResults) results));		
-		table.setDefaultRenderer(Object.class, new ResultsCellRenderer());		
+		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 		rightViewBuilder = new ResultsView("Category acceptability indices",
 				table, chart);
 		rebuildRightPanel();
@@ -393,7 +392,7 @@ public class JSMAAMainFrame extends JFrame {
                 dataset, PlotOrientation.VERTICAL, true, true, false);
 		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 		ResultsTable table = new ResultsTable(new RankAcceptabilityTableModel((SMAA2Results) results));
-		table.setDefaultRenderer(Object.class, new ResultsCellRenderer());		
+		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 		rightViewBuilder = new ResultsView("Rank acceptability indices", 
 				table, chart);
 		rebuildRightPanel();
