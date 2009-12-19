@@ -67,7 +67,6 @@ public class CriterionViewWithProfiles extends CriterionView {
 				"p" );
 		
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();		
 		int index = 0;
 		
