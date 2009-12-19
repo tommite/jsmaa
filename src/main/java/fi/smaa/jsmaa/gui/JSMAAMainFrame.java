@@ -93,7 +93,7 @@ import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -1025,7 +1025,7 @@ public class JSMAAMainFrame extends JFrame {
 		Criterion c = null;
 		if (model instanceof SMAATRIModel) {
 			c = new OutrankingCriterion(generateNextCriterionName(), true, 
-					new Interval(0.0, 0.0), new Interval(1.0, 1.0));
+					new ExactMeasurement(0.0), new ExactMeasurement(1.0));
 		} else {
 			c = new ScaleCriterion(generateNextCriterionName());			
 		}
