@@ -304,12 +304,11 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private JToolBar createToolBar() {
-		simulationProgress = new JProgressBar();	
-		simulationProgress.setStringPainted(true);
 		JToolBar bar = new JToolBar();
+		simulationProgress = new JProgressBar();	
+		simulationProgress.setStringPainted(true);		
 		bar.add(simulationProgress);
 		bar.setFloatable(false);
-		
 		return bar;
 	}
 
@@ -1292,6 +1291,9 @@ public class JSMAAMainFrame extends JFrame {
 			int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
 			simulationProgress.setValue(amount);
 			simulationProgress.setString("Error in simulation : " + e.getMessage());
+			getContentPane().remove(toolBar);
+			getContentPane().add("South", toolBar);
+			pack();			
 		}
 	}
 }
