@@ -1239,12 +1239,12 @@ public class JSMAAMainFrame extends JFrame {
 		}
 	}
 	
-	private void connectNameAdapters(List<? extends NamedObject> oldObjects,
-			List<? extends NamedObject> newObjects) {
-		assert(oldObjects.size() == newObjects.size());
-		for (int i=0;i<oldObjects.size();i++) {
-			NamedObject mCrit = oldObjects.get(i);
-			NamedObject nmCrit = newObjects.get(i);
+	private void connectNameAdapters(List<? extends NamedObject> oldModelObjects,
+			List<? extends NamedObject> newModelObjects) {
+		assert(oldModelObjects.size() == newModelObjects.size());
+		for (int i=0;i<oldModelObjects.size();i++) {
+			NamedObject mCrit = oldModelObjects.get(i);
+			NamedObject nmCrit = newModelObjects.get(i);
 			mCrit.addPropertyChangeListener(new NameUpdater(nmCrit));
 		}
 	}		

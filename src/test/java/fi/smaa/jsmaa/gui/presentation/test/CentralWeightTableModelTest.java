@@ -1,13 +1,18 @@
 package fi.smaa.jsmaa.gui.presentation.test;
 
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.presentation.CentralWeightTableModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -20,6 +25,7 @@ public class CentralWeightTableModelTest {
 	private CentralWeightTableModel model;
 	private Alternative a1;
 	private Alternative a2;
+	private ScaleCriterion c1;
 	
 	@Before
 	public void setUp() {
@@ -29,7 +35,8 @@ public class CentralWeightTableModelTest {
 		alts.add(a1);
 		alts.add(a2);
 		List<Criterion> crit = new ArrayList<Criterion>();
-		crit.add(new ScaleCriterion("c1"));
+		c1 = new ScaleCriterion("c1");
+		crit.add(c1);
 		crit.add(new ScaleCriterion("c2"));
 		crit.add(new ScaleCriterion("c3"));
 		
@@ -70,4 +77,12 @@ public class CentralWeightTableModelTest {
 		assertEquals("c2", model.getColumnName(3));
 		assertEquals("c3", model.getColumnName(4));
 	}
+	
+	@Test
+	public void testCriterionNameChanged() {
+		TableModelListener mock = JUnitUtil.mockTableModelListener(new TableModelEvent(model));
+		model.addTableModelListener(mock);
+		c1.setName("new crit");
+		verify(mock);
+	}	
 }

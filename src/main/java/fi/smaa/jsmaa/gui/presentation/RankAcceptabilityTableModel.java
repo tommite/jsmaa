@@ -4,7 +4,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 @SuppressWarnings("serial")
-public class RankAcceptabilityTableModel extends SMAAResultsTableModel<SMAA2Results> {
+public class RankAcceptabilityTableModel extends SMAA2ResultsTableModel {
 
 	public RankAcceptabilityTableModel(SMAA2Results results) {
 		super(results);

@@ -24,6 +24,7 @@ public class CategoryAcceptabilityTableModelTest {
 	private CategoryAcceptabilityTableModel model;
 	private Alternative a1;
 	private Alternative a2;
+	private Alternative cat1;
 	
 	@Before
 	public void setUp() {
@@ -33,7 +34,8 @@ public class CategoryAcceptabilityTableModelTest {
 		alts.add(a1);
 		alts.add(a2);
 		List<Alternative> cats = new ArrayList<Alternative>();
-		cats.add(new Alternative("c1"));
+		cat1 = new Alternative("c1");
+		cats.add(cat1);
 		cats.add(new Alternative("c2"));
 		cats.add(new Alternative("c3"));
 		
@@ -95,6 +97,21 @@ public class CategoryAcceptabilityTableModelTest {
 		assertEquals(new Double(0.5), model.getValueAt(1, 2));
 		assertEquals(new Double(0.0), model.getValueAt(1, 3));			
 	}
-
+	
+	@Test
+	public void testAlternativeNameChanged() {
+		TableModelListener mock = JUnitUtil.mockTableModelListener(new TableModelEvent(model));
+		model.addTableModelListener(mock);
+		a1.setName("new alt");
+		verify(mock);
+	}
+	
+	@Test
+	public void testCategoryNameChanged() {
+		TableModelListener mock = JUnitUtil.mockTableModelListener(new TableModelEvent(model));
+		model.addTableModelListener(mock);
+		cat1.setName("new cat");
+		verify(mock);
+	}	
 
 }

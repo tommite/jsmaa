@@ -2,6 +2,7 @@ package fi.smaa.jsmaa.gui.presentation;
 
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("serial")
@@ -9,7 +10,10 @@ public class CategoryAcceptabilityTableModel extends SMAAResultsTableModel<SMAAT
 
 	public CategoryAcceptabilityTableModel(SMAATRIResults results) {
 		super(results);
-
+		
+		for (Alternative a : results.getCategories()) {
+			a.addPropertyChangeListener(NamedObject.PROPERTY_NAME, listener);
+		}
 	}
 
 	public int getColumnCount() {

@@ -4,11 +4,10 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 @SuppressWarnings("serial")
-public class CentralWeightTableModel extends SMAAResultsTableModel<SMAA2Results> {
-
+public class CentralWeightTableModel extends SMAA2ResultsTableModel {
 
 	public CentralWeightTableModel(SMAA2Results results) {
-		super(results);
+		super(results);		
 	}
 
 	@Override
