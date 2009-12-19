@@ -40,6 +40,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import javax.swing.AbstractAction;
@@ -95,6 +96,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -170,14 +172,11 @@ public class JSMAAMainFrame extends JFrame {
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
 			addCatButton.setVisible(true);
-			toolBar.add(new LambdaPanel((SMAATRIModel) model));
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
-			if (toolBar.getComponents().length > 1) {
-				toolBar.remove(toolBar.getComponentAtIndex(1));
-			}
 			addCatButton.setVisible(false);			
 		}
+		rebuildBottomToolbar();
 		pack();
 		buildNewSimulator();
 		leftTreeFocusCriteria();
@@ -254,10 +253,17 @@ public class JSMAAMainFrame extends JFrame {
 	   
 	   getContentPane().setLayout(new BorderLayout());
 	   getContentPane().add("Center", splitPane);
-	   toolBar = createToolBar();
-	   getContentPane().add("South", toolBar);
+	   rebuildBottomToolbar();
 	   topToolBar = createTopToolbar();
 	   getContentPane().add("North", topToolBar);
+	}
+
+	private void rebuildBottomToolbar() {
+		if (toolBar != null) {
+			getContentPane().remove(toolBar);
+		}
+		toolBar = createToolBar();		
+		getContentPane().add("South", toolBar);
 	}
 	
 	private JToolBar createTopToolbar() {
@@ -309,6 +315,9 @@ public class JSMAAMainFrame extends JFrame {
 		simulationProgress.setStringPainted(true);		
 		bar.add(simulationProgress);
 		bar.setFloatable(false);
+		if (model instanceof SMAATRIModel) {
+			bar.add(new LambdaPanel((SMAATRIModel) model));
+		}
 		return bar;
 	}
 
@@ -1208,8 +1217,12 @@ public class JSMAAMainFrame extends JFrame {
 			}
 			SMAAModel newModel = model.deepCopy();
 			
-			connectAlternativeNameAdapters(model, newModel);
-			connectCriteriaNameAdapters(model, newModel);
+			connectNameAdapters(model.getAlternatives(), newModel.getAlternatives());
+			connectNameAdapters(model.getCriteria(), newModel.getCriteria());
+			if (newModel instanceof SMAATRIModel) {
+				connectNameAdapters(((SMAATRIModel) model).getCategories(), 
+						((SMAATRIModel) newModel).getCategories());
+			}
 			
 			SimulationThread thread = null;
 			if (newModel instanceof SMAATRIModel) {
@@ -1225,52 +1238,26 @@ public class JSMAAMainFrame extends JFrame {
 			checkStartNewSimulator();
 		}
 	}
-
-	private void connectAlternativeNameAdapters(SMAAModel model,
-			SMAAModel newModel) {
-		assert(model.getAlternatives().size() == newModel.getAlternatives().size());
-		for (int i=0;i<model.getAlternatives().size();i++) {
-			Alternative mAlt = model.getAlternatives().get(i);
-			Alternative nmAlt = newModel.getAlternatives().get(i);
-			mAlt.addPropertyChangeListener(new AlternativeNameUpdater(nmAlt));
-		}
-	}	
-
-	private void connectCriteriaNameAdapters(SMAAModel model,
-			SMAAModel newModel) {
-		assert(model.getCriteria().size() == newModel.getCriteria().size());
-		for (int i=0;i<model.getCriteria().size();i++) {
-			Criterion mCrit = model.getCriteria().get(i);
-			Criterion nmCrit = newModel.getCriteria().get(i);
-			mCrit.addPropertyChangeListener(new CriterionNameUpdater(nmCrit));
+	
+	private void connectNameAdapters(List<? extends NamedObject> oldObjects,
+			List<? extends NamedObject> newObjects) {
+		assert(oldObjects.size() == newObjects.size());
+		for (int i=0;i<oldObjects.size();i++) {
+			NamedObject mCrit = oldObjects.get(i);
+			NamedObject nmCrit = newObjects.get(i);
+			mCrit.addPropertyChangeListener(new NameUpdater(nmCrit));
 		}
 	}		
 	
-	private class CriterionNameUpdater implements PropertyChangeListener {
+	private class NameUpdater implements PropertyChangeListener {
 
-		private Criterion toUpdate;
-		public CriterionNameUpdater(Criterion toUpdate) {
+		private NamedObject toUpdate;
+		public NameUpdater(NamedObject toUpdate) {
 			this.toUpdate = toUpdate;
 		}
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(Criterion.PROPERTY_NAME)){ 
+			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)){ 
 				setModelUnsaved(true);
-				toUpdate.setName((String) evt.getNewValue());
-			}
-			
-		}
-	
-	}
-	
-	private class AlternativeNameUpdater implements PropertyChangeListener {
-		
-		private Alternative toUpdate;
-		public AlternativeNameUpdater(Alternative toUpdate) {
-			this.toUpdate = toUpdate;
-		}
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(Alternative.PROPERTY_NAME)) {
-				setModelUnsaved(true);				
 				toUpdate.setName((String) evt.getNewValue());
 			}
 		}
