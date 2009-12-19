@@ -21,7 +21,6 @@ package fi.smaa.jsmaa.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -50,12 +49,10 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -64,8 +61,6 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -80,12 +75,12 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
-import com.jidesoft.swing.RangeSlider;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
+import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
@@ -140,9 +135,6 @@ public class JSMAAMainFrame extends JFrame {
 		= new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
 	private JToolBar toolBar;
-	private RangeSlider lambdaSlider;
-	private JPanel lambdaPanel;
-	private JLabel lambdaRangeLabel;
 	private JToolBar topToolBar;
 	private JButton addCatButton;
 	
@@ -177,15 +169,13 @@ public class JSMAAMainFrame extends JFrame {
 		});
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
-			Interval lambda = ((SMAATRIModel) model).getLambda().deepCopy();
-			lambdaSlider.setLowValue((int)(lambda.getStart() * 100.0));
-			lambdaSlider.setHighValue((int)(lambda.getEnd() * 100.0));
-			updateLambdaLabel();
 			addCatButton.setVisible(true);
-			toolBar.add(lambdaPanel);
+			toolBar.add(new LambdaPanel((SMAATRIModel) model));
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
-			toolBar.remove(lambdaPanel);
+			if (toolBar.getComponents().length > 1) {
+				toolBar.remove(toolBar.getComponentAtIndex(1));
+			}
 			addCatButton.setVisible(false);			
 		}
 		pack();
@@ -320,41 +310,7 @@ public class JSMAAMainFrame extends JFrame {
 		bar.add(simulationProgress);
 		bar.setFloatable(false);
 		
-		createLambdaPanel();
 		return bar;
-	}
-
-	private void createLambdaPanel() {
-		lambdaSlider = new RangeSlider(50, 100, 65, 85);
-		lambdaSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				fireLambdaSliderChanged();
-			}
-		});
-		lambdaPanel = new JPanel();
-		lambdaPanel.add(lambdaSlider, BorderLayout.CENTER);
-		JPanel lowPanel = new JPanel();
-		lambdaPanel.add(new JLabel("Lambda range"), BorderLayout.NORTH);
-		lambdaPanel.add(lowPanel, BorderLayout.SOUTH);
-		lowPanel.setLayout(new FlowLayout());
-		lambdaRangeLabel = new JLabel();
-		lowPanel.add(lambdaRangeLabel);
-		updateLambdaLabel();
-	}
-
-
-	private void updateLambdaLabel() {
-		lambdaRangeLabel.setText("[" + lambdaSlider.getLowValue() / 100.0 + "-"
-				+lambdaSlider.getHighValue() / 100.0+ "]");
-	}
-
-	protected void fireLambdaSliderChanged() {
-		Interval lambda = ((SMAATRIModel) model).getLambda();
-		double lowVal = lambdaSlider.getLowValue() / 100.0;
-		double highVal = lambdaSlider.getHighValue() / 100.0;
-		lambda.setStart(lowVal);
-		lambda.setEnd(highVal);
-		updateLambdaLabel();
 	}
 
 	private void setRightViewToCentralWeights() {	
@@ -1214,8 +1170,6 @@ public class JSMAAMainFrame extends JFrame {
 				setRightViewToCategories();
 			} else if (type == ModelChangeEvent.PARAMETER) {
 				if (model instanceof SMAATRIModel) {
-					lambdaSlider.setLowValue((int) (((SMAATRIModel) model).getLambda().getStart() * 100.0));
-					lambdaSlider.setHighValue((int) (((SMAATRIModel) model).getLambda().getEnd() * 100.0));
 					if (rightViewBuilder instanceof ResultsView) {
 						setRightViewToCategoryAcceptabilities();
 					}
