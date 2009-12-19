@@ -8,7 +8,7 @@ Currently is implemented:
 Versions
 ========
 0.4.1 : Improvements of the GUI usability and bug fixes. 
-0.4 : Adds SMAA-TRI, uncertainty individually for measurements, cardinal preference information, graph output, and various other minor improvements.
+0.4 : Adds SMAA-TRI, uncertainty individually for measurements, cardinal preference information, graph output, and various minor improvements.
 0.2 : Initial release implementing SMAA-2. 
 
 License
