@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.components;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -39,9 +39,6 @@ import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.gui.components.FocusTransferrer;
-import fi.smaa.jsmaa.gui.components.GaussianMeasurementPanel;
-import fi.smaa.jsmaa.gui.components.IntervalPanel;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -113,9 +110,9 @@ public class MeasurementPanel extends JPanel {
 	public void rebuildPanel() {
 		removeAll();
 		valuePanel = buildValuePanel();
-		add(valuePanel);
 		add(chooserPanel);
-		revalidate();
+		add(valuePanel);		
+		revalidate();		
 	}
 
 	private JComboBox buildChooserPanel() {

@@ -36,8 +36,9 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.MeasurementPanel.MeasurementType;
 import fi.smaa.jsmaa.gui.components.FocusTransferrer;
+import fi.smaa.jsmaa.gui.components.MeasurementPanel;
+import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
