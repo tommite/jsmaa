@@ -416,7 +416,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.setCellRenderer(renderer);
 		
 		leftTree.setDragEnabled(true);
-		leftTree.setTransferHandler(new LeftTreeTransferHandler(leftTreeModel));
+		leftTree.setTransferHandler(new LeftTreeTransferHandler(leftTreeModel, model));
 		leftTree.setDropMode(DropMode.INSERT);
 		
 		final JPopupMenu leftTreeEditPopupMenu = new JPopupMenu();

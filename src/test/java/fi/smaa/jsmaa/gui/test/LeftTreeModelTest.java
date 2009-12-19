@@ -18,19 +18,14 @@
 
 package fi.smaa.jsmaa.gui.test;
 
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -174,32 +169,4 @@ public class LeftTreeModelTest {
 		assertEquals(getRankAccNode(), treeModel.getChild(getResultsNode(), 0));
 		assertEquals(getCentralWeightNode(), treeModel.getChild(getResultsNode(), 1));
 	}
-	
-	@Test
-	public void testMoveCriterion() {
-		ScaleCriterion crit2 = new ScaleCriterion("crit2");		
-		smaaModel.addCriterion(crit2);
-
-		TreeModelEvent ev = new TreeModelEvent(treeModel, new Object[]{treeModel.getRoot()});
-		TreeModelListener mock = JUnitUtil.mockTableModelListener(ev);
-		treeModel.addTreeModelListener(mock);
-		
-		treeModel.moveCriterion(crit2, 0);
-		verify(mock);
-		
-		assertEquals(crit2, treeModel.getChild(treeModel.getCriteriaNode(), 0));
-		assertEquals(crit1, treeModel.getChild(treeModel.getCriteriaNode(), 1));
-		assertEquals(2, treeModel.getChildCount(treeModel.getCriteriaNode()));
-	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
-	public void testMoveCriterionInvalidUnderIndexThrows() {
-		treeModel.moveCriterion(crit1, -1);
-	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
-	public void testMoveCriterionInvalidOverIndexThrows() {
-		treeModel.moveCriterion(crit1, 1);
-	}
-	
 }

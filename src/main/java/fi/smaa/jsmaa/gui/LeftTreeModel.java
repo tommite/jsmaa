@@ -19,7 +19,6 @@
 package fi.smaa.jsmaa.gui;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -28,11 +27,11 @@ import javax.swing.tree.TreePath;
 
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 @SuppressWarnings("unchecked")
 public class LeftTreeModel implements TreeModel{
@@ -183,26 +182,6 @@ public class LeftTreeModel implements TreeModel{
 
 	public Object getRoot() {
 		return smaaModel;
-	}
-	
-	public void moveCriterion(Criterion toMove, int newIndex) 
-		throws IndexOutOfBoundsException {
-		if (newIndex < 0 || newIndex >= smaaModel.getCriteria().size()) {
-			throw new IndexOutOfBoundsException();
-		}
-		int oldIndex = smaaModel.getCriteria().indexOf(toMove);
-		if (oldIndex == newIndex) {
-			return;
-		}
-		if (oldIndex < 0) {
-			throw new IllegalArgumentException("unknown criterion to move");
-		}
-		List<Criterion> newCrit = new ArrayList<Criterion>(smaaModel.getCriteria());
-		Criterion toMoveCrit = newCrit.get(newIndex);
-		newCrit.set(newIndex, toMove);
-		newCrit.set(oldIndex, toMoveCrit);
-		
-		smaaModel.setCriteria(newCrit);
 	}
 
 	public boolean isLeaf(Object node) {
