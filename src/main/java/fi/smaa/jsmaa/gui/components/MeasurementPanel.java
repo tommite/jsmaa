@@ -55,6 +55,8 @@ public class MeasurementPanel extends JPanel {
 	private JComponent valuePanel;
 
 	private JComboBox chooserPanel;
+
+	private JComboBox chooserComboBox;
 	
 	public enum MeasurementType {
 		EXACT("Exact"),
@@ -118,32 +120,28 @@ public class MeasurementPanel extends JPanel {
 	private JComboBox buildChooserPanel() {
 		ValueModel valueModel = new ChooserValueModel();
 		SelectionInList<MeasurementType> selInList = new SelectionInList<MeasurementType>(allowedValues, valueModel);
-		JComboBox comboBox = new JComboBox() {
-			@Override
-			public String getToolTipText() {
-				return getChooserTooltipText();
-			}
-		};
-		// just to enable to tool tip text
-		comboBox.setToolTipText("a");
-		comboBox.addActionListener(new AbstractAction() {
+		chooserComboBox = new JComboBox();
+		chooserComboBox.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				valuePanel.requestFocusInWindow();
+				updateChooserTooltipText();
 			}
 		});
-		Bindings.bind(comboBox, selInList);
-		return comboBox;
+		updateChooserTooltipText();
+		Bindings.bind(chooserComboBox, selInList);
+		return chooserComboBox;
 	}
 
-	protected String getChooserTooltipText() {
+	protected void updateChooserTooltipText() {
+		String text = null;
 		if (holder.getValue() instanceof Interval) {
-			return "Interval is input as [min, max]";
+			text = "Interval is input as [min, max]";
 		} else if (holder.getValue() instanceof LogNormalMeasurement) {
-			return "Log-normal distributed measurement is input as ln(mean) \u00B1 ln(stdev)";
+			text = "Log-normal distributed measurement is input as ln(mean) \u00B1 ln(stdev)";
 		} else if (holder.getValue() instanceof GaussianMeasurement) {
-			return "Gaussian distributed measurement is input as mean \u00B1 stdev";
+			text = "Gaussian distributed measurement is input as mean \u00B1 stdev";
 		}
-		return null;
+		chooserComboBox.setToolTipText(text);
 	}
 
 	private JComponent buildValuePanel() {
