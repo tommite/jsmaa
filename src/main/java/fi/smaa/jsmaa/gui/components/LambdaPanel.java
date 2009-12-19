@@ -37,7 +37,8 @@ public class LambdaPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		lambdaSlider = new RangeSlider(50, 100, 65, 85);
+		lambdaSlider = new RangeSlider(50, 100, (int) (model.getLambda().getStart() * 100.0),
+				(int)(model.getLambda().getEnd() * 100.0));
 		lambdaSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				fireLambdaSliderChanged();
