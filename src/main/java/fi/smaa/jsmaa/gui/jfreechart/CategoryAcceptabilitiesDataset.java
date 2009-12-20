@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jfree.data.UnknownKeyException;
 
+import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("unchecked")
@@ -29,9 +30,13 @@ public class CategoryAcceptabilitiesDataset extends AlternativeColumnCategoryDat
 	
 	// categories = alternatives
 	// series = categoryacceptabilities
-	
+		
 	public CategoryAcceptabilitiesDataset(SMAATRIResults results) {
 		super(results);
+		
+		for (Alternative a : results.getCategories()) {
+			a.addPropertyChangeListener(nameListener);
+		}
 	}
 
 	public int getRowIndex(Comparable cat) {

@@ -18,14 +18,20 @@
 
 package fi.smaa.jsmaa.gui.jfreechart.test;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.general.DatasetChangeListener;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset.Rank;
 import fi.smaa.jsmaa.model.Alternative;
@@ -116,5 +122,15 @@ public class RankAcceptabilitiesDataSetTest {
 		assertEquals(new Double(1.0), data.getValue(0, 1));
 		assertEquals(new Double(1.0), data.getValue(1, 0));
 		assertEquals(new Double(0.0), data.getValue(1, 1));
+	}
+	
+	@Test
+	public void testAlternativeNameChangeFires() {
+		DatasetChangeListener mock = createMock(DatasetChangeListener.class);
+		mock.datasetChanged((DatasetChangeEvent) JUnitUtil.eqEventObject(new DatasetChangeEvent(data, data)));
+		data.addChangeListener(mock);
+		replay(mock);
+		a1.setName("new alt");
+		verify(mock);
 	}
 }

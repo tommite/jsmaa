@@ -18,6 +18,8 @@
 
 package fi.smaa.jsmaa.gui.jfreechart;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,8 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 
+import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
@@ -34,11 +38,16 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 	private List<DatasetChangeListener> dataListeners = new ArrayList<DatasetChangeListener>();
 	private DatasetGroup group;
 	protected R results;
+	
+	protected NameListener nameListener = new NameListener();
 
 	protected SMAADataSet(R results) {
 		super();
 		this.results = results;
-		results.addResultsListener(this);		
+		results.addResultsListener(this);
+		for (Alternative a : results.getAlternatives()) {
+			a.addPropertyChangeListener(NamedObject.PROPERTY_NAME, nameListener);
+		}
 	}
 
 	public void addChangeListener(DatasetChangeListener l) {
@@ -69,6 +78,13 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 
 	public void resultsChanged(Exception e) {
 		// TODO
+	}
+	
+	private class NameListener implements PropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			fireResultsChanged();
+		}
 	}
 
 }

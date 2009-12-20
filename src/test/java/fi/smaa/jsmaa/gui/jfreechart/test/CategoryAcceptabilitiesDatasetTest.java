@@ -18,7 +18,10 @@
 
 package fi.smaa.jsmaa.gui.jfreechart.test;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +30,9 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.*;
-
+import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
@@ -146,15 +147,23 @@ public class CategoryAcceptabilitiesDatasetTest {
 	}
 	
 	@Test
-	@Ignore
-	// ignored for now .. .results fire but matcher in easymock doesnt work?
 	public void testResultChangeFires() {
 		DatasetChangeListener list = createMock(DatasetChangeListener.class);
 		data.addChangeListener(list);
-		list.datasetChanged(new DatasetChangeEvent(data, data));
+		list.datasetChanged((DatasetChangeEvent) JUnitUtil.eqEventObject(new DatasetChangeEvent(data, data)));
 		replay(list);
 		res.update(categoryHits);
 		verify(list);
 	}
-	
+
+	@Test
+	public void testCategoryNameChangeFires() {
+		DatasetChangeListener mock = createMock(DatasetChangeListener.class);
+		mock.datasetChanged((DatasetChangeEvent) JUnitUtil.eqEventObject(new DatasetChangeEvent(data, data)));
+		data.addChangeListener(mock);
+		replay(mock);
+		c1.setName("new cat");
+		verify(mock);
+	}
+
 }
