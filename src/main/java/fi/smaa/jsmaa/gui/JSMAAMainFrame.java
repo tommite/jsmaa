@@ -103,6 +103,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
 import fi.smaa.jsmaa.simulator.SMAAResults;
@@ -1264,23 +1265,23 @@ public class JSMAAMainFrame extends JFrame {
 	}
 		
 	private class SimulationProgressListener implements SMAAResultsListener {
-		public void resultsChanged() {
-			int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-			simulationProgress.setValue(amount);
-			if (amount < 100) {
-				simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");
+		public void resultsChanged(ResultsEvent ev) {
+			if (ev.getException() == null) {
+				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
+				simulationProgress.setValue(amount);
+				if (amount < 100) {
+					simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");
+				} else {
+					simulationProgress.setString("Simulation complete.");
+				}
 			} else {
-				simulationProgress.setString("Simulation complete.");
+				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
+				simulationProgress.setValue(amount);
+				simulationProgress.setString("Error in simulation : " + ev.getException().getMessage());
+				getContentPane().remove(toolBar);
+				getContentPane().add("South", toolBar);
+				pack();
 			}
-		}
-
-		public void resultsChanged(Exception e) {
-			int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-			simulationProgress.setValue(amount);
-			simulationProgress.setString("Error in simulation : " + e.getMessage());
-			getContentPane().remove(toolBar);
-			getContentPane().add("South", toolBar);
-			pack();			
 		}
 	}
 }

@@ -30,6 +30,7 @@ import org.jfree.data.general.DatasetGroup;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.NamedObject;
+import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
@@ -66,7 +67,7 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		group = g;
 	}
 
-	public void resultsChanged() {
+	public void resultsChanged(ResultsEvent ev) {
 		fireResultsChanged();
 	}
 
@@ -74,10 +75,6 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		for (DatasetChangeListener l : dataListeners) {
 			l.datasetChanged(new DatasetChangeEvent(this, this));
 		}
-	}
-
-	public void resultsChanged(Exception e) {
-		// TODO
 	}
 	
 	private class NameListener implements PropertyChangeListener {

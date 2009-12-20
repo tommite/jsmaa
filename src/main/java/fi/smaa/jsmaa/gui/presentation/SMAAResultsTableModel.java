@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.NamedObject;
+import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 
@@ -27,13 +28,13 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 	}
 	
 	private class ResultsListener implements SMAAResultsListener {
-		public void resultsChanged() {
-			fireTableDataChanged();
+		public void resultsChanged(ResultsEvent ev) {
+			if (ev.getException() == null) {
+				fireTableDataChanged();
+			} else {
+				fireTableStructureChanged();			
+			}	
 		}
-
-		public void resultsChanged(Exception e) {
-			fireTableStructureChanged();			
-		}	
 	}
 	
 	@Override
