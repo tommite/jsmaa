@@ -57,6 +57,7 @@ public class ResultsView implements ViewBuilder {
 		builder.add(spane, cc.xy(1, 3));
 	
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table.setAutoCreateRowSorter(true);
 		builder.addSeparator("", cc.xy(1, 5));	
 		builder.add(buildFigurePart(), cc.xy(1, 7));
 		
