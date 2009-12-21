@@ -17,7 +17,7 @@ public class CategoryAcceptabilityTableModel extends SMAAResultsTableModel<SMAAT
 		super(results);
 		
 		for (Alternative a : results.getCategories()) {
-			a.addPropertyChangeListener(NamedObject.PROPERTY_NAME, catListener);
+			a.addPropertyChangeListener(catListener);
 		}
 	}
 
@@ -45,7 +45,9 @@ public class CategoryAcceptabilityTableModel extends SMAAResultsTableModel<SMAAT
 	private class CategoryListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			fireTableStructureChanged();
+			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)) {
+				fireTableStructureChanged();
+			}
 		}
 	}
 

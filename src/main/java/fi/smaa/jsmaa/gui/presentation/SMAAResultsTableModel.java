@@ -23,7 +23,7 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 		results.addResultsListener(new ResultsListener());
 		
 		for (Alternative a : results.getAlternatives()) {
-			a.addPropertyChangeListener(NamedObject.PROPERTY_NAME, listener);
+			a.addPropertyChangeListener(listener);
 		}
 	}
 	
@@ -47,7 +47,9 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 	protected class NameListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			fireTableDataChanged();
+			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)) { 
+				fireTableDataChanged();
+			}
 		}
 	}
 }

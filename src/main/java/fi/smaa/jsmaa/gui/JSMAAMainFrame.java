@@ -36,8 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -76,6 +74,8 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
@@ -885,10 +885,10 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void loadModel(File file) throws IOException, ClassNotFoundException {
-		ObjectInputStream s = new ObjectInputStream(
-				new BufferedInputStream(
-						new FileInputStream(file)));
-		SMAAModel loadedModel = (SMAAModel) s.readObject();
+		BufferedInputStream s = new BufferedInputStream(new FileInputStream(file));
+		XStream x = new XStream();
+		x.setMode(XStream.ID_REFERENCES);		
+		SMAAModel loadedModel = (SMAAModel) x.fromXML(s);
 		s.close();
 		this.model = loadedModel;
 		initWithModel(model);
@@ -899,9 +899,10 @@ public class JSMAAMainFrame extends JFrame {
 
 
 	private void saveModel(SMAAModel model, File file) throws IOException {
-		ObjectOutputStream s = new ObjectOutputStream(new BufferedOutputStream(
-						new FileOutputStream(file)));
-		s.writeObject(model);
+		XStream x = new XStream(new DomDriver());
+		x.setMode(XStream.ID_REFERENCES);
+		BufferedOutputStream s = new BufferedOutputStream(new FileOutputStream(file));
+		x.toXML(model, s);
 		s.close();
 		setModelUnsaved(false);
 	}

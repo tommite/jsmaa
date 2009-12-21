@@ -47,7 +47,7 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		this.results = results;
 		results.addResultsListener(this);
 		for (Alternative a : results.getAlternatives()) {
-			a.addPropertyChangeListener(NamedObject.PROPERTY_NAME, nameListener);
+			a.addPropertyChangeListener(nameListener);
 		}
 	}
 
@@ -80,7 +80,9 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 	private class NameListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			fireResultsChanged();
+			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)) {
+				fireResultsChanged();
+			}
 		}
 	}
 
