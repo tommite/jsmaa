@@ -36,6 +36,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +85,7 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
+import fi.smaa.jsmaa.Version;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
@@ -885,10 +890,14 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void loadModel(File file) throws IOException, ClassNotFoundException {
-		BufferedInputStream s = new BufferedInputStream(new FileInputStream(file));
 		XStream x = new XStream();
-		x.setMode(XStream.ID_REFERENCES);		
-		SMAAModel loadedModel = (SMAAModel) x.fromXML(s);
+		x.setMode(XStream.ID_REFERENCES);
+		ObjectInputStream s= x.createObjectInputStream(
+				new InputStreamReader(
+						new BufferedInputStream(new FileInputStream(file))));
+		@SuppressWarnings("unused")
+		Version v = (Version) s.readObject();
+		SMAAModel loadedModel = (SMAAModel) s.readObject();
 		s.close();
 		this.model = loadedModel;
 		initWithModel(model);
@@ -900,9 +909,12 @@ public class JSMAAMainFrame extends JFrame {
 
 	private void saveModel(SMAAModel model, File file) throws IOException {
 		XStream x = new XStream(new DomDriver());
-		x.setMode(XStream.ID_REFERENCES);
-		BufferedOutputStream s = new BufferedOutputStream(new FileOutputStream(file));
-		x.toXML(model, s);
+		x.setMode(XStream.ID_REFERENCES);		
+		ObjectOutputStream s = x.createObjectOutputStream(new PrintWriter(new BufferedOutputStream(new FileOutputStream(file))),
+				"JSMAA-Model");
+		Version v = new Version(AppInfo.getAppVersion());
+		s.writeObject(v);
+		s.writeObject(model);
 		s.close();
 		setModelUnsaved(false);
 	}
