@@ -57,9 +57,9 @@ public class LeftTreeModel implements TreeModel{
 		}
 		this.smaaModel = smaaModel;
 		smaaModel.addModelListener(new SMAAModelListener() {
-			public void modelChanged(ModelChangeEvent type) {
-				if (type == ModelChangeEvent.ALTERNATIVES ||
-						type == ModelChangeEvent.CRITERIA) {
+			public void modelChanged(ModelChangeEvent ev) {
+				if (ev.getType() == ModelChangeEvent.ALTERNATIVES ||
+						ev.getType() == ModelChangeEvent.CRITERIA) {
 					fireTreeChange();
 				}
 			}

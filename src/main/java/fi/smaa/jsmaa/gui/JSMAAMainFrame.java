@@ -1169,25 +1169,32 @@ public class JSMAAMainFrame extends JFrame {
 
 	private class MySMAAModelListener implements SMAAModelListener {
 		
-		public void modelChanged(ModelChangeEvent type) {
+		public void modelChanged(ModelChangeEvent ev) {
 			setModelUnsaved(true);
 			buildNewSimulator();
-			if (type == ModelChangeEvent.ALTERNATIVES) {
+			switch (ev.getType()) {
+			case ModelChangeEvent.ALTERNATIVES:
 				setRightViewToAlternatives();
-			} else if (type == ModelChangeEvent.CRITERIA) {
+				break;
+			case ModelChangeEvent.CRITERIA:
 				setRightViewToCriteria();
-			} else if (type == ModelChangeEvent.CATEGORIES) {
+				break;
+			case ModelChangeEvent.CATEGORIES:
 				setRightViewToCategories();
-			} else if (type == ModelChangeEvent.PARAMETER) {
+				break;
+			case ModelChangeEvent.PARAMETER:
 				if (model instanceof SMAATRIModel) {
 					if (rightViewBuilder instanceof ResultsView) {
 						setRightViewToCategoryAcceptabilities();
 					}
 				}
-			} else if (type == ModelChangeEvent.PREFERENCES) {
-				// do nothing
-			} else if (type != ModelChangeEvent.MEASUREMENT && type != ModelChangeEvent.MEASUREMENT_TYPE) {
-				rebuildRightPanel();			
+				break;
+			case ModelChangeEvent.MEASUREMENT:
+			case ModelChangeEvent.MEASUREMENT_TYPE:
+			case ModelChangeEvent.PREFERENCES:
+				break;
+			default:
+				rebuildRightPanel();
 			}
 			
 			expandLeftMenu();				
