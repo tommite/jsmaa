@@ -21,7 +21,7 @@ package fi.smaa.jsmaa.gui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -31,72 +31,57 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
+import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
-public class CriterionViewWithProfiles extends CriterionView {
+public class ProfilesView implements ViewBuilder {
 
-	public CriterionViewWithProfiles(Criterion crit, SMAATRIModel model) {
-		super(crit, model);
+	private SMAATRIModel model;
+	private OutrankingCriterion crit;
+
+	public ProfilesView(OutrankingCriterion crit, SMAATRIModel model) {
+		this.crit = crit;
+		this.model = model;
 	}
 	
-	@Override
-	protected int buildMeasurementsPart(FormLayout layout, int fullWidth,
-			PanelBuilder builder, CellConstraints cc, int row) {
-		row = super.buildMeasurementsPart(layout, fullWidth, builder, cc, row);
-		LayoutUtil.addRow(layout);
-		row += 2;
-		builder.addSeparator("Profiles (category boundaries)", cc.xyw(1, row, fullWidth));
-
-		LayoutUtil.addRow(layout);
-		
-		builder.add(buildProfilePart(), cc.xyw(1, row+2, fullWidth));
-		return row + 4;
-	}
-
-	private JComponent buildProfilePart() {
-		SMAATRIModel triModel = (SMAATRIModel) model;
-		
+	public JPanel buildPanel() {
 		FormLayout layout = new FormLayout(
 				"right:pref, 1dlu, center:pref, 1dlu, right:pref, 3dlu, left:pref:grow",
 				"p" );
 		
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();		
-		int index = 0;
 		
-		int row = 1;
-		for (int aIndex=0;aIndex<triModel.getCategories().size()-1;aIndex++) {
-			Alternative a = triModel.getCategories().get(aIndex);
+		for (int aIndex=0;aIndex<model.getCategories().size()-1;aIndex++) {
+			Alternative a = model.getCategories().get(aIndex);
 			
-			LayoutUtil.addRow(layout);
+			if (aIndex != 0) {
+				LayoutUtil.addRow(layout);	
+			}
+			int row = 1 + (aIndex*2);			
+			
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
 			
 			builder.addLabel("-", cc.xy(3, row));
 			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Alternative>(triModel.getCategories().get(aIndex+1)).getModel(Alternative.PROPERTY_NAME)),
+					new PresentationModel<Alternative>(model.getCategories().get(aIndex+1)).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(5, row));			
 			
-			if (criterion instanceof OutrankingCriterion) {
-				ValueHolder holder = createMeasurementHolder(a);
-				MeasurementPanel mpanel = new MeasurementPanel(holder);
-				builder.add(mpanel, cc.xy(7, row));				
-			}
-			index++;
-			row += 2;
+			ValueHolder holder = createMeasurementHolder(a);
+			MeasurementPanel mpanel = new MeasurementPanel(holder);
+			builder.add(mpanel, cc.xy(7, row));				
 		}
 		return builder.getPanel();
 	}	
 	
 	private ValueHolder createMeasurementHolder(Alternative prof) {
-		ValueHolder holder = new ValueHolder(((SMAATRIModel)model).getCategoryUpperBound((OutrankingCriterion) criterion, prof));
+		ValueHolder holder = new ValueHolder(model.getCategoryUpperBound(crit, prof));
 		holder.addPropertyChangeListener(new HolderListener(prof));
 		return holder;
 	}
@@ -107,7 +92,7 @@ public class CriterionViewWithProfiles extends CriterionView {
 			this.profile = profile;
 		}
 		public void propertyChange(PropertyChangeEvent evt) {
-			model.setMeasurement((CardinalCriterion) criterion, profile, (CardinalMeasurement)evt.getNewValue());
+			model.setMeasurement(crit, profile, (CardinalMeasurement)evt.getNewValue());
 		}
 	}
 }

@@ -205,11 +205,7 @@ public class JSMAAMainFrame extends JFrame {
 	}	
 	
 	public void setRightViewToCriterion(Criterion node) {
-		if (model instanceof SMAATRIModel) {
-			rightViewBuilder = new CriterionViewWithProfiles(node, (SMAATRIModel) model);			
-		} else {
-			rightViewBuilder = new CriterionView(node, model);
-		}
+		rightViewBuilder = new CriterionView(node, model);
 		rebuildRightPanel();
 	}	
 	
@@ -299,7 +295,15 @@ public class JSMAAMainFrame extends JFrame {
 		addCritButton.setToolTipText("Add criterion");
 		addCritButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				addCriterion();
+				Criterion c = null;
+				if (model instanceof SMAATRIModel) {
+					c = new OutrankingCriterion(generateNextCriterionName(), true, 
+							new ExactMeasurement(0.0), new ExactMeasurement(1.0));
+				} else {
+					c = new ScaleCriterion(generateNextCriterionName());			
+				}
+				
+				addCriterionAndStartRename(c);
 			}
 		});
 		bar.add(addCritButton);
@@ -935,7 +939,6 @@ public class JSMAAMainFrame extends JFrame {
 		return file;
 	}
 
-
 	private JFileChooser getFileChooser() {
 		JFileChooser chooser = new JFileChooser(new File("."));
 		MyFileFilter filter = new MyFileFilter();
@@ -1015,12 +1018,45 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private JMenuItem createAddCardCritMenuItem() {
-		JMenuItem item = new JMenuItem("Add new");
-		item.setMnemonic('c');
+		if (model instanceof SMAATRIModel) {
+			return createAddOutrankingCriterionMenuItem();
+		} else {
+			return createAddUtilityCriterionMenuItem();
+		}
+	}
+	
+	private JMenuItem createAddUtilityCriterionMenuItem() {
+		JMenuItem item = new JMenu("Add new");
 		item.setIcon(getIcon(FileNames.ICON_ADDCRITERION));
+		
+		JMenuItem cardCrit = new JMenuItem("Cardinal");
+		JMenuItem ordCrit = new JMenuItem("Ordinal");
+		cardCrit.setIcon(getIcon(FileNames.ICON_CARDINALCRITERION));		
+		ordCrit.setIcon(getIcon(FileNames.ICON_ORDINALCRITERION));		
+
+		cardCrit.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCriterionAndStartRename(new ScaleCriterion(generateNextCriterionName()));
+			}			
+		});
+		ordCrit.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCriterionAndStartRename(new OrdinalCriterion(generateNextCriterionName()));
+			}			
+		});		
+		item.add(cardCrit);
+		item.add(ordCrit);
+		return item;
+	}
+
+	private JMenuItem createAddOutrankingCriterionMenuItem() {
+		JMenuItem item = new JMenuItem("Add new");
+		item.setIcon(getIcon(FileNames.ICON_ADDCRITERION));
+				
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				addCriterion();
+				addCriterionAndStartRename(new OutrankingCriterion(generateNextCriterionName(), true, 
+							new ExactMeasurement(0.0), new ExactMeasurement(1.0)));
 			}			
 		});
 		return item;
@@ -1043,22 +1079,6 @@ public class JSMAAMainFrame extends JFrame {
 		leftTree.setSelectionPath(((LeftTreeModelSMAATRI) leftTreeModel).getPathForCategory(a));
 		leftTree.startEditingAtPath(((LeftTreeModelSMAATRI) leftTreeModel).getPathForCategory(a));			
 	}	
-
-	protected void addCriterion() {
-		Criterion c = null;
-		if (model instanceof SMAATRIModel) {
-			c = new OutrankingCriterion(generateNextCriterionName(), true, 
-					new ExactMeasurement(0.0), new ExactMeasurement(1.0));
-		} else {
-			c = new ScaleCriterion(generateNextCriterionName());			
-		}
-		
-		addCriterionAndStartRename(c);
-	}
-	
-	protected void addOrdinalCriterion() {
-		model.addCriterion(new OrdinalCriterion(generateNextCriterionName()));
-	}
 
 	private String generateNextCriterionName() {
 		Collection<Criterion> crit = model.getCriteria();
