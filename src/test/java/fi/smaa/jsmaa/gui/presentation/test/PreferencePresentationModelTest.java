@@ -21,9 +21,6 @@ package fi.smaa.jsmaa.gui.presentation.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +30,6 @@ import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
@@ -44,19 +40,17 @@ public class PreferencePresentationModelTest {
 	
 	private PreferencePresentationModel pmodel;
 	private SMAAModel model;
-	private List<Criterion> crit;
 	private ScaleCriterion c1;
 	private ScaleCriterion c2;
 	
 	@Before
 	public void setUp() {
 		model = new SMAAModel("model");
-		crit = new ArrayList<Criterion>();
+		
 		c1 = new ScaleCriterion("c1");
-		crit.add(c1);
 		c2 = new ScaleCriterion("c2");
-		crit.add(c2);
-		model.setCriteria(crit);
+		model.addCriterion(c1);
+		model.addCriterion(c2);
 		pmodel = new PreferencePresentationModel(model);
 	}
 	

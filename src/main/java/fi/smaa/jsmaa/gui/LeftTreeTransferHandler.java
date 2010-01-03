@@ -137,7 +137,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 		}		
 		List<Criterion> newCrit = new ArrayList<Criterion>(smaaModel.getCriteria());
 		swap(newCrit, newIndex, oldIndex);
-		smaaModel.setCriteria(newCrit);
+		smaaModel.reorderCriteria(newCrit);
 	}
 	
 	public void moveAlternative(Alternative toMove, int newIndex) {
@@ -147,7 +147,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 		}		
 		List<Alternative> newAlts = new ArrayList<Alternative>(smaaModel.getAlternatives());
 		swap(newAlts, newIndex, oldIndex);
-		smaaModel.setAlternatives(newAlts);
+		smaaModel.reorderAlternatives(newAlts);
 	}	
 
 	
@@ -161,7 +161,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 		}
 		List<Alternative> newAlts = new ArrayList<Alternative>(((SMAATRIModel)smaaModel).getCategories());
 		swap(newAlts, newIndex, oldIndex);
-		((SMAATRIModel)smaaModel).setCategories(newAlts);
+		((SMAATRIModel)smaaModel).reorderCategories(newAlts);
 	}
 	
 	private <T> void swap(List<T> list, int index1, int index2) {
