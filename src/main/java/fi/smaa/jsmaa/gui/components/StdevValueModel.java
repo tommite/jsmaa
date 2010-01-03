@@ -4,7 +4,7 @@ import javax.swing.JComponent;
 
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.gui.MultiVetoableValueModel;
+import fi.smaa.jsmaa.gui.presentation.MultiVetoableValueModel;
 
 @SuppressWarnings("serial")
 public class StdevValueModel extends MultiVetoableValueModel {

@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.views;
 
 import java.util.List;
 
@@ -33,6 +33,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.RankSelectorGroup;
 import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;

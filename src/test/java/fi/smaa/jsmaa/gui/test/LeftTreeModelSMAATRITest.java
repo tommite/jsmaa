@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.gui.LeftTreeModelSMAATRI;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;

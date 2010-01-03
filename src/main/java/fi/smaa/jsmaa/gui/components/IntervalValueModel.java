@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.gui.MultiVetoableValueModel;
+import fi.smaa.jsmaa.gui.presentation.MultiVetoableValueModel;
 import fi.smaa.jsmaa.model.Interval;
 
 @SuppressWarnings("serial")

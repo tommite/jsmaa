@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.presentation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
 
 import com.jgoodies.binding.value.AbstractVetoableValueModel;
 import com.jgoodies.binding.value.ValueModel;
+
+import fi.smaa.jsmaa.gui.Vetoer;
 
 @SuppressWarnings("serial")
 public abstract class MultiVetoableValueModel extends AbstractVetoableValueModel {

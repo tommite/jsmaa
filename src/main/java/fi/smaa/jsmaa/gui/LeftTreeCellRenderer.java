@@ -25,8 +25,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import fi.smaa.common.gui.ImageLoader;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
@@ -55,6 +58,9 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				} else if (value instanceof OutrankingCriterion) {
 					setIcon(loader.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
 					setToolTipText("Outranking criterion");					
+				} else if (value instanceof OrdinalCriterion) {
+					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));
+					setToolTipText("Ordinal criterion");						
 				}
 			} else if (value == model.getCentralWeightsNode()) {
 				setIcon(loader.getIcon(FileNames.ICON_CENTRALWEIGHTS));

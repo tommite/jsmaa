@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.views;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;

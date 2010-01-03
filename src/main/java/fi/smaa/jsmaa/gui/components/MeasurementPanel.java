@@ -48,7 +48,7 @@ import fi.smaa.jsmaa.model.LogNormalMeasurement;
 @SuppressWarnings("serial")
 public class MeasurementPanel extends JPanel {
 	
-	private ValueHolder holder;
+	private ValueModel holder;
 	
 	private MeasurementType[] allowedValues;
 
@@ -80,7 +80,7 @@ public class MeasurementPanel extends JPanel {
 		}
 	}
 	
-	public MeasurementPanel(ValueHolder measurementHolder) {
+	public MeasurementPanel(ValueModel measurementHolder) {
 		allowedValues = MeasurementType.values();
 		this.holder = measurementHolder;
 				
@@ -97,7 +97,7 @@ public class MeasurementPanel extends JPanel {
 	}	
 	
 	public void init() {
-		holder.addPropertyChangeListener(new HolderListener());		
+		holder.addValueChangeListener(new HolderListener());		
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));		
 		chooserPanel = buildChooserPanel();		
 		addFocusListener(new FocusTransferrer(chooserPanel));

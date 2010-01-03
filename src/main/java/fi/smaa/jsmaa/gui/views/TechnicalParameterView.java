@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.views;
 
 import javax.swing.JComponent;
 
@@ -28,6 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.components.IntervalPanel;
+import fi.smaa.jsmaa.gui.presentation.ConstrainedIntervalValueModel;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 

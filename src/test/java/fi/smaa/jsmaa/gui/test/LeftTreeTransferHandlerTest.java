@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.gui.LeftTreeModel;
 import fi.smaa.jsmaa.gui.LeftTreeTransferHandler;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;

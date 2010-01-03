@@ -16,7 +16,7 @@
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.views;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,9 +33,10 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
-import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
@@ -74,7 +75,9 @@ public class CriterionView implements ViewBuilder {
 			row = 9;
 		}
 		builder.addSeparator("Measurements", cc.xy(1, row));
-		builder.add(buildMeasurementsPart(), cc.xy(1, row+2));
+		
+		ImpactMatrixPresentationModel iModel = new ImpactMatrixPresentationModel(model.getImpactMatrix()); 
+		builder.add(new CriterionMeasurementsView(criterion, iModel).buildPanel(), cc.xy(1, row+2));
 		
 		if (model instanceof SMAATRIModel) {
 			LayoutUtil.addRow(layout);
@@ -168,48 +171,5 @@ public class CriterionView implements ViewBuilder {
 		builder.add(prefPanel, cc.xy(3, 3));				
 		
 		return builder.getPanel();
-	}
-
-	private JComponent buildMeasurementsPart() {
-		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, left:pref",
-				"p" );
-		
-		PanelBuilder builder = new PanelBuilder(layout);
-		CellConstraints cc = new CellConstraints();
-		
-		for (int i=0;i<model.getAlternatives().size();i++) {
-			Alternative a = model.getAlternatives().get(i);
-			int row = 1 + (i*2);			
-			if (i != 0) {
-				LayoutUtil.addRow(layout);
-			}
-			builder.add(BasicComponentFactory.createLabel(
-					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
-					cc.xy(1, row));
-			if (criterion instanceof CardinalCriterion) {
-				ValueHolder holder = createMeasurementHolder(a);
-				MeasurementPanel mpanel = new MeasurementPanel(holder);
-				builder.add(mpanel, cc.xy(3, row));				
-			}
-		}
-		return builder.getPanel();
-	}
-
-
-	private ValueHolder createMeasurementHolder(Alternative a) {
-		ValueHolder holder = new ValueHolder(model.getMeasurement((CardinalCriterion) criterion, a));
-		holder.addPropertyChangeListener(new HolderListener(a));
-		return holder;
-	}
-	
-	private class HolderListener implements PropertyChangeListener {
-		private Alternative a;
-		public HolderListener(Alternative a) {
-			this.a = a;
-		}
-		public void propertyChange(PropertyChangeEvent evt) {
-			model.setMeasurement((CardinalCriterion) criterion, a, (CardinalMeasurement)evt.getNewValue());
-		}
 	}
 }
