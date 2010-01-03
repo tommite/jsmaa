@@ -4,7 +4,6 @@ import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -16,13 +15,14 @@ import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.OrdinalCriterion;
 
-public class CriterionMeasurementsView implements ViewBuilder {
+public class CardinalCriterionMeasurementsView implements ViewBuilder {
 	
 	private Criterion criterion;
 	private ImpactMatrixPresentationModel model;
 
-	public CriterionMeasurementsView(Criterion c, ImpactMatrixPresentationModel model) {
+	public CardinalCriterionMeasurementsView(CardinalCriterion c, ImpactMatrixPresentationModel model) {
 		this.model = model;
 		this.criterion = c;
 	}
@@ -45,11 +45,13 @@ public class CriterionMeasurementsView implements ViewBuilder {
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),
 					cc.xy(1, row));
+			JComponent comp = null;
 			if (criterion instanceof CardinalCriterion) {
-				ValueModel holder = model.getMeasurementHolder(a, criterion);
-				MeasurementPanel mpanel = new MeasurementPanel(holder);
-				builder.add(mpanel, cc.xy(3, row));				
+				comp = new MeasurementPanel(model.getMeasurementHolder(a, criterion));
+			} else if (criterion instanceof OrdinalCriterion) {
+				
 			}
+			builder.add(comp, cc.xy(3, row));			
 		}
 		return builder.getPanel();
 	}

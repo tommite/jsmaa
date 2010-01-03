@@ -9,10 +9,9 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.Measurement;
 
 @SuppressWarnings("serial")
 public class ImpactMatrixPresentationModel extends PresentationModel<ImpactMatrix> {
@@ -26,7 +25,7 @@ public class ImpactMatrixPresentationModel extends PresentationModel<ImpactMatri
 	}
 	
 	public ValueModel getMeasurementHolder(Alternative a, Criterion criterion) {
-		ValueHolder holder = new ValueHolder(getBean().getMeasurement((CardinalCriterion) criterion, a));
+		ValueHolder holder = new ValueHolder(getBean().getMeasurement(criterion, a));
 		holder.addPropertyChangeListener(new HolderListener(a, criterion));
 		return holder;
 	}
@@ -39,7 +38,7 @@ public class ImpactMatrixPresentationModel extends PresentationModel<ImpactMatri
 			this.c = c;
 		}
 		public void propertyChange(PropertyChangeEvent evt) {
-			getBean().setMeasurement((CardinalCriterion) c, a, (CardinalMeasurement)evt.getNewValue());
+			getBean().setMeasurement((Criterion) c, a, (Measurement)evt.getNewValue());
 		}
 	}
 }
