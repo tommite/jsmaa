@@ -186,10 +186,8 @@ public class JSMAAMainFrame extends JFrame {
 		});
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
-			addCatButton.setVisible(true);
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
-			addCatButton.setVisible(false);			
 		}
 		rebuildBottomToolbar();
 		rebuildTopToolbar();
@@ -329,14 +327,16 @@ public class JSMAAMainFrame extends JFrame {
 			});			
 		}
 		
-		addCatButton = new JButton(getIcon(FileNames.ICON_ADD));
-		addCatButton.setToolTipText("Add category");
-		addCatButton.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addCategory();
-			}
-		});
-		bar.add(addCatButton);
+		if (model instanceof SMAATRIModel) {
+			addCatButton = new JButton(getIcon(FileNames.ICON_ADD));
+			addCatButton.setToolTipText("Add category");
+			addCatButton.addActionListener(new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					addCategory();
+				}
+			});
+			bar.add(addCatButton);
+		}
 		
 		topToolBar = bar;
 		getContentPane().add("North", topToolBar);
