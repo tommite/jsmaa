@@ -20,6 +20,7 @@ package fi.smaa.jsmaa.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -191,6 +192,7 @@ public class JSMAAMainFrame extends JFrame {
 			addCatButton.setVisible(false);			
 		}
 		rebuildBottomToolbar();
+		rebuildTopToolbar();
 		pack();
 		buildNewSimulator();
 		leftTreeFocusCriteria();
@@ -264,19 +266,30 @@ public class JSMAAMainFrame extends JFrame {
 	   getContentPane().setLayout(new BorderLayout());
 	   getContentPane().add("Center", splitPane);
 	   rebuildBottomToolbar();
-	   topToolBar = createTopToolbar();
-	   getContentPane().add("North", topToolBar);
+	   rebuildTopToolbar();
 	}
 
 	private void rebuildBottomToolbar() {
 		if (toolBar != null) {
 			getContentPane().remove(toolBar);
 		}
-		toolBar = createToolBar();		
+		JToolBar bar = new JToolBar();
+		simulationProgress = new JProgressBar();	
+		simulationProgress.setStringPainted(true);		
+		bar.add(simulationProgress);
+		bar.setFloatable(false);
+		if (model instanceof SMAATRIModel) {
+			bar.add(new LambdaPanel((SMAATRIModel) model));
+		}
+		toolBar = bar;		
 		getContentPane().add("South", toolBar);
 	}
 	
-	private JToolBar createTopToolbar() {
+	private void rebuildTopToolbar() {
+		if (topToolBar != null) {
+			getContentPane().remove(topToolBar);
+		}		
+		
 		JToolBar bar = new JToolBar();
 		bar.setFloatable(false);
 
@@ -300,21 +313,21 @@ public class JSMAAMainFrame extends JFrame {
 		});
 		bar.add(addButton);
 		JButton addCritButton = new JButton(getIcon(FileNames.ICON_ADDCRITERION));
-		addCritButton.setToolTipText("Add criterion");
-		addCritButton.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				Criterion c = null;
-				if (model instanceof SMAATRIModel) {
-					c = new OutrankingCriterion(generateNextCriterionName(), true, 
-							new ExactMeasurement(0.0), new ExactMeasurement(1.0));
-				} else {
-					c = new ScaleCriterion(generateNextCriterionName());			
-				}
-				
-				addCriterionAndStartRename(c);
-			}
-		});
+		addCritButton.setToolTipText("Add criterion");		
 		bar.add(addCritButton);
+		if (model instanceof SMAATRIModel) {
+			addCritButton.addActionListener(new AddOutrankingCriterionListener());
+		} else {
+			final JPopupMenu addMenu = new JPopupMenu();
+			addUtilityAddItemsToMenu(addMenu);
+			addCritButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent evt) {
+					addMenu.show((Component) evt.getSource(), 
+							evt.getX(), evt.getY());
+				}
+			});			
+		}
 		
 		addCatButton = new JButton(getIcon(FileNames.ICON_ADD));
 		addCatButton.setToolTipText("Add category");
@@ -324,19 +337,9 @@ public class JSMAAMainFrame extends JFrame {
 			}
 		});
 		bar.add(addCatButton);
-		return bar;
-	}
-
-	private JToolBar createToolBar() {
-		JToolBar bar = new JToolBar();
-		simulationProgress = new JProgressBar();	
-		simulationProgress.setStringPainted(true);		
-		bar.add(simulationProgress);
-		bar.setFloatable(false);
-		if (model instanceof SMAATRIModel) {
-			bar.add(new LambdaPanel((SMAATRIModel) model));
-		}
-		return bar;
+		
+		topToolBar = bar;
+		getContentPane().add("North", topToolBar);
 	}
 
 	private void setRightViewToCentralWeights() {	
@@ -411,7 +414,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTreeAltsPopupMenu.add(createAddAltMenuItem());
 		
 		final JPopupMenu leftTreeCritPopupMenu = new JPopupMenu();
-		leftTreeCritPopupMenu.add(createAddCardCritMenuItem());
+		leftTreeCritPopupMenu.add(createAddCriterionItem());
 		
 		leftTree.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent evt) {
@@ -1017,7 +1020,7 @@ public class JSMAAMainFrame extends JFrame {
 			}
 		});		
 		
-		JMenuItem addCardItem = createAddCardCritMenuItem();
+		JMenuItem addCardItem = createAddCriterionItem();
 		
 		criteriaMenu.add(showItem);
 		criteriaMenu.addSeparator();
@@ -1025,49 +1028,66 @@ public class JSMAAMainFrame extends JFrame {
 		return criteriaMenu;
 	}
 
-	private JMenuItem createAddCardCritMenuItem() {
+	private JMenuItem createAddCriterionItem() {
 		if (model instanceof SMAATRIModel) {
 			return createAddOutrankingCriterionMenuItem();
 		} else {
-			return createAddUtilityCriterionMenuItem();
+			return createAddUtilityCriterionItem();
 		}
 	}
 	
-	private JMenuItem createAddUtilityCriterionMenuItem() {
-		JMenuItem item = new JMenu("Add new");
+	private JMenuItem createAddUtilityCriterionItem() {
+		JMenu item = new JMenu("Add new");
 		item.setIcon(getIcon(FileNames.ICON_ADDCRITERION));
 		
-		JMenuItem cardCrit = new JMenuItem("Cardinal");
+		addUtilityAddItemsToMenu(item);
+		return item;
+	}
+
+	private void addUtilityAddItemsToMenu(Container item) {
+		JMenuItem cardCrit = createAddScaleCriterionItem();
+		JMenuItem ordCrit = createAddOrdinalCriterionItem();		
+		item.add(cardCrit);
+		item.add(ordCrit);
+	}
+
+	private JMenuItem createAddOrdinalCriterionItem() {
 		JMenuItem ordCrit = new JMenuItem("Ordinal");
-		cardCrit.setIcon(getIcon(FileNames.ICON_CARDINALCRITERION));		
 		ordCrit.setIcon(getIcon(FileNames.ICON_ORDINALCRITERION));		
+
+		ordCrit.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				addCriterionAndStartRename(new OrdinalCriterion(generateNextCriterionName()));
+			}			
+		});
+		return ordCrit;
+	}
+
+	private JMenuItem createAddScaleCriterionItem() {
+		JMenuItem cardCrit = new JMenuItem("Cardinal");		
+		cardCrit.setIcon(getIcon(FileNames.ICON_CARDINALCRITERION));		
 
 		cardCrit.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addCriterionAndStartRename(new ScaleCriterion(generateNextCriterionName()));
 			}			
 		});
-		ordCrit.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addCriterionAndStartRename(new OrdinalCriterion(generateNextCriterionName()));
-			}			
-		});		
-		item.add(cardCrit);
-		item.add(ordCrit);
-		return item;
+		return cardCrit;
 	}
 
 	private JMenuItem createAddOutrankingCriterionMenuItem() {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setIcon(getIcon(FileNames.ICON_ADDCRITERION));
 				
-		item.addActionListener(new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				addCriterionAndStartRename(new OutrankingCriterion(generateNextCriterionName(), true, 
-							new ExactMeasurement(0.0), new ExactMeasurement(1.0)));
-			}			
-		});
+		item.addActionListener(new AddOutrankingCriterionListener());
 		return item;
+	}
+	
+	private class AddOutrankingCriterionListener extends AbstractAction {
+		public void actionPerformed(ActionEvent e) {
+			addCriterionAndStartRename(new OutrankingCriterion(generateNextCriterionName(), true, 
+						new ExactMeasurement(0.0), new ExactMeasurement(1.0)));
+		}			
 	}
 
 	private void addCriterionAndStartRename(Criterion c) {
