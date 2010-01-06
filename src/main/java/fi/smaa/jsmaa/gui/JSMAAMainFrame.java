@@ -80,13 +80,11 @@ import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
-import fi.smaa.jsmaa.Version;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
@@ -126,6 +124,7 @@ import fi.smaa.jsmaa.simulator.SMAASimulator;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 import fi.smaa.jsmaa.simulator.SimulationThread;
+import fi.smaa.jsmaa.xml.XmlConfigurator;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
@@ -905,13 +904,10 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void loadModel(File file) throws IOException, ClassNotFoundException {
-		XStream x = new XStream();
-		x.setMode(XStream.ID_REFERENCES);
+		XStream x = XmlConfigurator.getXstream();
 		ObjectInputStream s= x.createObjectInputStream(
 				new InputStreamReader(
 						new BufferedInputStream(new FileInputStream(file))));
-		@SuppressWarnings("unused")
-		Version v = (Version) s.readObject();
 		SMAAModel loadedModel = (SMAAModel) s.readObject();
 		s.close();
 		this.model = loadedModel;
@@ -923,12 +919,9 @@ public class JSMAAMainFrame extends JFrame {
 
 
 	private void saveModel(SMAAModel model, File file) throws IOException {
-		XStream x = new XStream(new DomDriver());
-		x.setMode(XStream.ID_REFERENCES);		
+		XStream x = XmlConfigurator.getXstream();
 		ObjectOutputStream s = x.createObjectOutputStream(new PrintWriter(new BufferedOutputStream(new FileOutputStream(file))),
-				"JSMAA-Model");
-		Version v = new Version(AppInfo.getAppVersion());
-		s.writeObject(v);
+				"JSMAA");
 		s.writeObject(model);
 		s.close();
 		setModelUnsaved(false);
