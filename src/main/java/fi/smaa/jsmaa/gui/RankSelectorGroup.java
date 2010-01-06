@@ -67,7 +67,7 @@ public class RankSelectorGroup {
 	private JComboBox createComboBox(Rank r) {
 		ValueModel valueModel = new PropertyAdapter<Rank>(r, Rank.PROPERTY_RANK, true);
 		JComboBox chooser = new JComboBox(new ComboBoxAdapter<Rank>(listModel, valueModel));
-		chooser.setToolTipText("Rank in descending order, 1 is the best/most important, 2 the second, etc.");
+		chooser.setToolTipText("Rank in ascending order, 1 is the best/most important, 2 the second, etc.");
 		
 		chooser.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
