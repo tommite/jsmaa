@@ -18,7 +18,6 @@
 
 package fi.smaa.jsmaa.gui.presentation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.jgoodies.binding.PresentationModel;
@@ -28,7 +27,6 @@ import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
-import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 @SuppressWarnings("serial")
@@ -101,11 +99,7 @@ public class PreferencePresentationModel extends PresentationModel<SMAAModel> {
 	private OrdinalPreferenceInformation generateOrdinalPreferences() {
 		if (ordinalPreferences == null) {
 			List<Criterion> crit = getBean().getCriteria();
-			List<Rank> ranks = new ArrayList<Rank>();
-			for (int i=0;i<crit.size();i++) {
-				ranks.add(new Rank(i+1));
-			}
-			ordinalPreferences = new OrdinalPreferenceInformation(ranks);			
+			ordinalPreferences = new OrdinalPreferenceInformation(crit);			
 		}
 		return ordinalPreferences;
 	}
