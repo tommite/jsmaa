@@ -30,17 +30,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,6 +64,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import javolution.xml.XMLObjectReader;
+import javolution.xml.XMLObjectWriter;
+import javolution.xml.stream.XMLStreamException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -79,7 +78,6 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
-import com.thoughtworks.xstream.XStream;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
@@ -124,7 +122,7 @@ import fi.smaa.jsmaa.simulator.SMAASimulator;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 import fi.smaa.jsmaa.simulator.SimulationThread;
-import fi.smaa.jsmaa.xml.XmlConfigurator;
+import fi.smaa.jsmaa.xml.JSMAABindingv1;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
@@ -846,7 +844,7 @@ public class JSMAAMainFrame extends JFrame {
 		try {
 			saveModel(model, file);
 			return true;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Error saving model to " + getCanonicalPath(file) + 
 					", " + e.getMessage(), "Save error", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -880,6 +878,8 @@ public class JSMAAMainFrame extends JFrame {
 				showErrorIncompatibleModel(chooser);
 			} catch (ClassNotFoundException e) {
 				showErrorIncompatibleModel(chooser);				
+			} catch (XMLStreamException e) {
+				showErrorIncompatibleModel(chooser);				
 			}
 		}
 	}
@@ -903,13 +903,12 @@ public class JSMAAMainFrame extends JFrame {
 				new Object[] {leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode() }));
 	}
 
-	private void loadModel(File file) throws IOException, ClassNotFoundException {
-		XStream x = XmlConfigurator.getXstream();
-		ObjectInputStream s= x.createObjectInputStream(
-				new InputStreamReader(
-						new BufferedInputStream(new FileInputStream(file))));
-		SMAAModel loadedModel = (SMAAModel) s.readObject();
-		s.close();
+	private void loadModel(File file) throws IOException, ClassNotFoundException, XMLStreamException {		
+		InputStream fos = new FileInputStream(file);
+		XMLObjectReader reader = new XMLObjectReader().setInput(fos).setBinding(new JSMAABindingv1());
+		SMAAModel loadedModel = reader.read();
+		reader.close();
+		
 		this.model = loadedModel;
 		initWithModel(model);
 		setCurrentModelFile(file);
@@ -918,12 +917,11 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 
-	private void saveModel(SMAAModel model, File file) throws IOException {
-		XStream x = XmlConfigurator.getXstream();
-		ObjectOutputStream s = x.createObjectOutputStream(new PrintWriter(new BufferedOutputStream(new FileOutputStream(file))),
-				"JSMAA");
-		s.writeObject(model);
-		s.close();
+	private void saveModel(SMAAModel model, File file) throws IOException, XMLStreamException {
+		FileOutputStream fos = new FileOutputStream(file);
+		XMLObjectWriter writer = new XMLObjectWriter().setOutput(fos).setBinding(new JSMAABindingv1());
+		writer.write(model);
+		writer.close();
 		setModelUnsaved(false);
 	}
 
