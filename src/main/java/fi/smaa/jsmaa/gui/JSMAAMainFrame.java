@@ -113,6 +113,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.model.xml.JSMAABindingv1;
 import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
@@ -122,7 +123,6 @@ import fi.smaa.jsmaa.simulator.SMAASimulator;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 import fi.smaa.jsmaa.simulator.SimulationThread;
-import fi.smaa.jsmaa.xml.JSMAABindingv1;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame {
