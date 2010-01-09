@@ -101,10 +101,5 @@
 			<artifactId>jsmaa-lib</artifactId>
 			<version>0.6-SNAPSHOT</version>
 		</dependency>
-      <dependency>
-          <groupId>javolution</groupId>
-          <artifactId>javolution</artifactId>
-          <version>5.4.0</version>
-      </dependency> 
 	</dependencies>
 </project>

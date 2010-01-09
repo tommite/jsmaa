@@ -25,7 +25,6 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
@@ -164,7 +163,7 @@ public class LeftTreeModel implements TreeModel{
 				}
 			}
 		} else if (parent == criteriaNode) {
-			if (child instanceof AbstractCriterion) {
+			if (child instanceof Criterion) {
 				int index = new ArrayList(smaaModel.getCriteria()).indexOf(child);
 				if (index != -1) {
 					return index;
@@ -189,7 +188,7 @@ public class LeftTreeModel implements TreeModel{
 			if (smaaModel.getAlternatives().contains(node)) {
 				return true;
 			}
-		} else if (node instanceof AbstractCriterion) {
+		} else if (node instanceof Criterion) {
 			if (smaaModel.getCriteria().contains(node)) {
 				return true;
 			}
@@ -226,9 +225,9 @@ public class LeftTreeModel implements TreeModel{
 			if (!smaaModel.getAlternatives().contains(new Alternative((String)newValue))) {
 				((Alternative) obj).setName((String) newValue);
 			}
-		} else if (obj instanceof AbstractCriterion) {
+		} else if (obj instanceof Criterion) {
 			if (!smaaModel.getCriteria().contains(new ScaleCriterion((String)newValue))) {			
-				((AbstractCriterion) obj).setName((String) newValue);
+				((Criterion) obj).setName((String) newValue);
 			}
 		} else if (obj instanceof SMAAModel) {
 			((SMAAModel) obj).setName((String) newValue);

@@ -30,6 +30,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,8 +66,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import javolution.xml.XMLObjectReader;
-import javolution.xml.XMLObjectWriter;
 import javolution.xml.stream.XMLStreamException;
 
 import org.jfree.chart.ChartFactory;
@@ -101,7 +101,6 @@ import fi.smaa.jsmaa.gui.views.CriterionView;
 import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
 import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.TechnicalParameterView;
-import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
@@ -113,7 +112,8 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
-import fi.smaa.jsmaa.model.xml.JSMAABindingv1;
+import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
+import fi.smaa.jsmaa.model.xml.JSMAABinding;
 import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
@@ -421,7 +421,7 @@ public class JSMAAMainFrame extends JFrame {
 						Object obj = leftTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
 						leftTree.setSelectionRow(selRow);						
 						if (obj instanceof Alternative ||
-								obj instanceof AbstractCriterion ||
+								obj instanceof Criterion ||
 								obj instanceof SMAAModel) {
 							leftTreeDeleteItem.setEnabled(!(obj instanceof SMAAModel));
 							leftTreeEditPopupMenu.show((Component) evt.getSource(), 
@@ -654,7 +654,7 @@ public class JSMAAMainFrame extends JFrame {
 		Object selection = getLeftMenuSelection();
 		if (selection instanceof Alternative) {
 			confirmDeleteAlternative((Alternative) selection);
-		} else if (selection instanceof AbstractCriterion) {
+		} else if (selection instanceof Criterion) {
 			confirmDeleteCriterion((Criterion)selection);
 		}
 	}
@@ -874,20 +874,20 @@ public class JSMAAMainFrame extends JFrame {
 				JOptionPane.showMessageDialog(this,
 						"Error loading model: "+ e.getMessage(), 
 						"Load error", JOptionPane.ERROR_MESSAGE);
-			} catch (IOException e) {				
-				showErrorIncompatibleModel(chooser);
-			} catch (ClassNotFoundException e) {
-				showErrorIncompatibleModel(chooser);				
-			} catch (XMLStreamException e) {
-				showErrorIncompatibleModel(chooser);				
+			} catch (InvalidModelVersionException e) {				
+				showErrorIncompatibleModel(chooser, "file contains a an incompatible JSMAA model version " + e.getVersion()
+						+ ".\nOnly versions until " + SMAAModel.MODELVERSION 
+						+ " supported.\nTo open the file, upgrade to a newer version of JSMAA (www.smaa.fi)");
+			} catch (Exception e) {
+				showErrorIncompatibleModel(chooser, "file doesn't dontain a JSMAA model");				
 			}
 		}
 	}
 
-	private void showErrorIncompatibleModel(JFileChooser chooser) {
+	private void showErrorIncompatibleModel(JFileChooser chooser, String reason) {
 		JOptionPane.showMessageDialog(this, "Error loading model from " +
 				getCanonicalPath(chooser.getSelectedFile()) + 
-				", file doesn't contain a compatible JSMAA model.", "Load error", JOptionPane.ERROR_MESSAGE);
+				": " + reason + ".", "Load error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private String getCanonicalPath(File selectedFile) {
@@ -904,10 +904,9 @@ public class JSMAAMainFrame extends JFrame {
 	}
 
 	private void loadModel(File file) throws IOException, ClassNotFoundException, XMLStreamException {		
-		InputStream fos = new FileInputStream(file);
-		XMLObjectReader reader = new XMLObjectReader().setInput(fos).setBinding(new JSMAABindingv1());
-		SMAAModel loadedModel = reader.read();
-		reader.close();
+		InputStream fis = new FileInputStream(file);
+		SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
+		fis.close();
 		
 		this.model = loadedModel;
 		initWithModel(model);
@@ -916,12 +915,10 @@ public class JSMAAMainFrame extends JFrame {
 		updateFrameTitle();		
 	}
 
-
 	private void saveModel(SMAAModel model, File file) throws IOException, XMLStreamException {
 		FileOutputStream fos = new FileOutputStream(file);
-		XMLObjectWriter writer = new XMLObjectWriter().setOutput(fos).setBinding(new JSMAABindingv1());
-		writer.write(model);
-		writer.close();
+		JSMAABinding.writeModel(model, new BufferedOutputStream(fos));
+		fos.close();
 		setModelUnsaved(false);
 	}
 
@@ -1174,8 +1171,8 @@ public class JSMAAMainFrame extends JFrame {
 			} else if (node == leftTreeModel.getCriteriaNode()){
 				setRightViewToCriteria();
 				setEditMenuItemsEnabled(false);
-			} else if (node instanceof AbstractCriterion) {
-				setRightViewToCriterion((AbstractCriterion)node);
+			} else if (node instanceof Criterion) {
+				setRightViewToCriterion((Criterion)node);
 				setEditMenuItemsEnabled(true);
 			} else if (node instanceof Alternative) {
 				setEditMenuItemsEnabled(true);

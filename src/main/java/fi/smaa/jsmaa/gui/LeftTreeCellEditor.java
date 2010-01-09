@@ -27,7 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import fi.smaa.jsmaa.model.AbstractCriterion;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -66,7 +65,7 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 					showErrorAlternativeExists(newName);
 					tree.startEditingAtPath(lastPath);							
 				}
-			} else if (editObject instanceof AbstractCriterion) {
+			} else if (editObject instanceof Criterion) {
 				if (!isValidName(newName)) {
 					showErrorCriterionExists(newName);
 					tree.startEditingAtPath(lastPath);
@@ -98,7 +97,7 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 			for (Alternative a : model.getAlternatives()) {
 				oldNames.add(a.getName());
 			}
-		} else if (editObject instanceof AbstractCriterion) {
+		} else if (editObject instanceof Criterion) {
 			oldName = ((Criterion) editObject).getName();				
 			for (Criterion c : model.getCriteria()) {
 				oldNames.add(c.getName());
