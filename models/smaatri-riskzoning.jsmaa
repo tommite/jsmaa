@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SMAA-TRI-model optimisticRule="true" name="SMAA-TRI model of risk zoning (see Tervonen et al., EJOR 192, 2009)" modelVersion="1">
+	<alternatives>
+		<alternative id="0" name="Z1"/>
+		<alternative id="1" name="Z2"/>
+		<alternative id="2" name="Z3"/>
+		<alternative id="3" name="Z4"/>
+		<alternative id="4" name="Z5"/>
+		<alternative id="5" name="Z6"/>
+		<alternative id="6" name="Z7"/>
+		<alternative id="7" name="Z8"/>
+		<alternative id="8" name="Z9"/>
+		<alternative id="9" name="Z10"/>
+	</alternatives>
+	<criteria>
+		<criterion class="outrankingCriterion" id="10" name="g1.1">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.05"/>
+			<preferenceTH class="exact" value="0.1"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="11" name="g1.2">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.0"/>
+			<preferenceTH class="exact" value="0.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="12" name="g1.3">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.0"/>
+			<preferenceTH class="exact" value="0.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="13" name="g1.4">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.0"/>
+			<preferenceTH class="exact" value="0.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="14" name="g1.5">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.0"/>
+			<preferenceTH class="exact" value="0.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="15" name="g2.1">
+			<ascending value="false"/>
+			<indifferenceTH class="exact" value="10.0"/>
+			<preferenceTH class="exact" value="20.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="16" name="g2.2">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.1"/>
+			<preferenceTH class="exact" value="0.2"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="17" name="g2.3">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.05"/>
+			<preferenceTH class="exact" value="0.08999999999999999"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="18" name="g2.4">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.5"/>
+			<preferenceTH class="exact" value="1.0"/>
+		</criterion>
+		<criterion class="outrankingCriterion" id="19" name="g2.5.1">
+			<ascending value="true"/>
+			<indifferenceTH class="exact" value="0.0"/>
+			<preferenceTH class="exact" value="0.0"/>
+		</criterion>
+	</criteria>
+	<measurements>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="5.7999999999999998"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="4.7999999999999998"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="9.699999999999999"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="10.4"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="9.699999999999999"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="9.8"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="12.3"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="11.199999999999999"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="11.3"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="11.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="40.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="40.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="35.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="70.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="200.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="203.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="222.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="50.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="155.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="180.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="115.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="170.0"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="2.37"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.28"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.6699999999999999"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.6799999999999999"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.2"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.27"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="0.95999999999999996"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="0.70999999999999996"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="2.18"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="0.31"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="6.7999999999999998"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="1.83"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.83999999999999997"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.82999999999999996"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.54"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="2.54"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.60999999999999999"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.39"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="1.8899999999999999"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.17999999999999999"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="3.6"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="0.2"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="7.4"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="9.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="1.8"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="6.7"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="14.1"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="6.4"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="2.5"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="2.6"/>
+			<alternative ref="9"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="4"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="5"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="6"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="7"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="8"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="9"/>
+		</measurement>
+	</measurements>
+	<preferences class="cardinalPreferences" id="20">
+		<preference>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="interval" start="0.07" end="0.15"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="interval" start="0.07" end="0.15"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="interval" start="0.33" end="0.54"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="interval" start="0.0" end="0.04"/>
+		</preference>
+		<preference>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="interval" start="0.15" end="0.28"/>
+		</preference>
+	</preferences>
+	<lambda start="0.65" end="0.85"/>
+	<categories>
+		<alternative id="21" name="Class 4"/>
+		<alternative id="22" name="Class 3"/>
+		<alternative id="23" name="Class 2"/>
+		<alternative id="24" name="Class 1"/>
+	</categories>
+	<upperBounds>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="8.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="10"/>
+			<value class="exact" value="14.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="0.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="11"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="12"/>
+			<value class="exact" value="40.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="13"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="10.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="14"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="190.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="150.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="15"/>
+			<value class="exact" value="110.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.3999999999999999"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="16"/>
+			<value class="exact" value="1.8"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.63"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="0.8199999999999999"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="17"/>
+			<value class="exact" value="1.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="6.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="18"/>
+			<value class="exact" value="35.0"/>
+			<alternative ref="23"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="21"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="20.0"/>
+			<alternative ref="22"/>
+		</measurement>
+		<measurement>
+			<criterion class="outrankingCriterion" ref="19"/>
+			<value class="exact" value="30.0"/>
+			<alternative ref="23"/>
+		</measurement>
+	</upperBounds>
+</SMAA-TRI-model>
