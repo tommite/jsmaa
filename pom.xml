@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fi.smaa</groupId>
 	<artifactId>jsmaa</artifactId>
-	<version>0.6-SNAPSHOT</version>
+	<version>0.6</version>
 
 	<repositories>	
 		<repository>
