@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 
 import fi.smaa.common.gui.GUIHelper;
+import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 
@@ -57,7 +58,7 @@ public class JSMAAMain {
 					"Model not saved. Do you want do save changes before quitting JSMAA?",
 					"Save changed",					
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-					app.getIcon(FileNames.ICON_STOP));
+					ImageLoader.getIcon(FileNames.ICON_STOP));
 			if (conf == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (conf == JOptionPane.YES_OPTION) {

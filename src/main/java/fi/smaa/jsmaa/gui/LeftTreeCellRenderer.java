@@ -19,7 +19,6 @@
 package fi.smaa.jsmaa.gui;
 
 import java.awt.Component;
-import java.io.FileNotFoundException;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -36,50 +35,44 @@ import fi.smaa.jsmaa.model.ScaleCriterion;
 public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private static final long serialVersionUID = -6982388941837275497L;
-	private ImageLoader loader;
 	private LeftTreeModel model;
 	
-	public LeftTreeCellRenderer(LeftTreeModel model, ImageLoader loader) {
-		this.loader = loader;
+	public LeftTreeCellRenderer(LeftTreeModel model) {
 		this.model = model;
 	}
 	
 	public Component getTreeCellRendererComponent(JTree tree, Object value,	boolean sel,
 			boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		try {
-			if (leaf && value instanceof Alternative) {
-				setIcon(loader.getIcon(FileNames.ICON_ALTERNATIVE));
-				setToolTipText("Alternative");
-			} else if (leaf && value instanceof Criterion) {
-				if (value instanceof ScaleCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_CARDINALCRITERION));
-					setToolTipText("Cardinal criterion");
-				} else if (value instanceof OutrankingCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
-					setToolTipText("Outranking criterion");					
-				} else if (value instanceof OrdinalCriterion) {
-					setIcon(loader.getIcon(FileNames.ICON_ORDINALCRITERION));
-					setToolTipText("Ordinal criterion");						
-				}
-			} else if (value == model.getCentralWeightsNode()) {
-				setIcon(loader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
-				setToolTipText("Central weights");									
-			} else if (value == model.getRankAcceptabilitiesNode()) {
-				setIcon(loader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
-				setToolTipText("Rank acceptability indices");									
-			} else if (value == model.getPreferencesNode()) {
-				setIcon(loader.getIcon(FileNames.ICON_PREFERENCES));
-				setToolTipText("Preference information");
-			} else if (model instanceof LeftTreeModelSMAATRI &&
-					((LeftTreeModelSMAATRI) model).getCatAccNode() == value) {
-				setIcon(loader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
-				setToolTipText("Category acceptability indices");													
-			} else {
-				setToolTipText(null); //no tool tip
+		if (leaf && value instanceof Alternative) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_ALTERNATIVE));
+			setToolTipText("Alternative");
+		} else if (leaf && value instanceof Criterion) {
+			if (value instanceof ScaleCriterion) {
+				setIcon(ImageLoader.getIcon(FileNames.ICON_CARDINALCRITERION));
+				setToolTipText("Cardinal criterion");
+			} else if (value instanceof OutrankingCriterion) {
+				setIcon(ImageLoader.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
+				setToolTipText("Outranking criterion");					
+			} else if (value instanceof OrdinalCriterion) {
+				setIcon(ImageLoader.getIcon(FileNames.ICON_ORDINALCRITERION));
+				setToolTipText("Ordinal criterion");						
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} else if (value == model.getCentralWeightsNode()) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
+			setToolTipText("Central weights");									
+		} else if (value == model.getRankAcceptabilitiesNode()) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setToolTipText("Rank acceptability indices");									
+		} else if (value == model.getPreferencesNode()) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_PREFERENCES));
+			setToolTipText("Preference information");
+		} else if (model instanceof LeftTreeModelSMAATRI &&
+				((LeftTreeModelSMAATRI) model).getCatAccNode() == value) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setToolTipText("Category acceptability indices");													
+		} else {
+			setToolTipText(null); //no tool tip
 		}
 		return this;
 	}

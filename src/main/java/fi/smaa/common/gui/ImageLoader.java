@@ -19,7 +19,6 @@
 package fi.smaa.common.gui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,21 +27,16 @@ import javax.swing.ImageIcon;
 
 public class ImageLoader {
 	
-	private Map<String, Icon> icons;
-	private String imagePath;
+	private static Map<String, Icon> icons = new HashMap<String, Icon>();
+	private static String imagePath;
 	
-	public ImageLoader(String imagePath) {
-		this.imagePath = imagePath + File.separator;
-		icons = new HashMap<String, Icon>();
-	}
-	
-	public Icon getIcon(String name) throws FileNotFoundException {
+	public static Icon getIcon(String name) {
 		if (icons.containsKey(name)) {
 			return icons.get(name);
 		} else {
-		    java.net.URL imgURL = getClass().getResource(deriveGfxPath(name));
+		    java.net.URL imgURL = ImageLoader.class.getResource(deriveGfxPath(name));
 		    if (imgURL == null) {
-		    	throw new FileNotFoundException("File not found for icon " + deriveGfxPath(name));
+		    	return null;
 		    }
 		    ImageIcon icon = new ImageIcon(imgURL);
 	        icons.put(name, icon);
@@ -50,7 +44,11 @@ public class ImageLoader {
 		}
 	}
 
-	private String deriveGfxPath(String name) {
+	private static String deriveGfxPath(String name) {
 		return imagePath + name;
+	}
+
+	public static void setImagePath(String path) {
+		imagePath = path + File.separator;
 	}
 }

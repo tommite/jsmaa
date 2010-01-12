@@ -18,9 +18,8 @@
 
 package fi.smaa.common.gui.test;
 
-import static org.junit.Assert.*;
-
-import java.io.FileNotFoundException;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,20 +29,18 @@ import fi.smaa.jsmaa.gui.FileNames;
 
 public class ImageLoaderTest {
 	
-	private ImageLoader loader;
-
 	@Before
 	public void setUp() {
-		loader = new ImageLoader("/fi/smaa/jsmaa/gui");
+		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui");
 	}
 	
 	@Test
 	public void testGetIcon() throws Exception {
-		assertNotNull(loader.getIcon(FileNames.ICON_ALTERNATIVE));
+		assertNotNull(ImageLoader.getIcon(FileNames.ICON_ALTERNATIVE));
 	}
 	
-	@Test(expected=FileNotFoundException.class)
+	@Test
 	public void testGetIconNotExisting() throws Exception {
-		loader.getIcon("gadgadghadhgadhgad.gif");
+		assertNull(ImageLoader.getIcon("gadgadghadhgadhgad.gif"));
 	}
 }
