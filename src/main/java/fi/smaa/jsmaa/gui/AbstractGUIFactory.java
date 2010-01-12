@@ -42,6 +42,8 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
+
+@SuppressWarnings("serial")
 public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAAModel> implements GUIFactory{
 
 	protected T treeModel;
@@ -54,9 +56,9 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected JMenuBar menuBar;
 	protected JTree tree;
 	protected Component parent = null;
-	protected GUIDirector director;
+	protected MenuDirector director;
 	
-	protected AbstractGUIFactory(M smaaModel, GUIDirector director) {
+	protected AbstractGUIFactory(M smaaModel, MenuDirector director) {
 		this.smaaModel = smaaModel;
 		this.treeModel = buildTreeModel();		
 		this.director = director;
@@ -124,6 +126,13 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 					return new JPanel();
 				}
 			};
+		} else if (o == treeModel.getModelNode()) {
+			return new ViewBuilder() {
+				@Override
+				public JComponent buildPanel() {
+					return new JPanel();
+				}
+			};			
 		} else {
 			throw new IllegalArgumentException("no view known for object "+ o);
 		}	

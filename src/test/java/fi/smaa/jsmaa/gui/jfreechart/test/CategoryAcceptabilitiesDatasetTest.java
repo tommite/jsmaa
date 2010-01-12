@@ -165,5 +165,15 @@ public class CategoryAcceptabilitiesDatasetTest {
 		c1.setName("new cat");
 		verify(mock);
 	}
+	
+	@Test
+	public void testSetResults() {
+		DatasetChangeListener mock = createMock(DatasetChangeListener.class);
+		mock.datasetChanged((DatasetChangeEvent) JUnitUtil.eqEventObject(new DatasetChangeEvent(data, data)));
+		data.addChangeListener(mock);
+		replay(mock);
+		data.setResults(new SMAATRIResults(alts, cats, 2));
+		verify(mock);		
+	}
 
 }

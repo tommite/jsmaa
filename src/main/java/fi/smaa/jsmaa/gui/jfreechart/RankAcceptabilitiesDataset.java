@@ -28,7 +28,7 @@ import fi.smaa.jsmaa.simulator.SMAA2Results;
 @SuppressWarnings("unchecked")
 public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAA2Results> {
 	
-	private List<Rank> ranks = new ArrayList<Rank>();
+	private List<Rank> ranks;
 	
 	public static class Rank implements Comparable<Rank>{
 		private int index;
@@ -55,9 +55,15 @@ public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset
 
 	public RankAcceptabilitiesDataset(SMAA2Results results) {
 		super(results);
+	}
+	
+	@Override
+	public void setResults(SMAA2Results results) {
+		ranks = new ArrayList<Rank>();
 		for (int i=0;i<results.getAlternatives().size();i++) {
 			ranks.add(new Rank(i));
 		}
+		super.setResults(results);
 	}
 
 	public int getRowIndex(Comparable rank) {

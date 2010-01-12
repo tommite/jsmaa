@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui.presentation.test;
 
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
-import static org.easymock.EasyMock.*;
-
 public class CategoryAcceptabilityTableModelTest {
 	
 	private SMAATRIResults res;
@@ -25,15 +24,17 @@ public class CategoryAcceptabilityTableModelTest {
 	private Alternative a1;
 	private Alternative a2;
 	private Alternative cat1;
+	private List<Alternative> alts;
+	private List<Alternative> cats;
 	
 	@Before
 	public void setUp() {
-		List<Alternative> alts = new ArrayList<Alternative>();
+		alts = new ArrayList<Alternative>();
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");		
 		alts.add(a1);
 		alts.add(a2);
-		List<Alternative> cats = new ArrayList<Alternative>();
+		cats = new ArrayList<Alternative>();
 		cat1 = new Alternative("c1");
 		cats.add(cat1);
 		cats.add(new Alternative("c2"));
@@ -113,5 +114,13 @@ public class CategoryAcceptabilityTableModelTest {
 		cat1.setName("new cat");
 		verify(mock);
 	}	
+	
+	@Test
+	public void testSetResults() {
+		TableModelListener mock = JUnitUtil.mockTableModelListener(new TableModelEvent(model));
+		model.addTableModelListener(mock);
+		model.setResults(new SMAATRIResults(alts, cats, 1));
+		verify(mock);
+	}
 
 }

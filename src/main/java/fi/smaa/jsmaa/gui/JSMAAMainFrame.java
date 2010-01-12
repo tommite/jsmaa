@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,13 +46,10 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-
-import javolution.xml.stream.XMLStreamException;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
+import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.NamedObject;
@@ -73,80 +69,64 @@ import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 import fi.smaa.jsmaa.simulator.SimulationThread;
 
 @SuppressWarnings("serial")
-public class JSMAAMainFrame extends JFrame implements GUIDirector {
+public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	
 	public static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	public static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	
-	private SMAAModel model;
 	private SMAAResults results;
 	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private JScrollPane rightPane;
 	private JProgressBar simulationProgress;
-	private File currentModelFile;
-	private ValueHolder modelSavedHolder = new ValueHolder(false);
 	private SMAAModelListener modelListener = new MySMAAModelListener();
 	private Queue<BuildSimulatorRun> buildQueue = new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
 	private GUIFactory guiFactory;
 	private JToolBar bottomToolBar;
+	public ModelFileManager modelManager;
+	
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
-		this.model = model;
-		startGui();
-		modelSavedHolder.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent ev) {
-				updateFrameTitle();
-			}
-		});
-	}
-	
-	public Boolean getModelUnsaved() {
-		return !((Boolean)modelSavedHolder.getValue());
-	}
-
-	private void startGui() {
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
 		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui");		
 		setPreferredSize(new Dimension(1000, 800));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		initWithModel(model);			
+		
+		modelManager = new ModelFileManager();
+		modelManager.addPropertyChangeListener(ModelFileManager.PROPERTY_TITLE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent ev) {
+				setTitle((String)ev.getNewValue());
+			}			
+		});
+		modelManager.addPropertyChangeListener(ModelFileManager.PROPERTY_MODEL, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				initWithModel((SMAAModel) evt.getNewValue());
+			}			
+		});
+		modelManager.setModel(model);
 	}
 	
 	public void initWithModel(SMAAModel model) {
-		this.model = model;
 		model.addModelListener(modelListener);
-		model.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				modelSavedHolder.setValue(false);
-			}
-		});
 		if (model instanceof SMAATRIModel) {
-			guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, null, this);
+			guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, this);
 		} else {
-			guiFactory = new SMAA2GUIFactory(model, null, this);			
+			guiFactory = new SMAA2GUIFactory(model, this);			
 		}
 		rebuildGUI();
-		modelSavedHolder.setValue(true);				
 		buildNewSimulator();
 		Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getCriteriaNode());
 		expandLeftMenu();
 	}	
 	
 	private void expandLeftMenu() {
-		// FIXME
-		/*
-		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getAlternativesNode()}));
-		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getCriteriaNode()}));
-		leftTree.expandPath(new TreePath(new Object[]{leftTreeModel.getRoot(), leftTreeModel.getResultsNode()}));
-		if (leftTreeModel instanceof LeftTreeModelSMAATRI) {
-			LeftTreeModelSMAATRI sltModel = (LeftTreeModelSMAATRI) leftTreeModel;
-			leftTree.expandPath(new TreePath(new Object[]{sltModel.getRoot(), sltModel.getCategoriesNode()}));			
+		for (int i=0;i<guiFactory.getTree().getRowCount();i++) {
+			guiFactory.getTree().expandRow(i);
 		}
-		*/
 	}	
 		
 	private void rebuildGUI() {
@@ -173,27 +153,14 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		simulationProgress.setStringPainted(true);		
 		bottomToolBar.add(simulationProgress);
 		bottomToolBar.setFloatable(false);
-		if (model instanceof SMAATRIModel) {
-			bottomToolBar.add(new LambdaPanel((SMAATRIModel) model));
+		if (modelManager.getModel() instanceof SMAATRIModel) {
+			bottomToolBar.add(new LambdaPanel((SMAATRIModel) modelManager.getModel()));
 		}
 		getContentPane().add("South", bottomToolBar);
 		setJMenuBar(guiFactory.getMenuBar());
 		
 		guiFactory.getTree().addTreeSelectionListener(new LeftTreeSelectionListener());
 		pack();
-	}
-
-	private void updateFrameTitle() {
-		String file = "Unsaved model";
-		
-		if (currentModelFile != null) {
-			try {
-				file = currentModelFile.getCanonicalPath();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		setTitle("JSMAA v" + AppInfo.getAppVersion() + " - " + file + (getModelUnsaved() ? "*" : ""));
 	}
 
 	private void rebuildRightPanel() {
@@ -210,12 +177,24 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
-		setCurrentModelFile(null);		
-		initWithModel(newModel);
+		modelManager.setModel(newModel);
 	}
 
+	public boolean saveAs() {
+		JFileChooser chooser = getFileChooser();
+		int retVal = chooser.showSaveDialog(this);
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			File file = checkFileExtension(chooser.getSelectedFile());
+			trySaveModel(file);
+			modelManager.setModelFile(file);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private boolean checkSaveCurrentModel() {
-		if (getModelUnsaved()) {
+		if (!modelManager.getSaved()) {
 			int conf = JOptionPane.showConfirmDialog(this, 
 					"Current model not saved. Do you want do save changes?",
 					"Save changed",
@@ -231,30 +210,14 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		}
 		return true;
 	}
-
-	public boolean saveAs() {
-		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showSaveDialog(this);
-		if (retVal == JFileChooser.APPROVE_OPTION) {
-			File file = checkFileExtension(chooser.getSelectedFile());
-			trySaveModel(file);
-			setCurrentModelFile(file);
-			updateFrameTitle();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
-	private void setCurrentModelFile(File file) {
-		currentModelFile = file;
-	}
-
+		
 
 	private boolean trySaveModel(File file) {
 		try {
-			saveModel(model, file);
+			FileOutputStream fos = new FileOutputStream(file);
+			JSMAABinding.writeModel(modelManager.getModel(), new BufferedOutputStream(fos));
+			fos.close();
+			modelManager.setSaved(true);
 			return true;
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Error saving model to " + getCanonicalPath(file) + 
@@ -264,10 +227,10 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 	}
 
 	public boolean save() {
-		if (currentModelFile == null) {
+		if (modelManager.getModelFile() == null) {
 			return saveAs();
 		} else {
-			return trySaveModel(currentModelFile);
+			return trySaveModel(modelManager.getModelFile());
 		}
 	}
 	
@@ -279,7 +242,13 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		int retVal = chooser.showOpenDialog(this);
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				loadModel(chooser.getSelectedFile());
+				File file = chooser.getSelectedFile();
+				InputStream fis = new FileInputStream(file);
+				SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
+				fis.close();
+
+				modelManager.setModel(loadedModel);
+				modelManager.setModelFile(file);
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(this,
 						"Error loading model: "+ e.getMessage(), 
@@ -289,6 +258,7 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 						+ ".\nOnly versions until " + SMAAModel.MODELVERSION 
 						+ " supported.\nTo open the file, upgrade to a newer version of JSMAA (www.smaa.fi)");
 			} catch (Exception e) {
+				e.printStackTrace();
 				showErrorIncompatibleModel(chooser, "file doesn't dontain a JSMAA model");				
 			}
 		}
@@ -306,23 +276,6 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		} catch (Exception e) {
 			return selectedFile.toString();
 		}
-	}
-
-	private void loadModel(File file) throws IOException, ClassNotFoundException, XMLStreamException {		
-		InputStream fis = new FileInputStream(file);
-		SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
-		fis.close();
-		
-		this.model = loadedModel;
-		setCurrentModelFile(file);		
-		initWithModel(model);
-	}
-
-	private void saveModel(SMAAModel model, File file) throws IOException, XMLStreamException {
-		FileOutputStream fos = new FileOutputStream(file);
-		JSMAABinding.writeModel(model, new BufferedOutputStream(fos));
-		fos.close();
-		modelSavedHolder.setValue(true);
 	}
 
 	private File checkFileExtension(File file) {
@@ -354,9 +307,7 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 	}
 	
 	private class MySMAAModelListener implements SMAAModelListener {
-		
 		public void modelChanged(ModelChangeEvent ev) {
-			modelSavedHolder.setValue(false);
 			buildNewSimulator();
 			switch (ev.getType()) {
 			case ModelChangeEvent.MEASUREMENT:
@@ -393,12 +344,12 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 			if (simulator != null) {
 				simulator.stop();
 			}
-			SMAAModel newModel = model.deepCopy();
+			SMAAModel newModel = modelManager.getModel().deepCopy();
 			
-			connectNameAdapters(model.getAlternatives(), newModel.getAlternatives());
-			connectNameAdapters(model.getCriteria(), newModel.getCriteria());
+			connectNameAdapters(modelManager.getModel().getAlternatives(), newModel.getAlternatives());
+			connectNameAdapters(modelManager.getModel().getCriteria(), newModel.getCriteria());
 			if (newModel instanceof SMAATRIModel) {
-				connectNameAdapters(((SMAATRIModel) model).getCategories(), 
+				connectNameAdapters(((SMAATRIModel) modelManager.getModel()).getCategories(), 
 						((SMAATRIModel) newModel).getCategories());
 			}
 			
@@ -411,10 +362,11 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 			simulator = new SMAASimulator(newModel, thread);
 			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
-			if (model instanceof SMAATRIModel) {
-				guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, (SMAATRIResults) results, getDirector());
+
+			if (modelManager.getModel() instanceof SMAATRIModel) {
+				((SMAATRIGUIFactory)guiFactory).setResults((SMAATRIResults) results);
 			} else {
-				guiFactory = new SMAA2GUIFactory(model, (SMAA2Results) results, getDirector());			
+				((SMAA2GUIFactory)guiFactory).setResults((SMAA2Results) results);				
 			}
 			
 			simulationProgress.setValue(0);
@@ -423,7 +375,7 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		}
 	}
 	
-	public GUIDirector getDirector() {
+	public MenuDirector getMenuDirector() {
 		return this;
 	}
 	
@@ -445,7 +397,7 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 		}
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)){ 
-				modelSavedHolder.setValue(false);
+				modelManager.setSaved(false);
 				toUpdate.setName((String) evt.getNewValue());
 			}
 		}
@@ -471,9 +423,4 @@ public class JSMAAMainFrame extends JFrame implements GUIDirector {
 			}
 		}
 	}
-
-	@Override
-	public ValueModel getModelSavedModel() {
-		return modelSavedHolder;
-	} 
 }

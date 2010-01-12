@@ -19,12 +19,17 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 	protected NameListener listener = new NameListener(); 
 
 	public SMAAResultsTableModel(T results) {
+		setResults(results);
+	}
+
+	synchronized public void setResults(T results) {
 		this.results = results;
 		results.addResultsListener(new ResultsListener());
 		
 		for (Alternative a : results.getAlternatives()) {
 			a.addPropertyChangeListener(listener);
 		}
+		fireTableStructureChanged();
 	}
 	
 	private class ResultsListener implements SMAAResultsListener {

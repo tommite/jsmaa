@@ -2,6 +2,7 @@ package fi.smaa.jsmaa.gui;
 
 import java.awt.event.ActionEvent;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -14,7 +15,6 @@ import javax.swing.JToolBar;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
@@ -32,13 +32,23 @@ import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
+@SuppressWarnings("serial")
 public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, SMAATRIModel> {
 
-	private SMAATRIResults results;
+	private CategoryAcceptabilityTableModel categoryAcceptabilityTM;
+	private CategoryAcceptabilitiesDataset categoryAcceptabilityDataset;
 
-	public SMAATRIGUIFactory(SMAATRIModel smaaModel, SMAATRIResults results, GUIDirector director) {
+	@SuppressWarnings("unchecked")
+	public SMAATRIGUIFactory(SMAATRIModel smaaModel, MenuDirector director) {
 		super(smaaModel, director);
-		this.results = results;
+		SMAATRIResults emptyResults = new SMAATRIResults(Collections.EMPTY_LIST, Collections.EMPTY_LIST, 1);
+		categoryAcceptabilityTM = new CategoryAcceptabilityTableModel(emptyResults);
+		categoryAcceptabilityDataset = new CategoryAcceptabilitiesDataset(emptyResults);		
+	}
+	
+	synchronized public void setResults(SMAATRIResults results) {
+		categoryAcceptabilityTM.setResults(results);
+		categoryAcceptabilityDataset.setResults(results);
 	}
 	
 	protected LeftTreeModelSMAATRI buildTreeModel() {
@@ -65,12 +75,11 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 		if (o == treeModel.getModelNode()) {
 			return new TechnicalParameterView(smaaModel);	
 		} else if (o == treeModel.getCatAccNode()) {
-			CategoryDataset dataset = new CategoryAcceptabilitiesDataset(results);
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
 			        "", "Alternative", "Category Acceptability",
-			        dataset, PlotOrientation.VERTICAL, true, true, false);
+			        categoryAcceptabilityDataset, PlotOrientation.VERTICAL, true, true, false);
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-			ResultsTable table = new ResultsTable(new CategoryAcceptabilityTableModel(results));		
+			ResultsTable table = new ResultsTable(categoryAcceptabilityTM);		
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 			return new ResultsView("Category acceptability indices", table, chart);
 		} else if (o == treeModel.getCategoriesNode()) {

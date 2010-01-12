@@ -44,14 +44,19 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 
 	protected SMAADataSet(R results) {
 		super();
+		setResults(results);
+	}
+
+	public void setResults(R results) {
 		this.results = results;
 		results.addResultsListener(this);
 		for (Alternative a : results.getAlternatives()) {
 			a.addPropertyChangeListener(nameListener);
 		}
+		fireResultsChanged();
 	}
-
-	public void addChangeListener(DatasetChangeListener l) {
+	
+	synchronized public void addChangeListener(DatasetChangeListener l) {
 		dataListeners.add(l);
 	}
 
@@ -59,7 +64,7 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		return group;
 	}
 
-	public void removeChangeListener(DatasetChangeListener l) {
+	synchronized public void removeChangeListener(DatasetChangeListener l) {
 		dataListeners.remove(l);
 	}
 
@@ -71,7 +76,7 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		fireResultsChanged();
 	}
 
-	private void fireResultsChanged() {
+	synchronized private void fireResultsChanged() {
 		for (DatasetChangeListener l : dataListeners) {
 			l.datasetChanged(new DatasetChangeEvent(this, this));
 		}

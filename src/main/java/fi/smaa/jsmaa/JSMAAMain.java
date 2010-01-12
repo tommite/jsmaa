@@ -53,7 +53,7 @@ public class JSMAAMain {
 	}
 	
 	private void quitApplication() {
-		if (app.getModelUnsaved()) {
+		if (!app.modelManager.getSaved()) {
 			int conf = JOptionPane.showConfirmDialog(app, 
 					"Model not saved. Do you want do save changes before quitting JSMAA?",
 					"Save changed",					

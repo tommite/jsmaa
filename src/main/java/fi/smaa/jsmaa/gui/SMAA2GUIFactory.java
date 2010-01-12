@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -16,7 +17,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
@@ -33,13 +33,31 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
+
+@SuppressWarnings("serial")
 public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel> {
 	
-	private SMAA2Results results;
+	private CentralWeightsDataset centralWeightsDataset;
+	private CentralWeightTableModel centralWeightsTM;
+	private RankAcceptabilitiesDataset rankAcceptabilitiesDataset;
+	private RankAcceptabilityTableModel rankAcceptabilitiesTM;
 
-	protected SMAA2GUIFactory(SMAAModel smaaModel, SMAA2Results smaaResults, GUIDirector director) {
+	@SuppressWarnings("unchecked")
+	protected SMAA2GUIFactory(SMAAModel smaaModel, MenuDirector director) {
 		super(smaaModel, director);
-		this.results = smaaResults;
+		SMAA2Results emptyResults = new SMAA2Results(Collections.EMPTY_LIST, Collections.EMPTY_LIST, 1);
+		centralWeightsDataset = new CentralWeightsDataset(emptyResults);
+		centralWeightsTM = new CentralWeightTableModel(emptyResults);	
+		rankAcceptabilitiesDataset = new RankAcceptabilitiesDataset(emptyResults);	
+		rankAcceptabilitiesTM = new RankAcceptabilityTableModel(emptyResults);		
+		
+	}
+	
+	synchronized public void setResults(SMAA2Results results) {
+		centralWeightsDataset.setResults(results);
+		centralWeightsTM.setResults(results);	
+		rankAcceptabilitiesDataset.setResults(results);	
+		rankAcceptabilitiesTM.setResults(results);		
 	}
 	
 	protected LeftTreeModel buildTreeModel() {
@@ -49,23 +67,20 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	@Override
 	public ViewBuilder buildView(Object o) {
 		if (o == treeModel.getCentralWeightsNode()) {
-			CategoryDataset dataset = new CentralWeightsDataset(results);
 			final JFreeChart chart = ChartFactory.createLineChart(
 			        "", "Criterion", "Central Weight",
-			        dataset, PlotOrientation.VERTICAL, true, true, false);
+			        centralWeightsDataset, PlotOrientation.VERTICAL, true, true, false);
 			LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
 			chart.getCategoryPlot().setRenderer(renderer);
-			
-			ResultsTable table = new ResultsTable(new CentralWeightTableModel(results));
+			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
 			return new ResultsView("Central weight vectors", table, chart);
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
-			CategoryDataset dataset = new RankAcceptabilitiesDataset(results);
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
 			        "", "Alternative", "Rank Acceptability",
-			        dataset, PlotOrientation.VERTICAL, true, true, false);
+			        rankAcceptabilitiesDataset, PlotOrientation.VERTICAL, true, true, false);
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-			ResultsTable table = new ResultsTable(new RankAcceptabilityTableModel(results));
+			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 			return new ResultsView("Rank acceptability indices", table, chart);
 		} else {

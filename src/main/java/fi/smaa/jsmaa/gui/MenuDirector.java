@@ -1,10 +1,8 @@
 package fi.smaa.jsmaa.gui;
 
-import com.jgoodies.binding.value.ValueModel;
-
 import fi.smaa.jsmaa.model.SMAAModel;
 
-public interface GUIDirector {
+public interface MenuDirector {
 	public void open();
 	/**
 	 * Saves the current model.
@@ -18,5 +16,4 @@ public interface GUIDirector {
 	public boolean saveAs();
 	public void quit();
 	public void newModel(SMAAModel model);
-	public ValueModel getModelSavedModel();
 }

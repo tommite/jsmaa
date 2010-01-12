@@ -8,7 +8,7 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 
 /**
- * Abstract factory for getting (right pane) views for objects.
+ * Abstract factory for getting (right pane) views for objects, and other GUI components.
  * 
  * @author Tommi Tervonen
  */
