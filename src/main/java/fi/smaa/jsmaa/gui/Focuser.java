@@ -23,7 +23,7 @@ public class Focuser {
 			}
 		}
 		tree.setSelectionPath(tp);		
-		expandTree(tree);		
+		expandTree(tree);
 	}
 
 	private static void expandTree(JTree tree) {

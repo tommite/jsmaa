@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
@@ -34,6 +35,7 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
 import fi.smaa.jsmaa.gui.views.AlternativeView;
@@ -59,8 +61,10 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected JTree tree;
 	protected Component parent = null;
 	protected MenuDirector director;
+	protected ModelFileManagerPM fileManagerPM;
 	
 	protected AbstractGUIFactory(M smaaModel, MenuDirector director) {
+		fileManagerPM = new ModelFileManagerPM(director.getFileManager());		
 		this.smaaModel = smaaModel;
 		this.treeModel = buildTreeModel();		
 		this.director = director;
@@ -89,7 +93,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 			}
 		});
 		bar.add(topBarSaveButton);
-		//Bindings.bind(topBarSaveButton, "enabled", new PresentationModel<JSMAAMainFrame>(this).getModel(PROPERTY_MODELUNSAVED));		
+		Bindings.bind(topBarSaveButton, "enabled", fileManagerPM.getUnsavedModel());
 		bar.addSeparator();
 
 		JButton addButton = new JButton(ImageLoader.getIcon(FileNames.ICON_ADDALTERNATIVE));
@@ -379,7 +383,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		saveItem.setMnemonic('s');
 		saveItem.setIcon(ImageLoader.getIcon(FileNames.ICON_SAVEFILE));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-		//Bindings.bind(saveItem, "enabled", new PresentationModel<JSMAAMainFrame>(main).getModel(JSMAAMainFrame.PROPERTY_MODELUNSAVED));
+		Bindings.bind(saveItem, "enabled", fileManagerPM.getUnsavedModel());
 		JMenuItem saveAsItem = new JMenuItem("Save As");
 		saveAsItem.setMnemonic('a');
 		saveAsItem.setIcon(ImageLoader.getIcon(FileNames.ICON_SAVEAS));

@@ -420,4 +420,9 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			}
 		}
 	}
+
+	@Override
+	public ModelFileManager getFileManager() {
+		return modelManager;
+	}
 }
