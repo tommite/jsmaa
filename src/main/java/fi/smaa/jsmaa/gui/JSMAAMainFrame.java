@@ -68,12 +68,6 @@ import javax.swing.tree.TreePath;
 
 import javolution.xml.stream.XMLStreamException;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
@@ -84,23 +78,8 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
-import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
-import fi.smaa.jsmaa.gui.components.ResultsTable;
-import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
-import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
-import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
-import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
-import fi.smaa.jsmaa.gui.presentation.CentralWeightTableModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
-import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
-import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
-import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
-import fi.smaa.jsmaa.gui.views.CriteriaListView;
-import fi.smaa.jsmaa.gui.views.CriterionView;
-import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
-import fi.smaa.jsmaa.gui.views.ResultsView;
-import fi.smaa.jsmaa.gui.views.TechnicalParameterView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
@@ -151,6 +130,7 @@ public class JSMAAMainFrame extends JFrame {
 	private JToolBar toolBar;
 	private JToolBar topToolBar;
 	private JButton addCatButton;
+	private ViewFactory viewFactory;
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
@@ -174,7 +154,7 @@ public class JSMAAMainFrame extends JFrame {
 	
 	public void initWithModel(SMAAModel model) {
 		this.model = model;
-		initLeftPanel();		
+		initLeftPanel();
 		model.addModelListener(modelListener);
 		model.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -183,8 +163,10 @@ public class JSMAAMainFrame extends JFrame {
 		});
 		if (model instanceof SMAATRIModel) {
 			setJMenuBar(createSMAATRIMenuBar());
+			viewFactory = new SMAATRIViewFactory((LeftTreeModelSMAATRI) leftTreeModel, (SMAATRIModel) model, null);
 		} else {
 			setJMenuBar(createSMAA2MenuBar());
+			viewFactory = new SMAA2ViewFactory(leftTreeModel, model, null);			
 		}
 		rebuildBottomToolbar();
 		rebuildTopToolbar();
@@ -193,33 +175,7 @@ public class JSMAAMainFrame extends JFrame {
 		leftTreeFocusCriteria();
 		expandLeftMenu();
 	}	
-	
-	public void setRightViewToCriteria() {
-		rightViewBuilder = new CriteriaListView(model);
-		rebuildRightPanel();
-	}
-	
-	public void setRightViewToAlternatives() {
-		rightViewBuilder = new AlternativeInfoView(model.getAlternatives(), "Alternatives");
-		rebuildRightPanel();
-	}
-
-	public void setRightViewToCategories() {
-		rightViewBuilder = new AlternativeInfoView(((SMAATRIModel) model).getCategories(), "Categories (in ascending order, top = worst)");
-		rebuildRightPanel();
-	}	
-	
-	public void setRightViewToCriterion(Criterion node) {
-		rightViewBuilder = new CriterionView(node, model);
-		rebuildRightPanel();
-	}	
-	
-	public void setRightViewToPreferences() {
-		rightViewBuilder = new PreferenceInformationView(
-				new PreferencePresentationModel(model));
-		rebuildRightPanel();
-	}	
-
+		
 	private void updateFrameTitle() {
 		String appString = getFrameTitleBase();
 		String file = "Unsaved model";
@@ -338,49 +294,7 @@ public class JSMAAMainFrame extends JFrame {
 		topToolBar = bar;
 		getContentPane().add("North", topToolBar);
 	}
-
-	private void setRightViewToCentralWeights() {	
-		CategoryDataset dataset = new CentralWeightsDataset((SMAA2Results) results);
-		final JFreeChart chart = ChartFactory.createLineChart(
-                "", "Criterion", "Central Weight",
-                dataset, PlotOrientation.VERTICAL, true, true, false);
-		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
-		chart.getCategoryPlot().setRenderer(renderer);
-		
-		ResultsTable table = new ResultsTable(new CentralWeightTableModel((SMAA2Results) results));
-		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
-		rightViewBuilder = new ResultsView("Central weight vectors", 
-				table, chart);
-		rebuildRightPanel();
-	}
-	
-	
-	public void setRightViewToCategoryAcceptabilities() {
-		CategoryDataset dataset = new CategoryAcceptabilitiesDataset((SMAATRIResults) results);
-		final JFreeChart chart = ChartFactory.createStackedBarChart(
-                "", "Alternative", "Category Acceptability",
-                dataset, PlotOrientation.VERTICAL, true, true, false);
-		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-		ResultsTable table = new ResultsTable(new CategoryAcceptabilityTableModel((SMAATRIResults) results));		
-		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
-		rightViewBuilder = new ResultsView("Category acceptability indices",
-				table, chart);
-		rebuildRightPanel();
-	}	
-	
-	private void setRightViewToRankAcceptabilities() {
-		CategoryDataset dataset = new RankAcceptabilitiesDataset((SMAA2Results) results);
-		final JFreeChart chart = ChartFactory.createStackedBarChart(
-                "", "Alternative", "Rank Acceptability",
-                dataset, PlotOrientation.VERTICAL, true, true, false);
-		chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-		ResultsTable table = new ResultsTable(new RankAcceptabilityTableModel((SMAA2Results) results));
-		table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
-		rightViewBuilder = new ResultsView("Rank acceptability indices", 
-				table, chart);
-		rebuildRightPanel();
-	}
-		
+			
 	private void initLeftPanel() {
 		if (model instanceof SMAATRIModel) {
 			leftTreeModel = new LeftTreeModelSMAATRI((SMAATRIModel) model);			
@@ -1165,43 +1079,16 @@ public class JSMAAMainFrame extends JFrame {
 				return;
 			}
 			Object node = e.getNewLeadSelectionPath().getLastPathComponent();
-			if (node == leftTreeModel.getAlternativesNode()) {
-				setRightViewToAlternatives();
-				setEditMenuItemsEnabled(false);				
-			} else if (node == leftTreeModel.getCriteriaNode()){
-				setRightViewToCriteria();
-				setEditMenuItemsEnabled(false);
-			} else if (node instanceof Criterion) {
-				setRightViewToCriterion((Criterion)node);
+			if (node instanceof Criterion || node instanceof Alternative ) {
 				setEditMenuItemsEnabled(true);
-			} else if (node instanceof Alternative) {
-				setEditMenuItemsEnabled(true);
-			} else if (node == leftTreeModel.getCentralWeightsNode()) {
-				setRightViewToCentralWeights();
-				setEditMenuItemsEnabled(false);				
-			} else if (node == leftTreeModel.getRankAcceptabilitiesNode()) {
-				setRightViewToRankAcceptabilities();
-				setEditMenuItemsEnabled(false);
 			} else if (node == leftTreeModel.getModelNode()) {
 				editRenameItem.setEnabled(true);
 				editDeleteItem.setEnabled(false);
-				if (model instanceof SMAATRIModel) {
-					setRightViewToTechParameterView();
-				}
-			} else if (node == leftTreeModel.getPreferencesNode()) {
-				setRightViewToPreferences();
-				setEditMenuItemsEnabled(false);
-			} else if (leftTreeModel instanceof LeftTreeModelSMAATRI &&
-				((LeftTreeModelSMAATRI) leftTreeModel).getCatAccNode() == node) {
-				setRightViewToCategoryAcceptabilities();
-				setEditMenuItemsEnabled(false);
-			} else if (leftTreeModel instanceof LeftTreeModelSMAATRI &&
-				((LeftTreeModelSMAATRI) leftTreeModel).getCategoriesNode() == node) {
-				setRightViewToCategories();
-				setEditMenuItemsEnabled(false);
 			} else {
 				setEditMenuItemsEnabled(false);
 			}
+			rightViewBuilder = viewFactory.getView(node);
+			rebuildRightPanel();
 		}
 	}
 	
@@ -1210,41 +1097,19 @@ public class JSMAAMainFrame extends JFrame {
 		editRenameItem.setEnabled(enable);
 	}			
 
-	public void setRightViewToTechParameterView() {
-		rightViewBuilder = new TechnicalParameterView((SMAATRIModel) model);
-		rebuildRightPanel();	
-	}
-
 	private class MySMAAModelListener implements SMAAModelListener {
 		
 		public void modelChanged(ModelChangeEvent ev) {
 			setModelUnsaved(true);
 			buildNewSimulator();
 			switch (ev.getType()) {
-			case ModelChangeEvent.ALTERNATIVES:
-				setRightViewToAlternatives();
-				break;
-			case ModelChangeEvent.CRITERIA:
-				setRightViewToCriteria();
-				break;
-			case ModelChangeEvent.CATEGORIES:
-				setRightViewToCategories();
-				break;
-			case ModelChangeEvent.PARAMETER:
-				if (model instanceof SMAATRIModel) {
-					if (rightViewBuilder instanceof ResultsView) {
-						setRightViewToCategoryAcceptabilities();
-					}
-				}
-				break;
 			case ModelChangeEvent.MEASUREMENT:
 			case ModelChangeEvent.MEASUREMENT_TYPE:
 			case ModelChangeEvent.PREFERENCES:
 				break;
 			default:
 				rebuildRightPanel();
-			}
-			
+			}			
 			expandLeftMenu();				
 		}
 	}
@@ -1290,6 +1155,12 @@ public class JSMAAMainFrame extends JFrame {
 			simulator = new SMAASimulator(newModel, thread);
 			results = thread.getResults();
 			results.addResultsListener(new SimulationProgressListener());
+			if (model instanceof SMAATRIModel) {
+				viewFactory = new SMAATRIViewFactory((LeftTreeModelSMAATRI) leftTreeModel, (SMAATRIModel) model, (SMAATRIResults) results);
+			} else {
+				viewFactory = new SMAA2ViewFactory(leftTreeModel, model, (SMAA2Results) results);			
+			}
+			
 			simulationProgress.setValue(0);
 			simulator.restart();
 			checkStartNewSimulator();
