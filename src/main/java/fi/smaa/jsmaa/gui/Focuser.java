@@ -1,23 +1,29 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JTree;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 
 public class Focuser {
 	
-	public static void focus(JTree tree, LeftTreeModel model, Object o) {
-		if (model.getIndexOfChild(model.getRoot(), o) != -1) {
-			tree.setSelectionPath(new TreePath(new Object[] {model.getRoot(), o }));
-		} else if (model.getIndexOfChild(model.getResultsNode(), o) != -1){
-			tree.setSelectionPath(new TreePath(new Object[] {model.getRoot(), 
-				model.getResultsNode(), o}));	
-		} else {
-			throw new IllegalArgumentException("cannot focus " + o);
+	public static void focus(JTree tree, TreeModel model, Object o) {
+		TreePath tp = null;
+		if (o == model.getRoot()) { // ROOT
+			tp = new TreePath(new Object[]{o});			
+		} else if (model.getIndexOfChild(model.getRoot(), o) != -1) { // DIRECT CHILD OF ROOT
+			tp = new TreePath(new Object[] {model.getRoot(), o });
+		} else { // OTHER
+			// go through all children of root
+			for (int i=0;i<model.getChildCount(model.getRoot());i++) {
+				Object parent = model.getChild(model.getRoot(), i);
+				if (model.getIndexOfChild(parent, o) != -1) {
+					tp = new TreePath(new Object[] {model.getRoot(), parent, o });
+					break;
+				}
+			}
 		}
-		
-		expandTree(tree);
+		tree.setSelectionPath(tp);		
+		expandTree(tree);		
 	}
 
 	private static void expandTree(JTree tree) {

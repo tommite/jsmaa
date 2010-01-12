@@ -133,6 +133,10 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 			} else if (child == preferencesNode) {
 				return PREFERENCES;
 			}
+		} else if (parent == getResultsNode()) {
+			if (child == categoryAcceptabilitiesNode) {
+				return 0;
+			}
 		}
 		return super.getIndexOfChild(parent, child);
 	}

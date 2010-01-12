@@ -49,8 +49,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 		centralWeightsDataset = new CentralWeightsDataset(emptyResults);
 		centralWeightsTM = new CentralWeightTableModel(emptyResults);	
 		rankAcceptabilitiesDataset = new RankAcceptabilitiesDataset(emptyResults);	
-		rankAcceptabilitiesTM = new RankAcceptabilityTableModel(emptyResults);		
-		
+		rankAcceptabilitiesTM = new RankAcceptabilityTableModel(emptyResults);
 	}
 	
 	synchronized public void setResults(SMAA2Results results) {
