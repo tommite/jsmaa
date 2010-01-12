@@ -16,6 +16,13 @@ public class Focuser {
 		} else {
 			throw new IllegalArgumentException("cannot focus " + o);
 		}
+		
+		expandTree(tree);
 	}
 
+	private static void expandTree(JTree tree) {
+		for (int i=0;i<tree.getRowCount();i++) {
+			tree.expandRow(i);
+		}
+	}
 }

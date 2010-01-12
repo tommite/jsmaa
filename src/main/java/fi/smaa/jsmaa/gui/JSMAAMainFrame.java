@@ -120,15 +120,8 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		rebuildGUI();
 		buildNewSimulator();
 		Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getCriteriaNode());
-		expandLeftMenu();
 	}	
 	
-	private void expandLeftMenu() {
-		for (int i=0;i<guiFactory.getTree().getRowCount();i++) {
-			guiFactory.getTree().expandRow(i);
-		}
-	}	
-		
 	private void rebuildGUI() {
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.1);	   
@@ -310,14 +303,18 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		public void modelChanged(ModelChangeEvent ev) {
 			buildNewSimulator();
 			switch (ev.getType()) {
+			case ModelChangeEvent.CRITERIA:
+			case ModelChangeEvent.ALTERNATIVES:
+			case ModelChangeEvent.CATEGORIES:
+				Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getModelNode());
+				break;
 			case ModelChangeEvent.MEASUREMENT:
 			case ModelChangeEvent.MEASUREMENT_TYPE:
 			case ModelChangeEvent.PREFERENCES:
 				break;
 			default:
 				rebuildRightPanel();
-			}			
-			expandLeftMenu();				
+			}
 		}
 	}
 

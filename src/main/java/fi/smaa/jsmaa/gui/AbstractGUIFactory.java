@@ -23,6 +23,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
@@ -218,6 +220,22 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 				}
 			}
 		});
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent ev) {
+				Object node = ev.getPath().getLastPathComponent();
+				if (node instanceof Alternative || node instanceof Criterion) {
+					editDeleteItem.setEnabled(true);
+					editRenameItem.setEnabled(true);
+				} else if (node == treeModel.getModelNode()) {
+					editDeleteItem.setEnabled(false);
+					editRenameItem.setEnabled(true);					
+				} else {
+					editDeleteItem.setEnabled(false);
+					editRenameItem.setEnabled(false);					
+				}
+			}	
+		});
 		return tree;
 	}	
 	
@@ -325,7 +343,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				menuRenameClicked();
+				tree.startEditingAtPath(tree.getSelectionPath());
 			}			
 		});	
 		return item;
@@ -426,22 +444,18 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	protected void addCriterionAndStartRename(Criterion c) {
 		smaaModel.addCriterion(c);
-		tree.setSelectionPath(treeModel.getPathForCriterion(c));
+		Focuser.focus(tree, treeModel, c);
 		tree.startEditingAtPath(treeModel.getPathForCriterion(c));
 	}
 	
 	protected void addAlternativeAndStartRename(Alternative a) {
 		smaaModel.addAlternative(a);
-		tree.setSelectionPath(treeModel.getPathForAlternative(a));
+		Focuser.focus(tree, treeModel, a);		
 		tree.startEditingAtPath(treeModel.getPathForAlternative(a));			
 	}	
 	
-	private Object getLeftMenuSelection() {
-		return tree.getSelectionPath().getLastPathComponent();
-	}	
-
 	public void menuDeleteClicked() {
-		Object selection = getLeftMenuSelection();
+		Object selection = tree.getSelectionPath().getLastPathComponent();
 		if (selection instanceof Alternative) {
 			confirmDeleteAlternative((Alternative) selection);
 		} else if (selection instanceof Criterion) {
@@ -472,10 +486,6 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		}
 	}
 	
-	protected void menuRenameClicked() {
-		tree.startEditingAtPath(tree.getSelectionPath());
-	}
-
 	private void addAlternative() {
 		Collection<Alternative> alts = smaaModel.getAlternatives();
 
