@@ -72,7 +72,6 @@ import fi.smaa.jsmaa.simulator.SimulationThread;
 public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	
 	public static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
-	public static final String PROPERTY_MODELUNSAVED = "modelUnsaved";
 	
 	private SMAAResults results;
 	private SMAASimulator simulator;
