@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.6.1:	Fix major bug in previous versions of not updating output graphs/tables when they are showing.
 0.6:	XML model files, ordinal criteria, improved output tables, reordering of alternatives/criteria/categories,
 	improved tooltips, and various minor improvements.
 0.4.1:	Improvements of the GUI usability and bug fixes. 
