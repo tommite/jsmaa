@@ -58,8 +58,8 @@ public class ModelFileManager extends Model {
 				setSaved(false);
 			}			
 		});
-		setSaved(true);
 		firePropertyChange(PROPERTY_MODEL, oldVal, this.model);
+		setSaved(true);		
 	}
 	
 	public void setModelFile(File f) {

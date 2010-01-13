@@ -31,9 +31,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -49,37 +46,23 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
-import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
 import fi.smaa.jsmaa.model.xml.JSMAABinding;
-import fi.smaa.jsmaa.simulator.ResultsEvent;
-import fi.smaa.jsmaa.simulator.SMAA2Results;
-import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
-import fi.smaa.jsmaa.simulator.SMAAResults;
-import fi.smaa.jsmaa.simulator.SMAAResultsListener;
-import fi.smaa.jsmaa.simulator.SMAASimulator;
-import fi.smaa.jsmaa.simulator.SMAATRIResults;
-import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
-import fi.smaa.jsmaa.simulator.SimulationThread;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	
 	public static final Object JSMAA_MODELFILE_EXTENSION = "jsmaa";
 	
-	private SMAAResults results;
-	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private JScrollPane rightPane;
 	private SMAAModelListener modelListener = new MySMAAModelListener();
-	private Queue<BuildSimulatorRun> buildQueue = new LinkedList<BuildSimulatorRun>();
-	private Thread buildSimulatorThread;
 	private GUIFactory guiFactory;
 	public ModelFileManager modelManager;
-	
+	public BuildQueue buildQueue = new BuildQueue();
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
@@ -105,14 +88,14 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	}
 	
 	public void initWithModel(SMAAModel model) {
-		model.addModelListener(modelListener);
 		if (model instanceof SMAATRIModel) {
 			guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, this);
 		} else {
 			guiFactory = new SMAA2GUIFactory(model, this);			
-		}
+		}		
 		rebuildGUI();
 		buildNewSimulator();
+		model.addModelListener(modelListener);		
 		Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getCriteriaNode());
 	}	
 	
@@ -303,57 +286,11 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		}
 	}
 
-	synchronized private void buildNewSimulator() {
-		buildQueue.add(new BuildSimulatorRun());
-		if (buildSimulatorThread == null) {
-			buildSimulatorThread = new Thread(buildQueue.poll());
-			buildSimulatorThread.start();
-		}
-	}
-	
-	synchronized private void checkStartNewSimulator() {
-		if (buildQueue.isEmpty()) {
-			buildSimulatorThread = null;
+	private void buildNewSimulator() {
+		if (modelManager.getModel() instanceof SMAATRIModel) {
+			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), guiFactory, this));
 		} else {
-			buildSimulatorThread = new Thread(buildQueue.poll());
-			buildSimulatorThread.start();
-			buildQueue.clear();
-		}
-	}
-	
-	private class BuildSimulatorRun implements Runnable {
-		public void run() {
-			if (simulator != null) {
-				simulator.stop();
-			}
-			SMAAModel newModel = modelManager.getModel().deepCopy();
-			
-			connectNameAdapters(modelManager.getModel().getAlternatives(), newModel.getAlternatives());
-			connectNameAdapters(modelManager.getModel().getCriteria(), newModel.getCriteria());
-			if (newModel instanceof SMAATRIModel) {
-				connectNameAdapters(((SMAATRIModel) modelManager.getModel()).getCategories(), 
-						((SMAATRIModel) newModel).getCategories());
-			}
-			
-			SimulationThread thread = null;
-			if (newModel instanceof SMAATRIModel) {
-				thread = new SMAATRISimulationThread((SMAATRIModel) newModel, 10000);				
-			} else {
-				thread = new SMAA2SimulationThread(newModel, 10000);
-			}
-			simulator = new SMAASimulator(newModel, thread);
-			results = thread.getResults();
-			results.addResultsListener(new SimulationProgressListener());
-
-			if (modelManager.getModel() instanceof SMAATRIModel) {
-				((SMAATRIGUIFactory)guiFactory).setResults((SMAATRIResults) results);
-			} else {
-				((SMAA2GUIFactory)guiFactory).setResults((SMAA2Results) results);				
-			}
-			
-			guiFactory.getProgressBar().setValue(0);
-			simulator.restart();
-			checkStartNewSimulator();
+			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel(), guiFactory, this));			
 		}
 	}
 	
@@ -361,51 +298,6 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		return this;
 	}
 	
-	private void connectNameAdapters(List<? extends NamedObject> oldModelObjects,
-			List<? extends NamedObject> newModelObjects) {
-		assert(oldModelObjects.size() == newModelObjects.size());
-		for (int i=0;i<oldModelObjects.size();i++) {
-			NamedObject mCrit = oldModelObjects.get(i);
-			NamedObject nmCrit = newModelObjects.get(i);
-			mCrit.addPropertyChangeListener(new NameUpdater(nmCrit));
-		}
-	}		
-	
-	private class NameUpdater implements PropertyChangeListener {
-
-		private NamedObject toUpdate;
-		public NameUpdater(NamedObject toUpdate) {
-			this.toUpdate = toUpdate;
-		}
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)){ 
-				modelManager.setSaved(false);
-				toUpdate.setName((String) evt.getNewValue());
-			}
-		}
-	}
-	
-	private class SimulationProgressListener implements SMAAResultsListener {
-		public void resultsChanged(ResultsEvent ev) {
-			if (ev.getException() == null) {
-				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				guiFactory.getProgressBar().setValue(amount);
-				if (amount < 100) {
-					guiFactory.getProgressBar().setString("Simulating: " + Integer.toString(amount) + "% done");
-				} else {
-					guiFactory.getProgressBar().setString("Simulation complete.");
-				}
-			} else {
-				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				guiFactory.getProgressBar().setValue(amount);
-				guiFactory.getProgressBar().setString("Error in simulation : " + ev.getException().getMessage());
-				getContentPane().remove(guiFactory.getBottomToolBar());
-				getContentPane().add("South", guiFactory.getBottomToolBar());
-				pack();
-			}
-		}
-	}
-
 	@Override
 	public ModelFileManager getFileManager() {
 		return modelManager;
