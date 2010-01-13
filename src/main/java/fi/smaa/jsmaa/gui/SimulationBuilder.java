@@ -46,6 +46,7 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 			simulator.stop();
 		}
 		T thread = generateSimulationThread();
+		thread.setPriority(Thread.MIN_PRIORITY);
 		simulator = new SMAASimulator(model, thread);
 		results = (R) thread.getResults();
 		results.addResultsListener(new SimulationProgressListener());
