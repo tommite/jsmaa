@@ -22,7 +22,7 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 		setResults(results);
 	}
 
-	public void setResults(T results) {
+	synchronized public void setResults(T results) {
 		if (this.results != null) {
 			this.results.removeResultsListener(resultsListener);
 			for (Alternative a : this.results.getAlternatives()) {
@@ -37,6 +37,11 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 			a.addPropertyChangeListener(listener);
 		}
 		fireTableStructureChanged();
+	}
+	
+	@Override
+	synchronized public void fireTableDataChanged() {
+		super.fireTableDataChanged();
 	}
 	
 
