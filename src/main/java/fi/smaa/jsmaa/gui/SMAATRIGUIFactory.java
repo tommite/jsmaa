@@ -192,7 +192,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 
 	private void addCategoryAndStartRename(Alternative a) {
 		smaaModel.addCategory(a);
-		tree.setSelectionPath(treeModel.getPathForCategory(a));
+		Focuser.focus(tree, treeModel, a);
 		tree.startEditingAtPath(treeModel.getPathForCategory(a));			
 	}	
 	
