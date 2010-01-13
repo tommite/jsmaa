@@ -38,10 +38,8 @@ import java.util.Queue;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -50,7 +48,6 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -77,12 +74,10 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	private SMAASimulator simulator;
 	private ViewBuilder rightViewBuilder;
 	private JScrollPane rightPane;
-	private JProgressBar simulationProgress;
 	private SMAAModelListener modelListener = new MySMAAModelListener();
 	private Queue<BuildSimulatorRun> buildQueue = new LinkedList<BuildSimulatorRun>();
 	private Thread buildSimulatorThread;
 	private GUIFactory guiFactory;
-	private JToolBar bottomToolBar;
 	public ModelFileManager modelManager;
 	
 	
@@ -139,16 +134,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add("Center", splitPane);
 		getContentPane().add("North", guiFactory.getTopToolBar());
-				
-		bottomToolBar = new JToolBar();
-		simulationProgress = new JProgressBar();	
-		simulationProgress.setStringPainted(true);		
-		bottomToolBar.add(simulationProgress);
-		bottomToolBar.setFloatable(false);
-		if (modelManager.getModel() instanceof SMAATRIModel) {
-			bottomToolBar.add(new LambdaPanel((SMAATRIModel) modelManager.getModel()));
-		}
-		getContentPane().add("South", bottomToolBar);
+		getContentPane().add("South", guiFactory.getBottomToolBar());
 		setJMenuBar(guiFactory.getMenuBar());
 		
 		guiFactory.getTree().addTreeSelectionListener(new LeftTreeSelectionListener());
@@ -365,7 +351,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 				((SMAA2GUIFactory)guiFactory).setResults((SMAA2Results) results);				
 			}
 			
-			simulationProgress.setValue(0);
+			guiFactory.getProgressBar().setValue(0);
 			simulator.restart();
 			checkStartNewSimulator();
 		}
@@ -403,18 +389,18 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		public void resultsChanged(ResultsEvent ev) {
 			if (ev.getException() == null) {
 				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				simulationProgress.setValue(amount);
+				guiFactory.getProgressBar().setValue(amount);
 				if (amount < 100) {
-					simulationProgress.setString("Simulating: " + Integer.toString(amount) + "% done");
+					guiFactory.getProgressBar().setString("Simulating: " + Integer.toString(amount) + "% done");
 				} else {
-					simulationProgress.setString("Simulation complete.");
+					guiFactory.getProgressBar().setString("Simulation complete.");
 				}
 			} else {
 				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				simulationProgress.setValue(amount);
-				simulationProgress.setString("Error in simulation : " + ev.getException().getMessage());
-				getContentPane().remove(bottomToolBar);
-				getContentPane().add("South", bottomToolBar);
+				guiFactory.getProgressBar().setValue(amount);
+				guiFactory.getProgressBar().setString("Error in simulation : " + ev.getException().getMessage());
+				getContentPane().remove(guiFactory.getBottomToolBar());
+				getContentPane().add("South", guiFactory.getBottomToolBar());
 				pack();
 			}
 		}

@@ -1,6 +1,7 @@
 package fi.smaa.jsmaa.gui;
 
 import javax.swing.JMenuBar;
+import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 
@@ -18,4 +19,6 @@ public interface GUIFactory {
 	public JTree getTree();
 	public JToolBar getTopToolBar();
 	public LeftTreeModel getTreeModel();
+	public JToolBar getBottomToolBar();
+	public JProgressBar getProgressBar();
 }

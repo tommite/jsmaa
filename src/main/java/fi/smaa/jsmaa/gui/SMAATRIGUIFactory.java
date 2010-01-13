@@ -18,6 +18,7 @@ import org.jfree.chart.plot.PlotOrientation;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
@@ -53,6 +54,13 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	
 	protected LeftTreeModelSMAATRI buildTreeModel() {
 		return new LeftTreeModelSMAATRI(smaaModel);
+	}
+	
+	@Override
+	protected JToolBar buildBottomToolBar() {
+		JToolBar tb = super.buildBottomToolBar();
+		tb.add(new LambdaPanel(smaaModel));
+		return tb;
 	}
 	
 	@Override

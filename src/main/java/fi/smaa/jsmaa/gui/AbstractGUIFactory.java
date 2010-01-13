@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -62,6 +63,8 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected Component parent = null;
 	protected MenuDirector director;
 	protected ModelFileManagerPM fileManagerPM;
+	private JToolBar bottomToolBar;
+	private JProgressBar progressBar;
 	
 	protected AbstractGUIFactory(M smaaModel, MenuDirector director) {
 		fileManagerPM = new ModelFileManagerPM(director.getFileManager());		
@@ -71,6 +74,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		menuBar = buildMenuBar();
 		tree = buildTree();
 		topToolBar = buildTopToolBar();
+		bottomToolBar = buildBottomToolBar();
 	}
 	
 	public T getTreeModel() {
@@ -79,6 +83,23 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	public JToolBar getTopToolBar() {
 		return topToolBar;
+	}
+	
+	public JToolBar getBottomToolBar() {
+		return bottomToolBar;
+	}
+	
+	protected JToolBar buildBottomToolBar() {
+		JToolBar bar = new JToolBar();
+		progressBar = new JProgressBar();	
+		progressBar.setStringPainted(true);		
+		bar.add(progressBar);
+		bar.setFloatable(false);
+		return bar;
+	}
+	
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 	protected JToolBar buildTopToolBar() {
