@@ -47,7 +47,7 @@ public abstract class SMAADataSet<R extends SMAAResults> implements SMAAResultsL
 		setResults(results);
 	}
 
-	public void setResults(R results) {
+	synchronized public void setResults(R results) {
 		this.results = results;
 		results.addResultsListener(this);
 		for (Alternative a : results.getAlternatives()) {

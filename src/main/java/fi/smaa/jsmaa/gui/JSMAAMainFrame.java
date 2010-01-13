@@ -288,9 +288,9 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 
 	private void buildNewSimulator() {
 		if (modelManager.getModel() instanceof SMAATRIModel) {
-			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), guiFactory, this));
+			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel().deepCopy(), guiFactory, this));
 		} else {
-			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel(), guiFactory, this));			
+			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel().deepCopy(), guiFactory, this));			
 		}
 	}
 	
