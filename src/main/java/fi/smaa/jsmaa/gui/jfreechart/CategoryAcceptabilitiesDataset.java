@@ -62,7 +62,11 @@ public class CategoryAcceptabilitiesDataset extends AlternativeColumnCategoryDat
 			throw new UnknownKeyException("Unknown category");
 		}
 		List<Double> accs = results.getCategoryAcceptabilities().get(alt);
-		return accs.get(results.getCategories().indexOf(cat));
+		int catIndex = results.getCategories().indexOf(cat);
+		if (catIndex < 0) { // FIXME
+			return Double.NaN;
+		}
+		return accs.get(catIndex);
 	}
 
 	public int getRowCount() {

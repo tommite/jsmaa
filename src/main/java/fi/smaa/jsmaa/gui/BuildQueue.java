@@ -22,11 +22,6 @@ public class BuildQueue {
 			while (!buildQueue.isEmpty()) {
 				SimulationBuilder simulationBuilder = getAndEmptyQueue();
 				simulationBuilder.run();
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 			buildSimulatorThread = null;
 		}

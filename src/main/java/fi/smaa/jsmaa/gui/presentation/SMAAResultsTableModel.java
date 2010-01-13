@@ -15,16 +15,23 @@ import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 public abstract class SMAAResultsTableModel<T extends SMAAResults> extends AbstractTableModel {
 
 	protected T results;
-	
 	protected NameListener listener = new NameListener(); 
+	private ResultsListener resultsListener = new ResultsListener();
 
 	public SMAAResultsTableModel(T results) {
 		setResults(results);
 	}
 
-	synchronized public void setResults(T results) {
+	public void setResults(T results) {
+		if (this.results != null) {
+			this.results.removeResultsListener(resultsListener);
+			for (Alternative a : this.results.getAlternatives()) {
+				a.removePropertyChangeListener(listener);
+			}			
+		}
+		
 		this.results = results;
-		results.addResultsListener(new ResultsListener());
+		results.addResultsListener(resultsListener);
 		
 		for (Alternative a : results.getAlternatives()) {
 			a.addPropertyChangeListener(listener);
@@ -32,8 +39,9 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 		fireTableStructureChanged();
 	}
 	
+
 	private class ResultsListener implements SMAAResultsListener {
-		synchronized public void resultsChanged(ResultsEvent ev) {
+		public void resultsChanged(ResultsEvent ev) {
 			if (ev.getException() == null) {
 				fireTableDataChanged();
 			} else {
