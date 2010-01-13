@@ -42,12 +42,8 @@ public abstract class SMAAResultsTableModel<T extends SMAAResults> extends Abstr
 
 	private class ResultsListener implements SMAAResultsListener {
 		public void resultsChanged(ResultsEvent ev) {
-			if (ev.getException() == null) {
-				fireTableDataChanged();
-			} else {
-				fireTableStructureChanged();			
-			}	
-		}
+			fireTableDataChanged();
+		}	
 	}
 	
 	@Override

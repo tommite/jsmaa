@@ -1,23 +1,27 @@
 package fi.smaa.jsmaa.gui.presentation;
 
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("serial")
 public class CategoryAcceptabilityTableModel extends SMAAResultsTableModel<SMAATRIResults> {
 	
-	private CategoryListener catListener = new CategoryListener();
-
 	public CategoryAcceptabilityTableModel(SMAATRIResults results) {
-		super(results);
-		
+		super(results);		
+	}
+	
+	@Override
+	public void setResults(SMAATRIResults results) {
+		if (this.results != null) {
+			for (Alternative a : this.results.getCategories()) {
+				a.removePropertyChangeListener(listener);
+			}					
+		}
+		super.setResults(results);
+	
 		for (Alternative a : results.getCategories()) {
-			a.addPropertyChangeListener(catListener);
+			a.addPropertyChangeListener(listener);
 		}
 	}
 
@@ -41,14 +45,4 @@ public class CategoryAcceptabilityTableModel extends SMAAResultsTableModel<SMAAT
 			return results.getCategories().get(column-1).getName();
 		}
 	}
-	
-	private class CategoryListener implements PropertyChangeListener {
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(NamedObject.PROPERTY_NAME)) {
-				fireTableStructureChanged();
-			}
-		}
-	}
-
 }
