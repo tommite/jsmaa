@@ -45,7 +45,10 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.ModelFileManager;
+import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
+import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -63,6 +66,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	private GUIFactory guiFactory;
 	public ModelFileManager modelManager;
 	public BuildQueue buildQueue = new BuildQueue();
+	public NameListener nameListener = new NameListener();
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
@@ -97,8 +101,24 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		buildNewSimulator();
 		model.addModelListener(modelListener);		
 		Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getCriteriaNode());
+		reconnectNameListeners();
 	}	
 	
+	private void reconnectNameListeners() {
+		for (Alternative a : modelManager.getModel().getAlternatives()) {
+			a.addPropertyChangeListener(nameListener);
+		}
+		if (modelManager.getModel() instanceof SMAATRIModel) {
+			for (Alternative cat : ((SMAATRIModel) modelManager.getModel()).getCategories()) {
+				cat.addPropertyChangeListener(nameListener);
+			}
+		}
+		for (Criterion c : modelManager.getModel().getCriteria()) {
+			c.addPropertyChangeListener(nameListener);
+		}		
+		
+	}
+
 	private void rebuildGUI() {
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.1);	   
@@ -274,6 +294,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			case ModelChangeEvent.CRITERIA:
 			case ModelChangeEvent.ALTERNATIVES:
 			case ModelChangeEvent.CATEGORIES:
+				reconnectNameListeners();
 				Focuser.focus(guiFactory.getTree(), guiFactory.getTreeModel(), guiFactory.getTreeModel().getModelNode());
 				break;
 			case ModelChangeEvent.MEASUREMENT:
@@ -288,9 +309,9 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 
 	private void buildNewSimulator() {
 		if (modelManager.getModel() instanceof SMAATRIModel) {
-			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel().deepCopy(), guiFactory, this));
+			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), guiFactory, this));
 		} else {
-			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel().deepCopy(), guiFactory, this));			
+			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel(), guiFactory, this));			
 		}
 	}
 	
@@ -301,5 +322,16 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	@Override
 	public ModelFileManager getFileManager() {
 		return modelManager;
+	}
+	
+	private class NameListener implements PropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent ev) {
+			if (ev.getPropertyName().equals(NamedObject.PROPERTY_NAME)) {
+				if (!ev.getNewValue().equals(ev.getOldValue())) {					
+					modelManager.setSaved(false);
+				}
+			}
+		}		
 	}
 }
