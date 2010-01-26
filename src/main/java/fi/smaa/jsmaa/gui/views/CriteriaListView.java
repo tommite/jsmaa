@@ -34,13 +34,13 @@ import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 
 public class CriteriaListView implements ViewBuilder {
 	
-	private SMAAModel model;
+	private SMAA2Model model;
 	
-	public CriteriaListView(SMAAModel model) {
+	public CriteriaListView(SMAA2Model model) {
 		this.model = model;
 	}
 
@@ -116,7 +116,7 @@ public class CriteriaListView implements ViewBuilder {
 		return builder.getPanel();
 	}
 
-	private boolean hasScaleCriteria(SMAAModel model2) {
+	private boolean hasScaleCriteria(SMAA2Model model2) {
 		for (Criterion c : model.getCriteria()) {
 			if (c instanceof ScaleCriterion) {
 				return true;
@@ -124,7 +124,7 @@ public class CriteriaListView implements ViewBuilder {
 		}
 		return false;	}
 
-	private boolean hasCardinalCriteria(SMAAModel model) {
+	private boolean hasCardinalCriteria(SMAA2Model model) {
 		for (Criterion c : model.getCriteria()) {
 			if (c instanceof CardinalCriterion) {
 				return true;

@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
 
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -20,10 +20,10 @@ import fi.smaa.jsmaa.model.SMAATRIModel;
 @SuppressWarnings("serial")
 public class LeftTreeTransferHandler extends TransferHandler {
 	
-	private LeftTreeModel model;
+	private AbstractLeftTreeModel<?> model;
 	private SMAAModel smaaModel;
 
-	public LeftTreeTransferHandler(LeftTreeModel model, SMAAModel smaaModel) {
+	public LeftTreeTransferHandler(AbstractLeftTreeModel<?> model, SMAAModel smaaModel) {
 		this.model = model;
 		this.smaaModel = smaaModel;
 	}
@@ -123,7 +123,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 	private boolean isLeftTree(Component component) {
 		if (component instanceof JTree) {
 			JTree jtree = (JTree) component;
-			if (jtree.getModel() instanceof LeftTreeModel) {
+			if (jtree.getModel() instanceof AbstractLeftTreeModel) {
 				return true;
 			}
 		}

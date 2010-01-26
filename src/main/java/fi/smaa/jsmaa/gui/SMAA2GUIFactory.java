@@ -25,17 +25,17 @@ import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
 import fi.smaa.jsmaa.gui.presentation.CentralWeightTableModel;
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAA2;
 import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 
 @SuppressWarnings("serial")
-public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel> {
+public class SMAA2GUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAA2, SMAA2Model> {
 	
 	private CentralWeightsDataset centralWeightsDataset;
 	private CentralWeightTableModel centralWeightsTM;
@@ -43,7 +43,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	private RankAcceptabilityTableModel rankAcceptabilitiesTM;
 
 	@SuppressWarnings("unchecked")
-	protected SMAA2GUIFactory(SMAAModel smaaModel, MenuDirector director) {
+	protected SMAA2GUIFactory(SMAA2Model smaaModel, MenuDirector director) {
 		super(smaaModel, director);
 		SMAA2Results emptyResults = new SMAA2Results(Collections.EMPTY_LIST, Collections.EMPTY_LIST, 1);
 		centralWeightsDataset = new CentralWeightsDataset(emptyResults);
@@ -59,8 +59,8 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 		rankAcceptabilitiesTM.setResults(results);		
 	}
 	
-	protected LeftTreeModel buildTreeModel() {
-		return new LeftTreeModel(smaaModel);
+	protected LeftTreeModelSMAA2 buildTreeModel() {
+		return new LeftTreeModelSMAA2(smaaModel);
 	}
 	
 	@Override
@@ -168,5 +168,10 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 		resultsMenu.add(cwItem);
 		resultsMenu.add(racsItem);
 		return resultsMenu;
+	}
+
+	@Override
+	protected LeftTreeCellRendererSMAA2 buildCellRenderer() {
+		return new LeftTreeCellRendererSMAA2(treeModel);		
 	}
 }

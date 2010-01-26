@@ -8,7 +8,7 @@ import java.io.IOException;
 import com.jgoodies.binding.beans.Model;
 
 import fi.smaa.jsmaa.model.ModelChangeEvent;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 
 @SuppressWarnings("serial")
@@ -20,7 +20,7 @@ public class ModelFileManager extends Model {
 
 	private File currentModelFile;
 	private boolean modelSaved = true;
-	private SMAAModel model;
+	private SMAA2Model model;
 		
 	public boolean getSaved() {
 		return modelSaved;
@@ -39,12 +39,12 @@ public class ModelFileManager extends Model {
 		return "JSMAA v" + AppInfo.getAppVersion() + " - " + file + (modelSaved ? "" : "*");
 	}
 
-	public SMAAModel getModel() {
+	public SMAA2Model getModel() {
 		return model;
 	}
 	
-	public void setModel(SMAAModel model) {
-		SMAAModel oldVal = this.model;
+	public void setModel(SMAA2Model model) {
+		SMAA2Model oldVal = this.model;
 		this.model = model;
 		this.currentModelFile = null;
 		model.addPropertyChangeListener(new PropertyChangeListener() {

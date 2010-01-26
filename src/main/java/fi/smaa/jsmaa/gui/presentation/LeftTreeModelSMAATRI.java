@@ -27,12 +27,11 @@ import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 
-public class LeftTreeModelSMAATRI extends LeftTreeModel {
+public class LeftTreeModelSMAATRI extends LeftTreeModelMCDAModel<SMAATRIModel> {
 	
 	private static int CATEGORIES = 2;
-	private static int PREFERENCES = 3;
-	private static int RESULTS = 4;	
-	
+	protected static final int PREFERENCES = 3;
+	protected static final int RESULTS = 4;	
 	private String categoriesNode = "Categories";
 	private String categoryAcceptabilitiesNode = "CatAcc";
 
@@ -63,15 +62,15 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	@Override
 	public Object getChild(Object parent, int index) {
 		if (parent == getRoot()) {
-			if (index == RESULTS) {
-				return resultsNode;
-			} else if (index == CATEGORIES) {
+			if (index == CATEGORIES) {
 				return categoriesNode;
 			} else if (index == PREFERENCES) {
 				return preferencesNode;
+			} else if (index == RESULTS) {
+				return resultsNode;
 			}
 		} else if (parent == categoriesNode) {
-			return ((SMAATRIModel)smaaModel).getCategories().get(index);
+			return smaaModel.getCategories().get(index);
 		} else if (parent == resultsNode) {
 			return categoryAcceptabilitiesNode;
 		}
@@ -86,21 +85,18 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 			return ((SMAATRIModel) smaaModel).getCategories().size();
 		} else if (parent == resultsNode) {
 			return 1;
-		} else {
-			return super.getChildCount(parent);
-		}
+		} 
+		return super.getChildCount(parent);
 	}
 	
 	@Override
 	public boolean isLeaf(Object node) {
-		if (node instanceof Alternative &&
-				((SMAATRIModel)smaaModel).getCategories().contains(node)) {
+		if (node instanceof Alternative && smaaModel.getCategories().contains(node)) {
 			return true;
 		} else if (node == categoryAcceptabilitiesNode) {
 			return true;
-		} else {
-			return super.isLeaf(node);
 		}
+		return super.isLeaf(node);
 	}
 	
 	@Override
@@ -108,7 +104,7 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 		Object obj = path.getLastPathComponent();
 		
 		if (obj instanceof Alternative) {
-			if (((SMAATRIModel) smaaModel).getCategories().contains(obj)) {
+			if (smaaModel.getCategories().contains(obj)) {
 				((Alternative) obj).setName((String) newValue);				
 				return;
 			}
@@ -120,7 +116,7 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 	public int getIndexOfChild(Object parent, Object child) {
 		if (parent == categoriesNode) {
 			if (child instanceof Alternative) {
-				int index = new ArrayList<Alternative>(((SMAATRIModel)smaaModel).getCategories()).indexOf(child);
+				int index = new ArrayList<Alternative>(smaaModel.getCategories()).indexOf(child);
 				if (index != -1) {
 					return index;
 				}
@@ -128,10 +124,10 @@ public class LeftTreeModelSMAATRI extends LeftTreeModel {
 		} else if (parent == getRoot()) {
 			if (child == categoriesNode) {
 				return CATEGORIES;
-			} else if (child == resultsNode) {
-				return RESULTS;
 			} else if (child == preferencesNode) {
 				return PREFERENCES;
+			} else if (child == resultsNode) {
+				return RESULTS;
 			}
 		} else if (parent == getResultsNode()) {
 			if (child == categoryAcceptabilitiesNode) {

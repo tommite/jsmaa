@@ -27,10 +27,10 @@ import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 
 @SuppressWarnings("serial")
-public class PreferencePresentationModel extends PresentationModel<SMAAModel> {
+public class PreferencePresentationModel extends PresentationModel<SMAA2Model> {
 	
 	public static final String PREFERENCE_TYPE = "preferenceType";
 	private OrdinalPreferenceInformation ordinalPreferences;
@@ -52,7 +52,7 @@ public class PreferencePresentationModel extends PresentationModel<SMAAModel> {
 		}		
 	}
 	
-	public PreferencePresentationModel(SMAAModel model) {
+	public PreferencePresentationModel(SMAA2Model model) {
 		super(model);
 	}
 	

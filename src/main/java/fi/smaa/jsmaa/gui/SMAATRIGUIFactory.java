@@ -34,7 +34,7 @@ import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("serial")
-public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, SMAATRIModel> {
+public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI, SMAATRIModel> {
 
 	private CategoryAcceptabilityTableModel categoryAcceptabilityTM;
 	private CategoryAcceptabilitiesDataset categoryAcceptabilityDataset;
@@ -219,5 +219,10 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 			addCriterionAndStartRename(new OutrankingCriterion(generateNextCriterionName(), true, 
 					new ExactMeasurement(0.0), new ExactMeasurement(1.0)));
 		}		
+	}
+
+	@Override
+	protected LeftTreeCellRendererSMAATRI buildCellRenderer() {
+		return new LeftTreeCellRendererSMAATRI(treeModel);
 	}
 }

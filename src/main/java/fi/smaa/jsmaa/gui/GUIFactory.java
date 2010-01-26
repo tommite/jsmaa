@@ -6,7 +6,7 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 
 /**
  * Abstract factory for getting (right pane) views for objects, and other GUI components.
@@ -18,7 +18,7 @@ public interface GUIFactory {
 	public JMenuBar getMenuBar();
 	public JTree getTree();
 	public JToolBar getTopToolBar();
-	public LeftTreeModel getTreeModel();
+	public AbstractLeftTreeModel<?> getTreeModel();
 	public JToolBar getBottomToolBar();
 	public JProgressBar getProgressBar();
 }

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.LeftTreeTransferHandler;
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAA2;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -42,7 +42,7 @@ public class LeftTreeTransferHandlerTest {
 		smaaModel.addCriterion(crit1);
 		smaaModel.addCriterion(crit2);
 		
-		LeftTreeModel treeModel = new LeftTreeModel(smaaModel);
+		LeftTreeModelSMAA2 treeModel = new LeftTreeModelSMAA2(smaaModel);
 		handler = new LeftTreeTransferHandler(treeModel, smaaModel);
 	}
 

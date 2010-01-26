@@ -33,19 +33,19 @@ import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.MissingPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class PreferencePresentationModelTest {
 	
 	private PreferencePresentationModel pmodel;
-	private SMAAModel model;
+	private SMAA2Model model;
 	private ScaleCriterion c1;
 	private ScaleCriterion c2;
 	
 	@Before
 	public void setUp() {
-		model = new SMAAModel("model");
+		model = new SMAA2Model("model");
 		
 		c1 = new ScaleCriterion("c1");
 		c2 = new ScaleCriterion("c2");

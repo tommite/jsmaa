@@ -43,15 +43,15 @@ import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class CriterionView implements ViewBuilder {
 	protected Criterion criterion;
-	protected SMAAModel model;
+	protected SMAA2Model model;
 	
-	public CriterionView(Criterion crit, SMAAModel model) {
+	public CriterionView(Criterion crit, SMAA2Model model) {
 		this.criterion = crit;
 		this.model = model;
 	}

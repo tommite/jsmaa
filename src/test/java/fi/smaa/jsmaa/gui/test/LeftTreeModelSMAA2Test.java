@@ -26,15 +26,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
+import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAA2;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
-public class LeftTreeModelTest {
+public class LeftTreeModelSMAA2Test {
 	
-	private LeftTreeModel treeModel;
-	private SMAAModel smaaModel;
+	private LeftTreeModelSMAA2 treeModel;
+	private SMAA2Model smaaModel;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
 	private ScaleCriterion crit1 = new ScaleCriterion("crit1");
@@ -42,11 +42,11 @@ public class LeftTreeModelTest {
 	@Before
 	public void setUp() {
 		smaaModel = createSmaaModel();
-		treeModel = new LeftTreeModel(smaaModel);
+		treeModel = new LeftTreeModelSMAA2(smaaModel);
 	}
 	
-	private SMAAModel createSmaaModel() {
-		SMAAModel model = new SMAAModel("model");
+	private SMAA2Model createSmaaModel() {
+		SMAA2Model model = new SMAA2Model("model");
 		model.addAlternative(alt1);
 		model.addAlternative(alt2);
 		model.addCriterion(crit1);
@@ -129,8 +129,8 @@ public class LeftTreeModelTest {
 	
 	@Test
 	public void testEmptyAltsCrits() {
-		smaaModel = new SMAAModel("model");
-		treeModel = new LeftTreeModel(smaaModel);
+		smaaModel = new SMAA2Model("model");
+		treeModel = new LeftTreeModelSMAA2(smaaModel);
 		
 		assertFalse(treeModel.isLeaf(getAlternativeNode()));
 		assertFalse(treeModel.isLeaf(getCriteriaNode()));

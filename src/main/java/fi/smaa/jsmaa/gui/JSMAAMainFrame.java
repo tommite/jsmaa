@@ -49,7 +49,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.NamedObject;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
@@ -68,7 +68,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	public BuildQueue buildQueue = new BuildQueue();
 	public NameListener nameListener = new NameListener();
 	
-	public JSMAAMainFrame(SMAAModel model) {
+	public JSMAAMainFrame(SMAA2Model model) {
 		super(AppInfo.getAppName());
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
 		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui");		
@@ -85,13 +85,13 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		modelManager.addPropertyChangeListener(ModelFileManager.PROPERTY_MODEL, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				initWithModel((SMAAModel) evt.getNewValue());
+				initWithModel((SMAA2Model) evt.getNewValue());
 			}			
 		});
 		modelManager.setModel(model);
 	}
 	
-	public void initWithModel(SMAAModel model) {
+	public void initWithModel(SMAA2Model model) {
 		if (model instanceof SMAATRIModel) {
 			guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, this);
 		} else {
@@ -154,7 +154,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		}
 	}
 
-	public void newModel(SMAAModel newModel) {
+	public void newModel(SMAA2Model newModel) {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
@@ -225,7 +225,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			try {
 				File file = chooser.getSelectedFile();
 				InputStream fis = new FileInputStream(file);
-				SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
+				SMAA2Model loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
 				fis.close();
 
 				modelManager.setModel(loadedModel);
@@ -236,7 +236,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 						"Load error", JOptionPane.ERROR_MESSAGE);
 			} catch (InvalidModelVersionException e) {				
 				showErrorIncompatibleModel(chooser, "file contains a an incompatible JSMAA model version " + e.getVersion()
-						+ ".\nOnly versions until " + SMAAModel.MODELVERSION 
+						+ ".\nOnly versions until " + SMAA2Model.MODELVERSION 
 						+ " supported.\nTo open the file, upgrade to a newer version of JSMAA (www.smaa.fi)");
 			} catch (Exception e) {
 				e.printStackTrace();

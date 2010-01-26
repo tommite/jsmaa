@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 import static org.easymock.EasyMock.*;
@@ -17,12 +17,12 @@ import static org.easymock.EasyMock.*;
 public class ModelFileManagerTest {
 
 	private ModelFileManager mgr;
-	private SMAAModel model;
+	private SMAA2Model model;
 
 	@Before
 	public void setUp() {
 		mgr = new ModelFileManager();
-		model = new SMAAModel("mod");		
+		model = new SMAA2Model("mod");		
 	}
 	
 	@Test

@@ -36,7 +36,7 @@ import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel.PreferenceType;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
-import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAA2Model;
 
 public class PreferenceInformationView implements ViewBuilder {
 	private PreferencePresentationModel model;
@@ -73,7 +73,7 @@ public class PreferenceInformationView implements ViewBuilder {
 
 		prefPanel = null;
 		if (model.getPreferenceType() == PreferenceType.ORDINAL) {
-			SMAAModel smodel = model.getBean();
+			SMAA2Model smodel = model.getBean();
 			OrdinalPreferencesView oview = new OrdinalPreferencesView(smodel.getCriteria(),
 					(OrdinalPreferenceInformation) smodel.getPreferenceInformation());
 			prefPanel = oview.buildPanel();

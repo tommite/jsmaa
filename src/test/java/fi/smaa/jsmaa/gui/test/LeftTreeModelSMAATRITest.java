@@ -101,8 +101,8 @@ public class LeftTreeModelSMAATRITest {
 	@Test
 	public void testGetIndexOfChild() {
 		assertEquals(2, treeModel.getIndexOfChild(treeModel.getRoot(), getCategoriesNode()));
+		assertEquals(3, treeModel.getIndexOfChild(treeModel.getRoot(), getPreferencesNode()));		
 		assertEquals(4, treeModel.getIndexOfChild(treeModel.getRoot(), getResultsNode()));
-		assertEquals(3, treeModel.getIndexOfChild(treeModel.getRoot(), getPreferencesNode()));
 		assertEquals(0, treeModel.getIndexOfChild(getCategoriesNode(), cat1));
 	}
 	

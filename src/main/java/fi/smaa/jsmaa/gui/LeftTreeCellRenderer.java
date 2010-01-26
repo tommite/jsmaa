@@ -24,20 +24,19 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import fi.smaa.common.gui.ImageLoader;
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
-import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
+import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
-public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
+@SuppressWarnings("serial")
+public abstract class LeftTreeCellRenderer<M extends AbstractLeftTreeModel<?>> extends DefaultTreeCellRenderer {
 
-	private static final long serialVersionUID = -6982388941837275497L;
-	private LeftTreeModel model;
+	protected M model;
 	
-	public LeftTreeCellRenderer(LeftTreeModel model) {
+	public LeftTreeCellRenderer(M model) {
 		this.model = model;
 	}
 	
@@ -58,19 +57,6 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 				setIcon(ImageLoader.getIcon(FileNames.ICON_ORDINALCRITERION));
 				setToolTipText("Ordinal criterion");						
 			}
-		} else if (value == model.getCentralWeightsNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
-			setToolTipText("Central weights");									
-		} else if (value == model.getRankAcceptabilitiesNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
-			setToolTipText("Rank acceptability indices");									
-		} else if (value == model.getPreferencesNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_PREFERENCES));
-			setToolTipText("Preference information");
-		} else if (model instanceof LeftTreeModelSMAATRI &&
-				((LeftTreeModelSMAATRI) model).getCatAccNode() == value) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
-			setToolTipText("Category acceptability indices");													
 		} else {
 			setToolTipText(null); //no tool tip
 		}
