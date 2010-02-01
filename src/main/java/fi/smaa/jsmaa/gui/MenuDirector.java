@@ -1,7 +1,6 @@
 package fi.smaa.jsmaa.gui;
 
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.model.SMAA2Model;
 
 public interface MenuDirector {
 	public void open();
@@ -16,6 +15,12 @@ public interface MenuDirector {
 	 */
 	public boolean saveAs();
 	public void quit();
-	public void newModel(SMAA2Model model);
+	public void newModel(ModelType type);
 	public ModelFileManager getFileManager();
+	
+	public enum ModelType {
+		SMAA2,
+		SMAATRI,
+		SMAACEA
+	};
 }

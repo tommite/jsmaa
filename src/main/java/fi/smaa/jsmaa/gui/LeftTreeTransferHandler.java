@@ -123,7 +123,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 	private boolean isLeftTree(Component component) {
 		if (component instanceof JTree) {
 			JTree jtree = (JTree) component;
-			if (jtree.getModel() instanceof AbstractLeftTreeModel) {
+			if (jtree.getModel() instanceof AbstractLeftTreeModel<?>) {
 				return true;
 			}
 		}

@@ -44,6 +44,7 @@ import javax.swing.event.TreeSelectionListener;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
+import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -154,11 +155,17 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		}
 	}
 
-	public void newModel(SMAA2Model newModel) {
+	public void newModel(MenuDirector.ModelType type) {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
-		modelManager.setModel(newModel);
+		if (type.equals(MenuDirector.ModelType.SMAA2)) {
+			modelManager.setModel(DefaultModels.getSMAA2Model());
+		} else if (type.equals(MenuDirector.ModelType.SMAATRI)) {
+			modelManager.setModel(DefaultModels.getSMAATRIModel());
+		} else if (type.equals(MenuDirector.ModelType.SMAACEA)) {
+			new SMAACEAModelLoader(modelManager).start(this);
+		}
 	}
 
 	public boolean saveAs() {

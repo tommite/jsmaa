@@ -24,7 +24,6 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.AppInfo;
-import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -113,19 +112,28 @@ public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M 
 		newSMAA2Item.setMnemonic('2');
 		newSMAA2Item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
-				director.newModel(DefaultModels.getSMAA2Model());
+				director.newModel(MenuDirector.ModelType.SMAA2);
 			}
 		});
 		JMenuItem newSMAATRIItem = new JMenuItem("SMAA-TRI");
 		newSMAATRIItem.setMnemonic('t');
 		newSMAATRIItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
-				director.newModel(DefaultModels.getSMAATRIModel());
+				director.newModel(MenuDirector.ModelType.SMAATRI);
 			}
 		});
 		
+		JMenuItem newSMAACEAItem = new JMenuItem("SMAA-CEA");
+		newSMAACEAItem.setMnemonic('c');
+		newSMAACEAItem.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent arg0) {
+				director.newModel(MenuDirector.ModelType.SMAACEA);
+			}
+		});		
+		
 		newMenu.add(newSMAA2Item);
 		newMenu.add(newSMAATRIItem);
+		newMenu.add(newSMAACEAItem);
 		JMenu newItem = newMenu;
 		
 		JMenuItem saveItem = new JMenuItem("Save");

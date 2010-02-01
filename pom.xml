@@ -106,5 +106,10 @@
 			<artifactId>jsmaa-lib</artifactId>
 			<version>0.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.pietschy</groupId>
+			<artifactId>wizard</artifactId>
+			<version>0.1.12</version>
+		</dependency>		
 	</dependencies>
 </project>
