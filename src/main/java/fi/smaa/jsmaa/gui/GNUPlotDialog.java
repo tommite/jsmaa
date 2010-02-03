@@ -18,6 +18,7 @@ import com.jidesoft.swing.JideButton;
 
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverter;
 
+@SuppressWarnings("serial")
 public class GNUPlotDialog extends JDialog {
 	
 	public GNUPlotDialog(JFrame parent, PlotConverter c) {
@@ -28,7 +29,7 @@ public class GNUPlotDialog extends JDialog {
 		JPanel pane = new JPanel();
 		pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
 	
-		JLabel label1 = new JLabel("GNUPlot script");
+		JLabel label1 = new JLabel("Script");
 		label1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pane.add(label1);
 		JTextArea scriptArea = new JTextArea();

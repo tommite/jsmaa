@@ -19,6 +19,7 @@
 package fi.smaa.jsmaa.gui.views;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -30,30 +31,33 @@ import javax.swing.JTable;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.data.category.CategoryDataset;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideButton;
 
+import fi.smaa.common.gui.GUIHelper;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.GNUPlotDialog;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverter;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverterFactory;
+import fi.smaa.jsmaa.gui.jfreechart.SMAADataSet;
 
 public class ResultsView implements ViewBuilder {
 
 	private JTable table;
 	private JFreeChart chart;
 	private String title;
+	private Window parent;
 
-	public ResultsView(String title, JTable table, JFreeChart chart) {
+	public ResultsView(Window parent, String title, JTable table, JFreeChart chart) {
 		this.title = title;
 		this.chart = chart;
 		this.table = table;
+		this.parent = parent;
 	}
 
 	public JComponent buildPanel() {
@@ -78,15 +82,16 @@ public class ResultsView implements ViewBuilder {
 		return builder.getPanel();
 	}
 
+	@SuppressWarnings("serial")
 	private Component buildExportButton() {
 		JButton exportButton = new JideButton("Export figure dataset as GNUPlot script", ImageLoader.getIcon(FileNames.ICON_SCRIPT));
 		exportButton.addActionListener(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				CategoryDataset dataset = (CategoryDataset) ((CategoryPlot) chart.getPlot()).getDataset();
-				PlotConverter c = PlotConverterFactory.getConverter(dataset);
+				PlotConverter c = PlotConverterFactory.getConverter((SMAADataSet<?>) ((CategoryPlot) chart.getPlot()).getDataset());
 				GNUPlotDialog d = new GNUPlotDialog(null, c);
-				d.setVisible(true);
+				GUIHelper.centerWindow(d, parent);
+				d.setVisible(true);				
 			}			
 		});
 		return exportButton;

@@ -1,6 +1,7 @@
 package fi.smaa.jsmaa.gui;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -60,13 +61,14 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected JToolBar topToolBar;
 	protected JMenuBar menuBar;
 	protected JTree tree;
-	protected Component parent = null;
 	protected MenuDirector director;
 	protected ModelFileManagerPM fileManagerPM;
 	private JToolBar bottomToolBar;
 	private JProgressBar progressBar;
+	protected Window parent;
 	
-	protected AbstractGUIFactory(M smaaModel, MenuDirector director) {
+	protected AbstractGUIFactory(Window parent, M smaaModel, MenuDirector director) {
+		this.parent = parent;
 		fileManagerPM = new ModelFileManagerPM(director.getFileManager());		
 		this.smaaModel = smaaModel;
 		this.treeModel = buildTreeModel();		

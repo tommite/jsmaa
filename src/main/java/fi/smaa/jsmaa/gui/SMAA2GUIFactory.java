@@ -2,6 +2,7 @@ package fi.smaa.jsmaa.gui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,8 +44,8 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	private RankAcceptabilityTableModel rankAcceptabilitiesTM;
 
 	@SuppressWarnings("unchecked")
-	protected SMAA2GUIFactory(SMAAModel smaaModel, MenuDirector director) {
-		super(smaaModel, director);
+	protected SMAA2GUIFactory(Window parent, SMAAModel smaaModel, MenuDirector director) {
+		super(parent, smaaModel, director);
 		SMAA2Results emptyResults = new SMAA2Results(Collections.EMPTY_LIST, Collections.EMPTY_LIST, 1);
 		centralWeightsDataset = new CentralWeightsDataset(emptyResults);
 		centralWeightsTM = new CentralWeightTableModel(emptyResults);	
@@ -73,7 +74,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			chart.getCategoryPlot().setRenderer(renderer);
 			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
-			return new ResultsView("Central weight vectors", table, chart);
+			return new ResultsView(parent, "Central weight vectors", table, chart);
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
 			        "", "Alternative", "Rank Acceptability",
@@ -81,7 +82,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
-			return new ResultsView("Rank acceptability indices", table, chart);
+			return new ResultsView(parent, "Rank acceptability indices", table, chart);
 		} else {
 			return super.buildView(o);
 		}	
