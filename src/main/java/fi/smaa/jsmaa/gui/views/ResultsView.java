@@ -18,18 +18,31 @@
 
 package fi.smaa.jsmaa.gui.views;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.data.category.CategoryDataset;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jidesoft.swing.JideButton;
 
+import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.FileNames;
+import fi.smaa.jsmaa.gui.GNUPlotDialog;
+import fi.smaa.jsmaa.gui.jfreechart.PlotConverter;
+import fi.smaa.jsmaa.gui.jfreechart.PlotConverterFactory;
 
 public class ResultsView implements ViewBuilder {
 
@@ -46,7 +59,7 @@ public class ResultsView implements ViewBuilder {
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p, 3dlu, p, 3dlu, p");		
+				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p");		
 		
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
@@ -60,8 +73,23 @@ public class ResultsView implements ViewBuilder {
 		table.setAutoCreateRowSorter(true);
 		builder.addSeparator("", cc.xy(1, 5));	
 		builder.add(buildFigurePart(), cc.xy(1, 7));
+		builder.add(buildExportButton(), cc.xy(1, 9, "left, center"));
 		
 		return builder.getPanel();
+	}
+
+	private Component buildExportButton() {
+		JButton exportButton = new JideButton("Export figure dataset as GNUPlot script", ImageLoader.getIcon(FileNames.ICON_SCRIPT));
+		exportButton.addActionListener(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				CategoryDataset dataset = (CategoryDataset) ((CategoryPlot) chart.getPlot()).getDataset();
+				PlotConverter c = PlotConverterFactory.getConverter(dataset);
+				GNUPlotDialog d = new GNUPlotDialog(null, c);
+				d.setVisible(true);
+			}			
+		});
+		return exportButton;
 	}
 
 	private JComponent buildFigurePart() {		
