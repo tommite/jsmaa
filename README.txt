@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.6.2:	Add exporting of GNUPlot scripts for figures. Fix SMAA-2 simulation crash on adding criterion.
 0.6.1:	Fix major bug in previous versions of not updating output graphs/tables when they are showing.
 0.6:	XML model files, ordinal criteria, improved output tables, reordering of alternatives/criteria/categories,
 	improved tooltips, and various minor improvements.
@@ -27,5 +28,5 @@ Contact me by email at t dot p dot tervonen at rug dot nl.
 
 More information can be found at http://www.smaa.fi.
 
-January 2010
+February 2010
 Tommi Tervonen
