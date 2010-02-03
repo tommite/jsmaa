@@ -285,7 +285,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		String msg = "JSMAA v" + AppInfo.getAppVersion();
 		msg += "\n"+AppInfo.getAppName()+" is open source and licensed under GPLv3.\n";
 		msg += "\t- and can be distributed freely!\n";
-		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
+		msg += "(c) 2009-2010 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
 		JOptionPane.showMessageDialog(parent, msg, title,
 				JOptionPane.INFORMATION_MESSAGE, ImageLoader.getIcon(FileNames.ICON_HOME));
 	}
