@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<SMAA-2-model name="SMAA-2 Model" modelVersion="1">
+<SMAA-2-model name="Benefit-Risk model of second generation antidepressants" modelVersion="1">
 	<alternatives>
 		<alternative id="0" name="Fluoxetine"/>
 		<alternative id="1" name="Paroxetine"/>
