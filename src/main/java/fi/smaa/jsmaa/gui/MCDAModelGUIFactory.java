@@ -1,6 +1,7 @@
 package fi.smaa.jsmaa.gui;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -44,8 +45,8 @@ public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;		
 	
-	protected MCDAModelGUIFactory(M smaaModel, MenuDirector director) {
-		super(smaaModel, director);
+	protected MCDAModelGUIFactory(Window parent, M smaaModel, MenuDirector director) {
+		super(parent, smaaModel, director);
 	}
 		
 	protected abstract JButton buildToolBarAddCriterionButton();

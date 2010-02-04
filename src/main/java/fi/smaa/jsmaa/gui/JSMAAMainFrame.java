@@ -94,9 +94,9 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	
 	public void initWithModel(SMAA2Model model) {
 		if (model instanceof SMAATRIModel) {
-			guiFactory = new SMAATRIGUIFactory((SMAATRIModel) model, this);
+			guiFactory = new SMAATRIGUIFactory(this, (SMAATRIModel) model, this);
 		} else {
-			guiFactory = new SMAA2GUIFactory(model, this);			
+			guiFactory = new SMAA2GUIFactory(this, model, this);			
 		}		
 		rebuildGUI();
 		buildNewSimulator();

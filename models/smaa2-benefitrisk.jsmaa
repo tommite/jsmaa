@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SMAA-2-model name="Benefit-Risk model of second generation antidepressants" modelVersion="1">
+	<alternatives>
+		<alternative id="0" name="Fluoxetine"/>
+		<alternative id="1" name="Paroxetine"/>
+		<alternative id="2" name="Sertraline"/>
+		<alternative id="3" name="Venlafaxine"/>
+	</alternatives>
+	<criteria>
+		<criterion class="cardinalCriterion" id="4" name="Efficacy">
+			<ascending value="true"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="5" name="Diarrhea">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="6" name="Dizziness">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="7" name="Headache">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="8" name="Insomnia">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="9" name="Nausea">
+			<ascending value="false"/>
+		</criterion>
+	</criteria>
+	<measurements>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="lognormal" mean="0.0" stdev="0.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="lognormal" mean="0.08599999999999999" stdev="0.056"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="lognormal" mean="0.095" stdev="0.043999999999999997"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="lognormal" mean="0.113" stdev="0.048"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="gaussian" mean="11.699999999999999" stdev="2.5"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="gaussian" mean="9.199999999999999" stdev="1.86"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="gaussian" mean="15.4" stdev="2.6499999999999999"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="gaussian" mean="5.5" stdev="2.3199999999999998"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="gaussian" mean="7.2" stdev="1.45"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="gaussian" mean="10.6" stdev="1.58"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="gaussian" mean="7.5" stdev="1.48"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="gaussian" mean="15.699999999999999" stdev="4.44"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="7"/>
+			<value class="gaussian" mean="16.6" stdev="3.27"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="7"/>
+			<value class="gaussian" mean="21.199999999999999" stdev="5.15"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="7"/>
+			<value class="gaussian" mean="20.199999999999999" stdev="3.7799999999999998"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="7"/>
+			<value class="gaussian" mean="12.8" stdev="2.45"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="8"/>
+			<value class="gaussian" mean="13.699999999999999" stdev="1.8899999999999999"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="8"/>
+			<value class="gaussian" mean="14.3" stdev="2.93"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="8"/>
+			<value class="gaussian" mean="15.0" stdev="3.21"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="8"/>
+			<value class="gaussian" mean="11.199999999999999" stdev="3.98"/>
+			<alternative ref="3"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="9"/>
+			<value class="gaussian" mean="18.6" stdev="1.79"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="9"/>
+			<value class="gaussian" mean="18.3" stdev="3.7"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="9"/>
+			<value class="gaussian" mean="19.5" stdev="2.6"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="9"/>
+			<value class="gaussian" mean="31.0" stdev="1.6799999999999999"/>
+			<alternative ref="3"/>
+		</measurement>
+	</measurements>
+</SMAA-2-model>

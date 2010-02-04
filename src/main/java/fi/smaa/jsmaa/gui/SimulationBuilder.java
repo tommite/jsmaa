@@ -17,7 +17,7 @@ import fi.smaa.jsmaa.simulator.SMAASimulator;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SimulationThread;
 
-public abstract class SimulationBuilder<M extends SMAA2Model, R extends SMAAResults, T extends SimulationThread> implements Runnable {
+public abstract class SimulationBuilder<M extends SMAA2Model, R extends SMAAResults, T extends SimulationThread<M>> implements Runnable {
 
 	private static SMAASimulator simulator;
 	protected M model;

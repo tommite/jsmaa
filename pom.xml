@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fi.smaa</groupId>
 	<artifactId>jsmaa</artifactId>
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 
 	<repositories>	
 		<repository>
@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>fi.smaa</groupId>
 			<artifactId>jsmaa-lib</artifactId>
-			<version>0.6.1</version>
+			<version>0.6.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pietschy</groupId>

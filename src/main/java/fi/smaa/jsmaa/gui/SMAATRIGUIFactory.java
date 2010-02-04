@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui;
 
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,8 +41,8 @@ public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI,
 	private CategoryAcceptabilitiesDataset categoryAcceptabilityDataset;
 
 	@SuppressWarnings("unchecked")
-	public SMAATRIGUIFactory(SMAATRIModel smaaModel, MenuDirector director) {
-		super(smaaModel, director);
+	public SMAATRIGUIFactory(Window parent, SMAATRIModel smaaModel, MenuDirector director) {
+		super(parent, smaaModel, director);
 		SMAATRIResults emptyResults = new SMAATRIResults(Collections.EMPTY_LIST, Collections.EMPTY_LIST, 1);
 		categoryAcceptabilityTM = new CategoryAcceptabilityTableModel(emptyResults);
 		categoryAcceptabilityDataset = new CategoryAcceptabilitiesDataset(emptyResults);		
@@ -89,7 +90,7 @@ public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI,
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(categoryAcceptabilityTM);		
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
-			return new ResultsView("Category acceptability indices", table, chart);
+			return new ResultsView(parent, "Category acceptability indices", table, chart);
 		} else if (o == treeModel.getCategoriesNode()) {
 			return new AlternativeInfoView(smaaModel.getCategories(), "Categories (in ascending order, top = worst)");
 		} else {
