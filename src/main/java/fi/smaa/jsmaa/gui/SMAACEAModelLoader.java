@@ -1,7 +1,5 @@
 package fi.smaa.jsmaa.gui;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -10,17 +8,13 @@ import java.io.FileReader;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.pietschy.wizard.PanelWizardStep;
@@ -35,7 +29,6 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
-import fi.smaa.jsmaa.gui.presentation.SMAACEAImportDataType;
 
 public class SMAACEAModelLoader {
 	
@@ -111,9 +104,9 @@ public class SMAACEAModelLoader {
 				
 				for (int i=0;i<table.getColumnModel().getColumnCount();i++) {
 					TableColumn col = table.getColumnModel().getColumn(i);
-					MyCellRenderer renderer = new MyCellRenderer();
+					SMAACEAImportDataCellRenderer renderer = new SMAACEAImportDataCellRenderer();
 					col.setCellRenderer(renderer);
-					col.setCellEditor(new MyCellEditor(renderer));
+					col.setCellEditor(new DefaultCellEditor(renderer));
 				}
 				spane.setViewportView(table);
 			} catch (InvalidInputException e) {
@@ -124,32 +117,5 @@ public class SMAACEAModelLoader {
 				e.printStackTrace();
 			}			
 		}
-	}
-	
-	@SuppressWarnings("serial")
-	private class MyCellRenderer extends JComboBox implements TableCellRenderer {
-		
-		private DefaultTableCellRenderer defRenderer = new DefaultTableCellRenderer();
-		
-		public MyCellRenderer() {
-			super(SMAACEAImportDataType.values());
-		}
-		
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			if (row != 0) {
-				return defRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
-			}
-			setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
-			setSelectedItem(value);
-			return this; 			
-		}
-	}
-	
-	@SuppressWarnings("serial")
-	private class MyCellEditor extends DefaultCellEditor {
-		public MyCellEditor(JComboBox comboBox) {
-			super(comboBox);
-		}		
 	}
 }
