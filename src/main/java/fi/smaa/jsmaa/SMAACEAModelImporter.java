@@ -7,7 +7,7 @@ import java.util.List;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.SMAACEAModel;
-import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.model.cea.DataPoint;
 
 public class SMAACEAModelImporter {
 
@@ -120,17 +120,24 @@ public class SMAACEAModelImporter {
 			throw new IllegalStateException("pre-condition violation: !isComplete()");
 		}
 		SMAACEAModel model = new SMAACEAModel("SMAA-CEA model");
-		model.addCriterion(new ScaleCriterion("Cost", false));
-		model.addCriterion(new ScaleCriterion("Effect", true));
 		
-		List<Alternative> alts = loadAlternatives();
-		for (Alternative a : alts) {
-			model.addAlternative(a);
+		List<String> altNames = loadAlternatives(model);
+		
+		for (int i=1;i<data.size();i++) {
+			String[] row = data.get(i);
+			Alternative alt = model.getAlternatives().get(altNames.indexOf(row[getColumnIndex(Type.TREATMENT_ID)]));			
+			double eff = Double.parseDouble(row[getColumnIndex(Type.EFFICACY)]);
+			double cost = Double.parseDouble(row[getColumnIndex(Type.COST)]);
+			boolean costCensor = Integer.parseInt(row[getColumnIndex(Type.COST_CENSORING)]) == 1;
+			boolean effCensor = Integer.parseInt(row[getColumnIndex(Type.EFFICACY_CENCORING)]) == 1;
+			DataPoint p = new DataPoint(alt, cost, eff, costCensor, effCensor);
+			model.addDataPoint(p);
 		}
+
 		return model;
 	}
 
-	private List<Alternative> loadAlternatives() {
+	private List<String> loadAlternatives(SMAACEAModel model) {
 		List<String> altNames = new ArrayList<String>();
 		int treatmentNameColumn = getColumnIndex(Type.TREATMENT_ID);
 		for (int i=0;i<getRowCount();i++) {
@@ -139,11 +146,10 @@ public class SMAACEAModelImporter {
 				altNames.add(treatmentName);
 			}
 		}
-		List<Alternative> alts = new ArrayList<Alternative>();
 		for (String s : altNames) {
-			alts.add(new Alternative(s));
+			model.addAlternative(new Alternative(s));
 		}
-		return alts;
+		return altNames;
 	}
 
 	private int getColumnIndex(Type treatment_id) {

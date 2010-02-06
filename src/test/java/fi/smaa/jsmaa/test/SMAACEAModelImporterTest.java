@@ -17,6 +17,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
+import fi.smaa.jsmaa.model.cea.DataPoint;
 
 public class SMAACEAModelImporterTest {
 
@@ -68,7 +69,20 @@ public class SMAACEAModelImporterTest {
 		assertEquals("Cost", c1.getName());
 		assertFalse(c1.getAscending());		
 		assertEquals("Effect", c2.getName());
-		assertTrue(c2.getAscending());				
+		assertTrue(c2.getAscending());	
+		// check data
+		for (int i=1;i<list.size();i++) {
+			String[] row = list.get(i);
+			double eff = Double.parseDouble(row[4]);
+			double cost = Double.parseDouble(row[2]);
+			boolean costCensor = Integer.parseInt(row[3]) == 1;
+			boolean effCensor = Integer.parseInt(row[5]) == 1;
+			Alternative a1 = alts.get(0);
+			Alternative a2 = alts.get(1);
+			DataPoint expected = new DataPoint(i == 1 ? a1 : a2, cost, eff, costCensor, effCensor);
+			DataPoint point = model.getDataPoints().get(i-1);
+			assertTrue(expected.deepEquals(point));
+		}
 	}
 	
 		

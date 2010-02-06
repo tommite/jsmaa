@@ -27,6 +27,7 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelMCDAModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
+import fi.smaa.jsmaa.gui.views.CriterionView;
 import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -47,7 +48,9 @@ public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M
 	protected abstract JMenuItem buildAddCriterionItem();		
 	
 	public ViewBuilder buildView(Object o) {
-		if (o == treeModel.getPreferencesNode()) {
+		if (o instanceof Criterion) {
+			return new CriterionView(((Criterion)o), smaaModel);
+		} else if (o == treeModel.getPreferencesNode()) {
 			return new PreferenceInformationView(new PreferencePresentationModel(smaaModel));
 		} else {
 			return super.buildView(o);

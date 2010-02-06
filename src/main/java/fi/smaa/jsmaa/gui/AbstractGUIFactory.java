@@ -31,9 +31,7 @@ import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
 import fi.smaa.jsmaa.gui.views.AlternativeView;
 import fi.smaa.jsmaa.gui.views.CriteriaListView;
-import fi.smaa.jsmaa.gui.views.CriterionView;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M extends SMAAModel> implements GUIFactory{
@@ -68,8 +66,6 @@ public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M 
 			return new AlternativeInfoView(smaaModel.getAlternatives(), "Alternatives");			
 		} else if (o == treeModel.getCriteriaNode()){
 			return new CriteriaListView(smaaModel);
-		} else if (o instanceof Criterion) {
-			return new CriterionView(((Criterion)o), smaaModel);
 		} else if (o instanceof Alternative) {
 			return new AlternativeView((Alternative) o);
 		}
