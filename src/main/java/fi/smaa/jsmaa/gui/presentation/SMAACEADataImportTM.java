@@ -1,59 +1,39 @@
 package fi.smaa.jsmaa.gui.presentation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
+
+import fi.smaa.jsmaa.SMAACEAImportData;
 
 @SuppressWarnings("serial")
 public class SMAACEADataImportTM extends AbstractTableModel {
+
+	private SMAACEAImportData data;
 	
-	private List<String[]> data;
-	private List<SMAACEAImportDataType> types = new ArrayList<SMAACEAImportDataType>();
-	
-	public SMAACEADataImportTM(List<String[]> data) throws InvalidInputException {
+	public SMAACEADataImportTM(SMAACEAImportData data) {
 		this.data = data;
-		if (data.size() > 0) {
-			int frowLength = data.get(0).length;
-			if (frowLength < 4 || frowLength > 6) {
-				throw new InvalidInputException("invalid number of columns ("+frowLength+") in input");
-			}
-			for (int i=0;i<frowLength;i++) {
-				types.add(SMAACEAImportDataType.values()[i]);
-			}
-		}
 	}
 
 	@Override
 	public int getColumnCount() {
-		if (data.size() == 0) {
-			return 0;
-		}
-		return data.get(0).length;
+		return data.getColumnCount();
 	}
 
 	@Override
 	public int getRowCount() {
-		if (data.size() == 0) {
-			return 0;
-		}
-		return data.size();
+		return data.getRowCount() + 1;
 	}
 	
 	@Override
 	public String getColumnName(int column) {
-		if (data.size() == 0) {
-			return "";
-		}
-		return data.get(0)[column];
+		return data.getColumnName(column);
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
 		if (row == 0) {
-			return types.get(col);			
+			return data.getColumnType(col);
 		} else {
-			return data.get(row)[col];
+			return data.getDataAt(row-1, col);
 		}
 	}
 	
@@ -65,10 +45,10 @@ public class SMAACEADataImportTM extends AbstractTableModel {
 		if (col < 0 || col > getColumnCount()) {
 			throw new IndexOutOfBoundsException("column " + col + " out of bounds");
 		}
-		if (!(val instanceof SMAACEAImportDataType)) {
+		if (!(val instanceof SMAACEAImportData.Type)) {
 			throw new IllegalArgumentException("value to set not SMAACEAImportDataType");
 		}
-		types.set(col, (SMAACEAImportDataType) val);
+		data.setColumnType(col, (SMAACEAImportData.Type) val);
 		super.fireTableDataChanged();
 	}
 	
