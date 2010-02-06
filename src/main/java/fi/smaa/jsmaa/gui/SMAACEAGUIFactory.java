@@ -7,6 +7,7 @@ import javax.swing.JTree;
 
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAACEA;
+import fi.smaa.jsmaa.gui.views.SMAACEADataView;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 
 public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, SMAACEAModel> {
@@ -38,6 +39,9 @@ public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, 
 	
 	@Override
 	public ViewBuilder buildView(Object o) {
+		if (o == treeModel.getDataNode()) {
+			return new SMAACEADataView(smaaModel);
+		}
 		return super.buildView(o);
 	}
 }

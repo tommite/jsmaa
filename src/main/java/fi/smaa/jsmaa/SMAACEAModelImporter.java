@@ -29,12 +29,21 @@ public class SMAACEAModelImporter {
 							". Input header has " + cols + " columns.");
 			}
 		}
+		trimData();
 		types = new Type[getColumnCount()];
 		for (int i=0;i<types.length;i++) {
 			types[i] = Type.values()[i];
 		}
 	}
 	
+	private void trimData() {
+		for (String[] s : data) {
+			for (int i=0;i<s.length;i++) {
+				s[i] = s[i].trim();
+			}
+		}
+	}
+
 	public Object getDataAt(int row, int col) {
 		return data.get(row+1)[col];
 	}
@@ -123,13 +132,19 @@ public class SMAACEAModelImporter {
 		
 		List<String> altNames = loadAlternatives(model);
 		
+		int costCensIndex = getColumnIndex(Type.COST_CENSORING);
+		int efficacyCensIndex = getColumnIndex(Type.EFFICACY_CENCORING);
+		int effIndex = getColumnIndex(Type.EFFICACY);
+		int costIndex = getColumnIndex(Type.COST);
+		int treatmentIndex = getColumnIndex(Type.TREATMENT_ID);		
+		
 		for (int i=1;i<data.size();i++) {
 			String[] row = data.get(i);
-			Alternative alt = model.getAlternatives().get(altNames.indexOf(row[getColumnIndex(Type.TREATMENT_ID)]));			
-			double eff = Double.parseDouble(row[getColumnIndex(Type.EFFICACY)]);
-			double cost = Double.parseDouble(row[getColumnIndex(Type.COST)]);
-			boolean costCensor = Integer.parseInt(row[getColumnIndex(Type.COST_CENSORING)]) == 1;
-			boolean effCensor = Integer.parseInt(row[getColumnIndex(Type.EFFICACY_CENCORING)]) == 1;
+			Alternative alt = model.getAlternatives().get(altNames.indexOf(row[treatmentIndex]));			
+			double eff = Double.parseDouble(row[effIndex]);
+			double cost = Double.parseDouble(row[costIndex]);
+			boolean costCensor = costCensIndex == -1 ? false : (Integer.parseInt(row[costCensIndex]) == 1);
+			boolean effCensor = efficacyCensIndex == -1 ? false : (Integer.parseInt(row[efficacyCensIndex]) == 1);
 			DataPoint p = new DataPoint(alt, cost, eff, costCensor, effCensor);
 			model.addDataPoint(p);
 		}
@@ -158,7 +173,7 @@ public class SMAACEAModelImporter {
 				return i;
 			}
 		}
-		throw new IllegalArgumentException("no index found for treatment_id " + treatment_id);
+		return -1;
 	}
 }
 
