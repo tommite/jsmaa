@@ -11,11 +11,9 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -51,13 +49,6 @@ public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M
 	public ViewBuilder buildView(Object o) {
 		if (o == treeModel.getPreferencesNode()) {
 			return new PreferenceInformationView(new PreferencePresentationModel(smaaModel));
-		} else if (o == treeModel.getResultsNode()) {
-			return new ViewBuilder() {
-				@Override
-				public JComponent buildPanel() {
-					return new JPanel();
-				}
-			};
 		} else {
 			return super.buildView(o);
 		}	

@@ -7,8 +7,6 @@ import fi.smaa.jsmaa.model.SMAAModelListener;
 public class LeftTreeModelMCDAModel<M extends AbstractSMAAModel> extends AbstractLeftTreeModel<M> {
 
 	protected static final int PREFERENCES = 2;
-	protected static final int RESULTS = 3;
-	protected String resultsNode = "Results";
 	protected String preferencesNode = "Preferences";
 
 	public LeftTreeModelMCDAModel(M model) {
@@ -23,20 +21,19 @@ public class LeftTreeModelMCDAModel<M extends AbstractSMAAModel> extends Abstrac
 		});		
 	}
 
-	public Object getResultsNode() {
-		return resultsNode;
-	}
-
 	public Object getPreferencesNode() {
 		return preferencesNode;
 	}
 	
 	@Override
+	protected int getResultsIndex() {
+		return 3;
+	}
+	
+	@Override
 	public Object getChild(Object parent, int index) {
 		if (parent == getRoot()) {
-			if (index == RESULTS) {
-				return resultsNode;
-			} else if (index == PREFERENCES) {
+			if (index == PREFERENCES) {
 				return preferencesNode;
 			}
 		}
@@ -56,9 +53,7 @@ public class LeftTreeModelMCDAModel<M extends AbstractSMAAModel> extends Abstrac
 	@Override
 	public int getIndexOfChild(Object parent, Object child) {
 		if (parent == getRoot()) {
-			if (child == resultsNode) {
-				return RESULTS;
-			} else if (child == preferencesNode) {
+			if (child == preferencesNode) {
 				return PREFERENCES;
 			}
 		}
@@ -67,9 +62,7 @@ public class LeftTreeModelMCDAModel<M extends AbstractSMAAModel> extends Abstrac
 	
 	@Override
 	public boolean isLeaf(Object node) {
-		if (node == resultsNode) {
-			return false;
-		} else if (node == preferencesNode) {
+		if (node == preferencesNode) {
 			return true;
 		}
 		return super.isLeaf(node);

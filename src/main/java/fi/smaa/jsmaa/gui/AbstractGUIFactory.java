@@ -9,12 +9,10 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.DropMode;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -27,6 +25,7 @@ import com.jgoodies.looks.Options;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
+import fi.smaa.jsmaa.gui.components.EmptyViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
@@ -73,16 +72,8 @@ public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M 
 			return new CriterionView(((Criterion)o), smaaModel);
 		} else if (o instanceof Alternative) {
 			return new AlternativeView((Alternative) o);
-		} else if (o == treeModel.getModelNode()) {
-			return new ViewBuilder() {
-				@Override
-				public JComponent buildPanel() {
-					return new JPanel();
-				}
-			};			
-		} else {
-			throw new IllegalArgumentException("No view known for object " + o);
 		}
+		return new EmptyViewBuilder();
 	}
 	public T getTreeModel() {
 		return treeModel;
@@ -233,7 +224,7 @@ public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M 
 		String msg = "JSMAA v" + AppInfo.getAppVersion();
 		msg += "\n"+AppInfo.getAppName()+" is open source and licensed under GPLv3.\n";
 		msg += "\t- and can be distributed freely!\n";
-		msg += "(c) 2009 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
+		msg += "(c) 2009-2010 Tommi Tervonen <t dot p dot tervonen at rug dot nl>";
 		JOptionPane.showMessageDialog(parent, msg, title,
 				JOptionPane.INFORMATION_MESSAGE, ImageLoader.getIcon(FileNames.ICON_HOME));
 	}

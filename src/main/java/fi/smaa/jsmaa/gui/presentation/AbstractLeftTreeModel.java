@@ -13,7 +13,7 @@ import fi.smaa.jsmaa.model.SMAA2Model;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
-public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
+public abstract class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 
 	private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
 	protected M smaaModel;
@@ -21,6 +21,7 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 	protected static final int CRITERIA = 1;
 	protected String alternativesNode = "Alternatives";
 	protected String criteriaNode = "Criteria";
+	protected String resultsNode = "Results";
 
 	public AbstractLeftTreeModel(M model) {
 		if (model == null) {
@@ -32,6 +33,8 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 	public Object getAlternativesNode() {
 		return alternativesNode;
 	}
+	
+	protected abstract int getResultsIndex();
 
 	public Object getCriteriaNode() {
 		return criteriaNode;
@@ -88,7 +91,9 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 				return alternativesNode;
 			} else if (index == CRITERIA) {
 				return criteriaNode;
-			}
+			} else if (index == getResultsIndex()) {
+				return resultsNode;
+			} 
 		} else if (parent == alternativesNode) {
 			return new ArrayList(smaaModel.getAlternatives()).get(index);
 		} else if (parent == criteriaNode) {
@@ -99,12 +104,12 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 	
 	public int getChildCount(Object parent) {
 		if (parent == getRoot()) {
-			return 2;
+			return 3;
 		} else if (parent == alternativesNode) {
 			return smaaModel.getAlternatives().size();
 		} else if (parent == criteriaNode) {
 			return smaaModel.getCriteria().size();
-		}
+		} 
 		return 0;
 	}
 	
@@ -115,6 +120,8 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 				return ALTERNATIVES;
 			} else if (child == criteriaNode) {
 				return CRITERIA;
+			} else if (child == resultsNode) {
+				return getResultsIndex();
 			}
 		} else if (parent == alternativesNode) {
 			if (child instanceof Alternative) {
@@ -147,12 +154,18 @@ public class AbstractLeftTreeModel<M extends SMAAModel> implements TreeModel {
 			return false;
 		} else if (node == criteriaNode) {
 			return false;
+		} else if (node == resultsNode) {
+			return false;
 		}
 		return false;
 	}
 
 	public Object getModelNode() {
 		return smaaModel;
+	}
+
+	public Object getResultsNode() {
+		return resultsNode;
 	}
 	
 }

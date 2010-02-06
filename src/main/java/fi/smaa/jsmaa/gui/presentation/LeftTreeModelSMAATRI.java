@@ -31,7 +31,6 @@ public class LeftTreeModelSMAATRI extends LeftTreeModelMCDAModel<SMAATRIModel> {
 	
 	private static int CATEGORIES = 2;
 	protected static final int PREFERENCES = 3;
-	protected static final int RESULTS = 4;	
 	private String categoriesNode = "Categories";
 	private String categoryAcceptabilitiesNode = "CatAcc";
 
@@ -45,6 +44,11 @@ public class LeftTreeModelSMAATRI extends LeftTreeModelMCDAModel<SMAATRIModel> {
 				}
 			}
 		});		
+	}
+	
+	@Override
+	protected int getResultsIndex() {
+		return 4;
 	}
 	
 	public Object getCategoriesNode() {
@@ -66,8 +70,6 @@ public class LeftTreeModelSMAATRI extends LeftTreeModelMCDAModel<SMAATRIModel> {
 				return categoriesNode;
 			} else if (index == PREFERENCES) {
 				return preferencesNode;
-			} else if (index == RESULTS) {
-				return resultsNode;
 			}
 		} else if (parent == categoriesNode) {
 			return smaaModel.getCategories().get(index);
@@ -126,8 +128,6 @@ public class LeftTreeModelSMAATRI extends LeftTreeModelMCDAModel<SMAATRIModel> {
 				return CATEGORIES;
 			} else if (child == preferencesNode) {
 				return PREFERENCES;
-			} else if (child == resultsNode) {
-				return RESULTS;
 			}
 		} else if (parent == getResultsNode()) {
 			if (child == categoryAcceptabilitiesNode) {
