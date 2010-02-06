@@ -6,9 +6,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
@@ -32,18 +29,18 @@ import com.jidesoft.swing.JideButton;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.SMAACEAImportData;
+import fi.smaa.jsmaa.SMAACEAModelImporter;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
 
-public class SMAACEAModelLoader {
+public class SMAACEAModelLoaderWizard {
 
 	private ModelFileManager mgr;
 	private JFrame parent;
 	private StaticModel wizardModel;
-	private SMAACEAImportData importData;	
+	private SMAACEAModelImporter importData;	
 
-	public SMAACEAModelLoader(ModelFileManager mgr) {
+	public SMAACEAModelLoaderWizard(ModelFileManager mgr) {
 		this.mgr = mgr;
 	}
 
@@ -86,7 +83,7 @@ public class SMAACEAModelLoader {
 				private void loadFile(final JTextField field, File file) {
 					try {
 						CSVReader reader = new CSVReader(new FileReader(file));
-						importData = new SMAACEAImportData(reader.readAll());
+						importData = new SMAACEAModelImporter(reader.readAll());
 						field.setText(file.getName());
 						setComplete(file != null);
 					}  catch (InvalidInputException e) {
@@ -116,7 +113,13 @@ public class SMAACEAModelLoader {
 		@Override
 		public void prepare() {
 			SMAACEADataImportTM tableModel = new SMAACEADataImportTM(importData);
-			tableModel.addTableModelListener(new SelectColumnsListener(tableModel));
+			setComplete(importData.isComplete());			
+			tableModel.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent arg0) {
+					setComplete(importData.isComplete());
+				}				
+			});
 			JTable table = new JTable(tableModel);
 
 			table.setCellSelectionEnabled(false);
@@ -129,34 +132,5 @@ public class SMAACEAModelLoader {
 			}
 			spane.setViewportView(table);
 		}
-
-		private class SelectColumnsListener implements TableModelListener {
-
-			private SMAACEADataImportTM tableModel;
-
-			public SelectColumnsListener(SMAACEADataImportTM tableModel) {
-				this.tableModel = tableModel;
-				checkTableChanged();
-			}
-
-			@Override
-			public void tableChanged(TableModelEvent ev) {
-				checkTableChanged();
-			}
-
-			private void checkTableChanged() {
-				SMAACEAImportData.Type[] neededColumns = new SMAACEAImportData.Type[]{
-						SMAACEAImportData.Type.COST,
-						SMAACEAImportData.Type.EFFICACY,
-						SMAACEAImportData.Type.PATIENT_ID,
-						SMAACEAImportData.Type.TREATMENT_ID};
-
-				List<SMAACEAImportData.Type> actualColumns = new ArrayList<SMAACEAImportData.Type>();
-				for (int col=0;col<tableModel.getColumnCount();col++) {
-					actualColumns.add((SMAACEAImportData.Type) tableModel.getValueAt(0, col));
-				}
-				setComplete(actualColumns.containsAll(Arrays.asList(neededColumns)));
-			}	
-		}		
 	}
 }

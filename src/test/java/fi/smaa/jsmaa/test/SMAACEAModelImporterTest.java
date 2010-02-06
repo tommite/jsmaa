@@ -1,19 +1,22 @@
 package fi.smaa.jsmaa.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAACEAImportData;
+import fi.smaa.jsmaa.SMAACEAModelImporter;
+import fi.smaa.jsmaa.SMAACEAModelImporter.Type;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 
-public class SMAACEAImportDataTest {
+public class SMAACEAModelImporterTest {
 
 	private ArrayList<String[]> list;
-	private SMAACEAImportData data;
+	private SMAACEAModelImporter data;
 
 	@Before
 	public void setUp() throws InvalidInputException {
@@ -23,7 +26,7 @@ public class SMAACEAImportDataTest {
 		list.add(new String[]{"p1", "1", "200", "0", "0.6", "0"});
 		list.add(new String[]{"p2", "2", "220", "1", "0.8", "0"});
 		
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 	}
 		
 	@Test
@@ -38,14 +41,14 @@ public class SMAACEAImportDataTest {
 	@Test(expected=InvalidInputException.class)
 	public void testInvalidDataConstructor() throws InvalidInputException {
 		list.add(new String[]{"p3"});
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 	}
 	
 	@Test(expected=InvalidInputException.class)	
 	public void testNoDataInConstructor() throws InvalidInputException {
 		list = new ArrayList<String[]>();
 		list.add(new String[]{"patientID", "treatmentID", "cost", "costCensor", "eff", "effCensor"});
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 	}
 		
 	@Test(expected=InvalidInputException.class)	
@@ -53,7 +56,7 @@ public class SMAACEAImportDataTest {
 		list = new ArrayList<String[]>();
 		list.add(new String[]{"patientID", "treatmentID", "cost", "costCensor", "eff", "effCensor", "extra column"});
 		list.add(new String[]{"p1", "1", "200", "0", "0.6", "0", "9"});		
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 	}
 	
 	@Test(expected=InvalidInputException.class)	
@@ -61,21 +64,21 @@ public class SMAACEAImportDataTest {
 		list = new ArrayList<String[]>();
 		list.add(new String[]{"patientID", "treatmentID", "cost"});
 		list.add(new String[]{"p1", "1", "200"});		
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 	}	
 	
 	@Test
 	public void testGetColumnType() {
 		// check that initially they are in order
 		for (int i=0;i<data.getColumnCount();i++) {
-			assertEquals(SMAACEAImportData.Type.values()[i], data.getColumnType(i));
+			assertEquals(SMAACEAModelImporter.Type.values()[i], data.getColumnType(i));
 		}
 	}
 	
 	@Test
 	public void testSetColumnType() {
-		SMAACEAImportData.Type oldType = SMAACEAImportData.Type.values()[0];		
-		SMAACEAImportData.Type newType = SMAACEAImportData.Type.values()[1];
+		SMAACEAModelImporter.Type oldType = SMAACEAModelImporter.Type.values()[0];		
+		SMAACEAModelImporter.Type newType = SMAACEAModelImporter.Type.values()[1];
 		data.setColumnType(0, newType);
 		assertEquals(newType, data.getColumnType(0));
 		// check that column previously holding the type swapped
@@ -97,5 +100,20 @@ public class SMAACEAImportDataTest {
 		for (int i=0;i<data.getColumnCount();i++) {
 			assertEquals(list.get(0)[i], data.getColumnName(i));
 		}
+	}
+	
+	@Test
+	public void testIsComplete() throws InvalidInputException {
+		list = new ArrayList<String[]>();
+		
+		list.add(new String[]{"patientID", "treatmentID", "cost", "eff"});
+		list.add(new String[]{"p1", "1", "200", "0"});
+		data = new SMAACEAModelImporter(list);
+	
+		Type oldType = data.getColumnType(0);
+		data.setColumnType(0, Type.EFFICACY_CENCORING);
+		assertFalse(data.isComplete());
+		data.setColumnType(0, oldType);
+		assertTrue(data.isComplete());
 	}
 }

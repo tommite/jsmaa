@@ -10,7 +10,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import fi.smaa.jsmaa.SMAACEAImportData;
+import fi.smaa.jsmaa.SMAACEAModelImporter;
 
 @SuppressWarnings("serial")
 public class SMAACEAImportDataCellRenderer extends JComboBox implements TableCellRenderer {
@@ -18,7 +18,7 @@ public class SMAACEAImportDataCellRenderer extends JComboBox implements TableCel
 	private DefaultTableCellRenderer defRenderer = new DefaultTableCellRenderer();
 	
 	public SMAACEAImportDataCellRenderer() {
-		super(SMAACEAImportData.Type.values());
+		super(SMAACEAModelImporter.Type.values());
 	}
 	
 	@Override

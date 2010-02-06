@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAACEAImportData;
+import fi.smaa.jsmaa.SMAACEAModelImporter;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
 
 public class SMAACEADataImportTMTest {
 
-	private SMAACEAImportData data;
+	private SMAACEAModelImporter data;
 	private SMAACEADataImportTM model;
 
 	@Before
@@ -25,7 +25,7 @@ public class SMAACEADataImportTMTest {
 		list.add(new String[]{"p1", "1", "200", "0", "0.6", "0"});
 		list.add(new String[]{"p2", "2", "220", "1", "0.8", "0"});
 		
-		data = new SMAACEAImportData(list);
+		data = new SMAACEAModelImporter(list);
 		model = new SMAACEADataImportTM(data);
 	}
 		
@@ -53,7 +53,7 @@ public class SMAACEADataImportTMTest {
 	public void testGetValueAt() {
 
 		for (int i=0;i<model.getColumnCount();i++) {
-			assertTrue(model.getValueAt(0, i) instanceof SMAACEAImportData.Type);
+			assertTrue(model.getValueAt(0, i) instanceof SMAACEAModelImporter.Type);
 		}
 
 		for (int row=1;row<data.getRowCount();row++) {
@@ -65,7 +65,7 @@ public class SMAACEADataImportTMTest {
 	
 	@Test
 	public void testSetValueAt() {
-		model.setValueAt(SMAACEAImportData.Type.EFFICACY, 0, 0);
-		assertEquals(SMAACEAImportData.Type.EFFICACY, model.getValueAt(0, 0));
+		model.setValueAt(SMAACEAModelImporter.Type.EFFICACY, 0, 0);
+		assertEquals(SMAACEAModelImporter.Type.EFFICACY, model.getValueAt(0, 0));
 	}	
 }

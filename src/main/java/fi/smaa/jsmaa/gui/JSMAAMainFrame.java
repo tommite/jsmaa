@@ -164,7 +164,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		} else if (type.equals(MenuDirector.ModelType.SMAATRI)) {
 			modelManager.setModel(DefaultModels.getSMAATRIModel());
 		} else if (type.equals(MenuDirector.ModelType.SMAACEA)) {
-			new SMAACEAModelLoader(modelManager).start(this);
+			new SMAACEAModelLoaderWizard(modelManager).start(this);
 		}
 	}
 

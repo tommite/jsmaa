@@ -1,15 +1,16 @@
 package fi.smaa.jsmaa;
 
+import java.util.Arrays;
 import java.util.List;
 
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 
-public class SMAACEAImportData {
+public class SMAACEAModelImporter {
 
 	private List<String[]> data;
 	private Type[] types;
 
-	public SMAACEAImportData(List<String[]> data) throws InvalidInputException {
+	public SMAACEAModelImporter(List<String[]> data) throws InvalidInputException {
 		this.data = data;
 		if (data.size() < 2) {
 			throw new InvalidInputException("Not enough rows in input data, required at least header row an one input");
@@ -35,22 +36,28 @@ public class SMAACEAImportData {
 	}
 	
 	public enum Type {
-		PATIENT_ID("Pat. ID"),
-		TREATMENT_ID("Treatm. ID"),
-		COST("Cost"),
-		EFFICACY("Effic."),
-		COST_CENSORING("Cost cens."),
-		EFFICACY_CENCORING("Effic. cens.");
+		PATIENT_ID("Pat. ID", true),
+		TREATMENT_ID("Treatm. ID", true),
+		COST("Cost", true),
+		EFFICACY("Effic.", true),
+		COST_CENSORING("Cost cens.", false),
+		EFFICACY_CENCORING("Effic. cens.", false);
 		
 		private String title;
+		private boolean mandatory;
 		
-		Type(String title) {
+		Type(String title, boolean mandatory) {
 			this.title = title;
+			this.mandatory = mandatory;
 		}
 		
 		@Override
 		public String toString() {
 			return title;
+		}
+		
+		public boolean isMandatory() {
+			return mandatory;
 		}
 	}
 	
@@ -86,6 +93,18 @@ public class SMAACEAImportData {
 
 	public String getColumnName(int column) {
 		return data.get(0)[column];
+	}
+	
+	public boolean isComplete() {
+		List<Type> tList = Arrays.asList(types);
+		for (Type t : Type.values()) {
+			if (t.isMandatory()) {
+				if (!tList.contains(t)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
 

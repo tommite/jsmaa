@@ -2,14 +2,14 @@ package fi.smaa.jsmaa.gui.presentation;
 
 import javax.swing.table.AbstractTableModel;
 
-import fi.smaa.jsmaa.SMAACEAImportData;
+import fi.smaa.jsmaa.SMAACEAModelImporter;
 
 @SuppressWarnings("serial")
 public class SMAACEADataImportTM extends AbstractTableModel {
 
-	private SMAACEAImportData data;
+	private SMAACEAModelImporter data;
 	
-	public SMAACEADataImportTM(SMAACEAImportData data) {
+	public SMAACEADataImportTM(SMAACEAModelImporter data) {
 		this.data = data;
 	}
 
@@ -45,10 +45,10 @@ public class SMAACEADataImportTM extends AbstractTableModel {
 		if (col < 0 || col > getColumnCount()) {
 			throw new IndexOutOfBoundsException("column " + col + " out of bounds");
 		}
-		if (!(val instanceof SMAACEAImportData.Type)) {
+		if (!(val instanceof SMAACEAModelImporter.Type)) {
 			throw new IllegalArgumentException("value to set not SMAACEAImportDataType");
 		}
-		data.setColumnType(col, (SMAACEAImportData.Type) val);
+		data.setColumnType(col, (SMAACEAModelImporter.Type) val);
 		super.fireTableDataChanged();
 	}
 	
