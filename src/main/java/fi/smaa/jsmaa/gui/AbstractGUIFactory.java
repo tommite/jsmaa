@@ -9,10 +9,12 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.DropMode;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -23,9 +25,16 @@ import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
 import fi.smaa.common.gui.ImageLoader;
+import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
+import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
+import fi.smaa.jsmaa.gui.views.AlternativeView;
+import fi.smaa.jsmaa.gui.views.CriteriaListView;
+import fi.smaa.jsmaa.gui.views.CriterionView;
+import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M extends SMAAModel> implements GUIFactory{
@@ -55,6 +64,26 @@ public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M 
 		bottomToolBar = buildBottomToolBar();
 	}
 	
+	public ViewBuilder buildView(Object o) {
+		if (o == treeModel.getAlternativesNode()) {
+			return new AlternativeInfoView(smaaModel.getAlternatives(), "Alternatives");			
+		} else if (o == treeModel.getCriteriaNode()){
+			return new CriteriaListView(smaaModel);
+		} else if (o instanceof Criterion) {
+			return new CriterionView(((Criterion)o), smaaModel);
+		} else if (o instanceof Alternative) {
+			return new AlternativeView((Alternative) o);
+		} else if (o == treeModel.getModelNode()) {
+			return new ViewBuilder() {
+				@Override
+				public JComponent buildPanel() {
+					return new JPanel();
+				}
+			};			
+		} else {
+			throw new IllegalArgumentException("No view known for object " + o);
+		}
+	}
 	public T getTreeModel() {
 		return treeModel;
 	}

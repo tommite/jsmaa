@@ -32,7 +32,7 @@ import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 @SuppressWarnings("serial")
-public abstract class LeftTreeCellRenderer<M extends AbstractLeftTreeModel<?>> extends DefaultTreeCellRenderer {
+public class LeftTreeCellRenderer<M extends AbstractLeftTreeModel<?>> extends DefaultTreeCellRenderer {
 
 	protected M model;
 	

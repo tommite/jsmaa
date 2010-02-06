@@ -29,10 +29,6 @@ import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelMCDAModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
-import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
-import fi.smaa.jsmaa.gui.views.AlternativeView;
-import fi.smaa.jsmaa.gui.views.CriteriaListView;
-import fi.smaa.jsmaa.gui.views.CriterionView;
 import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -53,15 +49,7 @@ public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M
 	protected abstract JMenuItem buildAddCriterionItem();		
 	
 	public ViewBuilder buildView(Object o) {
-		if (o == treeModel.getAlternativesNode()) {
-			return new AlternativeInfoView(smaaModel.getAlternatives(), "Alternatives");			
-		} else if (o == treeModel.getCriteriaNode()){
-			return new CriteriaListView(smaaModel);
-		} else if (o instanceof Criterion) {
-			return new CriterionView(((Criterion)o), smaaModel);
-		} else if (o instanceof Alternative) {
-			return new AlternativeView((Alternative) o);
-		} else if (o == treeModel.getPreferencesNode()) {
+		if (o == treeModel.getPreferencesNode()) {
 			return new PreferenceInformationView(new PreferencePresentationModel(smaaModel));
 		} else if (o == treeModel.getResultsNode()) {
 			return new ViewBuilder() {
@@ -70,15 +58,8 @@ public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M
 					return new JPanel();
 				}
 			};
-		} else if (o == treeModel.getModelNode()) {
-			return new ViewBuilder() {
-				@Override
-				public JComponent buildPanel() {
-					return new JPanel();
-				}
-			};			
 		} else {
-			throw new IllegalArgumentException("no view known for object "+ o);
+			return super.buildView(o);
 		}	
 	}
 	

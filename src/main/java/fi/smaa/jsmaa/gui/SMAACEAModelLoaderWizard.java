@@ -32,6 +32,7 @@ import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.SMAACEAModelImporter;
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
+import fi.smaa.jsmaa.model.SMAACEAModel;
 
 public class SMAACEAModelLoaderWizard {
 
@@ -66,7 +67,7 @@ public class SMAACEAModelLoaderWizard {
 			JideButton openButton = new JideButton("Choose file", ImageLoader.getIcon(FileNames.ICON_OPENFILE));
 			final JTextField field = new JTextField("no file selected");
 			field.setColumns(20);
-			field.setEnabled(false);			
+			field.setEnabled(false);	
 			openButton.addActionListener(new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -131,6 +132,12 @@ public class SMAACEAModelLoaderWizard {
 				col.setCellEditor(new DefaultCellEditor(renderer));
 			}
 			spane.setViewportView(table);
+		}
+		
+		@Override
+		public void applyState() {
+			SMAACEAModel model = importData.constructModel();
+			mgr.setModel(model);
 		}
 	}
 }

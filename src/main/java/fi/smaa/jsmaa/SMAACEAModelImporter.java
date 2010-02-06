@@ -1,9 +1,13 @@
 package fi.smaa.jsmaa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
+import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.SMAACEAModel;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class SMAACEAModelImporter {
 
@@ -105,6 +109,50 @@ public class SMAACEAModelImporter {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * PRE-COND: isComplete()
+	 * @return
+	 */
+	public SMAACEAModel constructModel() {
+		if (!isComplete()) {
+			throw new IllegalStateException("pre-condition violation: !isComplete()");
+		}
+		SMAACEAModel model = new SMAACEAModel("SMAA-CEA model");
+		model.addCriterion(new ScaleCriterion("Cost", false));
+		model.addCriterion(new ScaleCriterion("Effect", true));
+		
+		List<Alternative> alts = loadAlternatives();
+		for (Alternative a : alts) {
+			model.addAlternative(a);
+		}
+		return model;
+	}
+
+	private List<Alternative> loadAlternatives() {
+		List<String> altNames = new ArrayList<String>();
+		int treatmentNameColumn = getColumnIndex(Type.TREATMENT_ID);
+		for (int i=0;i<getRowCount();i++) {
+			String treatmentName = getDataAt(i, treatmentNameColumn).toString();
+			if (!altNames.contains(treatmentName)) {
+				altNames.add(treatmentName);
+			}
+		}
+		List<Alternative> alts = new ArrayList<Alternative>();
+		for (String s : altNames) {
+			alts.add(new Alternative(s));
+		}
+		return alts;
+	}
+
+	private int getColumnIndex(Type treatment_id) {
+		for (int i=0;i<types.length;i++) {
+			if (types[i].equals(treatment_id)) {
+				return i;
+			}
+		}
+		throw new IllegalArgumentException("no index found for treatment_id " + treatment_id);
 	}
 }
 

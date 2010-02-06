@@ -51,6 +51,8 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAA2Model;
+import fi.smaa.jsmaa.model.SMAACEAModel;
+import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
@@ -86,18 +88,22 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		modelManager.addPropertyChangeListener(ModelFileManager.PROPERTY_MODEL, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				initWithModel((SMAA2Model) evt.getNewValue());
+				initWithModel((SMAAModel)evt.getNewValue());
 			}			
 		});
 		modelManager.setModel(model);
 	}
 	
-	public void initWithModel(SMAA2Model model) {
+	public void initWithModel(SMAAModel model) {
 		if (model instanceof SMAATRIModel) {
 			guiFactory = new SMAATRIGUIFactory(this, (SMAATRIModel) model, this);
+		} else if (model instanceof SMAA2Model) {
+			guiFactory = new SMAA2GUIFactory(this, (SMAA2Model) model, this);			
+		} else if (model instanceof SMAACEAModel) {
+			guiFactory = new SMAACEAGUIFactory(this, (SMAACEAModel) model, this);			
 		} else {
-			guiFactory = new SMAA2GUIFactory(this, model, this);			
-		}		
+			throw new IllegalArgumentException("Cannot init gui with model of type " + model.getClass());
+		}
 		rebuildGUI();
 		buildNewSimulator();
 		model.addModelListener(modelListener);		
@@ -317,8 +323,8 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	private void buildNewSimulator() {
 		if (modelManager.getModel() instanceof SMAATRIModel) {
 			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), guiFactory, this));
-		} else {
-			buildQueue.add(new SMAA2SimulationBuilder(modelManager.getModel(), guiFactory, this));			
+		} else if (modelManager.getModel() instanceof SMAA2Model){
+			buildQueue.add(new SMAA2SimulationBuilder((SMAA2Model) modelManager.getModel(), guiFactory, this));			
 		}
 	}
 	
