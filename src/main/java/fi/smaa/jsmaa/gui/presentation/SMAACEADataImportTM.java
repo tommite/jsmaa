@@ -2,7 +2,7 @@ package fi.smaa.jsmaa.gui.presentation;
 
 import javax.swing.table.AbstractTableModel;
 
-import fi.smaa.jsmaa.SMAACEAModelImporter;
+import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter;
 
 @SuppressWarnings("serial")
 public class SMAACEADataImportTM extends AbstractTableModel {

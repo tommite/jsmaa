@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.SMAACEAModelImporter;
-import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
+import fi.smaa.jsmaa.model.cea.InvalidInputException;
+import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter;
 
 public class SMAACEADataImportTMTest {
 

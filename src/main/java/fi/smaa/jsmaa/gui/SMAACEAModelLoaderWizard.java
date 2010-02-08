@@ -29,10 +29,10 @@ import com.jidesoft.swing.JideButton;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.SMAACEAModelImporter;
-import fi.smaa.jsmaa.gui.presentation.InvalidInputException;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
 import fi.smaa.jsmaa.model.SMAACEAModel;
+import fi.smaa.jsmaa.model.cea.InvalidInputException;
+import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter;
 
 public class SMAACEAModelLoaderWizard {
 
@@ -83,7 +83,7 @@ public class SMAACEAModelLoaderWizard {
 
 				private void loadFile(final JTextField field, File file) {
 					try {
-						CSVReader reader = new CSVReader(new FileReader(file));
+						CSVReader reader = new CSVReader(new FileReader(file), ' ');
 						importData = new SMAACEAModelImporter(reader.readAll());
 						field.setText(file.getName());
 						setComplete(file != null);
