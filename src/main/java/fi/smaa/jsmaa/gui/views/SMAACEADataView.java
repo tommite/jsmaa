@@ -29,7 +29,7 @@ public class SMAACEADataView implements ViewBuilder {
 	@Override
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
-				"pref",
+				"pref:grow:fill",
 				"p, 3dlu, p, 3dlu, p");
 
 		PanelBuilder builder = new PanelBuilder(layout);
