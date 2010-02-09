@@ -45,6 +45,7 @@ public class SMAACEADataView implements ViewBuilder {
 		return builder.getPanel();
 	}
 
+	@SuppressWarnings("serial")
 	private Component buildSurvivalButton() {
 		JideButton survButton = new JideButton("Survival analysis");
 		survButton.addActionListener(new AbstractAction() {
@@ -67,6 +68,7 @@ public class SMAACEADataView implements ViewBuilder {
 		return scrollPane;
 	}
 	
+	@SuppressWarnings("serial")
 	private class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object val, boolean isSelected, 

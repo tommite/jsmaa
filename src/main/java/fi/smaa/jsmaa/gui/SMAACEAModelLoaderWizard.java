@@ -141,6 +141,7 @@ public class SMAACEAModelLoaderWizard {
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	private class ChooseEffectDirectionStep extends PanelWizardStep {
 		public ChooseEffectDirectionStep() {
 			super("Choose effect direction", "Choose Direction for effect - either ascending (larger the better) or descending");
