@@ -65,7 +65,7 @@ public class SMAACEADataImportTMTest {
 	
 	@Test
 	public void testSetValueAt() {
-		model.setValueAt(SMAACEAModelImporter.Type.EFFICACY, 0, 0);
-		assertEquals(SMAACEAModelImporter.Type.EFFICACY, model.getValueAt(0, 0));
+		model.setValueAt(SMAACEAModelImporter.Type.EFFECT, 0, 0);
+		assertEquals(SMAACEAModelImporter.Type.EFFECT, model.getValueAt(0, 0));
 	}	
 }

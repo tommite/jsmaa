@@ -30,6 +30,7 @@ import com.jidesoft.swing.JideButton;
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
+import fi.smaa.jsmaa.gui.presentation.SMAACEAModelImporterPM;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 import fi.smaa.jsmaa.model.cea.InvalidInputException;
 import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter;
@@ -125,9 +126,10 @@ public class SMAACEAModelLoaderWizard {
 
 			table.setCellSelectionEnabled(false);
 
+			SMAACEAModelImporterPM presentationModel = new SMAACEAModelImporterPM(importData);
 			for (int i=0;i<table.getColumnModel().getColumnCount();i++) {
 				TableColumn col = table.getColumnModel().getColumn(i);
-				SMAACEAImportDataCellRenderer renderer = new SMAACEAImportDataCellRenderer();
+				SMAACEAImportDataCellRenderer renderer = new SMAACEAImportDataCellRenderer(presentationModel.getTypeSelectionList(i));
 				col.setCellRenderer(renderer);
 				col.setCellEditor(new DefaultCellEditor(renderer));
 			}

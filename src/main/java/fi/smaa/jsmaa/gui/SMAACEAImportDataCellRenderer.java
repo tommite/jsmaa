@@ -4,21 +4,22 @@
 package fi.smaa.jsmaa.gui;
 
 import java.awt.Component;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter;
+import fi.smaa.jsmaa.model.cea.SMAACEAModelImporter.Type;
 
 @SuppressWarnings("serial")
 public class SMAACEAImportDataCellRenderer extends JComboBox implements TableCellRenderer {
 	
 	private DefaultTableCellRenderer defRenderer = new DefaultTableCellRenderer();
 	
-	public SMAACEAImportDataCellRenderer() {
-		super(SMAACEAModelImporter.Type.values());
+	public SMAACEAImportDataCellRenderer(List<Type> list) {
+		super(list.toArray());
 	}
 	
 	@Override
