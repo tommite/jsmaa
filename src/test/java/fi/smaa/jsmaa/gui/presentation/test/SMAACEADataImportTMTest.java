@@ -21,9 +21,9 @@ public class SMAACEADataImportTMTest {
 	public void setUp() throws InvalidInputException {
 		ArrayList<String[]> list = new ArrayList<String[]>();
 		
-		list.add(new String[]{"patientID", "treatmentID", "cost", "costCensor", "eff", "effCensor"});
-		list.add(new String[]{"p1", "1", "200", "0", "0.6", "0"});
-		list.add(new String[]{"p2", "2", "220", "1", "0.8", "0"});
+		list.add(new String[]{"patientID", "treatmentID", "cost", "censor", "eff"});
+		list.add(new String[]{"p1", "1", "200", "0", "0.6"});
+		list.add(new String[]{"p2", "2", "220", "1", "0.8"});
 		
 		data = new SMAACEAModelImporter(list);
 		model = new SMAACEADataImportTM(data);
@@ -31,7 +31,7 @@ public class SMAACEADataImportTMTest {
 		
 	@Test
 	public void testGetColumnCount() {
-		assertEquals(6, model.getColumnCount());
+		assertEquals(5, model.getColumnCount());
 	}
 	
 	@Test
@@ -44,9 +44,8 @@ public class SMAACEADataImportTMTest {
 		assertEquals("patientID", model.getColumnName(0));
 		assertEquals("treatmentID", model.getColumnName(1));
 		assertEquals("cost", model.getColumnName(2));
-		assertEquals("costCensor", model.getColumnName(3));
-		assertEquals("eff", model.getColumnName(4));
-		assertEquals("effCensor", model.getColumnName(5));		
+		assertEquals("censor", model.getColumnName(3));
+		assertEquals("eff", model.getColumnName(4));		
 	}
 	
 	@Test

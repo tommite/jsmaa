@@ -22,7 +22,7 @@ public class SMAACEADataTableModelTest {
 		ceaModel = new SMAACEAModel("model");
 		Alternative a = new Alternative("t1");
 		ceaModel.addAlternative(a);
-		DataPoint p = new DataPoint(a, 1.0, 2.0, false, true);
+		DataPoint p = new DataPoint(a, 1.0, 2.0, true);
 		ceaModel.addDataPoint(p);
 		model = new SMAACEADataTableModel(ceaModel);
 	}
