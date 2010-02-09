@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
 
+import fi.smaa.jsmaa.gui.components.TransferableObject;
 import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;

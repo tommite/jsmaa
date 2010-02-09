@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import com.jgoodies.binding.value.AbstractVetoableValueModel;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.gui.Vetoer;
+import fi.smaa.jsmaa.gui.components.Vetoer;
 
 @SuppressWarnings("serial")
 public abstract class MultiVetoableValueModel extends AbstractVetoableValueModel {

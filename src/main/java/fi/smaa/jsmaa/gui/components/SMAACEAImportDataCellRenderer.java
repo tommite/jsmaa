@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.components;
 
 import java.awt.Component;
 import java.util.List;

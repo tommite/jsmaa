@@ -29,6 +29,7 @@ import com.jidesoft.swing.JideButton;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.jsmaa.ModelFileManager;
+import fi.smaa.jsmaa.gui.components.SMAACEAImportDataCellRenderer;
 import fi.smaa.jsmaa.gui.presentation.SMAACEADataImportTM;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 import fi.smaa.jsmaa.model.cea.InvalidInputException;

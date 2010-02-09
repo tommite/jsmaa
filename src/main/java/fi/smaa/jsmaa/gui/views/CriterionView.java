@@ -33,7 +33,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.IntervalFormat;
+import fi.smaa.jsmaa.gui.components.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;

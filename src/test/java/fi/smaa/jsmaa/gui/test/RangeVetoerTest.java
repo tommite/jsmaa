@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.gui.RangeVetoer;
+import fi.smaa.jsmaa.gui.components.RangeVetoer;
 import fi.smaa.jsmaa.model.Interval;
 
 public class RangeVetoerTest {

@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.jsmaa.gui.RankSelectorGroup;
+import fi.smaa.jsmaa.gui.components.RankSelectorGroup;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.OrdinalCriterion;

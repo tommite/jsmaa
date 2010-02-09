@@ -1,4 +1,4 @@
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.components;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

@@ -1,4 +1,4 @@
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.gui.components;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;

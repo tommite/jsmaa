@@ -19,6 +19,7 @@ import org.jfree.chart.plot.PlotOrientation;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.Focuser;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;

@@ -46,6 +46,7 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
 import fi.smaa.jsmaa.ModelFileManager;
+import fi.smaa.jsmaa.gui.components.Focuser;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;

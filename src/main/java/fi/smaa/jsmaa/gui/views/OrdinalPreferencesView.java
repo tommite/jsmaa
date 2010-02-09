@@ -33,8 +33,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.common.gui.LayoutUtil;
 import fi.smaa.common.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.RankSelectorGroup;
 import fi.smaa.jsmaa.gui.components.FocusTransferrer;
+import fi.smaa.jsmaa.gui.components.RankSelectorGroup;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 

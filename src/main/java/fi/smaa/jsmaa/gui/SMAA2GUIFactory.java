@@ -21,6 +21,7 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.Focuser;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;

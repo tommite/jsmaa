@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import com.jgoodies.binding.value.AbstractValueModel;
 
-import fi.smaa.jsmaa.gui.Vetoer;
+import fi.smaa.jsmaa.gui.components.Vetoer;
 import fi.smaa.jsmaa.gui.presentation.MultiVetoableValueModel;
 
 public class MultiVetoableValueModelTest {

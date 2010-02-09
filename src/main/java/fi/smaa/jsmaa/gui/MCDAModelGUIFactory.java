@@ -25,6 +25,7 @@ import com.jgoodies.binding.adapter.Bindings;
 
 import fi.smaa.common.gui.ImageLoader;
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.Focuser;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelMCDAModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.gui.views.CriterionView;
