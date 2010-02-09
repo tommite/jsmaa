@@ -61,6 +61,7 @@ public class SMAACEADataView implements ViewBuilder {
 	private Component buildDataPart() {
 		SMAACEADataTableModel tableModel = new SMAACEADataTableModel(model);
 		JTable dataTable = new JTable(tableModel);
+		dataTable.setAutoCreateRowSorter(true);
 		dataTable.setDefaultRenderer(Object.class, new MyTableCellRenderer());
 		JScrollPane scrollPane = new JScrollPane(dataTable);
 		return scrollPane;
@@ -79,7 +80,5 @@ public class SMAACEADataView implements ViewBuilder {
 			}
 			return super.getTableCellRendererComponent(table, val, isSelected, hasFocus, row, col);
 		}
-		
 	}
-
 }
