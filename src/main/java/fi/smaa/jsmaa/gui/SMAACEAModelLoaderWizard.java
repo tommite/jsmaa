@@ -107,7 +107,7 @@ public class SMAACEAModelLoaderWizard {
 		private JScrollPane spane;
 
 		public SelectColumnsStep() {
-			super("Tag columns", "Select columns to use as patient ID, treatment ID, cost, efficacy, and possible censoring inputs");
+			super("Tag columns", "Select columns to use as patient ID, treatment ID, cost, effect, and possible censoring");
 			spane = new JScrollPane();
 			add(spane);
 		}
