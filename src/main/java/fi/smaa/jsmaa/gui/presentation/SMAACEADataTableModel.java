@@ -8,6 +8,10 @@ import fi.smaa.jsmaa.model.SMAACEAModel;
 public class SMAACEADataTableModel extends AbstractTableModel {
 	
 	private SMAACEAModel model;
+	
+	public static final int INDEX_TREATMENT = 0;
+	public static final int INDEX_COST = 1;
+	public static final int INDEX_EFFECT = 2;
 
 	public SMAACEADataTableModel(SMAACEAModel model) {
 		this.model = model;
@@ -23,11 +27,11 @@ public class SMAACEADataTableModel extends AbstractTableModel {
 
 	public Object getValueAt(int row, int col) {
 		switch (col) {
-		case 0:
+		case INDEX_TREATMENT:
 			return model.getDataPoints().get(row).getAlternative();
-		case 1:
+		case INDEX_COST:
 			return model.getDataPoints().get(row).getCost();			
-		case 2:
+		case INDEX_EFFECT:
 			return model.getDataPoints().get(row).getEffect();			
 		}
 
@@ -37,11 +41,11 @@ public class SMAACEADataTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int index) {
 		switch (index) {
-		case 0:
+		case INDEX_TREATMENT:
 			return "Treatment";
-		case 1:
+		case INDEX_COST:
 			return "Cost";
-		case 2:
+		case INDEX_EFFECT:
 			return "Effect";
 		}
 		return null;

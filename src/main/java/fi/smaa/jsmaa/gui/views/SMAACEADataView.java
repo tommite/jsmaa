@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui.views;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
@@ -7,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -57,9 +59,27 @@ public class SMAACEADataView implements ViewBuilder {
 	}
 
 	private Component buildDataPart() {
-		JTable dataTable = new JTable(new SMAACEADataTableModel(model));
+		SMAACEADataTableModel tableModel = new SMAACEADataTableModel(model);
+		JTable dataTable = new JTable(tableModel);
+		dataTable.setDefaultRenderer(Object.class, new MyTableCellRenderer());
 		JScrollPane scrollPane = new JScrollPane(dataTable);
 		return scrollPane;
+	}
+	
+	private class MyTableCellRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object val, boolean isSelected, 
+				boolean hasFocus, int row, int col) {			
+			if (!model.getDataPoints().get(row).isNotCensored()) {
+				setBackground(Color.red);
+				this.setToolTipText("Censored");
+			} else {
+				setBackground(Color.white);
+				this.setToolTipText(null);				
+			}
+			return super.getTableCellRendererComponent(table, val, isSelected, hasFocus, row, col);
+		}
+		
 	}
 
 }
