@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -41,7 +42,8 @@ public class SMAACEAModelLoaderWizard {
 	private ModelFileManager mgr;
 	private JFrame parent;
 	private StaticModel wizardModel;
-	private SMAACEAModelImporter importData;	
+	private SMAACEAModelImporter importData;
+	private JComboBox chooserBox;
 
 	public SMAACEAModelLoaderWizard(ModelFileManager mgr) {
 		this.mgr = mgr;
@@ -53,6 +55,7 @@ public class SMAACEAModelLoaderWizard {
 
 		wizardModel.add(new ChooseFileStep());
 		wizardModel.add(new SelectColumnsStep());
+		wizardModel.add(new ChooseEffectDirectionStep());
 
 		Wizard wizard = new Wizard(wizardModel);
 		wizard.setDefaultExitMode(Wizard.EXIT_ON_FINISH);
@@ -136,11 +139,24 @@ public class SMAACEAModelLoaderWizard {
 			}
 			spane.setViewportView(table);
 		}
+	}
+	
+	private class ChooseEffectDirectionStep extends PanelWizardStep {
+		public ChooseEffectDirectionStep() {
+			super("Choose effect direction", "Choose Direction for effect - either ascending (larger the better) or descending");
+			setLayout(new FlowLayout());
+			chooserBox = new JComboBox();
+			chooserBox.addItem("Ascending");
+			chooserBox.addItem("Descending");
+			chooserBox.setSelectedIndex(0);
+			add(chooserBox);
+			setComplete(true);
+		}
 		
 		@Override
 		public void applyState() {
-			SMAACEAModel model = importData.constructModel();
+			SMAACEAModel model = importData.constructModel(chooserBox.getSelectedIndex() == 0);
 			mgr.setModel(model);
-		}
-	}
+		}		
+	}	
 }
