@@ -6,7 +6,9 @@ public class LeftTreeModelSMAACEA extends AbstractLeftTreeModel<SMAACEAModel>{
 	
 	public static final int DATA = 2;	
 	
-	public static final String dataNode = "Data"; 
+	public static final String dataNode = "Data";
+	
+	protected String rankAccNode = "RankAcc";	
 	
 	public LeftTreeModelSMAACEA(SMAACEAModel model) {
 		super(model);
@@ -21,11 +23,19 @@ public class LeftTreeModelSMAACEA extends AbstractLeftTreeModel<SMAACEAModel>{
 		return 3;
 	}
 	
+	public Object getRankAcceptabilitiesNode() {
+		return rankAccNode;
+	}	
+	
 	@Override
 	public Object getChild(Object parent, int index) {
 		if (parent == getRoot()) {
 			if (index == DATA) {
 				return dataNode;
+			}
+		} else if (parent == resultsNode) {
+			if (index == 0) {
+				return rankAccNode;
 			}
 		}
 		return super.getChild(parent, index);
@@ -35,6 +45,8 @@ public class LeftTreeModelSMAACEA extends AbstractLeftTreeModel<SMAACEAModel>{
 	public int getChildCount(Object parent) {
 		if (parent == getRoot()) {
 			return 4;
+		} else if (parent == resultsNode) {
+			return 1;
 		}
 		return super.getChildCount(parent);
 	}	
@@ -45,6 +57,10 @@ public class LeftTreeModelSMAACEA extends AbstractLeftTreeModel<SMAACEAModel>{
 			if (child == dataNode) {
 				return DATA;
 			}
+		} else if (parent == resultsNode) {
+			if (child == rankAccNode) {
+				return 0;
+			}
 		}
 		return super.getIndexOfChild(parent, child);
 	}	
@@ -52,6 +68,8 @@ public class LeftTreeModelSMAACEA extends AbstractLeftTreeModel<SMAACEAModel>{
 	@Override
 	public boolean isLeaf(Object node) {
 		if (node == dataNode) {
+			return true;
+		} else if (node == rankAccNode) {
 			return true;
 		}
 		return super.isLeaf(node);

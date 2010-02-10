@@ -20,6 +20,9 @@ public class LeftTreeCellRendererSMAACEA extends LeftTreeCellRenderer<LeftTreeMo
 		if (value == model.getDataNode()) {
 			setIcon(ImageLoader.getIcon(FileNames.ICON_DATA));
 			setToolTipText("Model data");
+		} else if (value == model.getRankAcceptabilitiesNode()) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setToolTipText("Rank acceptability indices");									
 		}
 		return this;	
 	}

@@ -1,12 +1,12 @@
 package fi.smaa.jsmaa.gui.presentation;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.simulator.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
 @SuppressWarnings("serial")
-public class RankAcceptabilityTableModel extends SMAA2ResultsTableModel {
+public class RankAcceptabilityTableModel extends SMAAResultsTableModel<SMAARankAcceptabilityResults> {
 
-	public RankAcceptabilityTableModel(SMAA2Results results) {
+	public RankAcceptabilityTableModel(SMAARankAcceptabilityResults results) {
 		super(results);
 	}
 

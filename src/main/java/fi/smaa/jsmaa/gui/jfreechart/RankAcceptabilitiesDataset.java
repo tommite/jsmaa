@@ -24,9 +24,10 @@ import java.util.List;
 import org.jfree.data.UnknownKeyException;
 
 import fi.smaa.jsmaa.simulator.SMAA2Results;
+import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
 @SuppressWarnings("unchecked")
-public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAA2Results> {
+public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAARankAcceptabilityResults> {
 	
 	private List<Rank> ranks;
 	
@@ -58,7 +59,7 @@ public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset
 	}
 	
 	@Override
-	public void setResults(SMAA2Results results) {
+	public void setResults(SMAARankAcceptabilityResults results) {
 		ranks = new ArrayList<Rank>();
 		for (int i=0;i<results.getAlternatives().size();i++) {
 			ranks.add(new Rank(i));
