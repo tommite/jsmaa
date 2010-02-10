@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.jfree.data.UnknownKeyException;
 
-import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
 @SuppressWarnings("unchecked")
@@ -54,7 +53,7 @@ public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset
 		}
 	}
 
-	public RankAcceptabilitiesDataset(SMAA2Results results) {
+	public RankAcceptabilitiesDataset(SMAARankAcceptabilityResults results) {
 		super(results);
 	}
 	
