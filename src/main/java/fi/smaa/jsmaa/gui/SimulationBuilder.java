@@ -8,25 +8,22 @@ import javax.swing.JFrame;
 
 import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.ResultsEvent;
-import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 import fi.smaa.jsmaa.simulator.SMAASimulator;
-import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SimulationThread;
 
-public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M>> implements Runnable {
+public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M, R>> implements Runnable {
 
 	private static SMAASimulator simulator;
 	protected M model;
 	protected R results;
-	private GUIFactory factory;
+	private GUIFactory<R> factory;
 	private JFrame frame;
 
 	@SuppressWarnings("unchecked")
-	public SimulationBuilder(M model, GUIFactory factory, JFrame frame) {
+	public SimulationBuilder(M model, GUIFactory<R> factory, JFrame frame) {
 		this.model = (M) model.deepCopy();
 		this.factory = factory;
 		this.frame = frame;
@@ -39,7 +36,6 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		return results;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void run() {
 		if (simulator != null) {
@@ -48,15 +44,10 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		T thread = generateSimulationThread();
 		thread.setPriority(Thread.MIN_PRIORITY);
 		simulator = new SMAASimulator(model, thread);
-		results = (R) thread.getResults();
+		results = thread.getResults();
 		results.addResultsListener(new SimulationProgressListener());
 
-		if (model instanceof SMAATRIModel) {
-			((SMAATRIGUIFactory)factory).setResults((SMAATRIResults) results);
-		} else {
-			((SMAA2GUIFactory)factory).setResults((SMAA2Results) results);				
-		}
-		
+		factory.setResults(results);		
 		factory.getProgressBar().setValue(0);
 		simulator.restart();
 	}

@@ -7,13 +7,14 @@ import javax.swing.JTree;
 
 import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.AbstractLeftTreeModel;
+import fi.smaa.jsmaa.simulator.SMAAResults;
 
 /**
  * Abstract factory for getting (right pane) views for objects, and other GUI components.
  * 
  * @author Tommi Tervonen
  */
-public interface GUIFactory {
+public interface GUIFactory<R extends SMAAResults> {
 	public ViewBuilder buildView(Object o);
 	public JMenuBar getMenuBar();
 	public JTree getTree();
@@ -21,4 +22,5 @@ public interface GUIFactory {
 	public AbstractLeftTreeModel<?> getTreeModel();
 	public JToolBar getBottomToolBar();
 	public JProgressBar getProgressBar();
+	public void setResults(R results);
 }

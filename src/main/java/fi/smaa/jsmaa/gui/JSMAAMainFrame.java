@@ -67,7 +67,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	private ViewBuilder rightViewBuilder;
 	private JScrollPane rightPane;
 	private SMAAModelListener modelListener = new MySMAAModelListener();
-	private GUIFactory guiFactory;
+	private GUIFactory<?> guiFactory;
 	public ModelFileManager modelManager;
 	public BuildQueue buildQueue = new BuildQueue();
 	public NameListener nameListener = new NameListener();
@@ -323,11 +323,11 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 
 	private void buildNewSimulator() {
 		if (modelManager.getModel() instanceof SMAATRIModel) {
-			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), guiFactory, this));
+			buildQueue.add(new SMAATRISimulationBuilder((SMAATRIModel) modelManager.getModel(), (SMAATRIGUIFactory) guiFactory, this));
 		} else if (modelManager.getModel() instanceof SMAA2Model){
-			buildQueue.add(new SMAA2SimulationBuilder((SMAA2Model) modelManager.getModel(), guiFactory, this));			
+			buildQueue.add(new SMAA2SimulationBuilder((SMAA2Model) modelManager.getModel(), (SMAA2GUIFactory) guiFactory, this));			
 		} else if (modelManager.getModel() instanceof SMAACEAModel) {
-			buildQueue.add(new SMAACEASimulationBuilder((SMAACEAModel) modelManager.getModel(), guiFactory, this));
+			buildQueue.add(new SMAACEASimulationBuilder((SMAACEAModel) modelManager.getModel(), (SMAACEAGUIFactory) guiFactory, this));
 		}
 	}
 	

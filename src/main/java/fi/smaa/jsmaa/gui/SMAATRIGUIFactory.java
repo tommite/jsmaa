@@ -36,7 +36,7 @@ import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 @SuppressWarnings("serial")
-public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI, SMAATRIModel> {
+public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI, SMAATRIModel, SMAATRIResults> {
 
 	private CategoryAcceptabilityTableModel categoryAcceptabilityTM;
 	private CategoryAcceptabilitiesDataset categoryAcceptabilityDataset;

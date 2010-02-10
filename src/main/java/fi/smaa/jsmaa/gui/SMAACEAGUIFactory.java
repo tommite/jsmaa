@@ -9,8 +9,9 @@ import fi.smaa.common.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAACEA;
 import fi.smaa.jsmaa.gui.views.SMAACEADataView;
 import fi.smaa.jsmaa.model.SMAACEAModel;
+import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
-public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, SMAACEAModel> {
+public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, SMAACEAModel, SMAARankAcceptabilityResults> {
 	
 	public SMAACEAGUIFactory(Window parent, SMAACEAModel m, MenuDirector dir) {
 		super(parent, m, dir);
@@ -43,5 +44,8 @@ public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, 
 			return new SMAACEADataView(smaaModel);
 		}
 		return super.buildView(o);
+	}
+
+	public void setResults(SMAARankAcceptabilityResults results) {
 	}
 }

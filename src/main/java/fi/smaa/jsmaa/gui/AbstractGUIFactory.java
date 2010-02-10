@@ -33,8 +33,9 @@ import fi.smaa.jsmaa.gui.views.AlternativeView;
 import fi.smaa.jsmaa.gui.views.CriteriaListView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.simulator.SMAAResults;
 
-public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M extends SMAAModel> implements GUIFactory{
+public abstract class AbstractGUIFactory <T extends AbstractLeftTreeModel<M>, M extends SMAAModel, R extends SMAAResults> implements GUIFactory<R>{
 
 	protected T treeModel;
 	protected M smaaModel;

@@ -8,7 +8,7 @@ import fi.smaa.jsmaa.simulator.SMAATRISimulationThread;
 
 public class SMAATRISimulationBuilder extends SimulationBuilder<SMAATRIModel, SMAATRIResults, SMAATRISimulationThread> {
 
-	public SMAATRISimulationBuilder(SMAATRIModel model, GUIFactory factory, JFrame frame) {
+	public SMAATRISimulationBuilder(SMAATRIModel model, SMAATRIGUIFactory factory, JFrame frame) {
 		super(model, factory, frame);
 		
 		connectNameAdapters(model.getCategories(), this.model.getCategories());		

@@ -8,7 +8,7 @@ import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
 public class SMAACEASimulationBuilder extends SimulationBuilder<SMAACEAModel, SMAARankAcceptabilityResults, SMAACEASimulationThread> {
 
-	public SMAACEASimulationBuilder(SMAACEAModel model, GUIFactory factory, JFrame frame) {
+	public SMAACEASimulationBuilder(SMAACEAModel model, SMAACEAGUIFactory factory, JFrame frame) {
 		super(model, factory, frame);
 	}
 

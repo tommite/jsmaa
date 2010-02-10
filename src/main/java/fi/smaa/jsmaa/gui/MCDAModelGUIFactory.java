@@ -33,10 +33,12 @@ import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAA2Model;
+import fi.smaa.jsmaa.simulator.SMAAResults;
 
 
 @SuppressWarnings("serial")
-public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M extends SMAA2Model> extends AbstractGUIFactory<T, M>{
+public abstract class MCDAModelGUIFactory<T extends LeftTreeModelMCDAModel<M>, M extends SMAA2Model,
+	R extends SMAAResults> extends AbstractGUIFactory<T, M, R>{
 	
 	private JMenuItem editRenameItem;
 	private JMenuItem editDeleteItem;		

@@ -37,7 +37,7 @@ import fi.smaa.jsmaa.simulator.SMAA2Results;
 
 
 @SuppressWarnings("serial")
-public class SMAA2GUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAA2, SMAA2Model> {
+public class SMAA2GUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAA2, SMAA2Model, SMAA2Results> {
 	
 	private CentralWeightsDataset centralWeightsDataset;
 	private CentralWeightTableModel centralWeightsTM;
