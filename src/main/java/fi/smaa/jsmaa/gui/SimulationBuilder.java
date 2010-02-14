@@ -16,7 +16,7 @@ import fi.smaa.jsmaa.simulator.SimulationThread;
 
 public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M, R>> implements Runnable {
 
-	private static SMAASimulator simulator;
+	private static SMAASimulator<?, ?> simulator;
 	protected M model;
 	protected R results;
 	private GUIFactory<R> factory;
@@ -43,7 +43,7 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		}
 		T thread = generateSimulationThread();
 		thread.setPriority(Thread.MIN_PRIORITY);
-		simulator = new SMAASimulator(model, thread);
+		simulator = new SMAASimulator<M, R>(model, thread);
 		results = thread.getResults();
 		results.addResultsListener(new SimulationProgressListener());
 
