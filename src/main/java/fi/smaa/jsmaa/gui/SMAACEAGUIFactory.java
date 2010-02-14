@@ -20,6 +20,7 @@ import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAACEA;
 import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.SMAACEADataView;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
@@ -61,7 +62,7 @@ public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, 
 	@Override
 	protected JToolBar buildBottomToolBar() {
 		JToolBar tb = super.buildBottomToolBar();
-		tb.add(new LambdaPanel(smaaModel.getLambda()));
+		tb.add(new LambdaPanel(smaaModel.getLambda(), new Interval(0.0, 100000.0), 1.0));
 		return tb;
 	}
 	

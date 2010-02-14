@@ -19,9 +19,14 @@ public class LambdaPanel extends JPanel {
 	private RangeSlider lambdaSlider;
 	private JLabel lambdaRangeLabel;
 	private Interval lambda;
+	
+	private Interval range;
+	private double multiplier;
 
-	public LambdaPanel(Interval lambda) {
+	public LambdaPanel(Interval lambda, Interval range, double parameterMultiplier) {
 		this.lambda = lambda;
+		this.range = range;
+		this.multiplier = parameterMultiplier;
 		initComponents();
 		
 		lambda.addPropertyChangeListener(new LambdaListener());
@@ -31,13 +36,14 @@ public class LambdaPanel extends JPanel {
 	}
 
 	private void updateLambdaSlider() {
-		lambdaSlider.setLowValue((int) (lambda.getStart() * 100.0));
-		lambdaSlider.setHighValue((int) (lambda.getEnd() * 100.0));
+		lambdaSlider.setLowValue((int) (lambda.getStart() * multiplier));
+		lambdaSlider.setHighValue((int) (lambda.getEnd() * multiplier));
 	}
 
 	private void initComponents() {
-		lambdaSlider = new RangeSlider(50, 100, (int) (lambda.getStart() * 100.0),
-				(int)(lambda.getEnd() * 100.0));
+		lambdaSlider = new RangeSlider((int) (range.getStart() * multiplier),
+				(int) (range.getEnd() * multiplier), (int) (lambda.getStart() * multiplier),
+				(int)(lambda.getEnd() * multiplier));
 		lambdaSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				fireLambdaSliderChanged();
@@ -52,13 +58,13 @@ public class LambdaPanel extends JPanel {
 	}
 	
 	private void updateLambdaLabel() {
-		lambdaRangeLabel.setText("[" + lambdaSlider.getLowValue() / 100.0 + "-"
-				+lambdaSlider.getHighValue() / 100.0+ "]");	
+		lambdaRangeLabel.setText("[" + lambdaSlider.getLowValue() / multiplier + "-"
+				+lambdaSlider.getHighValue() / multiplier + "]");	
 	}	
 	
 	protected void fireLambdaSliderChanged() {
-		double lowVal = lambdaSlider.getLowValue() / 100.0;
-		double highVal = lambdaSlider.getHighValue() / 100.0;
+		double lowVal = lambdaSlider.getLowValue() / multiplier;
+		double highVal = lambdaSlider.getHighValue() / multiplier;
 		lambda.setStart(lowVal);
 		lambda.setEnd(highVal);
 	}	

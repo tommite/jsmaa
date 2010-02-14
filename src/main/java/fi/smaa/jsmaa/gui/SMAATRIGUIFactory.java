@@ -31,6 +31,7 @@ import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.TechnicalParameterView;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
@@ -61,7 +62,7 @@ public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI,
 	@Override
 	protected JToolBar buildBottomToolBar() {
 		JToolBar tb = super.buildBottomToolBar();
-		tb.add(new LambdaPanel(smaaModel.getLambda()));
+		tb.add(new LambdaPanel(smaaModel.getLambda(), new Interval(0.5, 1.0), 100));
 		return tb;
 	}
 	
