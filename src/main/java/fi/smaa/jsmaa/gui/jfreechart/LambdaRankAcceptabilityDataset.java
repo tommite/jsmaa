@@ -49,6 +49,9 @@ public class LambdaRankAcceptabilityDataset extends SMAADataSet<SMAACEAResults> 
 	@Override
 	public double getYValue(int series, int item) { // series are ranks, item = lambda
 		Double lambda = new ArrayList<Double>(results.getLambdaAcceptabilities().keySet()).get(item);
+		if (alt == null) {
+			return 0.0;
+		}
 		return results.getLambdaAcceptabilities().get(lambda).getRankAcceptabilities().get(alt).get(series);
 	}
 

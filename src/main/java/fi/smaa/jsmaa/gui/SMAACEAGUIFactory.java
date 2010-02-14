@@ -20,23 +20,25 @@ import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAACEA;
 import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.SMAACEADataView;
+import fi.smaa.jsmaa.gui.views.SMAACEALambdaRankAccsResultsView;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.SMAACEAModel;
 import fi.smaa.jsmaa.simulator.SMAACEAResults;
-import fi.smaa.jsmaa.simulator.SMAARankAcceptabilityResults;
 
 public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, SMAACEAModel, SMAACEAResults> {
 	
 	private RankAcceptabilitiesDataset rankAcceptabilitiesDataset;
 	private RankAcceptabilityTableModel rankAcceptabilitiesTM;
+	private SMAACEALambdaRankAccsResultsView lambdaResView;
 
 	@SuppressWarnings("unchecked")
 	public SMAACEAGUIFactory(Window parent, SMAACEAModel m, MenuDirector dir) {
 		super(parent, m, dir);
-		SMAARankAcceptabilityResults emptyResults = new SMAARankAcceptabilityResults(Collections.EMPTY_LIST, 1);
+		SMAACEAResults emptyResults = new SMAACEAResults(Collections.EMPTY_LIST, 1);
 
 		rankAcceptabilitiesDataset = new RankAcceptabilitiesDataset(emptyResults);
-		rankAcceptabilitiesTM = new RankAcceptabilityTableModel(emptyResults);		
+		rankAcceptabilitiesTM = new RankAcceptabilityTableModel(emptyResults);
+		lambdaResView = new SMAACEALambdaRankAccsResultsView(emptyResults);		
 	}
 
 	@Override
@@ -79,21 +81,15 @@ public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, 
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 			return new ResultsView(parent, "Rank acceptability indices", table, chart);
-		} /*else if (o == treeModel.getRankAcceptabilitiesLambdaNode()) {
-			final JFreeChart chart = ChartFactory.createXYLineChart(
-					"", "Lambda", "Rank Acceptability",
-					rankAcceptabilitiesDataset, PlotOrientation.VERTICAL, true, true, false);
-			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
-			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
-			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
-			return new ResultsView(parent, "Rank acceptability indices", table, chart);
-			
-		}*/
+		} else if (o == treeModel.getRankAcceptabilitiesLambdaNode()) {		
+			return lambdaResView;
+		}
 		return super.buildView(o);
 	}
 
 	public void setResults(SMAACEAResults results) {
 		rankAcceptabilitiesDataset.setResults(results);
 		rankAcceptabilitiesTM.setResults(results);
+		lambdaResView.setResults(results);
 	}
 }
