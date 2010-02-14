@@ -14,7 +14,7 @@ public class SMAACEASimulationBuilder extends SimulationBuilder<SMAACEAModel, SM
 
 	@Override
 	protected SMAACEASimulationThread generateSimulationThread() {
-		return new SMAACEASimulationThread(model, 10000);
+		return new SMAACEASimulationThread(model, 10000, 10);
 	}
 
 }
