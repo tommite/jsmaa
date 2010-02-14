@@ -61,7 +61,7 @@ public class SMAATRIGUIFactory extends MCDAModelGUIFactory<LeftTreeModelSMAATRI,
 	@Override
 	protected JToolBar buildBottomToolBar() {
 		JToolBar tb = super.buildBottomToolBar();
-		tb.add(new LambdaPanel(smaaModel));
+		tb.add(new LambdaPanel(smaaModel.getLambda()));
 		return tb;
 	}
 	

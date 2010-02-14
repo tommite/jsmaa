@@ -12,33 +12,32 @@ import javax.swing.event.ChangeListener;
 import com.jidesoft.swing.RangeSlider;
 
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.SMAATRIModel;
 
 @SuppressWarnings("serial")
 public class LambdaPanel extends JPanel {
 	
 	private RangeSlider lambdaSlider;
 	private JLabel lambdaRangeLabel;
-	private SMAATRIModel model;
+	private Interval lambda;
 
-	public LambdaPanel(SMAATRIModel model) {
-		this.model = model;
+	public LambdaPanel(Interval lambda) {
+		this.lambda = lambda;
 		initComponents();
 		
-		model.getLambda().addPropertyChangeListener(new LambdaListener());
+		lambda.addPropertyChangeListener(new LambdaListener());
 		
 		updateLambdaSlider();
 		updateLambdaLabel();
 	}
 
 	private void updateLambdaSlider() {
-		lambdaSlider.setLowValue((int) (model.getLambda().getStart() * 100.0));
-		lambdaSlider.setHighValue((int) (model.getLambda().getEnd() * 100.0));
+		lambdaSlider.setLowValue((int) (lambda.getStart() * 100.0));
+		lambdaSlider.setHighValue((int) (lambda.getEnd() * 100.0));
 	}
 
 	private void initComponents() {
-		lambdaSlider = new RangeSlider(50, 100, (int) (model.getLambda().getStart() * 100.0),
-				(int)(model.getLambda().getEnd() * 100.0));
+		lambdaSlider = new RangeSlider(50, 100, (int) (lambda.getStart() * 100.0),
+				(int)(lambda.getEnd() * 100.0));
 		lambdaSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				fireLambdaSliderChanged();
@@ -58,7 +57,6 @@ public class LambdaPanel extends JPanel {
 	}	
 	
 	protected void fireLambdaSliderChanged() {
-		Interval lambda = model.getLambda();
 		double lowVal = lambdaSlider.getLowValue() / 100.0;
 		double highVal = lambdaSlider.getHighValue() / 100.0;
 		lambda.setStart(lowVal);

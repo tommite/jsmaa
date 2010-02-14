@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.util.Collections;
 
 import javax.swing.JMenu;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
 
 import org.jfree.chart.ChartFactory;
@@ -11,6 +12,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 
 import fi.smaa.common.gui.ViewBuilder;
+import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
@@ -54,6 +56,13 @@ public class SMAACEAGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAACEA, 
 	@Override
 	protected LeftTreeCellRenderer<?> buildCellRenderer() {
 		return new LeftTreeCellRendererSMAACEA(getTreeModel());
+	}
+	
+	@Override
+	protected JToolBar buildBottomToolBar() {
+		JToolBar tb = super.buildBottomToolBar();
+		tb.add(new LambdaPanel(smaaModel.getLambda()));
+		return tb;
 	}
 	
 	@Override
