@@ -23,6 +23,9 @@ public class LeftTreeCellRendererSMAACEA extends LeftTreeCellRenderer<LeftTreeMo
 		} else if (value == model.getRankAcceptabilitiesNode()) {
 			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 			setToolTipText("Rank acceptability indices");									
+		} else if (value == model.getRankAcceptabilitiesLambdaNode()) {
+			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setToolTipText("Rank acceptability indices plotted against lambda");									
 		}
 		return this;	
 	}
