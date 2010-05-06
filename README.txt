@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.7-SS: Added showing of scales to preference information view.
 0.6.2:	Add exporting of GNUPlot scripts for figures. Fix SMAA-2 simulation crash on adding criterion.
 0.6.1:	Fix major bug in previous versions of not updating output graphs/tables when they are showing.
 0.6:	XML model files, ordinal criteria, improved output tables, reordering of alternatives/criteria/categories,
