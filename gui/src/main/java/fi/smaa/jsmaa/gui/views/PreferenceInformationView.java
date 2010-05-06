@@ -41,10 +41,17 @@ import fi.smaa.jsmaa.model.SMAAModel;
 public class PreferenceInformationView implements ViewBuilder {
 	private PreferencePresentationModel model;
 	private JComponent prefPanel;
+	private ScaleRenderer renderer;
 	
 	public PreferenceInformationView(PreferencePresentationModel model) {
 		this.model = model;
+		this.renderer = new DefaultScaleRenderer();
 	}
+	
+	public PreferenceInformationView(PreferencePresentationModel model, ScaleRenderer renderer) {
+		this.model = model;
+		this.renderer = renderer;
+	}	
 
 	@SuppressWarnings("serial")
 	public JComponent buildPanel() {
@@ -75,10 +82,12 @@ public class PreferenceInformationView implements ViewBuilder {
 		if (model.getPreferenceType() == PreferenceType.ORDINAL) {
 			SMAAModel smodel = model.getBean();
 			OrdinalPreferencesView oview = new OrdinalPreferencesView((OrdinalPreferenceInformation) smodel.getPreferenceInformation());
+			oview.setScaleRenderer(renderer);
 			prefPanel = oview.buildPanel();
 		} else if (model.getPreferenceType() == PreferenceType.CARDINAL) {
 			CardinalPreferencesView oview = new CardinalPreferencesView(
 					(CardinalPreferenceInformation) model.getBean().getPreferenceInformation());
+			oview.setScaleRenderer(renderer);			
 			prefPanel = oview.buildPanel();
 		}
 		if (prefPanel != null) {
