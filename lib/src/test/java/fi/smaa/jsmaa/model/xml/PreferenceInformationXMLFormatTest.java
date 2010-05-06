@@ -19,7 +19,6 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
-import fi.smaa.jsmaa.model.PreferenceInformation;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
@@ -66,7 +65,7 @@ public class PreferenceInformationXMLFormatTest {
 		assertEquals(new ExactMeasurement(1.0), npref.getMeasurement(nc1));
 		assertEquals(new GaussianMeasurement(1.0, 1.1), npref.getMeasurement(nc2));
 		
-		PropertyChangeListener mock = JUnitUtil.mockListener(npref, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener mock = JUnitUtil.mockListener(npref, CardinalPreferenceInformation.PREFERENCES, null, null);
 		npref.addPropertyChangeListener(mock);
 		((ExactMeasurement) npref.getMeasurement(npref.getCriteria().get(0))).setValue(2.0);
 		EasyMock.verify(mock);		
@@ -98,7 +97,7 @@ public class PreferenceInformationXMLFormatTest {
 		assertEquals(new Rank(1), npref.getMeasurement(nc1));
 		assertEquals(new Rank(2), npref.getMeasurement(nc2));		
 		
-		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(npref, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(npref, OrdinalPreferenceInformation.PREFERENCES, null, null);
 		npref.addPropertyChangeListener(mock);
 		npref.getMeasurement(npref.getCriteria().get(0)).setRank(2);
 		EasyMock.verify(mock);

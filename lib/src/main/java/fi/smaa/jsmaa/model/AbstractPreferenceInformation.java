@@ -11,6 +11,7 @@ public abstract class AbstractPreferenceInformation<T extends Measurement> exten
 	private static final long serialVersionUID = -7094213141120934341L;
 	protected transient MeasurementListener measListener = new MeasurementListener();
 	protected List<Criterion> criteria;
+	public static final String PREFERENCES = "preferences";	
 
 	protected AbstractPreferenceInformation(List<Criterion> criteria) {
 		this.criteria = criteria;

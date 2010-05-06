@@ -51,7 +51,7 @@ public class CardinalPreferenceInformationTest {
 	
 	@Test
 	public void testSetMeasurement() {
-		PropertyChangeListener list = JUnitUtil.mockListener(info, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener list = JUnitUtil.mockListener(info, CardinalPreferenceInformation.PREFERENCES, null, null);
 		info.addPropertyChangeListener(list);
 		info.setMeasurement(crit, new ExactMeasurement(1.0));
 		assertEquals(new ExactMeasurement(1.0), info.getMeasurement(crit));
@@ -60,7 +60,7 @@ public class CardinalPreferenceInformationTest {
 	
 	@Test
 	public void testMeasurementChangeFires() {
-		PropertyChangeListener list = JUnitUtil.mockListener(info, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener list = JUnitUtil.mockListener(info, CardinalPreferenceInformation.PREFERENCES, null, null);
 		ExactMeasurement m = new ExactMeasurement(2.0);
 		info.setMeasurement(crit, m);
 		info.addPropertyChangeListener(list);		
@@ -70,7 +70,7 @@ public class CardinalPreferenceInformationTest {
 	
 	@Test
 	public void testInitialMeasurementsFire() {
-		PropertyChangeListener list = JUnitUtil.mockListener(info, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener list = JUnitUtil.mockListener(info, CardinalPreferenceInformation.PREFERENCES, null, null);
 		info.addPropertyChangeListener(list);
 		((ExactMeasurement) info.getMeasurement(crit)).setValue(1.0);
 		verify(list);
@@ -121,7 +121,7 @@ public class CardinalPreferenceInformationTest {
 		assertEquals("c", info2.getCriteria().get(0).getName());
 		assertEquals(new ExactMeasurement(1.0), info2.getMeasurement(info.getCriteria().get(0)));
 		
-		PropertyChangeListener list = JUnitUtil.mockListener(info2, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener list = JUnitUtil.mockListener(info2, CardinalPreferenceInformation.PREFERENCES, null, null);
 		info2.addPropertyChangeListener(list);		
 		((ExactMeasurement) info2.getMeasurement(info2.getCriteria().get(0))).setValue(3.0);
 		verify(list);		
@@ -130,7 +130,7 @@ public class CardinalPreferenceInformationTest {
 	@Test
 	public void testSerializationConnectsListeners() throws Exception {
 		CardinalPreferenceInformation i2 = JUnitUtil.serializeObject(info);
-		PropertyChangeListener list = JUnitUtil.mockListener(i2, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener list = JUnitUtil.mockListener(i2, CardinalPreferenceInformation.PREFERENCES, null, null);
 		i2.addPropertyChangeListener(list);
 		((ExactMeasurement)i2.getMeasurement(i2.getCriteria().get(0))).setValue(2.0);
 		verify(list);

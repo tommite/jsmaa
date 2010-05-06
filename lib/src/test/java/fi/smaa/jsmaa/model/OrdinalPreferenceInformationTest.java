@@ -67,7 +67,7 @@ public class OrdinalPreferenceInformationTest {
 		assertEquals(new Rank(3), pref2.getRanks().get(1));
 		assertEquals(new Rank(2), pref2.getRanks().get(2));
 		
-		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref2, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref2, OrdinalPreferenceInformation.PREFERENCES, null, null);
 		pref2.addPropertyChangeListener(mock);		
 		pref2.getRanks().get(0).setRank(2);
 		verify(mock);
@@ -75,7 +75,7 @@ public class OrdinalPreferenceInformationTest {
 	
 	@Test
 	public void testRankChangeUpdatesOtherRank() {
-		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref, OrdinalPreferenceInformation.PREFERENCES, null, null);
 		pref.addPropertyChangeListener(mock);		
 		pref.getRanks().get(0).setRank(2);
 		verify(mock);
@@ -91,7 +91,7 @@ public class OrdinalPreferenceInformationTest {
 	
 	@Test
 	public void testRankChangeFiresPropertyChange() {
-		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref, PreferenceInformation.PREFERENCES, null, null);
+		PropertyChangeListener mock = JUnitUtil.mockMultipleCallListener(pref, OrdinalPreferenceInformation.PREFERENCES, null, null);
 		pref.addPropertyChangeListener(mock);
 		pref.getRanks().get(0).setRank(2);
 		verify(mock);

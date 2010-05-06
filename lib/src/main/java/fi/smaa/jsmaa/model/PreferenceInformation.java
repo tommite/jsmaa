@@ -23,7 +23,5 @@ import java.io.Serializable;
 import com.jgoodies.binding.beans.Observable;
 
 public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, Serializable, Observable {
-	
-	public static final String PREFERENCES = "preferences";
 	public abstract double[] sampleWeights() throws IterationException;	
 }

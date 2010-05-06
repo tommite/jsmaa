@@ -18,70 +18,30 @@
 
 package fi.smaa.jsmaa.gui.views;
 
-import java.util.List;
-
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.Bindings;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.gui.LayoutUtil;
 import fi.smaa.jsmaa.gui.RankSelectorGroup;
 import fi.smaa.jsmaa.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 
-public class OrdinalPreferencesView implements ViewBuilder {
+public class OrdinalPreferencesView extends AbstractPreferencesView<OrdinalPreferenceInformation> implements ViewBuilder {
 	
-	private OrdinalPreferenceInformation prefs;
-	private List<Criterion> crit;
+	private RankSelectorGroup selectorGroup;
 
-	public OrdinalPreferencesView(List<Criterion> crit, OrdinalPreferenceInformation prefs) {
-		this.prefs = prefs;
-		this.crit = crit;
+	public OrdinalPreferencesView(OrdinalPreferenceInformation prefs) {
+		super(prefs);
+		selectorGroup = new RankSelectorGroup(prefs.getRanks());	
 	}
 
-	public JComponent buildPanel() {		
-		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, center:pref",
-				"p, 3dlu, p" );
-		
-		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
-		CellConstraints cc = new CellConstraints();
-		
-		RankSelectorGroup selectorGroup = new RankSelectorGroup(prefs.getRanks());
-		
-		builder.addLabel("Criterion", cc.xy(1, 1));
-		builder.addLabel("Rank", cc.xy(3, 1));
-		
-		int row = 3;
-		int i=0;
-		for (Criterion c : crit) {
-			row += 2;
-			LayoutUtil.addRow(layout);
-			JLabel label = new JLabel();
-			Bindings.bind(label, "text",
-					new PresentationModel<Criterion>(c).getModel(
-							Criterion.PROPERTY_NAME)
-			);
-			builder.add(label, cc.xy(1, row));
-			JComboBox selector = selectorGroup.getSelectors().get(i);
-			builder.add(selector, cc.xy(3, row));
-			i++;
-		}
-		
-		JPanel panel = builder.getPanel();
-		if (!selectorGroup.getSelectors().isEmpty()) {
-			panel.addFocusListener(new FocusTransferrer(selectorGroup.getSelectors().get(0)));
-		}
-		return panel;
+	@Override
+	protected String getTypeName() {
+		return "Rank";
+	}
+
+	@Override
+	protected JComboBox getPreferenceComponent(Criterion c, int i) {
+		return selectorGroup.getSelectors().get(i);
 	}
 }

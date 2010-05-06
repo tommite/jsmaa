@@ -74,8 +74,7 @@ public class PreferenceInformationView implements ViewBuilder {
 		prefPanel = null;
 		if (model.getPreferenceType() == PreferenceType.ORDINAL) {
 			SMAAModel smodel = model.getBean();
-			OrdinalPreferencesView oview = new OrdinalPreferencesView(smodel.getCriteria(),
-					(OrdinalPreferenceInformation) smodel.getPreferenceInformation());
+			OrdinalPreferencesView oview = new OrdinalPreferencesView((OrdinalPreferenceInformation) smodel.getPreferenceInformation());
 			prefPanel = oview.buildPanel();
 		} else if (model.getPreferenceType() == PreferenceType.CARDINAL) {
 			CardinalPreferencesView oview = new CardinalPreferencesView(
