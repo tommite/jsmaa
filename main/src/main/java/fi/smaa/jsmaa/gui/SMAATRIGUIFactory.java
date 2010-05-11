@@ -88,6 +88,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 			        categoryAcceptabilityDataset, PlotOrientation.VERTICAL, true, true, false);
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(categoryAcceptabilityTM);		
+			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 			return new ResultsView(parent, "Category acceptability indices", table, chart, FileNames.ICON_SCRIPT);
 		} else if (o == treeModel.getCategoriesNode()) {

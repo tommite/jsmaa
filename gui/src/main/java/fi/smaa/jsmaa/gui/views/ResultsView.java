@@ -75,7 +75,6 @@ public class ResultsView implements ViewBuilder {
 		builder.add(spane, cc.xy(1, 3));
 	
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
-		table.setAutoCreateRowSorter(true);
 		builder.addSeparator("", cc.xy(1, 5));	
 		builder.add(buildFigurePart(), cc.xy(1, 7));
 		builder.add(buildExportButton(), cc.xy(1, 9, "left, center"));
@@ -87,7 +86,6 @@ public class ResultsView implements ViewBuilder {
 	private Component buildExportButton() {
 		JButton exportButton = new JideButton("Export figure dataset as GNUPlot script", ImageLoader.getIcon(scriptIcon));
 		exportButton.addActionListener(new AbstractAction() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				PlotConverter c = PlotConverterFactory.getConverter((SMAADataSet<?>) ((CategoryPlot) chart.getPlot()).getDataset());
 				GNUPlotDialog d = new GNUPlotDialog(null, c);

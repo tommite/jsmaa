@@ -72,6 +72,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
 			chart.getCategoryPlot().setRenderer(renderer);
 			ResultsTable table = new ResultsTable(centralWeightsTM);
+			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
 			return new ResultsView(parent, "Central weight vectors", table, chart, FileNames.ICON_SCRIPT);
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
@@ -80,6 +81,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			        rankAcceptabilitiesDataset, PlotOrientation.VERTICAL, true, true, false);
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
+			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
 			return new ResultsView(parent, "Rank acceptability indices", table, chart, FileNames.ICON_SCRIPT);
 		} else {
