@@ -11,19 +11,9 @@
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>${pom.version}</version>
+    <version>0.6.3</version>
   </parent>
   
-  <distributionManagement>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>smaa.fi</id>
-      <name>smaa.fi repository</name>
-      <url>scp://tommi@medusa.tutka.net/home/tommi/smaa_html/mvn</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>	
-
   <repositories>
     <repository>
       <id>maven2-repository.dev.java.net</id>

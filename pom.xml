@@ -7,6 +7,16 @@
   <packaging>pom</packaging>
   <name>jsmaa-pom</name>
 
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>smaa.fi</id>
+      <name>smaa.fi repository</name>
+      <url>scp://tommi@medusa.tutka.net/home/tommi/smaa_html/mvn</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>	
+
   <build>
     <plugins>
       <plugin>

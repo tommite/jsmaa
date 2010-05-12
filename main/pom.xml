@@ -9,7 +9,7 @@
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>${pom.version}</version>
+    <version>0.6.3</version>
   </parent>
 
   <build>
@@ -69,17 +69,17 @@
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gui</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>lib</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>lib</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
       <classifier>tests</classifier>
     </dependency>
