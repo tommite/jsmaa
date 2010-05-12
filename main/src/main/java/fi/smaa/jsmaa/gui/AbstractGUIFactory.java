@@ -108,7 +108,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		bar.setFloatable(false);
 
 		JButton topBarSaveButton = new JButton(ImageLoader.getIcon(FileNames.ICON_SAVEFILE));
-		topBarSaveButton.setToolTipText("Add alternative");
+		topBarSaveButton.setToolTipText("Save");
 		topBarSaveButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				director.save();

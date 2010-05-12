@@ -8,7 +8,7 @@ Currently is implemented:
 
 Versions
 ========
-0.7-SS: Added showing of scales to preference information view.
+0.6.3:	Added showing of scales to preference information view. Major refactors and small fixes.
 0.6.2:	Add exporting of GNUPlot scripts for figures. Fix SMAA-2 simulation crash on adding criterion.
 0.6.1:	Fix major bug in previous versions of not updating output graphs/tables when they are showing.
 0.6:	XML model files, ordinal criteria, improved output tables, reordering of alternatives/criteria/categories,
@@ -29,5 +29,5 @@ Contact me by email at t dot p dot tervonen at rug dot nl.
 
 More information can be found at http://www.smaa.fi.
 
-February 2010
+May 2010
 Tommi Tervonen
