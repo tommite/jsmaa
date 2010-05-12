@@ -36,7 +36,7 @@ public class AppInfo {
 	
 	private static String getProperty(String property, String fallback) {
 		try {
-			InputStream is = AppInfo.class.getResourceAsStream("/META-INF/maven/fi.smaa/jsmaa/pom.properties");
+			InputStream is = AppInfo.class.getResourceAsStream("/META-INF/maven/fi.smaa.jsmaa/main/pom.properties");
 			Properties props = new Properties();
 			props.load(is);
 			return props.getProperty(property, fallback);
