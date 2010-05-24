@@ -19,8 +19,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
-import fi.smaa.jsmaa.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
+import fi.smaa.jsmaa.gui.components.CentralWeightsCellRenderer;
+import fi.smaa.jsmaa.gui.components.ResultsCellColorRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CentralWeightsDataset;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
@@ -73,7 +73,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			chart.getCategoryPlot().setRenderer(renderer);
 			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setAutoCreateRowSorter(true);			
-			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));
+			table.setDefaultRenderer(Object.class, new CentralWeightsCellRenderer(1.0));
 			return new ResultsView(parent, "Central weight vectors", table, chart, FileNames.ICON_SCRIPT);
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
@@ -82,7 +82,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setAutoCreateRowSorter(true);			
-			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
+			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
 			return new ResultsView(parent, "Rank acceptability indices", table, chart, FileNames.ICON_SCRIPT);
 		} else {
 			return super.buildView(o);

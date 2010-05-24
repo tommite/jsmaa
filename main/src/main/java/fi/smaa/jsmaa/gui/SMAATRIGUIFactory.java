@@ -19,7 +19,7 @@ import org.jfree.chart.plot.PlotOrientation;
 
 import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
-import fi.smaa.jsmaa.gui.components.ResultsCellRenderer;
+import fi.smaa.jsmaa.gui.components.ResultsCellColorRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
@@ -89,7 +89,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(categoryAcceptabilityTM);		
 			table.setAutoCreateRowSorter(true);			
-			table.setDefaultRenderer(Object.class, new ResultsCellRenderer(1.0));		
+			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
 			return new ResultsView(parent, "Category acceptability indices", table, chart, FileNames.ICON_SCRIPT);
 		} else if (o == treeModel.getCategoriesNode()) {
 			return new AlternativeInfoView(smaaModel.getCategories(), "Categories (in ascending order, top = worst)");
