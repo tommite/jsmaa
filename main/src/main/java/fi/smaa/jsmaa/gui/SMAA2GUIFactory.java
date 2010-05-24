@@ -83,7 +83,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
-			return new ResultsView(parent, "Rank acceptability indices", table, chart, FileNames.ICON_SCRIPT);
+			return new ResultsView(parent, "Rank acceptability indices", table, chart, FileNames.ICON_SCRIPT, isChartDrawable());
 		} else {
 			return super.buildView(o);
 		}	

@@ -532,4 +532,8 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 			index++;
 		}
 	}
+
+	protected boolean isChartDrawable() {
+		return this.smaaModel.getAlternatives().size() <= 20;
+	}
 }

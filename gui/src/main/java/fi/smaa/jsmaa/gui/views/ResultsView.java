@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -52,14 +53,25 @@ public class ResultsView implements ViewBuilder {
 	private String title;
 	private Window parent;
 	private String scriptIcon;
+	private boolean showChart;
 
+	public ResultsView(Window parent, String title, JTable table, JFreeChart chart, String scriptIcon, boolean showChart) {
+		this.title = title;
+		this.chart = chart;
+		this.table = table;
+		this.parent = parent;
+		this.scriptIcon = scriptIcon;
+		this.showChart = showChart;
+	}
+	
 	public ResultsView(Window parent, String title, JTable table, JFreeChart chart, String scriptIcon) {
 		this.title = title;
 		this.chart = chart;
 		this.table = table;
 		this.parent = parent;
 		this.scriptIcon = scriptIcon;
-	}
+		this.showChart = true;
+	}	
 
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
@@ -96,9 +108,13 @@ public class ResultsView implements ViewBuilder {
 		return exportButton;
 	}
 
-	private JComponent buildFigurePart() {		
-		ChartPanel chartPanel = new ChartPanel(chart);
-		return chartPanel;
+	private JComponent buildFigurePart() {
+		if (showChart) {
+			ChartPanel chartPanel = new ChartPanel(chart);
+			return chartPanel;			
+		} else {
+			return new JLabel("Cannot show chart - column charts supported for up to 20 alternatives");
+		}
 	}
 
 }
