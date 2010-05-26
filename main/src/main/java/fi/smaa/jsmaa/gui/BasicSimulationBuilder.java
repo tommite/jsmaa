@@ -13,21 +13,18 @@ import fi.smaa.jsmaa.simulator.ResultsEvent;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
-import fi.smaa.jsmaa.simulator.SMAASimulator;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
+import fi.smaa.jsmaa.simulator.SimulationBuilder;
 import fi.smaa.jsmaa.simulator.SimulationThread;
 
-public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M>> implements Runnable {
+public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M>> 
+	extends SimulationBuilder<M, R, T> {
 
-	private static SMAASimulator simulator;
-	protected M model;
-	protected R results;
 	private GUIFactory factory;
 	private JFrame frame;
 
-	@SuppressWarnings("unchecked")
-	public SimulationBuilder(M model, GUIFactory factory, JFrame frame) {
-		this.model = (M) model.deepCopy();
+	public BasicSimulationBuilder(M model, GUIFactory factory, JFrame frame) {
+		super(model);
 		this.factory = factory;
 		this.frame = frame;
 		
@@ -35,20 +32,7 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		connectNameAdapters(model.getCriteria(), this.model.getCriteria());
 	}
 	
-	public R getResults() {
-		return results;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized void run() {
-		if (simulator != null) {
-			simulator.stop();
-		}
-		T thread = generateSimulationThread();
-		thread.setPriority(Thread.MIN_PRIORITY);
-		simulator = new SMAASimulator(model, thread);
-		results = (R) thread.getResults();
+	protected void prepareSimulation(R results) {
 		results.addResultsListener(new SimulationProgressListener());
 
 		if (model instanceof SMAATRIModel) {
@@ -58,10 +42,7 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		}
 		
 		factory.getProgressBar().setValue(0);
-		simulator.restart();
 	}
-
-	protected abstract T generateSimulationThread();
 
 	protected void connectNameAdapters(List<? extends NamedObject> oldModelObjects,
 			List<? extends NamedObject> newModelObjects) {

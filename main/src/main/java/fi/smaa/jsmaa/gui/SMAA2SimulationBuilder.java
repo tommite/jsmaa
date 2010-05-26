@@ -6,7 +6,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAA2SimulationThread;
 
-public class SMAA2SimulationBuilder extends SimulationBuilder<SMAAModel, SMAA2Results, SMAA2SimulationThread> {
+public class SMAA2SimulationBuilder extends BasicSimulationBuilder<SMAAModel, SMAA2Results, SMAA2SimulationThread> {
 
 	public SMAA2SimulationBuilder(SMAAModel model, GUIFactory factory, JFrame frame) {
 		super(model, factory, frame);

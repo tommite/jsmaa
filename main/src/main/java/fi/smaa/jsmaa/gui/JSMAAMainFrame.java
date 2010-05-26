@@ -53,6 +53,7 @@ import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
 import fi.smaa.jsmaa.model.xml.JSMAABinding;
+import fi.smaa.jsmaa.simulator.BuildQueue;
 
 @SuppressWarnings("serial")
 public class JSMAAMainFrame extends JFrame implements MenuDirector {

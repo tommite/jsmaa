@@ -1,4 +1,4 @@
-package fi.smaa.jsmaa.gui;
+package fi.smaa.jsmaa.simulator;
 
 import java.util.LinkedList;
 import java.util.Queue;
