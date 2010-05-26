@@ -6,7 +6,7 @@ public class PlotConverterFactory {
 	public static PlotConverter getConverter(SMAADataSet<?> s) {
 		if (s instanceof CentralWeightsDataset) {
 			return new CentralWeightsDatasetConverter((CentralWeightsDataset) s);
-		} else if (s instanceof AlternativeColumnCategoryDataset) {
+		} else if (s instanceof AlternativeColumnCategoryDataset<?>) {
 			return new CategoryDatasetConverter((AlternativeColumnCategoryDataset<?>) s);
 		}
 		throw new IllegalArgumentException("no plot converters available for " + s);
