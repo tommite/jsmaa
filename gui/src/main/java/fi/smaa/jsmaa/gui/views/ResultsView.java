@@ -50,13 +50,11 @@ public class ResultsView implements ViewBuilder {
 
 	private JTable table;
 	private JFreeChart chart;
-	private String title;
 	private Window parent;
 	private String scriptIcon;
 	private boolean showChart;
 
-	public ResultsView(Window parent, String title, JTable table, JFreeChart chart, String scriptIcon, boolean showChart) {
-		this.title = title;
+	public ResultsView(Window parent, JTable table, JFreeChart chart, String scriptIcon, boolean showChart) {
 		this.chart = chart;
 		this.table = table;
 		this.parent = parent;
@@ -64,8 +62,7 @@ public class ResultsView implements ViewBuilder {
 		this.showChart = showChart;
 	}
 	
-	public ResultsView(Window parent, String title, JTable table, JFreeChart chart, String scriptIcon) {
-		this.title = title;
+	public ResultsView(Window parent, JTable table, JFreeChart chart, String scriptIcon) {
 		this.chart = chart;
 		this.table = table;
 		this.parent = parent;
@@ -76,20 +73,19 @@ public class ResultsView implements ViewBuilder {
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p");		
+				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p");		
 		
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();	
 		
-		builder.addSeparator(title, cc.xy(1, 1));
 		JScrollPane spane = new JScrollPane(table);
-		builder.add(spane, cc.xy(1, 3));
+		builder.add(spane, cc.xy(1, 1));
 	
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
-		builder.addSeparator("", cc.xy(1, 5));	
-		builder.add(buildFigurePart(), cc.xy(1, 7));
-		builder.add(buildExportButton(), cc.xy(1, 9, "left, center"));
+		builder.addSeparator("", cc.xy(1, 3));	
+		builder.add(buildFigurePart(), cc.xy(1, 5));
+		builder.add(buildExportButton(), cc.xy(1, 7, "left, center"));
 		
 		return builder.getPanel();
 	}

@@ -28,6 +28,7 @@ import fi.smaa.jsmaa.gui.presentation.CentralWeightTableModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.RankAcceptabilityTableModel;
 import fi.smaa.jsmaa.gui.views.ResultsView;
+import fi.smaa.jsmaa.gui.views.ViewWithHeader;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
@@ -74,7 +75,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new CentralWeightsCellRenderer(1.0));
-			return new ResultsView(parent, "Central weight vectors", table, chart, FileNames.ICON_SCRIPT);
+			return new ViewWithHeader("Central weight vectors", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT));
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
 			        "", "Alternative", "Rank Acceptability",
@@ -83,7 +84,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
-			return new ResultsView(parent, "Rank acceptability indices", table, chart, FileNames.ICON_SCRIPT, isChartDrawable());
+			return new ViewWithHeader("Rank acceptability indices", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT, isChartDrawable()));
 		} else {
 			return super.buildView(o);
 		}	

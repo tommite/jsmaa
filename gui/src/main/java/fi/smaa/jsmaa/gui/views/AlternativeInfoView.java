@@ -34,11 +34,9 @@ import fi.smaa.jsmaa.model.Alternative;
 
 public class AlternativeInfoView implements ViewBuilder {
 	private List<Alternative> alts;
-	private String header;
 	
-	public AlternativeInfoView(List<Alternative> alts, String header) {
+	public AlternativeInfoView(List<Alternative> alts) {
 		this.alts = alts;
-		this.header = header;
 	}
 
 	public JComponent buildPanel() {
@@ -46,18 +44,16 @@ public class AlternativeInfoView implements ViewBuilder {
 				"fill:pref:grow",
 				"p" );
 		
-		int fullWidth = 1;
-
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator(header, cc.xyw(1,1, fullWidth));
-
-		int row = 3;
+		int row = 1;
 		
 		for (Alternative a : alts) {
-			LayoutUtil.addRow(layout);
+			if (row > 1) {
+				LayoutUtil.addRow(layout);	
+			}
 		
 			builder.add(BasicComponentFactory.createLabel(
 					new PresentationModel<Alternative>(a).getModel(Alternative.PROPERTY_NAME)),

@@ -27,6 +27,7 @@ import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
 import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.TechnicalParameterView;
+import fi.smaa.jsmaa.gui.views.ViewWithHeader;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -90,9 +91,9 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 			ResultsTable table = new ResultsTable(categoryAcceptabilityTM);		
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
-			return new ResultsView(parent, "Category acceptability indices", table, chart, FileNames.ICON_SCRIPT);
+			return new ViewWithHeader("Category acceptability indices", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT));
 		} else if (o == treeModel.getCategoriesNode()) {
-			return new AlternativeInfoView(smaaModel.getCategories(), "Categories (in ascending order, top = worst)");
+			return new ViewWithHeader("Categories (in ascending order, top = worst)", new AlternativeInfoView(smaaModel.getCategories()));
 		} else {
 			return super.buildView(o);
 		}		

@@ -7,14 +7,15 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.jsmaa.gui.ViewBuilder;
-import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 
-public class PreferenceInformationViewWithHeader implements ViewBuilder {
+public class ViewWithHeader implements ViewBuilder {
 	
-	private PreferencePresentationModel model;
+	private ViewBuilder vbuilder;
+	private String header;
 
-	public PreferenceInformationViewWithHeader(PreferencePresentationModel model) {
-		this.model = model;
+	public ViewWithHeader(String header, ViewBuilder builder) {
+		this.header = header;
+		this.vbuilder = builder;
 	}
 
 	@Override
@@ -27,8 +28,8 @@ public class PreferenceInformationViewWithHeader implements ViewBuilder {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Preferences", cc.xy(1, 1));
-		builder.add(new PreferenceInformationView(model).buildPanel(), cc.xy(1, 3));
+		builder.addSeparator(header, cc.xy(1, 1));
+		builder.add(vbuilder.buildPanel(), cc.xy(1, 3));
 		return builder.getPanel();
 	}
 }

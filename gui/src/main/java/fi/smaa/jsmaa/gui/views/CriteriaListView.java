@@ -48,36 +48,32 @@ public class CriteriaListView implements ViewBuilder {
 		
 		FormLayout layout = new FormLayout(
 				"pref, 3dlu, left:pref",
-				"p, 3dlu, p" );
+				"p" );
 
-		int fullWidth = 3;
 		if (hasCardinalCriteria(model)) {
 			layout.appendColumn(ColumnSpec.decode("3dlu"));
 			layout.appendColumn(ColumnSpec.decode("center:pref"));
-			fullWidth = 5;
 		}
 		if (hasScaleCriteria(model)) {
 			layout.appendColumn(ColumnSpec.decode("3dlu"));
 			layout.appendColumn(ColumnSpec.decode("center:pref"));
-			fullWidth = 7;
 		}
 
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Criteria", cc.xyw(1, 1, fullWidth));
-		builder.addLabel("Name", cc.xy(1, 3));
-		builder.addLabel("Type", cc.xy(3, 3));
+		builder.addLabel("Name", cc.xy(1, 1));
+		builder.addLabel("Type", cc.xy(3, 1));
 		
 		if (hasCardinalCriteria(model)) {
-			builder.addLabel("Ascending", cc.xy(5, 3));
+			builder.addLabel("Ascending", cc.xy(5, 1));
 		}
 		if (hasScaleCriteria(model)) {
-			builder.addLabel("Scale", cc.xy(7, 3));
+			builder.addLabel("Scale", cc.xy(7, 1));
 		}
 
-		int row = 5;
+		int row = 3;
 
 		for (Criterion c : model.getCriteria()) {
 			LayoutUtil.addRow(layout);

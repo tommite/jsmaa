@@ -59,22 +59,21 @@ public class CriterionView implements ViewBuilder {
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"pref",
-				"p, 3dlu, p, 3dlu, p, 3dlu, p" );
+				"p, 3dlu, p, 3dlu, p" );
 
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Criterion", cc.xy(1,1));		
-		builder.add(buildOverviewPart(), cc.xy(1, 3));
+		builder.add(buildOverviewPart(), cc.xy(1, 1));
 		
-		int row = 5;
+		int row = 3;
 		if (criterion instanceof OutrankingCriterion) {
 			LayoutUtil.addRow(layout);
-			builder.addSeparator("Thresholds", cc.xy(1, 5));
+			builder.addSeparator("Thresholds", cc.xy(1, 3));
 			LayoutUtil.addRow(layout);
-			builder.add(buildThresholdsPart(), cc.xy(1, 7));
-			row = 9;
+			builder.add(buildThresholdsPart(), cc.xy(1, 5));
+			row = 7;
 		}
 		builder.addSeparator("Measurements", cc.xy(1, row));
 		

@@ -41,7 +41,8 @@ import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
 import fi.smaa.jsmaa.gui.views.AlternativeView;
 import fi.smaa.jsmaa.gui.views.CriteriaListView;
 import fi.smaa.jsmaa.gui.views.CriterionView;
-import fi.smaa.jsmaa.gui.views.PreferenceInformationViewWithHeader;
+import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
+import fi.smaa.jsmaa.gui.views.ViewWithHeader;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -136,15 +137,15 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	public ViewBuilder buildView(Object o) {
 		if (o == treeModel.getAlternativesNode()) {
-			return new AlternativeInfoView(smaaModel.getAlternatives(), "Alternatives");			
+			return new ViewWithHeader("Alternatives", new AlternativeInfoView(smaaModel.getAlternatives()));			
 		} else if (o == treeModel.getCriteriaNode()){
-			return new CriteriaListView(smaaModel);
+			return new ViewWithHeader("Criteria", new CriteriaListView(smaaModel));
 		} else if (o instanceof Criterion) {
-			return new CriterionView(((Criterion)o), smaaModel);
+			return new ViewWithHeader("Criterion", new CriterionView(((Criterion)o), smaaModel));
 		} else if (o instanceof Alternative) {
-			return new AlternativeView((Alternative) o);
+			return new ViewWithHeader("Alternative", new AlternativeView((Alternative) o));
 		} else if (o == treeModel.getPreferencesNode()) {
-			return new PreferenceInformationViewWithHeader(new PreferencePresentationModel(smaaModel));
+			return new ViewWithHeader("Preferences", new PreferenceInformationView(new PreferencePresentationModel(smaaModel)));
 		} else if (o == treeModel.getResultsNode()) {
 			return new ViewBuilder() {
 				@Override
