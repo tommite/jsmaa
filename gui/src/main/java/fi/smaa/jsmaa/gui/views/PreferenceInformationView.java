@@ -57,7 +57,7 @@ public class PreferenceInformationView implements ViewBuilder {
 	public JComponent buildPanel() {
 		FormLayout layout = new FormLayout(
 				"right:pref, 3dlu, left:pref:grow",
-				"p, 3dlu, p, 3dlu, p");
+				"p, 3dlu, p");
 		
 		int fullWidth = 3;
 		
@@ -67,16 +67,14 @@ public class PreferenceInformationView implements ViewBuilder {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
-		builder.addSeparator("Preferences", cc.xyw(1, 1, fullWidth));
-		
 		SelectionInList<PreferenceType> typeSelInList 
 			= new SelectionInList<PreferenceType>(PreferenceType.values(), preferenceTypeModel);
 		
 
 		JComboBox preferenceTypeBox = BasicComponentFactory.createComboBox(typeSelInList);
-		builder.add(preferenceTypeBox, cc.xy(1, 3));
+		builder.add(preferenceTypeBox, cc.xy(1, 1));
 
-		builder.addLabel("Preference information", cc.xyw(3, 3, fullWidth-2));
+		builder.addLabel("Preference information", cc.xyw(3, 1, fullWidth-2));
 
 		prefPanel = null;
 		if (model.getPreferenceType() == PreferenceType.ORDINAL) {
@@ -91,7 +89,7 @@ public class PreferenceInformationView implements ViewBuilder {
 			prefPanel = oview.buildPanel();
 		}
 		if (prefPanel != null) {
-			builder.add(prefPanel, cc.xyw(1, 5, fullWidth));
+			builder.add(prefPanel, cc.xyw(1, 3, fullWidth));
 		}
 		
 		preferenceTypeBox.addActionListener(new AbstractAction() {

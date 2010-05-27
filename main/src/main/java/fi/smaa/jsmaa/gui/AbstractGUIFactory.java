@@ -34,7 +34,6 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
@@ -42,7 +41,7 @@ import fi.smaa.jsmaa.gui.views.AlternativeInfoView;
 import fi.smaa.jsmaa.gui.views.AlternativeView;
 import fi.smaa.jsmaa.gui.views.CriteriaListView;
 import fi.smaa.jsmaa.gui.views.CriterionView;
-import fi.smaa.jsmaa.gui.views.PreferenceInformationView;
+import fi.smaa.jsmaa.gui.views.PreferenceInformationViewWithHeader;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -146,7 +145,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		} else if (o instanceof Alternative) {
 			return new AlternativeView((Alternative) o);
 		} else if (o == treeModel.getPreferencesNode()) {
-			return new PreferenceInformationView(new PreferencePresentationModel(smaaModel));
+			return new PreferenceInformationViewWithHeader(new PreferencePresentationModel(smaaModel));
 		} else if (o == treeModel.getResultsNode()) {
 			return new ViewBuilder() {
 				@Override

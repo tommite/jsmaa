@@ -47,7 +47,7 @@ public class CriteriaListView implements ViewBuilder {
 	public JComponent buildPanel() {
 		
 		FormLayout layout = new FormLayout(
-				"pref, 3dlu, center:pref",
+				"pref, 3dlu, left:pref",
 				"p, 3dlu, p" );
 
 		int fullWidth = 3;
