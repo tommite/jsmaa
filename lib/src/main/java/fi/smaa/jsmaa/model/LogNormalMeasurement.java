@@ -58,7 +58,7 @@ public class LogNormalMeasurement extends GaussianMeasurement {
 		if (!(other instanceof LogNormalMeasurement)) {
 			return false;
 		}
-		return super.equals(other);
+		return super.valueEquals((LogNormalMeasurement)other);
 	}
 	
 

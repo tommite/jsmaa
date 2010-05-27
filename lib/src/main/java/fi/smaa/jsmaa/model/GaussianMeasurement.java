@@ -85,10 +85,13 @@ public class GaussianMeasurement extends CardinalMeasurement {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof GaussianMeasurement)) {
+		if (!(other.getClass().equals(GaussianMeasurement.class))) {
 			return false;
 		}
 		GaussianMeasurement go = (GaussianMeasurement) other;
+		return valueEquals(go);
+	}
+	protected boolean valueEquals(GaussianMeasurement go) {
 		return go.mean.equals(mean) && go.stDev.equals(stDev);
 	}
 
