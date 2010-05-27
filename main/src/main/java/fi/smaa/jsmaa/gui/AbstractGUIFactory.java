@@ -21,7 +21,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -34,6 +33,7 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
+import fi.smaa.jsmaa.gui.components.SimulationProgressBar;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
@@ -62,7 +62,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected MenuDirector director;
 	protected ModelFileManagerPM fileManagerPM;
 	private JToolBar bottomToolBar;
-	private JProgressBar progressBar;
+	private SimulationProgressBar progressBar;
 	protected Window parent;
 	
 	protected AbstractGUIFactory(Window parent, M smaaModel, MenuDirector director) {
@@ -91,14 +91,13 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	protected JToolBar buildBottomToolBar() {
 		JToolBar bar = new JToolBar();
-		progressBar = new JProgressBar();	
-		progressBar.setStringPainted(true);		
+		progressBar = new SimulationProgressBar();	
 		bar.add(progressBar);
 		bar.setFloatable(false);
 		return bar;
 	}
 	
-	public JProgressBar getProgressBar() {
+	public SimulationProgressBar getProgressBar() {
 		return progressBar;
 	}
 

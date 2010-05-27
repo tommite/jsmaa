@@ -41,7 +41,7 @@ public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAA
 			((SMAA2GUIFactory)factory).setResults((SMAA2Results) results);				
 		}
 		
-		factory.getProgressBar().setValue(0);
+		factory.getProgressBar().setSimulator(simulator);
 	}
 
 	protected void connectNameAdapters(List<? extends NamedObject> oldModelObjects,
@@ -69,18 +69,7 @@ public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAA
 
 	private class SimulationProgressListener implements SMAAResultsListener {
 		public void resultsChanged(ResultsEvent ev) {
-			if (ev.getException() == null) {
-				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				factory.getProgressBar().setValue(amount);
-				if (amount < 100) {
-					factory.getProgressBar().setString("Simulating: " + Integer.toString(amount) + "% done");
-				} else {
-					factory.getProgressBar().setString("Simulation complete.");
-				}
-			} else {
-				int amount = simulator.getCurrentIteration() * 100 / simulator.getTotalIterations();
-				factory.getProgressBar().setValue(amount);
-				factory.getProgressBar().setString("Error in simulation : " + ev.getException().getMessage());
+			if (ev.getException() != null) {
 				frame.getContentPane().remove(factory.getBottomToolBar());
 				frame.getContentPane().add("South", factory.getBottomToolBar());
 				frame.pack();
