@@ -8,16 +8,17 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.components.LambdaPanel;
 import fi.smaa.jsmaa.gui.components.ResultsCellColorRenderer;
 import fi.smaa.jsmaa.gui.components.ResultsTable;
@@ -81,7 +82,14 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	
 	@Override
 	public ViewBuilder buildView(Object o) {
-		if (o == treeModel.getModelNode()) {
+		if (o instanceof Alternative && smaaModel.getCategories().contains(o)) {
+			return new ViewBuilder() {
+				@Override
+				public JComponent buildPanel() {
+					return new JPanel();
+				}
+			};
+		} else if (o == treeModel.getModelNode()) {
 			return new TechnicalParameterView(smaaModel);	
 		} else if (o == treeModel.getCatAccNode()) {
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
