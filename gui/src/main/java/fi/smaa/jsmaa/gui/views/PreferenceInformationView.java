@@ -67,8 +67,14 @@ public class PreferenceInformationView implements ViewBuilder {
 		builder.setDefaultDialogBorder();
 		CellConstraints cc = new CellConstraints();
 		
+		PreferenceType[] valueList = null;
+		if (model.includesCardinalPreferences()) {
+			valueList = PreferenceType.values();			
+		} else {
+			valueList = new PreferenceType[]{PreferenceType.MISSING, PreferenceType.ORDINAL};			
+		}
 		SelectionInList<PreferenceType> typeSelInList 
-			= new SelectionInList<PreferenceType>(PreferenceType.values(), preferenceTypeModel);
+			= new SelectionInList<PreferenceType>(valueList, preferenceTypeModel);
 		
 
 		JComboBox preferenceTypeBox = BasicComponentFactory.createComboBox(typeSelInList);

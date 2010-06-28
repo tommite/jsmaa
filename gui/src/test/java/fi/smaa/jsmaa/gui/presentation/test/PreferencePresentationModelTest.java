@@ -51,7 +51,7 @@ public class PreferencePresentationModelTest {
 		c2 = new ScaleCriterion("c2");
 		model.addCriterion(c1);
 		model.addCriterion(c2);
-		pmodel = new PreferencePresentationModel(model);
+		pmodel = new PreferencePresentationModel(model, true);
 	}
 	
 	@Test

@@ -35,6 +35,7 @@ public class PreferencePresentationModel extends PresentationModel<SMAAModel> {
 	public static final String PREFERENCE_TYPE = "preferenceType";
 	private OrdinalPreferenceInformation ordinalPreferences;
 	private CardinalPreferenceInformation cardinalPreferences;
+	private boolean includeCardinal;
 	
 	public enum PreferenceType {
 		MISSING("Missing"),
@@ -52,8 +53,13 @@ public class PreferencePresentationModel extends PresentationModel<SMAAModel> {
 		}		
 	}
 	
-	public PreferencePresentationModel(SMAAModel model) {
+	public PreferencePresentationModel(SMAAModel model, boolean includeCardinal) {
 		super(model);
+		this.includeCardinal = includeCardinal;
+	}
+	
+	public boolean includesCardinalPreferences() {
+		return includeCardinal;
 	}
 	
 	@Override
