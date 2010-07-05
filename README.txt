@@ -8,6 +8,8 @@ Currently is implemented:
 
 Versions
 ========
+0.6.4:	Changed to not showing acceptabilities graphs for 20+ alternatives. Added measurements to view of
+	an alternative. Minor fixes & refactors for better integrability.
 0.6.3:	Added showing of scales to preference information view. Major refactors and small fixes.
 0.6.2:	Add exporting of GNUPlot scripts for figures. Fix SMAA-2 simulation crash on adding criterion.
 0.6.1:	Fix major bug in previous versions of not updating output graphs/tables when they are showing.
@@ -29,5 +31,5 @@ Contact me by email at t dot p dot tervonen at rug dot nl.
 
 More information can be found at http://www.smaa.fi.
 
-May 2010
+July 2010
 Tommi Tervonen
