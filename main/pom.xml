@@ -3,25 +3,24 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.smaa.jsmaa</groupId>
   <artifactId>main</artifactId>
-  <version>0.7-SNAPSHOT</version>
+  <version>0.6.4</version>
   <name>jsmaa-app</name>
 
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.6.4</version>
   </parent>
 
   <build>
     <plugins>
-      <plugin>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<configuration>
-	  <source>1.6</source>
-	  <target>1.6</target>
-	</configuration>
-      </plugin>
-      
+     <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>      
       <plugin>
 	<artifactId>maven-assembly-plugin</artifactId>
 	<configuration>
