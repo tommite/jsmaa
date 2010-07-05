@@ -21,6 +21,7 @@ package fi.smaa.jsmaa.gui.views;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -62,7 +63,7 @@ public class CriterionView implements ViewBuilder {
 				"p, 3dlu, p, 3dlu, p" );
 
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());
 		CellConstraints cc = new CellConstraints();
 		
 		builder.add(buildOverviewPart(), cc.xy(1, 1));

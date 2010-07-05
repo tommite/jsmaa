@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui.views;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
@@ -34,7 +35,7 @@ public class AlternativeView implements ViewBuilder {
 				"p, 3dlu, p, 3dlu, p" );
 
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());
 		CellConstraints cc = new CellConstraints();
 		
 		int fullwidth = 3;
@@ -57,7 +58,7 @@ public class AlternativeView implements ViewBuilder {
 				"p" );
 
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());		
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel("Criterion", cc.xy(1, 1));

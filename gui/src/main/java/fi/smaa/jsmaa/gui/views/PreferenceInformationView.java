@@ -21,6 +21,7 @@ package fi.smaa.jsmaa.gui.views;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
@@ -64,7 +65,7 @@ public class PreferenceInformationView implements ViewBuilder {
 		ValueModel preferenceTypeModel = model.getModel(PreferencePresentationModel.PREFERENCE_TYPE);
 
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());		
 		CellConstraints cc = new CellConstraints();
 		
 		PreferenceType[] valueList = null;

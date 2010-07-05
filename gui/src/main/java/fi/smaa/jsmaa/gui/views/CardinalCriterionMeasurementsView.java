@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui.views;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
@@ -33,6 +34,7 @@ public class CardinalCriterionMeasurementsView implements ViewBuilder {
 				"p" );
 		
 		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setBorder(BorderFactory.createEmptyBorder());
 		CellConstraints cc = new CellConstraints();
 		
 		for (int i=0;i<model.getAlternatives().size();i++) {

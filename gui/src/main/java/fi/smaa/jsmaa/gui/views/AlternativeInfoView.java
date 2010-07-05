@@ -20,6 +20,7 @@ package fi.smaa.jsmaa.gui.views;
 
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
 import com.jgoodies.binding.PresentationModel;
@@ -45,7 +46,7 @@ public class AlternativeInfoView implements ViewBuilder {
 				"p" );
 		
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());
 		CellConstraints cc = new CellConstraints();
 		
 		int row = 1;

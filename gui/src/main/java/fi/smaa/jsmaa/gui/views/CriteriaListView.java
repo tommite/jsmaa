@@ -18,6 +18,7 @@
 
 package fi.smaa.jsmaa.gui.views;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
 
@@ -60,7 +61,7 @@ public class CriteriaListView implements ViewBuilder {
 		}
 
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
+		builder.setBorder(BorderFactory.createEmptyBorder());		
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel("Name", cc.xy(1, 1));
