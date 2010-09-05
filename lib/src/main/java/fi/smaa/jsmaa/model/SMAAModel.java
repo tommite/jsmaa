@@ -35,7 +35,7 @@ import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
 
 
 public class SMAAModel extends AbstractEntity {
-	public static final int MODELVERSION = 1;
+	public static final int MODELVERSION = 2;
 	public final static String PROPERTY_NAME = "name";
 	
 	private String name;

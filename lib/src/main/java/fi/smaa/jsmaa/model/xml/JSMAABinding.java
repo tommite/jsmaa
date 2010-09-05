@@ -9,6 +9,7 @@ import javolution.xml.XMLObjectWriter;
 import javolution.xml.XMLReferenceResolver;
 import javolution.xml.stream.XMLStreamException;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.BetaMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -50,6 +51,7 @@ public class JSMAABinding extends XMLBinding {
 	private void setAliases() {
 		setAlias(Rank.class, "rank");
 		setAlias(GaussianMeasurement.class, "gaussian");
+		setAlias(BetaMeasurement.class, "beta");
 		setAlias(LogNormalMeasurement.class, "lognormal");
 		setAlias(ExactMeasurement.class, "exact");
 		setAlias(CriterionMeasurementPair.class, "criterionMeasurement");

@@ -1,6 +1,6 @@
 /*
 	This file is part of JSMAA.
-	(c) Tommi Tervonen, 2009	
+	(c) Tommi Tervonen, 2009-2010	
 
     JSMAA is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -95,6 +95,10 @@ public class RandomUtil {
 	public static void createSumToOneSorted(double[] dest) throws NullPointerException {
 		createSumToOneRand(dest);
 		Arrays.sort(dest);
+	}
+
+	public static double createBeta(Double alpha, Double beta) {
+		return random.nextBeta(alpha, beta);
 	}
 	
 }

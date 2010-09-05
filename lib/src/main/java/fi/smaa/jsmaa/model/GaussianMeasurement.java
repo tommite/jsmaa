@@ -91,6 +91,7 @@ public class GaussianMeasurement extends CardinalMeasurement {
 		GaussianMeasurement go = (GaussianMeasurement) other;
 		return valueEquals(go);
 	}
+	
 	protected boolean valueEquals(GaussianMeasurement go) {
 		return go.mean.equals(mean) && go.stDev.equals(stDev);
 	}
