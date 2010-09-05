@@ -21,6 +21,10 @@
       <url>http://download.java.net/maven/2/</url>
       <layout>default</layout>
     </repository>
+    <repository>
+        <id>activequant-external-repository</id>
+        <url>http://activequant.org/m2/external</url>
+        </repository>
   </repositories>
 
   <build>
@@ -53,6 +57,11 @@
     </plugins>		
   </build>
   <dependencies>
+  	<dependency>
+  		<groupId>flanagan</groupId>
+  		<artifactId>flanagan</artifactId>
+  		<version>1.1.0</version>
+  	</dependency>
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>binding</artifactId>

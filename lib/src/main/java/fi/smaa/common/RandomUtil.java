@@ -19,11 +19,12 @@
 package fi.smaa.common;
 
 import java.util.Arrays;
-import java.util.Random;
+
+import flanagan.math.PsRandom;
 
 public class RandomUtil {
 	
-	private static Random random = new Random(666);
+	private static PsRandom random = new PsRandom(666);
 	
 	/**
 	 * Generates a gaussian distributed number.
@@ -33,7 +34,7 @@ public class RandomUtil {
 	 * @return a value sampled from the gaussian distribution
 	 */
 	public static double createGaussian(double mean, double stdev) {
-		return mean + random.nextGaussian() * stdev;
+		return random.nextGaussian(mean, stdev);
 	}
 	
 	/**
