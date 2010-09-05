@@ -102,7 +102,7 @@ public class BetaMeasurement extends CardinalMeasurement {
 	
 	@Override
 	public String toString() {
-		return "\u03B1: " + alpha + " \u03D0: " + beta + " min: " + min + " max: " + max; 
+		return "\u03B1: " + alpha + " \u03B2: " + beta + " min: " + min + " max: " + max; 
 	}	
 
 	@Override

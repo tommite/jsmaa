@@ -39,6 +39,7 @@ import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
+import fi.smaa.jsmaa.model.BetaMeasurement;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -62,7 +63,8 @@ public class MeasurementPanel extends JPanel {
 		EXACT("Exact"),
 		INTERVAL("Interval"),
 		GAUSSIAN("Gaussian"),
-		LOGNORMAL("LogNormal");
+		LOGNORMAL("LogNormal"),
+		BETA("Beta");
 		
 		private String label;
 		
@@ -140,6 +142,8 @@ public class MeasurementPanel extends JPanel {
 			text = "Log-normal distributed measurement is input as ln(mean) \u00B1 ln(stdev)";
 		} else if (holder.getValue() instanceof GaussianMeasurement) {
 			text = "Gaussian distributed measurement is input as mean \u00B1 stdev";
+		} else if (holder.getValue() instanceof BetaMeasurement) {
+			text = "Beta distributed measurement is input as alpha, beta, min, max";
 		}
 		chooserComboBox.setToolTipText(text);
 	}
@@ -161,6 +165,9 @@ public class MeasurementPanel extends JPanel {
 		} else if (m instanceof GaussianMeasurement) {
 			GaussianMeasurement gm = (GaussianMeasurement) m;
 		    measComp = new GaussianMeasurementPanel(this, new PresentationModel<GaussianMeasurement>(gm));
+		} else if (m instanceof BetaMeasurement) {
+			BetaMeasurement gm = (BetaMeasurement) m;
+		    measComp = new BetaMeasurementPanel(this, new PresentationModel<BetaMeasurement>(gm));
 		} else {
 			throw new RuntimeException("unknown measurement type");
 		}
@@ -178,6 +185,8 @@ public class MeasurementPanel extends JPanel {
 				return MeasurementType.LOGNORMAL;
 			} else if (m instanceof GaussianMeasurement) {
 				return MeasurementType.GAUSSIAN;
+			} else if (m instanceof BetaMeasurement) {
+				return MeasurementType.BETA;
 			} else {
 				throw new RuntimeException("unknown measurement type");
 			}
@@ -217,6 +226,8 @@ public class MeasurementPanel extends JPanel {
 				} else {
 					holder.setValue(new GaussianMeasurement(1.0, 0.0));
 				}
+			}  else if (type == MeasurementType.BETA) {
+				holder.setValue(new BetaMeasurement(2.0, 2.0, 0.0, 1.0));
 			} else {
 				throw new RuntimeException("unknown measurement type");
 			}

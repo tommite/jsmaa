@@ -26,7 +26,7 @@ public class GaussianMeasurementPanel extends JPanel {
 				m.getModel(GaussianMeasurement.PROPERTY_MEAN),
 				new DefaultFormatter());
 		stDevField = BasicComponentFactory.createFormattedTextField(
-				new StdevValueModel(parent, m.getModel(GaussianMeasurement.PROPERTY_STDEV)), 
+				new NonNegativeValueModel(parent, m.getModel(GaussianMeasurement.PROPERTY_STDEV), "Standard deviation"), 
 				new DefaultFormatter());
 
 		meanField.setHorizontalAlignment(JTextField.CENTER);
