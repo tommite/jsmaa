@@ -50,8 +50,12 @@ public class BetaMeasurementTest {
 	
 	@Test
 	public void testGetRange() {
-		BetaMeasurement meas = new BetaMeasurement(2.0, 2.0, 2.0, 4.0);
-		assertEquals(new Interval(2.0, 4.0), meas.getRange());
+		BetaMeasurement meas = new BetaMeasurement(52.0, 46.0, 1.0, 3.0);
+		Interval range = meas.getRange();
+		double targetMin = (0.4319303 + 1.0) * (3.0 - 1.0);
+		double targetMax = (0.6281102 + 1.0) * (3.0 - 1.0);
+		assertEquals(targetMin, range.getStart(), 0.01);
+		assertEquals(targetMax, range.getEnd(), 0.01);
 	}
 	
 	@Test

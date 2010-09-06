@@ -62,6 +62,11 @@
   		<artifactId>flanagan</artifactId>
   		<version>1.1.0</version>
   	</dependency>
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-math</artifactId>
+    <version>2.1</version>
+</dependency>
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>binding</artifactId>
