@@ -71,8 +71,8 @@ public class BetaMeasurementTest {
 	
 	@Test
 	public void testSample() {
-		BetaMeasurement m = new BetaMeasurement(1.0, 1.0, 3.0, 3.01);
-		assertEquals(3.005, m.sample(), 0.005);
+		BetaMeasurement m = new BetaMeasurement(10.0, 20.0, 2.0, 4.0);
+		assertEquals(3.0, m.sample(), 0.99);
 	}	
 	
 	@Test

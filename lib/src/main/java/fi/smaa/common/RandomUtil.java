@@ -20,6 +20,7 @@ package fi.smaa.common;
 
 import java.util.Arrays;
 
+import flanagan.analysis.Stat;
 import flanagan.math.PsRandom;
 
 public class RandomUtil {
@@ -98,7 +99,9 @@ public class RandomUtil {
 	}
 
 	public static double createBeta(Double min, Double max, Double alpha, Double beta) {
-		return random.nextBeta(min, max, alpha, beta);
+		// No idea why PsRandom.nextBeta doesn't work, anyway use this for now
+		double[] arr = Stat.betaRand(min, max, alpha, beta, 1);
+		return arr[0];
 	}
 	
 }
