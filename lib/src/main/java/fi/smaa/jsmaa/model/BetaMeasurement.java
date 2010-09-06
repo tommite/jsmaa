@@ -108,7 +108,7 @@ public class BetaMeasurement extends CardinalMeasurement {
 
 	@Override
 	public double sample() {
-		return RandomUtil.createBeta(alpha, beta);
+		return RandomUtil.createBeta(min, max, alpha, beta);
 	}
 	
 	public BetaMeasurement deepCopy() {

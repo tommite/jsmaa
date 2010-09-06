@@ -97,8 +97,8 @@ public class RandomUtil {
 		Arrays.sort(dest);
 	}
 
-	public static double createBeta(Double alpha, Double beta) {
-		return random.nextBeta(alpha, beta);
+	public static double createBeta(Double min, Double max, Double alpha, Double beta) {
+		return random.nextBeta(min, max, alpha, beta);
 	}
 	
 }
