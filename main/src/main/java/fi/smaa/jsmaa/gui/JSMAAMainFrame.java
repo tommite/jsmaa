@@ -32,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -42,6 +41,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.drugis.common.gui.FileLoadDialog;
+import org.drugis.common.gui.FileSaveDialog;
 import org.drugis.common.gui.ViewBuilder;
 
 import fi.smaa.jsmaa.AppInfo;
@@ -164,18 +164,16 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	}
 
 	public boolean saveAs() {
-		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showSaveDialog(this);
-		if (retVal == JFileChooser.APPROVE_OPTION) {
-			File file = checkFileExtension(chooser.getSelectedFile());
-			trySaveModel(file);
-			modelManager.setModelFile(file);
-			return true;
-		} else {
-			return false;
-		}
+		FileSaveDialog d = new FileSaveDialog(this, "jsmaa", "JSMAA model files") {
+			public void doAction(String path, String extension) {
+				File file = checkFileExtension(new File(path));
+				setLastSuccess(trySaveModel(file));
+				modelManager.setModelFile(file);
+			}
+		};
+		return d.getLastSuccess();
 	}
-	
+
 	private boolean checkSaveCurrentModel() {
 		if (!modelManager.getSaved()) {
 			int conf = JOptionPane.showConfirmDialog(this, 
@@ -267,15 +265,6 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			return new File(file.getAbsolutePath() + "." + JSMAA_MODELFILE_EXTENSION);
 		}
 		return file;
-	}
-
-	private JFileChooser getFileChooser() {
-		JFileChooser chooser = new JFileChooser(new File("."));
-		MyFileFilter filter = new MyFileFilter();
-		filter.addExtension("jsmaa");
-		filter.setDescription("JSMAA model files");
-		chooser.setFileFilter(filter);
-		return chooser;
 	}
 	
 	private class LeftTreeSelectionListener implements TreeSelectionListener {
