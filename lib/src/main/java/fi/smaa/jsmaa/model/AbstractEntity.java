@@ -19,7 +19,7 @@ public abstract class AbstractEntity implements Observable, Serializable {
 	}
 	
 	protected void init() {
-		d_om = new ObserverManager(this);
+		d_om = new ConcurrentObserverManager(this);
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
