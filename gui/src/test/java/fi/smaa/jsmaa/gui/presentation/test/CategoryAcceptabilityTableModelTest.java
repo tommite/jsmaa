@@ -9,10 +9,10 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;

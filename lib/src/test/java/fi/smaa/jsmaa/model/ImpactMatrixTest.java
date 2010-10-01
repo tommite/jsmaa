@@ -26,11 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.drugis.common.JUnitUtil;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
 
 public class ImpactMatrixTest {
 	

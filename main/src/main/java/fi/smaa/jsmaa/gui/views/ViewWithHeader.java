@@ -2,11 +2,11 @@ package fi.smaa.jsmaa.gui.views;
 
 import javax.swing.JComponent;
 
+import org.drugis.common.gui.ViewBuilder;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import fi.smaa.jsmaa.gui.ViewBuilder;
 
 public class ViewWithHeader implements ViewBuilder {
 	

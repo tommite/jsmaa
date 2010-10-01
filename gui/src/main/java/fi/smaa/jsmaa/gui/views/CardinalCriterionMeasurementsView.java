@@ -3,14 +3,15 @@ package fi.smaa.jsmaa.gui.views;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import org.drugis.common.gui.LayoutUtil;
+import org.drugis.common.gui.ViewBuilder;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.gui.LayoutUtil;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.model.Alternative;

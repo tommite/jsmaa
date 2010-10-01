@@ -8,11 +8,11 @@ import java.util.List;
 
 import javolution.xml.stream.XMLStreamException;
 
+import org.drugis.common.JUnitUtil;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.common.XMLHelper;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;

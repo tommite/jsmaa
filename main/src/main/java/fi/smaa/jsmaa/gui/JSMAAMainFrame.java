@@ -41,9 +41,10 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import org.drugis.common.gui.ViewBuilder;
+
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.ModelFileManager;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ModelChangeEvent;

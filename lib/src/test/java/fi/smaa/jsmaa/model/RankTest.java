@@ -21,10 +21,8 @@ package fi.smaa.jsmaa.model;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
-import fi.smaa.jsmaa.model.Rank;
 
 public class RankTest {
 

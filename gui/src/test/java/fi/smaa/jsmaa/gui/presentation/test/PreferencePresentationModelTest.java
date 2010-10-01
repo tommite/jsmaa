@@ -21,12 +21,12 @@ package fi.smaa.jsmaa.gui.presentation.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.jgoodies.binding.value.ValueModel;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;

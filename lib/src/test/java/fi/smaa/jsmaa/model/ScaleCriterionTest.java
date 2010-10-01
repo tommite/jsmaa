@@ -18,14 +18,11 @@
 
 package fi.smaa.jsmaa.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
-import fi.smaa.jsmaa.model.ScaleCriterion;
-import fi.smaa.jsmaa.model.Interval;
 
 public class ScaleCriterionTest {
 	

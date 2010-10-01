@@ -23,12 +23,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.beans.PropertyChangeListener;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
-import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class OutrankingCriterionTest {
 

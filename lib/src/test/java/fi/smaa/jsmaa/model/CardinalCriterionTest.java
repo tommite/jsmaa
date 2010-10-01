@@ -18,12 +18,9 @@
 
 package fi.smaa.jsmaa.model;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
-import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.CardinalCriterion;
 
 public class CardinalCriterionTest {
 	

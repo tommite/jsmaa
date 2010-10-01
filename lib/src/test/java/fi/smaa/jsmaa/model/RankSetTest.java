@@ -10,10 +10,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
 
 public class RankSetTest {
 

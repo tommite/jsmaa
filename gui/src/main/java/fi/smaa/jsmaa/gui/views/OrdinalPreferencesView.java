@@ -20,9 +20,9 @@ package fi.smaa.jsmaa.gui.views;
 
 import javax.swing.JComboBox;
 
+import org.drugis.common.gui.ViewBuilder;
 
 import fi.smaa.jsmaa.gui.RankSelectorGroup;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalPreferenceInformation;
 

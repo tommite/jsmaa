@@ -59,6 +59,19 @@
     </plugins>		
   </build>
   <dependencies>
+    	<dependency>
+  		<groupId>org.drugis</groupId>
+  		<artifactId>common-lib</artifactId>
+  		<version>0.2</version>
+	</dependency>
+    	<dependency>
+  		<groupId>org.drugis</groupId>
+  		<artifactId>common-lib</artifactId>
+  		<version>0.2</version>
+<scope>test</scope>
+<classifier>tests</classifier>
+	</dependency>
+ 
   	<dependency>
   		<groupId>flanagan</groupId>
   		<artifactId>flanagan</artifactId>

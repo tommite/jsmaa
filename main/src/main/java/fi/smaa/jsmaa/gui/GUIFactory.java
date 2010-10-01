@@ -4,6 +4,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 
+import org.drugis.common.gui.ViewBuilder;
+
 import fi.smaa.jsmaa.gui.components.SimulationProgressBar;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 

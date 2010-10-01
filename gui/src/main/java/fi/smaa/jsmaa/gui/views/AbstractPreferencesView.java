@@ -4,13 +4,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.drugis.common.gui.LayoutUtil;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.gui.LayoutUtil;
 import fi.smaa.jsmaa.gui.components.FocusTransferrer;
 import fi.smaa.jsmaa.model.AbstractPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;

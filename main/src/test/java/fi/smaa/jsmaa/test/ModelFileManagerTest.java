@@ -1,18 +1,18 @@
 package fi.smaa.jsmaa.test;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyChangeListener;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.ModelFileManager;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
-
-import static org.easymock.EasyMock.*;
 
 public class ModelFileManagerTest {
 

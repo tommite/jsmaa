@@ -26,12 +26,12 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.drugis.common.JUnitUtil;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset;
 import fi.smaa.jsmaa.gui.jfreechart.RankAcceptabilitiesDataset.Rank;
 import fi.smaa.jsmaa.model.Alternative;

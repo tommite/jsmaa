@@ -55,6 +55,14 @@
       <version>4.6</version>
       <scope>test</scope>
     </dependency>
+    	<dependency>
+  		<groupId>org.drugis</groupId>
+  		<artifactId>common-lib</artifactId>
+  		<version>0.2</version>
+<scope>test</scope>
+<classifier>tests</classifier>
+	</dependency>
+
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>binding</artifactId>

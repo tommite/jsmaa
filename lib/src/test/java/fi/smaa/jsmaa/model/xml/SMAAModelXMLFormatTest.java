@@ -13,9 +13,9 @@ import java.io.StringReader;
 import javolution.xml.XMLObjectReader;
 import javolution.xml.stream.XMLStreamException;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;

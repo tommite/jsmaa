@@ -21,11 +21,9 @@ package fi.smaa.jsmaa.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
-import fi.smaa.jsmaa.model.Alternative;
 
 public class AlternativeTest {
 	

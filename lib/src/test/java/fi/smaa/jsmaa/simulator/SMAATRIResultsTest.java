@@ -28,13 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.common.JUnitUtil;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.simulator.SMAAResultsListener;
-import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class SMAATRIResultsTest {
 

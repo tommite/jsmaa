@@ -21,6 +21,8 @@ package fi.smaa.jsmaa.gui.views;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import org.drugis.common.gui.LayoutUtil;
+import org.drugis.common.gui.ViewBuilder;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -30,12 +32,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 
 import fi.smaa.jsmaa.gui.IntervalFormat;
-import fi.smaa.jsmaa.gui.LayoutUtil;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.model.CardinalCriterion;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class CriteriaListView implements ViewBuilder {
 	

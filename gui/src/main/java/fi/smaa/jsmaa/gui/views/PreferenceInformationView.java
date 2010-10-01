@@ -25,6 +25,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
+import org.drugis.common.gui.ViewBuilder;
+
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
@@ -32,7 +34,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel.PreferenceType;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;

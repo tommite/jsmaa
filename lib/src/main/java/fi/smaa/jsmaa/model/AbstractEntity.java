@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-import com.jgoodies.binding.beans.Observable;
+import org.drugis.common.ObserverManager;
 
-import fi.smaa.common.ObserverManager;
+import com.jgoodies.binding.beans.Observable;
 
 public abstract class AbstractEntity implements Observable, Serializable {
 	private static final long serialVersionUID = -3889001536692466540L;

@@ -3,9 +3,8 @@ package fi.smaa.jsmaa.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.drugis.common.JUnitUtil;
 import org.junit.Test;
-
-import fi.smaa.common.JUnitUtil;
 
 public class BetaMeasurementTest {
 

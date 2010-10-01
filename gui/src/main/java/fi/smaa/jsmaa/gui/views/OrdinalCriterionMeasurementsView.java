@@ -5,14 +5,15 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
+import org.drugis.common.gui.LayoutUtil;
+import org.drugis.common.gui.ViewBuilder;
+
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fi.smaa.jsmaa.gui.LayoutUtil;
-import fi.smaa.jsmaa.gui.ViewBuilder;
 import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
 
 public class OrdinalCriterionMeasurementsView implements ViewBuilder {
