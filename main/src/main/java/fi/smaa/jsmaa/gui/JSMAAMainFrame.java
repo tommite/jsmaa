@@ -41,6 +41,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import org.drugis.common.gui.FileLoadDialog;
 import org.drugis.common.gui.ViewBuilder;
 
 import fi.smaa.jsmaa.AppInfo;
@@ -220,11 +221,11 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
-		JFileChooser chooser = getFileChooser();
-		int retVal = chooser.showOpenDialog(this);
-		if (retVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				File file = chooser.getSelectedFile();
+		new FileLoadDialog(this, "jsmaa", "JSMAA model files") {
+			@Override
+			public void doAction(String path, String extension) {
+			try {				
+				File file = new File(path);
 				InputStream fis = new FileInputStream(file);
 				SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));
 				fis.close();
@@ -232,24 +233,24 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 				modelManager.setModel(loadedModel);
 				modelManager.setModelFile(file);
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(this,
+				JOptionPane.showMessageDialog(JSMAAMainFrame.this,
 						"Error loading model: "+ e.getMessage(), 
 						"Load error", JOptionPane.ERROR_MESSAGE);
 			} catch (InvalidModelVersionException e) {				
-				showErrorIncompatibleModel(chooser, "file contains a an incompatible JSMAA model version " + e.getVersion()
+				showErrorIncompatibleModel(path, "file contains a an incompatible JSMAA model version " + e.getVersion()
 						+ ".\nOnly versions until " + SMAAModel.MODELVERSION 
 						+ " supported.\nTo open the file, upgrade to a newer version of JSMAA (www.smaa.fi)");
 			} catch (Exception e) {
 				e.printStackTrace();
-				showErrorIncompatibleModel(chooser, "file doesn't dontain a JSMAA model");				
+				showErrorIncompatibleModel(path, "file doesn't dontain a JSMAA model");				
 			}
-		}
+			}
+		};
 	}
 
-	private void showErrorIncompatibleModel(JFileChooser chooser, String reason) {
+	private void showErrorIncompatibleModel(String file, String reason) {
 		JOptionPane.showMessageDialog(this, "Error loading model from " +
-				getCanonicalPath(chooser.getSelectedFile()) + 
-				": " + reason + ".", "Load error", JOptionPane.ERROR_MESSAGE);
+				file + ": " + reason + ".", "Load error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private String getCanonicalPath(File selectedFile) {

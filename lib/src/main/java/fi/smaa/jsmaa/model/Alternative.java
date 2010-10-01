@@ -63,11 +63,11 @@ public final class Alternative extends AbstractEntity implements Comparable<Alte
 		}
 		@Override
 		public Alternative newInstance(Class<Alternative> cls, InputElement ie) throws XMLStreamException {
-			return new Alternative(ie.<String>getAttribute("name", ""));
+			return new Alternative(ie.getAttribute("name", ""));
 		}
 		@Override
 		public void read(InputElement ie, Alternative alt) throws XMLStreamException {
-			alt.name = ie.<String>getAttribute("name", "");
+			alt.name = ie.getAttribute("name", "");
 		}
 		@Override
 		public void write(Alternative alt, OutputElement oe) throws XMLStreamException {
