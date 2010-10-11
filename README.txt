@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.8:    Beta-distributed measurements, GUI improvements, heavy refactoring.
 0.6.4:	Changed to not showing acceptabilities graphs for 20+ alternatives. Added measurements to view of
 	an alternative. Minor fixes & refactors for better integrability.
 0.6.3:	Added showing of scales to preference information view. Major refactors and small fixes.
@@ -27,9 +28,9 @@ Icons are taken from Eclipse, and are (c) Eclipse foundations and of their corre
 
 Contact
 =======
-Contact me by email at t dot p dot tervonen at rug dot nl.
+Contact me by email at tervonen at ese dot eur dot nl.
 
 More information can be found at http://www.smaa.fi.
 
-July 2010
+October 2010
 Tommi Tervonen

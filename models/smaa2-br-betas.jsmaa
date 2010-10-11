@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SMAA-2-model name="Analysis with all ADRs" modelVersion="2">
+	<alternatives>
+		<alternative id="0" name="Venlafaxine 0.0 mg/day"/>
+		<alternative id="1" name="Fluoxetine 0.0 mg/day"/>
+		<alternative id="2" name="Placebo 0.0 mg/day"/>
+	</alternatives>
+	<criteria>
+		<criterion class="cardinalCriterion" id="3" name="HAM-D response">
+			<ascending value="true"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="4" name="Nausea">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="5" name="Insomnia">
+			<ascending value="false"/>
+		</criterion>
+		<criterion class="cardinalCriterion" id="6" name="Anxiety">
+			<ascending value="false"/>
+		</criterion>
+	</criteria>
+	<measurements>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="3"/>
+			<value class="beta" alpha="52.0" beta="46.0" min="0.0" max="1.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="3"/>
+			<value class="beta" alpha="46.0" beta="56.0" min="0.0" max="1.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="3"/>
+			<value class="beta" alpha="38.0" beta="65.0" min="0.0" max="1.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="beta" alpha="41.0" beta="61.0" min="0.0" max="1.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="beta" alpha="23.0" beta="81.0" min="0.0" max="1.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="beta" alpha="9.0" beta="95.0" min="0.0" max="1.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="beta" alpha="23.0" beta="79.0" min="0.0" max="1.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="beta" alpha="16.0" beta="88.0" min="0.0" max="1.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="beta" alpha="15.0" beta="89.0" min="0.0" max="1.0"/>
+			<alternative ref="2"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="beta" alpha="11.0" beta="91.0" min="0.0" max="1.0"/>
+			<alternative ref="0"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="beta" alpha="8.0" beta="96.0" min="0.0" max="1.0"/>
+			<alternative ref="1"/>
+		</measurement>
+		<measurement>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="beta" alpha="2.0" beta="102.0" min="0.0" max="1.0"/>
+			<alternative ref="2"/>
+		</measurement>
+	</measurements>
+	<preferences class="ordinalPreferences" id="7">
+		<preference>
+			<criterion class="cardinalCriterion" ref="3"/>
+			<value class="rank" rank="1"/>
+		</preference>
+		<preference>
+			<criterion class="cardinalCriterion" ref="4"/>
+			<value class="rank" rank="2"/>
+		</preference>
+		<preference>
+			<criterion class="cardinalCriterion" ref="5"/>
+			<value class="rank" rank="4"/>
+		</preference>
+		<preference>
+			<criterion class="cardinalCriterion" ref="6"/>
+			<value class="rank" rank="3"/>
+		</preference>
+	</preferences>
+</SMAA-2-model>
