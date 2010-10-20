@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.smaa.jsmaa</groupId>
   <artifactId>lib</artifactId>
-  <version>0.8</version>
+  <version>0.8.1-SNAPSHOT</version>
   <url>http://www.smaa.fi</url>
   <packaging>jar</packaging>
   <name>jsmaa-lib</name>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>0.8</version>
+    <version>0.8.1-SNAPSHOT</version>
   </parent>
   
   <repositories>
@@ -62,14 +62,13 @@
     	<dependency>
   		<groupId>org.drugis</groupId>
   		<artifactId>common-lib</artifactId>
-  		<version>0.2</version>
+  		<version>0.3-SNAPSHOT</version>
 	</dependency>
     	<dependency>
   		<groupId>org.drugis</groupId>
-  		<artifactId>common-lib</artifactId>
-  		<version>0.2</version>
-<scope>test</scope>
-<classifier>tests</classifier>
+  		<artifactId>common-test</artifactId>
+  		<version>0.3-SNAPSHOT</version>
+		<scope>test</scope>
 	</dependency>
  
   	<dependency>

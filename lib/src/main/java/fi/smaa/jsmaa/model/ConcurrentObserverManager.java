@@ -4,7 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.drugis.common.ObserverManager;
+import org.drugis.common.beans.ObserverManager;
 
 import com.jgoodies.binding.beans.Observable;
 
