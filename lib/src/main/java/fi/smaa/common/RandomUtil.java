@@ -20,12 +20,15 @@ package fi.smaa.common;
 
 import java.util.Arrays;
 
-import flanagan.analysis.Stat;
-import flanagan.math.PsRandom;
+import cern.jet.random.Beta;
+import cern.jet.random.Normal;
+import cern.jet.random.engine.DRand;
+import cern.jet.random.engine.RandomEngine;
 
 public class RandomUtil {
-	
-	private static PsRandom random = new PsRandom(666);
+	private static RandomEngine random = new DRand(666);
+	private static Normal normal = new Normal(0, 1, random);
+	private static Beta betaGen = new Beta(1, 1, random);
 	
 	/**
 	 * Generates a gaussian distributed number.
@@ -35,7 +38,7 @@ public class RandomUtil {
 	 * @return a value sampled from the gaussian distribution
 	 */
 	public static double createGaussian(double mean, double stdev) {
-		return random.nextGaussian(mean, stdev);
+		return normal.nextDouble(mean, stdev);
 	}
 	
 	/**
@@ -99,9 +102,8 @@ public class RandomUtil {
 	}
 
 	public static double createBeta(Double min, Double max, Double alpha, Double beta) {
-		// No idea why PsRandom.nextBeta doesn't work, anyway use this for now
-		double[] arr = Stat.betaRand(min, max, alpha, beta, 1);
-		return arr[0];
+		double r = betaGen.nextDouble(alpha, beta);
+		return r * (max - min) + min;
 	}
 	
 }
