@@ -27,6 +27,10 @@ import javax.swing.JPanel;
 
 import org.drugis.common.gui.LayoutUtil;
 import org.drugis.common.gui.ViewBuilder;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -38,6 +42,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
+import fi.smaa.jsmaa.gui.jfreechart.UtilityFunctionDataset;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
 import fi.smaa.jsmaa.model.CardinalCriterion;
@@ -89,11 +94,26 @@ public class CriterionView implements ViewBuilder {
 		}
 		builder.add(measPanel, cc.xy(1, row+2));
 		
+		row += 4;
+		if (criterion instanceof ScaleCriterion) {
+			LayoutUtil.addRow(layout);
+			builder.addSeparator("Value function", cc.xy(1, row));
+			LayoutUtil.addRow(layout);
+			
+			JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
+					new UtilityFunctionDataset((ScaleCriterion) criterion), PlotOrientation.VERTICAL,
+					true, true, false);
+			chart.removeLegend();
+			ChartPanel chartPanel = new ChartPanel(chart);
+			builder.add(chartPanel, cc.xy(1, row+2));
+			row += 4;
+		}
+		
 		if (model instanceof SMAATRIModel) {
 			LayoutUtil.addRow(layout);
-			builder.addSeparator("Profiles (category boundaries)", cc.xy(1, row+4));
+			builder.addSeparator("Profiles (category boundaries)", cc.xy(1, row));
 			LayoutUtil.addRow(layout);
-			builder.add(new ProfilesView((OutrankingCriterion)criterion, (SMAATRIModel)model).buildPanel(), cc.xy(1, row+6));
+			builder.add(new ProfilesView((OutrankingCriterion)criterion, (SMAATRIModel)model).buildPanel(), cc.xy(1, row+2));
 		}
 			
 		return builder.getPanel();
