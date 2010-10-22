@@ -139,7 +139,7 @@ public class MeasurementPanel extends JPanel {
 		if (holder.getValue() instanceof Interval) {
 			text = "Interval is input as [min, max]";
 		} else if (holder.getValue() instanceof LogNormalMeasurement) {
-			text = "Log-normal distributed measurement is input as ln(mean) \u00B1 ln(stdev)";
+			text = "Log-normal distributed measurement is input as mean \u00B1 stdev (both of the log)";
 		} else if (holder.getValue() instanceof GaussianMeasurement) {
 			text = "Gaussian distributed measurement is input as mean \u00B1 stdev";
 		} else if (holder.getValue() instanceof BetaMeasurement) {

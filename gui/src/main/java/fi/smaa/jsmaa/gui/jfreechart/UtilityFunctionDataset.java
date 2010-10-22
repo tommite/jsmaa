@@ -29,7 +29,7 @@ public class UtilityFunctionDataset extends AbstractXYDataset implements Propert
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Comparable getSeriesKey(int index) {
+	public Comparable getSeriesKey(int index) { 
 		if (index == 0) {
 			return "value";
 		}

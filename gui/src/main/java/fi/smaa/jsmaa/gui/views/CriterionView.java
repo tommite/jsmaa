@@ -27,10 +27,8 @@ import javax.swing.JPanel;
 
 import org.drugis.common.gui.LayoutUtil;
 import org.drugis.common.gui.ViewBuilder;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -42,15 +40,17 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
-import fi.smaa.jsmaa.gui.jfreechart.UtilityFunctionDataset;
+import fi.smaa.jsmaa.gui.jfreechart.PlotFactory;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.ModelChangeEvent;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
@@ -100,12 +100,27 @@ public class CriterionView implements ViewBuilder {
 			builder.addSeparator("Value function", cc.xy(1, row));
 			LayoutUtil.addRow(layout);
 			
-			JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
-					new UtilityFunctionDataset((ScaleCriterion) criterion), PlotOrientation.VERTICAL,
-					true, true, false);
-			chart.removeLegend();
-			ChartPanel chartPanel = new ChartPanel(chart);
+			JFreeChart chart = PlotFactory.createUtilityFunctionChart((ScaleCriterion) criterion);
+			chart.removeLegend();			
+			final ChartPanel chartPanel = new ChartPanel(chart);
 			builder.add(chartPanel, cc.xy(1, row+2));
+			
+			row += 4;
+			
+			LayoutUtil.addRow(layout);
+			builder.addSeparator("Measurement distributions", cc.xy(1, row));
+			LayoutUtil.addRow(layout);
+			
+			JFreeChart chart2 = PlotFactory.createProbabilityFunctionChart(model, (ScaleCriterion) criterion);
+
+			final ChartPanel chartPanel2 = new ChartPanel(chart2);
+			model.addModelListener(new SMAAModelListener() {
+				public void modelChanged(ModelChangeEvent type) {
+					chartPanel2.setChart(PlotFactory.createProbabilityFunctionChart(model, (ScaleCriterion) criterion));
+				}				
+			});
+			builder.add(chartPanel2, cc.xy(1, row+2));
+
 			row += 4;
 		}
 		
