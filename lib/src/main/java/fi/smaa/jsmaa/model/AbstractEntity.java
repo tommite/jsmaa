@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-import org.drugis.common.ObserverManager;
+import org.drugis.common.beans.ObserverManager;
 
 import com.jgoodies.binding.beans.Observable;
 
