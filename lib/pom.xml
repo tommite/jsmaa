@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.smaa.jsmaa</groupId>
   <artifactId>lib</artifactId>
-  <version>0.8.1-SNAPSHOT</version>
+  <version>0.8.1</version>
   <url>http://www.smaa.fi</url>
   <packaging>jar</packaging>
   <name>jsmaa-lib</name>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>0.8.1-SNAPSHOT</version>
+    <version>0.8.1</version>
   </parent>
   
   <repositories>
@@ -27,6 +27,12 @@
     <layout>default</layout>
     <url>http://smaa.fi/mvn</url>
 </repository>
+		<repository>
+  			<id>drugis.org</id>
+	  		<name>drugis.org Maven 2 Repository</name>
+  			<url>http://drugis.org/mvn</url>
+  			<layout>default</layout>
+		</repository>		
   </repositories>
 
   <build>
