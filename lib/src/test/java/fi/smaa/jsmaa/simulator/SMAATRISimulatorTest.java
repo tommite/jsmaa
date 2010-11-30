@@ -85,7 +85,7 @@ public class SMAATRISimulatorTest {
 	@Test
 	public void testOneCategory() throws InterruptedException {
 		model.deleteCategory(cat1);
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 10000));		
 		simulator.restart();
 		while (simulator.isRunning()) {
 			Thread.sleep(10);
@@ -99,13 +99,13 @@ public class SMAATRISimulatorTest {
 	
 	@Test
 	public void testConstructor() {
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 100));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 100));		
 		assertEquals(100, simulator.getTotalIterations().intValue());
 	}
 	
 	@Test
 	public void testCorrectResults() throws InterruptedException {
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 10000));		
 		simulator.restart();
 		while (simulator.isRunning()) {
 			Thread.sleep(10);
@@ -124,7 +124,7 @@ public class SMAATRISimulatorTest {
 	@Test
 	public void testCorrectResultsPessimistic() throws InterruptedException {
 		model.setRule(false);
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 10000));
 		simulator.restart();
 		while (simulator.isRunning()) {
 			Thread.sleep(10);
@@ -147,7 +147,7 @@ public class SMAATRISimulatorTest {
 		model.addCategory(cat3);
 		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(1.0));
 		model.setCategoryUpperBound(c1, cat2, new ExactMeasurement(0.0));
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 10000));		
 		
 		SMAAResultsListener mock = createMock(SMAAResultsListener.class);
 		mock.resultsChanged((ResultsEvent) JUnitUtil.eqEventObject(new ResultsEvent(simulator.getResults(),
@@ -165,7 +165,7 @@ public class SMAATRISimulatorTest {
 	public void testInvalidThresholdsFire() throws InterruptedException {
 		c1.setIndifMeasurement(new ExactMeasurement(3.0));
 		c1.setPrefMeasurement(new ExactMeasurement(2.0));
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 10000));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 10000));		
 		
 		SMAAResultsListener mock = createMock(SMAAResultsListener.class);
 		mock.resultsChanged((ResultsEvent) JUnitUtil.eqEventObject(new ResultsEvent(simulator.getResults(),
@@ -183,7 +183,7 @@ public class SMAATRISimulatorTest {
 		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(0.0));
 		model.setCategoryUpperBound(c2, cat1, new ExactMeasurement(0.0));
 
-		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulationThread(model, 1));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAATRISimulation(model, 1));		
 		
 		simulator.restart();
 		Thread.sleep(10);

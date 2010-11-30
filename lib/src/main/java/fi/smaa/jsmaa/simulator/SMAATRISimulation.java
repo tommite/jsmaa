@@ -23,14 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.drugis.common.threading.AbstractIterativeComputation;
+import org.drugis.common.threading.IterativeTask;
+import org.drugis.common.threading.activity.ActivityModel;
+import org.drugis.common.threading.activity.ActivityTask;
+
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
-import fi.smaa.jsmaa.model.IterationException;
 import fi.smaa.jsmaa.model.electre.ElectreTri;
 
-public class SMAATRISimulationThread extends SimulationThread<SMAATRIModel> {
+public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 	
 	private static final int MAX_SAMPLE_TRIES = 1000;
 	private SMAATRIResults results;
@@ -38,13 +42,16 @@ public class SMAATRISimulationThread extends SimulationThread<SMAATRIModel> {
 	private Map<Alternative, Map<OutrankingCriterion, Double>> criteriaMeasurements;
 	private Map<Alternative, Map<OutrankingCriterion, Double>> categoryUpperBounds;
 	private double lambda;
+	private ActivityTask activityTask;
+	private IterativeTask catAccComputation;
 
-	public SMAATRISimulationThread(SMAATRIModel triModel, int iterations) {
+	public SMAATRISimulation(SMAATRIModel triModel, int iterations) {
 		super(triModel);
 		results = new SMAATRIResults(model.getAlternatives(), model.getCategories(), 100);
 		
-		addPhase(new SimulationPhase() {
-			public void iterate() throws IterationException {
+		catAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
+			@Override
+			public void doStep() {
 				if (getModel().getCategories().size() == 0) {
 					return;
 				}
@@ -56,7 +63,17 @@ public class SMAATRISimulationThread extends SimulationThread<SMAATRIModel> {
 				sortAlternatives();
 				updateHits();
 			}
-		}, iterations);
+		});
+		catAccComputation.setReportingInterval(REPORTING_INTERVAL);
+
+		activityTask = new ActivityTask(
+				new ActivityModel(catAccComputation, catAccComputation, null), 
+				"SMAA-2 model");
+
+	}
+	
+	public ActivityTask getActivityTask() {
+		return activityTask;
 	}
 	
 	protected void sampleThresholds() throws IterationException {

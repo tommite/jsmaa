@@ -18,8 +18,10 @@
 
 package fi.smaa.jsmaa.simulator;
 
+import org.drugis.common.threading.AbortedException;
+
 @SuppressWarnings("serial")
-public class IterationException extends Exception {
+public class IterationException extends AbortedException {
 
 	public IterationException(String reason) {
 		super(reason);

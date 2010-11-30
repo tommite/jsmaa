@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import fi.smaa.jsmaa.simulator.IterationException;
+
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -125,7 +127,7 @@ public final class OutrankingCriterion extends CardinalCriterion {
 	private static final XMLFormat<OutrankingCriterion> XML = new XMLFormat<OutrankingCriterion>(OutrankingCriterion.class) {
 		@Override
 		public OutrankingCriterion newInstance(Class<OutrankingCriterion> cls, InputElement ie) throws XMLStreamException {
-			return new OutrankingCriterion(ie.getAttribute("name", ""), ie.getAttribute("ascending", true), 
+			return new OutrankingCriterion(ie.getAttribute("name", null), ie.getAttribute("ascending", true), 
 					new ExactMeasurement(0.0), new ExactMeasurement(1.0)); 
 		}		
 		@Override

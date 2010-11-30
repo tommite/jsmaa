@@ -29,6 +29,7 @@ import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.CriterionMeasurementPair;
+import fi.smaa.jsmaa.simulator.IterationException;
 
 public final class CardinalPreferenceInformation extends AbstractPreferenceInformation<CardinalMeasurement> {
 

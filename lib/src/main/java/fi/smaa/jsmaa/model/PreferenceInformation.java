@@ -20,8 +20,10 @@ package fi.smaa.jsmaa.model;
 
 import java.io.Serializable;
 
+import org.drugis.common.threading.AbortedException;
+
 import com.jgoodies.binding.beans.Observable;
 
 public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, Serializable, Observable {
-	public abstract double[] sampleWeights() throws IterationException;	
+	public abstract double[] sampleWeights() throws AbortedException;	
 }

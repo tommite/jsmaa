@@ -14,55 +14,79 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package fi.smaa.jsmaa.simulator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+
+import org.drugis.common.threading.AbstractIterativeComputation;
+import org.drugis.common.threading.IterativeTask;
+import org.drugis.common.threading.activity.ActivityModel;
+import org.drugis.common.threading.activity.ActivityTask;
+import org.drugis.common.threading.activity.DirectTransition;
+import org.drugis.common.threading.activity.Transition;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
-import fi.smaa.jsmaa.model.IterationException;
 import fi.smaa.jsmaa.model.maut.UtilIndexPair;
 import fi.smaa.jsmaa.model.maut.UtilityFunction;
 
-public class SMAA2SimulationThread extends SimulationThread<SMAAModel> {
-	
+public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
+
 	private SMAA2Results results;
 	private boolean[] confidenceHits;
 	private double[] utilities;
 	private Integer[] ranks;
-	public SMAA2SimulationThread(SMAAModel amodel, int iterations) {
+
+	private IterativeTask rankAccComputation;
+	private IterativeTask confFacComputation;
+	private ActivityTask activityTask;
+
+	public SMAA2Simulation(SMAAModel amodel, int iterations) {
 		super(amodel);
-		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 100);		
+		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 1);		
 		reset();
-		
-		addPhase(new SimulationPhase() {
-			public void iterate() throws IterationException {
+
+		rankAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
+			@Override
+			public void doStep() {
 				generateWeights();
 				sampleCriteria();
 				aggregate();
 				rankAlternatives();
 				results.update(ranks, weights);
 			}
-		}, iterations);
-		addPhase(new SimulationPhase() {
-			public void iterate() throws IterationException {
+		});
+		rankAccComputation.setReportingInterval(REPORTING_INTERVAL);
+
+		confFacComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
+			@Override
+			public void doStep() {
 				sampleCriteria();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);
 			}
-		}, iterations);
+		});
+		confFacComputation.setReportingInterval(REPORTING_INTERVAL);
+
+		List<Transition> transitions = new ArrayList<Transition>();
+		transitions.add(new DirectTransition(rankAccComputation, confFacComputation));
+		activityTask = new ActivityTask(
+				new ActivityModel(rankAccComputation, confFacComputation, transitions), 
+				"SMAA-2 model");
 	}
-	
+
 	public SMAA2Results getResults() {
 		return results;
 	}
-	
+
 	private void rankAlternatives() {
 		UtilIndexPair[] pairs = new UtilIndexPair[utilities.length];
 		for (int i=0;i<utilities.length;i++) {
@@ -82,7 +106,7 @@ public class SMAA2SimulationThread extends SimulationThread<SMAAModel> {
 
 	private void aggregate() {
 		clearUtilities();
-		
+
 		for (int critIndex=0;critIndex<model.getCriteria().size();critIndex++) {
 			Criterion crit = model.getCriteria().get(critIndex);
 			for (int altIndex=0;altIndex<model.getAlternatives().size();altIndex++) {
@@ -149,6 +173,11 @@ public class SMAA2SimulationThread extends SimulationThread<SMAAModel> {
 		utilities = new double[numAlts];
 		ranks = new Integer[numAlts];
 		confidenceHits = new boolean[numAlts];
+	}
+
+	@Override
+	public ActivityTask getActivityTask() {
+		return activityTask;
 	}		
 
 }

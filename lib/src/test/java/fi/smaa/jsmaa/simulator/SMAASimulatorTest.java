@@ -66,7 +66,7 @@ public class SMAASimulatorTest {
 		model.setMeasurement(o, alt1, new Rank(2));
 		model.setMeasurement(o, alt2, new Rank(1));
 		
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 10));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, 10));
 		simulator.restart();
 		do {
 			Thread.sleep(1);
@@ -83,13 +83,13 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testConstructor() {
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 100));		
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, 100));		
 		assertEquals(200, simulator.getTotalIterations().intValue());
 	}
 	
 	@Test
 	public void testIsSimulatorRunning() throws InterruptedException {
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, Integer.MAX_VALUE));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, Integer.MAX_VALUE));
 		assertFalse(simulator.isRunning());
 		simulator.restart();
 		Thread.sleep(1);
@@ -99,7 +99,7 @@ public class SMAASimulatorTest {
 	
 	@Test
 	public void testStopSimulator() throws InterruptedException {
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, Integer.MAX_VALUE));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, Integer.MAX_VALUE));
 		simulator.restart();
 		Thread.sleep(1);
 		simulator.stop();
@@ -119,7 +119,7 @@ public class SMAASimulatorTest {
 		model.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
 		model.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
 				
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, 10000));
 		simulator.restart();
 		do {
 			Thread.sleep(100);
@@ -144,7 +144,7 @@ public class SMAASimulatorTest {
 	public void testCorrectResults() throws InterruptedException {
 		setCriteriaMeasurements();
 		
-		SMAASimulator simulator = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
+		SMAASimulator simulator = new SMAASimulator(model, new SMAA2Simulation(model, 10000));
 		simulator.restart();
 		do {
 			Thread.sleep(100);
@@ -249,7 +249,7 @@ public class SMAASimulatorTest {
 		assertEquals(11.1, nausea.getScale().getStart(), 1.0);
 		assertEquals(34.0, nausea.getScale().getEnd(), 1.0);
 	
-		SMAASimulator sim = new SMAASimulator(model, new SMAA2SimulationThread(model, 10000));
+		SMAASimulator sim = new SMAASimulator(model, new SMAA2Simulation(model, 10000));
 		sim.restart();
 		while (sim.isRunning()) {
 			Thread.sleep(100);

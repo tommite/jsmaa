@@ -18,29 +18,21 @@
 
 package fi.smaa.jsmaa.simulator;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.drugis.common.threading.activity.ActivityTask;
 
 import fi.smaa.jsmaa.model.SMAAModel;
-import fi.smaa.jsmaa.model.IterationException;
 
-public abstract class SimulationThread<M extends SMAAModel> extends Thread{
+public abstract class SMAASimulation<M extends SMAAModel> {
 
-	private int iteration;
-	private SimulationPhase currentPhase;
-	private boolean go;
-	private List<SimulationPhase> phases = new ArrayList<SimulationPhase>();
-	private List<Integer> phaseIterations = new ArrayList<Integer>();
 	protected double[][] measurements;
 	protected M model;
 	protected Sampler sampler;
 	protected double[] weights;
+	
+	public static int REPORTING_INTERVAL = 100;
 
-	public SimulationThread(M model) {
+	public SMAASimulation(M model) {
 		this.model = model;
-		currentPhase = null;
-		iteration = 0;
-		go = false;
 		initialize();
 	}
 	
@@ -55,60 +47,6 @@ public abstract class SimulationThread<M extends SMAAModel> extends Thread{
 		initialize();
 	}
 	
-	public void addPhase(SimulationPhase phase, int iterations) {
-		assert(iterations > 0);
-		phases.add(phase);
-		phaseIterations.add(iterations);
-	}
-
-	public void run() {
-		go = true;
-		for (int i=0;go && i<phases.size();i++) {
-			currentPhase = phases.get(i);
-			iteration = 1;
-			int currentTotalIters = phaseIterations.get(i);
-			while (go && iteration <= currentTotalIters) {
-				try {
-					currentPhase.iterate();
-				} catch (IterationException e) {
-					go = false;
-					getResults().fireResultsChanged(e);
-					return;
-				}
-				iteration++;
-			}
-		}
-		getResults().fireResultsChanged();
-		go = false;
-	}
-
-	public int getTotalIterations() {
-		int total = 0;
-		for (Integer i : phaseIterations) {
-			total += i;
-		}
-		return total;
-	}
-
-	public int getIteration() {
-		int total = 0;
-		for (int i=0;i<phases.size();i++) {
-			if (currentPhase == phases.get(i)) {
-				break;
-			}
-			total += phaseIterations.get(i);
-		}
-		return total + iteration;
-	}
-
-	public void stopSimulation() {
-		go = false;
-	}
-	
-	public boolean isRunning() {
-		return go;
-	}
-
 	protected void sampleCriteria() {
 		for (int i=0;i<model.getCriteria().size();i++) {
 			sampler.sample(model.getCriteria().get(i), measurements[i]);
@@ -128,4 +66,6 @@ public abstract class SimulationThread<M extends SMAAModel> extends Thread{
 			weights = new double[model.getCriteria().size()];
 		}
 	}
+	
+	public abstract ActivityTask getActivityTask();
 }

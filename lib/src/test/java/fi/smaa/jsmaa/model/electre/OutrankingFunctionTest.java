@@ -25,9 +25,8 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.IterationException;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
-import fi.smaa.jsmaa.model.electre.OutrankingFunction;
+import fi.smaa.jsmaa.simulator.IterationException;
 
 public class OutrankingFunctionTest {
 	

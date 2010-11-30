@@ -30,6 +30,8 @@ import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.jsmaa.simulator.IterationException;
+
 public class CardinalPreferenceInformationTest {
 	
 	private CardinalPreferenceInformation info;

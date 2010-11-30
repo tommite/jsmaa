@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.IterationException;
 
 public abstract class SMAAResults {
 

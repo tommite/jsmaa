@@ -15,13 +15,14 @@ import fi.smaa.jsmaa.simulator.SMAAResults;
 import fi.smaa.jsmaa.simulator.SMAAResultsListener;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SimulationBuilder;
-import fi.smaa.jsmaa.simulator.SimulationThread;
+import fi.smaa.jsmaa.simulator.SMAASimulation;
 
-public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SimulationThread<M>> 
+public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAAResults, T extends SMAASimulation<M>> 
 	extends SimulationBuilder<M, R, T> {
 
 	private GUIFactory factory;
 	private JFrame frame;
+	public int ITERATIONS = 10000;
 
 	public BasicSimulationBuilder(M model, GUIFactory factory, JFrame frame) {
 		super(model);
@@ -41,7 +42,7 @@ public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAA
 			((SMAA2GUIFactory)factory).setResults((SMAA2Results) results);				
 		}
 		
-		factory.getProgressBar().setSimulator(simulator);
+		//factory.getProgressBar().setSimulator(simulator);
 	}
 
 	protected void connectNameAdapters(List<? extends NamedObject> oldModelObjects,
