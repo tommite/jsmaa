@@ -5,8 +5,9 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 
 import org.drugis.common.gui.ViewBuilder;
+import org.drugis.common.gui.task.TaskProgressBar;
+import org.drugis.common.gui.task.TaskProgressModel;
 
-import fi.smaa.jsmaa.gui.components.SimulationProgressBar;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 
 /**
@@ -21,5 +22,6 @@ public interface GUIFactory {
 	public JToolBar getTopToolBar();
 	public LeftTreeModel getTreeModel();
 	public JToolBar getBottomToolBar();
-	public SimulationProgressBar getProgressBar();
+	public TaskProgressBar getProgressBar();
+	public TaskProgressModel getProgressModel();
 }

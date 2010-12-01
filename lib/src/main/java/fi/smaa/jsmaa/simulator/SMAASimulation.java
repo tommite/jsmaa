@@ -18,7 +18,7 @@
 
 package fi.smaa.jsmaa.simulator;
 
-import org.drugis.common.threading.activity.ActivityTask;
+import org.drugis.common.threading.Task;
 
 import fi.smaa.jsmaa.model.SMAAModel;
 
@@ -67,5 +67,5 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 		}
 	}
 	
-	public abstract ActivityTask getActivityTask();
+	public abstract Task getTask();
 }

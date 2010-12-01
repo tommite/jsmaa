@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
@@ -62,7 +63,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	@Override
 	protected JToolBar buildBottomToolBar() {
 		JToolBar tb = super.buildBottomToolBar();
-		tb.add(new LambdaPanel(smaaModel));
+		tb.add(new LambdaPanel(smaaModel), BorderLayout.EAST);
 		return tb;
 	}
 	

@@ -25,8 +25,7 @@ import java.util.Map;
 
 import org.drugis.common.threading.AbstractIterativeComputation;
 import org.drugis.common.threading.IterativeTask;
-import org.drugis.common.threading.activity.ActivityModel;
-import org.drugis.common.threading.activity.ActivityTask;
+import org.drugis.common.threading.Task;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -42,7 +41,6 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 	private Map<Alternative, Map<OutrankingCriterion, Double>> criteriaMeasurements;
 	private Map<Alternative, Map<OutrankingCriterion, Double>> categoryUpperBounds;
 	private double lambda;
-	private ActivityTask activityTask;
 	private IterativeTask catAccComputation;
 
 	public SMAATRISimulation(SMAATRIModel triModel, int iterations) {
@@ -63,17 +61,13 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 				sortAlternatives();
 				updateHits();
 			}
-		});
+		}, "CatAcc computation");
 		catAccComputation.setReportingInterval(REPORTING_INTERVAL);
-
-		activityTask = new ActivityTask(
-				new ActivityModel(catAccComputation, catAccComputation, null), 
-				"SMAA-2 model");
 
 	}
 	
-	public ActivityTask getActivityTask() {
-		return activityTask;
+	public Task getTask() {
+		return catAccComputation;
 	}
 	
 	protected void sampleThresholds() throws IterationException {

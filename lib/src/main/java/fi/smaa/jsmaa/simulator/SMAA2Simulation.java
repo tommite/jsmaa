@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.drugis.common.threading.AbstractIterativeComputation;
 import org.drugis.common.threading.IterativeTask;
+import org.drugis.common.threading.Task;
 import org.drugis.common.threading.activity.ActivityModel;
 import org.drugis.common.threading.activity.ActivityTask;
 import org.drugis.common.threading.activity.DirectTransition;
@@ -63,7 +64,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 				rankAlternatives();
 				results.update(ranks, weights);
 			}
-		});
+		}, "RA & CW computation");
 		rankAccComputation.setReportingInterval(REPORTING_INTERVAL);
 
 		confFacComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
@@ -73,14 +74,14 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);
 			}
-		});
+		}, "CF computation");
 		confFacComputation.setReportingInterval(REPORTING_INTERVAL);
 
 		List<Transition> transitions = new ArrayList<Transition>();
 		transitions.add(new DirectTransition(rankAccComputation, confFacComputation));
 		activityTask = new ActivityTask(
 				new ActivityModel(rankAccComputation, confFacComputation, transitions), 
-				"SMAA-2 model");
+				"SMAA-2");
 	}
 
 	public SMAA2Results getResults() {
@@ -176,7 +177,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 	}
 
 	@Override
-	public ActivityTask getActivityTask() {
+	public Task getTask() {
 		return activityTask;
 	}		
 

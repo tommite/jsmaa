@@ -33,7 +33,8 @@ public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAA
 		connectNameAdapters(model.getCriteria(), this.model.getCriteria());
 	}
 	
-	protected void prepareSimulation(R results) {
+	@Override
+	protected void prepareSimulation(T simulation, R results) {
 		results.addResultsListener(new SimulationProgressListener());
 
 		if (model instanceof SMAATRIModel) {
@@ -42,7 +43,7 @@ public abstract class BasicSimulationBuilder<M extends SMAAModel, R extends SMAA
 			((SMAA2GUIFactory)factory).setResults((SMAA2Results) results);				
 		}
 		
-		//factory.getProgressBar().setSimulator(simulator);
+		factory.getProgressModel().setTask(simulation.getTask());
 	}
 
 	protected void connectNameAdapters(List<? extends NamedObject> oldModelObjects,

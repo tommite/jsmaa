@@ -1,5 +1,6 @@
 package fi.smaa.jsmaa.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.drugis.common.gui.ViewBuilder;
+import org.drugis.common.gui.task.TaskProgressBar;
+import org.drugis.common.gui.task.TaskProgressModel;
+import org.drugis.common.threading.NullTask;
 
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.looks.HeaderStyle;
@@ -35,7 +39,6 @@ import com.jgoodies.looks.Options;
 
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.DefaultModels;
-import fi.smaa.jsmaa.gui.components.SimulationProgressBar;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.ModelFileManagerPM;
 import fi.smaa.jsmaa.gui.presentation.PreferencePresentationModel;
@@ -65,7 +68,8 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	protected MenuDirector director;
 	protected ModelFileManagerPM fileManagerPM;
 	private JToolBar bottomToolBar;
-	private SimulationProgressBar progressBar;
+	private TaskProgressBar progressBar;
+	private TaskProgressModel progressModel;
 	protected Window parent;
 	
 	protected AbstractGUIFactory(Window parent, M smaaModel, MenuDirector director) {
@@ -74,6 +78,8 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		this.smaaModel = smaaModel;
 		this.treeModel = buildTreeModel();		
 		this.director = director;
+		progressModel = new TaskProgressModel(new NullTask());
+		progressBar = new TaskProgressBar(progressModel);
 		menuBar = buildMenuBar();
 		tree = buildTree();
 		topToolBar = buildTopToolBar();
@@ -82,6 +88,10 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	public T getTreeModel() {
 		return treeModel;
+	}
+	
+	public TaskProgressModel getProgressModel() {
+		return progressModel;
 	}
 	
 	public JToolBar getTopToolBar() {
@@ -94,13 +104,13 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	
 	protected JToolBar buildBottomToolBar() {
 		JToolBar bar = new JToolBar();
-		progressBar = new SimulationProgressBar();	
-		bar.add(progressBar);
+		bar.setLayout(new BorderLayout());
+		bar.add(progressBar, BorderLayout.CENTER);
 		bar.setFloatable(false);
 		return bar;
 	}
 	
-	public SimulationProgressBar getProgressBar() {
+	public TaskProgressBar getProgressBar() {
 		return progressBar;
 	}
 

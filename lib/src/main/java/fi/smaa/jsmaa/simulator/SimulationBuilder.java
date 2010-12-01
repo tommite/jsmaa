@@ -19,11 +19,11 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 		T simul = generateSimulation();
 		handler.clear();
 		R results = (R) simul.getResults();
-		prepareSimulation(results);		
-		handler.scheduleTask(simul.getActivityTask());
+		prepareSimulation(simul, results);		
+		handler.scheduleTask(simul.getTask());
 	}
 
-	protected abstract void prepareSimulation(R results);
+	protected abstract void prepareSimulation(T simulation, R results);
 	
 	protected abstract T generateSimulation();
 }
