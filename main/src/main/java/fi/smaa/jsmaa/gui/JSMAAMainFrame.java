@@ -74,7 +74,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
-		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui");		
+		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui/");		
 		setPreferredSize(new Dimension(1000, 800));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
