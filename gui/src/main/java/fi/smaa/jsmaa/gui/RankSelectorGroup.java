@@ -37,7 +37,6 @@ public class RankSelectorGroup {
 	private ArrayList<JComboBox> components = new ArrayList<JComboBox>();
 	private ListModel listModel;
 	private List<Rank> boundRanks;
-	
 	public RankSelectorGroup(List<Rank> boundRanks) {
 		int numBoxes = boundRanks.size();
 		this.boundRanks = boundRanks;

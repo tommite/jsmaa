@@ -77,6 +77,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new CentralWeightsCellRenderer(1.0));
+			table.getTableHeader().setToolTipText("CF = Confidence Factor");
 			return new ViewWithHeader("Central weight vectors", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT));
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
 			final JFreeChart chart = ChartFactory.createStackedBarChart(
@@ -85,7 +86,8 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setAutoCreateRowSorter(true);			
-			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));		
+			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));
+			table.getTableHeader().setToolTipText("Ranks in descending order, 1 is the best, 2 the second best, etc.");
 			return new ViewWithHeader("Rank acceptability indices", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT, isChartDrawable()));
 		} else {
 			return super.buildView(o);
