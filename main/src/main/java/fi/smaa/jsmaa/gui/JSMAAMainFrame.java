@@ -44,6 +44,8 @@ import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.FileLoadDialog;
 import org.drugis.common.gui.FileSaveDialog;
 import org.drugis.common.gui.ViewBuilder;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.StandardChartTheme;
 
 import fi.smaa.jsmaa.AppInfo;
 import fi.smaa.jsmaa.ModelFileManager;
@@ -73,6 +75,8 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	
 	public JSMAAMainFrame(SMAAModel model) {
 		super(AppInfo.getAppName());
+		
+		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());		
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
 		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui/");		
 		setPreferredSize(new Dimension(1000, 800));
@@ -223,7 +227,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		new FileLoadDialog(this, "jsmaa", "JSMAA model files") {
 			@Override
 			public void doAction(String path, String extension) {
-			try {				
+			try {		
 				File file = new File(path);
 				InputStream fis = new FileInputStream(file);
 				SMAAModel loadedModel = JSMAABinding.readModel(new BufferedInputStream(fis));

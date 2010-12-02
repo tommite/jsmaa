@@ -67,7 +67,7 @@ public class ResultsView implements ViewBuilder {
 		this.table = table;
 		this.parent = parent;
 		this.scriptIcon = scriptIcon;
-		this.showChart = true;
+		this.showChart = chart != null;
 	}	
 
 	public JComponent buildPanel() {

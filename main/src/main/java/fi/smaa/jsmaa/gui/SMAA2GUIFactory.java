@@ -69,26 +69,32 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	@Override
 	public ViewBuilder buildView(Object o) {
 		if (o == treeModel.getCentralWeightsNode()) {
-			final JFreeChart chart = ChartFactory.createLineChart(
-			        "", "Criterion", "Central Weight",
-			        centralWeightsDataset, PlotOrientation.VERTICAL, true, true, false);
-			LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
-			chart.getCategoryPlot().setRenderer(renderer);
+			JFreeChart chart = null;
+			if (isChartDrawable()) {
+				chart = ChartFactory.createLineChart(
+				        "", "Criterion", "Central Weight",
+				        centralWeightsDataset, PlotOrientation.VERTICAL, true, true, false);
+				LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
+				chart.getCategoryPlot().setRenderer(renderer);
+			}
 			ResultsTable table = new ResultsTable(centralWeightsTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new CentralWeightsCellRenderer(1.0));
 			table.getTableHeader().setToolTipText("CF = Confidence Factor");
 			return new ViewWithHeader("Central weight vectors", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT));
 		} else if (o == treeModel.getRankAcceptabilitiesNode()) {
-			final JFreeChart chart = ChartFactory.createStackedBarChart(
-			        "", "Alternative", "Rank Acceptability",
-			        rankAcceptabilitiesDataset, PlotOrientation.VERTICAL, true, true, false);
-			chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);
+			JFreeChart chart = null;
+			if (isChartDrawable()) {
+				chart = ChartFactory.createStackedBarChart(
+				        "", "Alternative", "Rank Acceptability",
+				        rankAcceptabilitiesDataset, PlotOrientation.VERTICAL, true, true, false);
+				chart.getCategoryPlot().getRangeAxis().setUpperBound(1.0);	
+			}
 			ResultsTable table = new ResultsTable(rankAcceptabilitiesTM);
 			table.setAutoCreateRowSorter(true);			
 			table.setDefaultRenderer(Object.class, new ResultsCellColorRenderer(1.0));
 			table.getTableHeader().setToolTipText("Ranks in descending order, 1 is the best, 2 the second best, etc.");
-			return new ViewWithHeader("Rank acceptability indices", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT, isChartDrawable()));
+			return new ViewWithHeader("Rank acceptability indices", new ResultsView(parent, table, chart, FileNames.ICON_SCRIPT));
 		} else {
 			return super.buildView(o);
 		}	

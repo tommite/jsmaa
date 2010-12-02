@@ -70,7 +70,11 @@
   		<version>0.5-SNAPSHOT</version>
 		<scope>test</scope>
 	</dependency>
-
+    <dependency>
+      <groupId>jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.0.12</version>
+    </dependency> 		
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>binding</artifactId>
