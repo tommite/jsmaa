@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.GUIHelper;
 import org.drugis.common.gui.ViewBuilder;
 import org.jfree.chart.ChartPanel;
@@ -41,7 +42,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideButton;
 
 import fi.smaa.jsmaa.gui.GNUPlotDialog;
-import fi.smaa.jsmaa.gui.ImageLoader;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverter;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverterFactory;
 import fi.smaa.jsmaa.gui.jfreechart.SMAADataSet;

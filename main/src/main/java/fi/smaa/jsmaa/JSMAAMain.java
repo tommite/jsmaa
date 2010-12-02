@@ -23,10 +23,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
+import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.GUIHelper;
 
 import fi.smaa.jsmaa.gui.FileNames;
-import fi.smaa.jsmaa.gui.ImageLoader;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 
 public class JSMAAMain {

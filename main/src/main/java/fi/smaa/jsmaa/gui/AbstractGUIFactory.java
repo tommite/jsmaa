@@ -28,6 +28,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.ViewBuilder;
 import org.drugis.common.gui.task.TaskProgressBar;
 import org.drugis.common.gui.task.TaskProgressModel;
