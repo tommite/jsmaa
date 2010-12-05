@@ -52,7 +52,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 
 	public SMAA2Simulation(SMAAModel amodel, int iterations) {
 		super(amodel);
-		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 1);		
+		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 100);		
 		reset();
 
 		rankAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
