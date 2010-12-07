@@ -52,7 +52,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 
 	public SMAA2Simulation(SMAAModel amodel, int iterations) {
 		super(amodel);
-		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), 100);		
+		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), REPORTING_INTERVAL);		
 		reset();
 
 		rankAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
@@ -156,7 +156,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 		if (crit instanceof ScaleCriterion) {
 			return UtilityFunction.utility(((ScaleCriterion)crit), measurements[critIndex][altIndex]);
 		} else if (crit instanceof OrdinalCriterion) {
-			// ordinal ones are directly as simulated partial utility function values
+			// ordinal ones are directly as simulated partial utility function values);
 			return measurements[critIndex][altIndex];
 		} else {
 			throw new RuntimeException("Unknown criterion type");

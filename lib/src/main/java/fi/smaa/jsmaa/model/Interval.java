@@ -20,6 +20,7 @@ package fi.smaa.jsmaa.model;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
@@ -95,17 +96,18 @@ public final class Interval extends CardinalMeasurement {
 		if (intervals.size() == 0) {
 			return null;
 		}
-		Double min = Double.MAX_VALUE;
-		Double max = Double.MIN_VALUE;
-		for (Interval i : intervals) {
-			if (i.getStart() < min) {
-				min = i.getStart();
+		Iterator<Interval> it = intervals.iterator();
+		Interval enclosing = it.next().deepCopy();
+		while (it.hasNext()) {
+			Interval other = it.next();
+			if (other.getStart() < enclosing.getStart()) {
+				enclosing.setStart(other.getStart());
 			}
-			if (i.getEnd() > max) {
-				max = i.getEnd();
+			if (other.getEnd() > enclosing.getEnd()) {
+				enclosing.setEnd(other.getEnd());
 			}
 		}
-		return new Interval(min, max);
+		return enclosing;
 	}
 	
 	public Double getLength() {

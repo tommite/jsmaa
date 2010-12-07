@@ -57,31 +57,7 @@ public class SMAA2SimulationTest {
 		model.addCriterion(c2);
 		model.addCriterion(c3);
 	}
-	
-	@Test
-	public void testResultsWithOrdinalCriteria() throws InterruptedException {
-		OrdinalCriterion o = new OrdinalCriterion("ord");
-		model.addCriterion(o);
 		
-		model.setMeasurement(o, alt1, new Rank(2));
-		model.setMeasurement(o, alt2, new Rank(1));
-		
-		SMAA2Simulation simulation = new SMAA2Simulation(model, 10);
-		ThreadHandler hand = ThreadHandler.getInstance();
-		hand.scheduleTask(simulation.getTask());
-		do {
-			Thread.sleep(1);
-		} while (!simulation.getTask().isFinished());
-
-		SMAA2Results results = (SMAA2Results) simulation.getResults();
-		
-		List<Double> ra1 = results.getRankAcceptabilities().get(alt1);
-		List<Double> ra2 = results.getRankAcceptabilities().get(alt2);
-		
-		assertTrue(ra1.get(0) < ra2.get(0));
-		assertTrue(ra1.get(1) > ra2.get(1));
-	}
-	
 	@Test
 	public void testEqualRanks() throws InterruptedException {
 		// set intervals for cardinal criterion
@@ -291,9 +267,34 @@ public class SMAA2SimulationTest {
 		assertEquals(0.48, conf.get(fluox), 0.03);
 		assertEquals(0.44, conf.get(parox), 0.03);
 		assertEquals(0.34, conf.get(sert), 0.03);
-		assertEquals(0.74, conf.get(ven), 0.03);
-		
-		
+		assertEquals(0.74, conf.get(ven), 0.03);		
 	}
+	
+	@Test
+	public void testResultsWithOrdinalCriteria() throws InterruptedException {
+		OrdinalCriterion o = new OrdinalCriterion("ord");
+		model = new SMAAModel("model");
+		model.addAlternative(alt1);
+		model.addAlternative(alt2);		
+		model.addCriterion(o);
+		
+		model.setMeasurement(o, alt1, new Rank(2));
+		model.setMeasurement(o, alt2, new Rank(1));
+		
+		SMAA2Simulation simulation = new SMAA2Simulation(model, 10);
+		ThreadHandler hand = ThreadHandler.getInstance();
+		hand.scheduleTask(simulation.getTask());
+		do {
+			Thread.sleep(1);
+		} while (!simulation.getTask().isFinished());
+
+		SMAA2Results results = (SMAA2Results) simulation.getResults();
+		
+		List<Double> ra1 = results.getRankAcceptabilities().get(alt1);
+		List<Double> ra2 = results.getRankAcceptabilities().get(alt2);
+				
+		assertTrue(ra1.get(0) < ra2.get(0));
+		assertTrue(ra1.get(1) > ra2.get(1));
+	}	
 	
 }

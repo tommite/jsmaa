@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.drugis.common.JUnitUtil;
 import org.junit.Test;
@@ -125,5 +126,16 @@ public class IntervalTest {
 	@Test
 	public void testGetMiddle() {
 		assertEquals(new Double(0.5), new Interval(0.0, 1.0).getMiddle());
+	}
+	
+	@Test
+	public void testNegativeScalesEnclosingInterval() {
+		Interval i1 = new Interval(-2.0, -1.0);
+		Interval i2 = new Interval(-5.0, -4.0);
+		List<Interval> ivals = new ArrayList<Interval>();
+		ivals.add(i1);
+		ivals.add(i2);
+		Interval res = Interval.enclosingInterval(ivals);
+		assertEquals(new Interval(-5.0, -1.0), res);
 	}
 }

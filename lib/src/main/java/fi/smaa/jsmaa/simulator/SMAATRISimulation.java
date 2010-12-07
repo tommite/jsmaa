@@ -45,7 +45,7 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 
 	public SMAATRISimulation(SMAATRIModel triModel, int iterations) {
 		super(triModel);
-		results = new SMAATRIResults(model.getAlternatives(), model.getCategories(), 100);
+		results = new SMAATRIResults(model.getAlternatives(), model.getCategories(), REPORTING_INTERVAL);
 		
 		catAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
 			@Override
