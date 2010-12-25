@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.8.2:	Fixes: icons to work on Windows, negative interval calculation, slowness in simulations, chart style to 2d. Added tooltip for rank acceptability- and CW table headers, changed to not construct any charts for 20+ alternatives.
 0.8.1:	Better beta-sampler, value function graphs, refactoring.
 0.8:    Beta-distributed measurements, GUI improvements, heavy refactoring.
 0.6.4:	Changed to not showing acceptabilities graphs for 20+ alternatives. Added measurements to view of
@@ -33,5 +34,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-November 2010
+December 2010
 Tommi Tervonen
