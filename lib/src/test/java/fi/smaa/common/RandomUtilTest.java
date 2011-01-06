@@ -20,11 +20,23 @@ package fi.smaa.common;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
+import org.apache.commons.math.linear.ArrayRealVector;
+import org.apache.commons.math.linear.RealVector;
+import org.junit.Before;
 import org.junit.Test;
+
+import cern.jet.random.engine.DRand;
 
 import fi.smaa.common.RandomUtil;
 
 public class RandomUtilTest {
+	
+	@Before
+	public void setUp() {
+		RandomUtil.random = new DRand(new Date());
+	}
 
 	@Test
 	public void testCreateSumToRand() {
@@ -73,5 +85,27 @@ public class RandomUtilTest {
 		
 		gaus = RandomUtil.createGaussian(1.0, 0.0);
 		assertEquals(1.0, gaus, 0.0001);
+	}
+	
+	@Test
+	public void testCreateUnifOnSphere() {
+		RealVector point = RandomUtil.createUnifOnsphere(3);
+		assertEquals(3, point.getDimension());
+		assertEquals(1, point.getNorm(), 0.0000001);
+	}
+	
+	@Test
+	public void testCreateUnifFromSegment() {
+		RealVector p1 = new ArrayRealVector(2);
+		RealVector p2 = new ArrayRealVector(2);
+		
+		p1.setEntry(0, 1.0);
+		p1.setEntry(1, 1.0);
+		p2.setEntry(0, 2.0);
+		p2.setEntry(1, 2.0);
+
+		RealVector s = RandomUtil.createUnifFromSegment(p1, p2);
+		assertTrue(s.getEntry(0) >= 1.0 && s.getEntry(0) <= 2.0);
+		assertTrue(s.getEntry(1) >= -2.0 && s.getEntry(1) <= 2.0);
 	}
 }

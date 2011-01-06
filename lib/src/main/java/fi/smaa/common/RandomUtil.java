@@ -20,13 +20,16 @@ package fi.smaa.common;
 
 import java.util.Arrays;
 
+import org.apache.commons.math.linear.ArrayRealVector;
+import org.apache.commons.math.linear.RealVector;
+
 import cern.jet.random.Beta;
 import cern.jet.random.Normal;
 import cern.jet.random.engine.DRand;
 import cern.jet.random.engine.RandomEngine;
 
 public class RandomUtil {
-	private static RandomEngine random = new DRand(666);
+	public static RandomEngine random = new DRand(666);
 	private static Normal normal = new Normal(0, 1, random);
 	private static Beta betaGen = new Beta(1, 1, random);
 	
@@ -48,6 +51,34 @@ public class RandomUtil {
 	 */
 	public static double createUnif01() {
 		return random.nextDouble();
+	}
+	
+	/**
+	 * Generates a uniformly distributed point from a dim-dimensional unit sphere
+	 * @param dim dimension of the sphere
+	 * @return the random point
+	 */
+	public static RealVector createUnifOnsphere(int dim) {
+		RealVector n = new ArrayRealVector(dim);
+		for (int i=0;i<dim;i++) {
+			n.setEntry(i, createGaussian(0.0, 1.0));
+		}
+		n.unitize();
+		return n;
+	}
+	
+	/**
+	 * Creates a point uniformly distributed from a line segment
+	 * 
+	 * @param p1 First endpoint of the segment
+	 * @param p2 Second endpoint of the segment
+	 * @return the random point from the segment
+	 */
+	public static RealVector createUnifFromSegment(RealVector p1, RealVector p2) {
+		RealVector diff = p2.subtract(p1);
+		diff.mapMultiplyToSelf(createUnif01());
+		RealVector retP = p1.add(diff);
+		return retP;
 	}
 	
 	/**
