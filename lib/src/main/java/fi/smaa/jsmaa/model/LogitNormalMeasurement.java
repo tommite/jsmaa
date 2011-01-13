@@ -1,5 +1,8 @@
 package fi.smaa.jsmaa.model;
 
+import javolution.xml.XMLFormat;
+import javolution.xml.stream.XMLStreamException;
+
 import org.drugis.common.stat.Statistics;
 
 public class LogitNormalMeasurement extends GaussianMeasurement {
@@ -33,4 +36,24 @@ public class LogitNormalMeasurement extends GaussianMeasurement {
 	public LogitNormalMeasurement deepCopy() {
 		return new LogitNormalMeasurement(getMean(), getStDev());
 	}
+	
+	protected static final XMLFormat<LogitNormalMeasurement> XML = new XMLFormat<LogitNormalMeasurement>(LogitNormalMeasurement.class) {
+		@Override
+		public LogitNormalMeasurement newInstance(Class<LogitNormalMeasurement> cls, InputElement ie) throws XMLStreamException {
+			return new LogitNormalMeasurement(ie.getAttribute("mean").toDouble(),
+					ie.getAttribute("stdev").toDouble());
+		}				
+		@Override
+		public boolean isReferenceable() {
+			return GaussianMeasurement.XML.isReferenceable();
+		}
+		@Override
+		public void read(InputElement ie, LogitNormalMeasurement meas) throws XMLStreamException {
+			GaussianMeasurement.XML.read(ie, meas);			
+		}
+		@Override
+		public void write(LogitNormalMeasurement meas, OutputElement oe) throws XMLStreamException {
+			GaussianMeasurement.XML.write(meas, oe);
+		}
+	};
 }

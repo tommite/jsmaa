@@ -45,6 +45,7 @@ import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
+import fi.smaa.jsmaa.model.LogitNormalMeasurement;
 
 @SuppressWarnings("serial")
 public class MeasurementPanel extends JPanel {
@@ -64,6 +65,7 @@ public class MeasurementPanel extends JPanel {
 		INTERVAL("Interval"),
 		GAUSSIAN("Gaussian"),
 		LOGNORMAL("LogNormal"),
+		LOGITNORMAL("LogitNormal"),
 		BETA("Beta");
 		
 		private String label;
@@ -183,6 +185,8 @@ public class MeasurementPanel extends JPanel {
 				return MeasurementType.INTERVAL;
 			} else if (m instanceof LogNormalMeasurement) {
 				return MeasurementType.LOGNORMAL;
+			} else if (m instanceof LogitNormalMeasurement) {
+				return MeasurementType.LOGITNORMAL;
 			} else if (m instanceof GaussianMeasurement) {
 				return MeasurementType.GAUSSIAN;
 			} else if (m instanceof BetaMeasurement) {
@@ -219,6 +223,12 @@ public class MeasurementPanel extends JPanel {
 					holder.setValue(new LogNormalMeasurement(oldBounds.getMiddle(), 0.0));
 				} else {
 					holder.setValue(new LogNormalMeasurement(0.0, 0.0));
+				}
+			} else if (type == MeasurementType.LOGITNORMAL) {
+				if (oldBounds != null) {
+					holder.setValue(new LogitNormalMeasurement(oldBounds.getMiddle(), 0.0));
+				} else {
+					holder.setValue(new LogitNormalMeasurement(0.0, 0.0));
 				}
 			} else if (type == MeasurementType.GAUSSIAN) {
 				if (oldBounds != null) {
