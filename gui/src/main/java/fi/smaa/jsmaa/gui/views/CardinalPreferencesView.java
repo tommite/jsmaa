@@ -65,7 +65,7 @@ public class CardinalPreferencesView extends AbstractPreferencesView<CardinalPre
 	protected JComponent getPreferenceComponent(Criterion c, int i) {
 		MeasurementType[] mvals = new MeasurementType[] { MeasurementType.EXACT, MeasurementType.INTERVAL };
 		ValueHolder holder = values.get(c);
-		MeasurementPanel vpanel = new MeasurementPanel(holder, mvals); 
+		MeasurementPanel vpanel = new MeasurementPanel(holder, mvals, null); 
 		return vpanel;
 	}
 

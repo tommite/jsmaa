@@ -27,10 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
-
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
+import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
 
 public final class ImpactMatrix extends AbstractEntity {
 	
@@ -39,6 +38,7 @@ public final class ImpactMatrix extends AbstractEntity {
 	private List<Criterion> criteria = new ArrayList<Criterion>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
+	private Map<Criterion, ReferenceableGaussianMeasurement> baselines = new HashMap<Criterion, ReferenceableGaussianMeasurement>();
 	private transient MeasurementListener measListener = new MeasurementListener();
 	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
 	private transient Map<Criterion, RankSet<Alternative>> ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
@@ -82,6 +82,9 @@ public final class ImpactMatrix extends AbstractEntity {
 			return false;
 		}
 		if (!measurements.equals(m.measurements)) {
+			return false;
+		}
+		if (!baselines.equals(m.baselines)) {
 			return false;
 		}
 		return true;
@@ -171,6 +174,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		criteria.remove(c);
 		measurements.remove(c);
 		ordinalCriteriaRanksSets.remove(c);
+		baselines.remove(c);
 	}
 	
 	/**
@@ -193,7 +197,8 @@ public final class ImpactMatrix extends AbstractEntity {
 				setMeasurementNoFires(c, a, r);
 			}
 			
-		} else if (c instanceof CardinalCriterion) { 
+		} else if (c instanceof CardinalCriterion) {
+			baselines.put(c, new ReferenceableGaussianMeasurement());
 			for (Alternative a : alternatives) {
 				if (getMeasurement(c, a) == null) {
 					setMeasurementNoFires(c, a, new Interval());
@@ -313,7 +318,10 @@ public final class ImpactMatrix extends AbstractEntity {
 
 		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
-			int aIndex = 0;				
+			int aIndex = 0;
+			if (this.getBaseline(c) != null) {
+				other.setBaseline(c, this.getBaseline(c).deepCopy());
+			}
 			for (Alternative a : getAlternatives()) {
 				Measurement m = getMeasurement(c, a).deepCopy();
 				other.setMeasurement(crit.get(cIndex), alts.get(aIndex), m);
@@ -322,6 +330,14 @@ public final class ImpactMatrix extends AbstractEntity {
 			cIndex++;
 		}
 		return other;		
+	}
+
+	void setBaseline(Criterion c, ReferenceableGaussianMeasurement m) {
+		baselines.put(c, m);		
+	}
+
+	public ReferenceableGaussianMeasurement getBaseline(Criterion c) {
+		return baselines.get(c);
 	}
 
 	public void reorderAlternatives(List<Alternative> newAlts) {
@@ -349,6 +365,10 @@ public final class ImpactMatrix extends AbstractEntity {
 				mat.addAlternative(m.getAlternative());
 				mat.addCriterion(m.getCriterion());
 				mat.setMeasurement(m.getCriterion(), m.getAlternative(), m.getMeasurement());
+				if (m.getMeasurement() instanceof RelativeLogitNormalMeasurement) {
+					RelativeLogitNormalMeasurement rm = (RelativeLogitNormalMeasurement)m.getMeasurement();
+					mat.setBaseline(m.getCriterion(), rm.getBaseline());
+				}
 			}
 		}
 		@Override

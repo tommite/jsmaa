@@ -49,7 +49,7 @@ public class CardinalCriterionMeasurementsView implements ViewBuilder {
 					cc.xy(1, row));
 			JComponent comp = null;
 			if (criterion instanceof CardinalCriterion) {
-				comp = new MeasurementPanel(model.getMeasurementHolder(a, criterion));
+				comp = new MeasurementPanel(model.getMeasurementHolder(a, criterion), model.getBean().getBaseline(criterion));
 			} else if (criterion instanceof OrdinalCriterion) {
 				
 			}

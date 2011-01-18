@@ -189,8 +189,8 @@ public class CriterionView implements ViewBuilder {
 		MeasurementPanel.MeasurementType[] measVals = new MeasurementPanel.MeasurementType[] {
 				MeasurementType.EXACT, MeasurementType.INTERVAL, MeasurementType.GAUSSIAN
 		};
-		JPanel indifPanel = new MeasurementPanel(indifHolder, measVals);		
-		JPanel prefPanel = new MeasurementPanel(prefHolder, measVals);
+		JPanel indifPanel = new MeasurementPanel(indifHolder, measVals, null);		
+		JPanel prefPanel = new MeasurementPanel(prefHolder, measVals, null);
 		
 		builder.addLabel("Indifference:", cc.xy(1, 1));
 		builder.add(indifPanel, cc.xy(3, 1));				

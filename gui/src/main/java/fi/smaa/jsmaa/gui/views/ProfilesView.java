@@ -75,7 +75,7 @@ public class ProfilesView implements ViewBuilder {
 					cc.xy(5, row));			
 			
 			ValueHolder holder = createMeasurementHolder(a);
-			MeasurementPanel mpanel = new MeasurementPanel(holder);
+			MeasurementPanel mpanel = new MeasurementPanel(holder, model.getImpactMatrix().getBaseline(crit));
 			builder.add(mpanel, cc.xy(7, row));				
 		}
 		return builder.getPanel();

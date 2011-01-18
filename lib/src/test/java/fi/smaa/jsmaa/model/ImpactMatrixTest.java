@@ -140,6 +140,14 @@ public class ImpactMatrixTest {
 	}
 	
 	@Test
+	public void testSetBaseline() {
+		m = new ImpactMatrix(alts, crit);
+		ReferenceableGaussianMeasurement meas = new ReferenceableGaussianMeasurement(1.0, 2.0);
+		m.setBaseline(c1, meas);
+		assertEquals(meas, m.getBaseline(c1));
+	}
+	
+	@Test
 	public void testScalesSetCorrectly() {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 2.0));
@@ -250,7 +258,11 @@ public class ImpactMatrixTest {
 		assertFalse(m.equals(m4));
 		
 		m2.setMeasurement(c1, a1, new Interval(0.2, 0.3));
-		assertFalse(m.equals(m2));		
+		assertFalse(m.equals(m2));
+		
+		m2 = new ImpactMatrix(alts, crit);
+		m2.setBaseline(c1, new ReferenceableGaussianMeasurement(1.0, 3.0));
+		assertFalse(m.equals(m2));
 	}
 
 	@Test
@@ -260,6 +272,8 @@ public class ImpactMatrixTest {
 		OrdinalCriterion ordCrit = new OrdinalCriterion("ord");
 		m.addCriterion(ordCrit);
 		m.setMeasurement(ordCrit, a1, new Rank(2));
+		ReferenceableGaussianMeasurement base = new ReferenceableGaussianMeasurement(1.0, 0.5);
+		m.setBaseline(c1, base);
 		
 		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy(m.getAlternatives(), m.getCriteria());
 		
@@ -285,6 +299,9 @@ public class ImpactMatrixTest {
 		assertEquals(new Interval(0.0, 1.0), ival);
 		
 		assertEquals(new Rank(2), m2.getMeasurement(nc3, na1));
+		assertEquals(base, m2.getBaseline(nc1));
+		assertEquals(new ReferenceableGaussianMeasurement(), m2.getBaseline(nc2));
+		assertEquals(null, m2.getBaseline(nc3));
 	}
 	
 	@Test

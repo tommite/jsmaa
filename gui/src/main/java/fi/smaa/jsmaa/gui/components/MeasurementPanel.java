@@ -36,7 +36,6 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.AbstractValueModel;
-import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.model.BetaMeasurement;
@@ -46,6 +45,8 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.LogitNormalMeasurement;
+import fi.smaa.jsmaa.model.ReferenceableGaussianMeasurement;
+import fi.smaa.jsmaa.model.RelativeLogitNormalMeasurement;
 
 @SuppressWarnings("serial")
 public class MeasurementPanel extends JPanel {
@@ -60,18 +61,21 @@ public class MeasurementPanel extends JPanel {
 
 	private JComboBox chooserComboBox;
 	
+	private ReferenceableGaussianMeasurement baselineMeasurement;
+	
 	public enum MeasurementType {
 		EXACT("Exact"),
 		INTERVAL("Interval"),
 		GAUSSIAN("Gaussian"),
 		LOGNORMAL("LogNormal"),
 		LOGITNORMAL("LogitNormal"),
+		RELATIVELOGITNORMAL("RelativeLogit"),
 		BETA("Beta");
 		
 		private String label;
 		
 		MeasurementType(String label) {
-			this.label = label; 
+			this.label = label;
 		}
 		
 		public String getLabel() {
@@ -84,18 +88,15 @@ public class MeasurementPanel extends JPanel {
 		}
 	}
 	
-	public MeasurementPanel(ValueModel measurementHolder) {
-		allowedValues = MeasurementType.values();
-		this.holder = measurementHolder;
-				
-		init();
-		rebuildPanel();
+	public MeasurementPanel(ValueModel measurementHolder, ReferenceableGaussianMeasurement baseline) {
+		this(measurementHolder, MeasurementType.values(), baseline);
 	}
 	
-	public MeasurementPanel(ValueHolder measurementHolder, MeasurementType[] allowedValues) {
+	public MeasurementPanel(ValueModel measurementHolder, MeasurementType[] allowedValues, ReferenceableGaussianMeasurement baseline) {
 		this.allowedValues = allowedValues;
 		this.holder = measurementHolder;
 		
+		this.baselineMeasurement = baseline;
 		init();
 		rebuildPanel();
 	}	
@@ -170,6 +171,9 @@ public class MeasurementPanel extends JPanel {
 		} else if (m instanceof BetaMeasurement) {
 			BetaMeasurement gm = (BetaMeasurement) m;
 		    measComp = new BetaMeasurementPanel(this, new PresentationModel<BetaMeasurement>(gm));
+		} else if (m instanceof RelativeLogitNormalMeasurement) {
+			RelativeLogitNormalMeasurement gm = (RelativeLogitNormalMeasurement) m;
+		    measComp = new RelativeLogitNormalMeasurementPanel(this, gm);
 		} else {
 			throw new RuntimeException("unknown measurement type");
 		}
@@ -187,6 +191,8 @@ public class MeasurementPanel extends JPanel {
 				return MeasurementType.LOGNORMAL;
 			} else if (m instanceof LogitNormalMeasurement) {
 				return MeasurementType.LOGITNORMAL;
+			} else if (m instanceof RelativeLogitNormalMeasurement) {
+				return MeasurementType.RELATIVELOGITNORMAL;
 			} else if (m instanceof GaussianMeasurement) {
 				return MeasurementType.GAUSSIAN;
 			} else if (m instanceof BetaMeasurement) {
@@ -236,6 +242,8 @@ public class MeasurementPanel extends JPanel {
 				} else {
 					holder.setValue(new GaussianMeasurement(1.0, 0.0));
 				}
+			} else if (type == MeasurementType.RELATIVELOGITNORMAL) {
+				holder.setValue(new RelativeLogitNormalMeasurement(baselineMeasurement));
 			}  else if (type == MeasurementType.BETA) {
 				holder.setValue(new BetaMeasurement(2.0, 2.0, 0.0, 1.0));
 			} else {
