@@ -23,10 +23,11 @@ public class RelativeNormalMeasurement extends RelativeGaussianMeasurementBase {
 		return (new GaussianMeasurement(getAbsoluteMean(), getAbsoluteStdDev()));
 	}
 
-	public RelativeNormalMeasurement deepCopy() {
-		return new RelativeNormalMeasurement(getBaseline().deepCopy(), getRelative().deepCopy());
+	@Override
+	protected RelativeGaussianMeasurementBase newInstance() {
+		return new RelativeNormalMeasurement();
 	}
-	
+
 	protected static final XMLFormat<RelativeNormalMeasurement> XML = new XMLFormat<RelativeNormalMeasurement>(RelativeNormalMeasurement.class) {
 		@Override
 		public RelativeNormalMeasurement newInstance(Class<RelativeNormalMeasurement> cls, InputElement xml) {

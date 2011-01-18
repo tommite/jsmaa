@@ -21,11 +21,12 @@ public class RelativeLogitNormalMeasurement extends RelativeGaussianMeasurementB
 	protected LogitNormalMeasurement getAbsolute() {
 		return (new LogitNormalMeasurement(getAbsoluteMean(), getAbsoluteStdDev()));
 	}
-
-	public RelativeLogitNormalMeasurement deepCopy() {
-		return new RelativeLogitNormalMeasurement(getBaseline().deepCopy(), getRelative().deepCopy());
-	}
 	
+	@Override
+	protected RelativeGaussianMeasurementBase newInstance() {
+		return new RelativeLogitNormalMeasurement();
+	}
+
 	protected static final XMLFormat<RelativeLogitNormalMeasurement> XML = new XMLFormat<RelativeLogitNormalMeasurement>(RelativeLogitNormalMeasurement.class) {
 		@Override
 		public RelativeLogitNormalMeasurement newInstance(Class<RelativeLogitNormalMeasurement> cls, InputElement xml) {

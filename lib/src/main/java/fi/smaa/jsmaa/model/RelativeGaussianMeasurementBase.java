@@ -33,6 +33,7 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 		d_relative.addPropertyChangeListener(nestedListener);
 	}
 
+	protected abstract RelativeGaussianMeasurementBase newInstance();
 	protected abstract CardinalMeasurement getAbsolute();
 
 	@Override
@@ -42,6 +43,13 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 		}
 		RelativeGaussianMeasurementBase m = (RelativeGaussianMeasurementBase)obj;
 		return m.getBaseline().equals(getBaseline()) && m.getRelative().equals(getRelative());
+	}
+	
+	public RelativeGaussianMeasurementBase deepCopy() {
+		RelativeGaussianMeasurementBase copy = newInstance();
+		copy.setBaseline(getBaseline().deepCopy());
+		copy.setRelative(getRelative().deepCopy());
+		return copy;
 	}
 
 	@Override
