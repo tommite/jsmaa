@@ -332,7 +332,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		return other;		
 	}
 
-	void setBaseline(Criterion c, ReferenceableGaussianMeasurement m) {
+	public void setBaseline(Criterion c, ReferenceableGaussianMeasurement m) {
 		baselines.put(c, m);		
 	}
 
@@ -365,8 +365,8 @@ public final class ImpactMatrix extends AbstractEntity {
 				mat.addAlternative(m.getAlternative());
 				mat.addCriterion(m.getCriterion());
 				mat.setMeasurement(m.getCriterion(), m.getAlternative(), m.getMeasurement());
-				if (m.getMeasurement() instanceof RelativeLogitNormalMeasurement) {
-					RelativeLogitNormalMeasurement rm = (RelativeLogitNormalMeasurement)m.getMeasurement();
+				if (m.getMeasurement() instanceof RelativeGaussianMeasurementBase) {
+					RelativeGaussianMeasurementBase rm = (RelativeGaussianMeasurementBase)m.getMeasurement();
 					mat.setBaseline(m.getCriterion(), rm.getBaseline());
 				}
 			}

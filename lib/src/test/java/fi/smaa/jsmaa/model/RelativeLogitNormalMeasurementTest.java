@@ -32,17 +32,17 @@ public class RelativeLogitNormalMeasurementTest {
 
 	@Test
 	public void testEquals() {
-		RelativeLogitNormalMeasurement m2 = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase m2 = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(0.3, 0.4),
 				new GaussianMeasurement(-0.1, 0.3)
 			);
 		assertFalse(d_m.equals(m2));
-		RelativeLogitNormalMeasurement m3 = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase m3 = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(0.25, 0.4),
 				new GaussianMeasurement(-0.1, 0.35)
 			);
 		assertFalse(d_m.equals(m3));
-		RelativeLogitNormalMeasurement m4 = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase m4 = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(0.25, 0.4),
 				new GaussianMeasurement(-0.1, 0.3)
 			);
@@ -51,7 +51,7 @@ public class RelativeLogitNormalMeasurementTest {
 	
 	@Test
 	public void testDeepCopy() {
-		RelativeLogitNormalMeasurement m2 = d_m.deepCopy();
+		RelativeGaussianMeasurementBase m2 = d_m.deepCopy();
 		assertNotSame(d_m, m2);
 		assertNotSame(d_m.getBaseline(), m2.getBaseline());
 		assertNotSame(d_m.getRelative(), m2.getRelative());
@@ -60,7 +60,7 @@ public class RelativeLogitNormalMeasurementTest {
 	
 	@Test
 	public void testSample() {
-		RelativeLogitNormalMeasurement m = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase m = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(0.0, 0.0),
 				new GaussianMeasurement(0.0, 0.0)
 			);
@@ -69,11 +69,11 @@ public class RelativeLogitNormalMeasurementTest {
 	
 	@Test
 	public void testConstructorBaselineOnly() {
-		RelativeLogitNormalMeasurement expected = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase expected = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(2.0, 1.0),
 				new GaussianMeasurement(0.0, 0.0)
 			);
-		RelativeLogitNormalMeasurement actual = new RelativeLogitNormalMeasurement(
+		RelativeGaussianMeasurementBase actual = new RelativeLogitNormalMeasurement(
 				new ReferenceableGaussianMeasurement(2.0, 1.0)
 			);
 		assertEquals(expected, actual);
@@ -82,8 +82,7 @@ public class RelativeLogitNormalMeasurementTest {
 	@Test
 	public void testXML() throws XMLStreamException {
 		String xml = XMLHelper.toXml(d_m, RelativeLogitNormalMeasurement.class);
-		System.out.println(xml);
-		RelativeLogitNormalMeasurement nm = (RelativeLogitNormalMeasurement) XMLHelper.fromXml(xml);
+		RelativeGaussianMeasurementBase nm = (RelativeGaussianMeasurementBase) XMLHelper.fromXml(xml);
 		assertEquals(d_m, nm);
 	}
 }

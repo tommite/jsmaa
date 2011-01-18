@@ -11,6 +11,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.ReferenceableGaussianMeasurement;
+import fi.smaa.jsmaa.model.RelativeGaussianMeasurementBase;
 import fi.smaa.jsmaa.model.RelativeLogitNormalMeasurement;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
@@ -49,18 +50,16 @@ public class ImpactMatrixXMLFormatTest {
 		ReferenceableGaussianMeasurement baseline = mat.getBaseline(c);
 		baseline.setMean(1.0);
 		baseline.setStDev(0.3);
-		RelativeLogitNormalMeasurement ma = new RelativeLogitNormalMeasurement(baseline);
+		RelativeGaussianMeasurementBase ma = new RelativeLogitNormalMeasurement(baseline);
 		ma.getRelative().setMean(0.5);
 		ma.getRelative().setStDev(0.4);
 		mat.setMeasurement(c, a, ma);
-		RelativeLogitNormalMeasurement mb = new RelativeLogitNormalMeasurement(baseline);
+		RelativeGaussianMeasurementBase mb = new RelativeLogitNormalMeasurement(baseline);
 		mb.getRelative().setMean(-0.1);
 		mb.getRelative().setStDev(0.5);
 		mat.setMeasurement(c, b, mb);
 		
-		String xml = XMLHelper.toXml(mat, ImpactMatrix.class);
-		System.out.println(xml);
-		ImpactMatrix nm = XMLHelper.fromXml(xml);
+		ImpactMatrix nm = XMLHelper.fromXml(XMLHelper.toXml(mat, ImpactMatrix.class));
 		
 		assertEquals(1, nm.getCriteria().size());
 		assertEquals(2, nm.getAlternatives().size());
@@ -71,8 +70,8 @@ public class ImpactMatrixXMLFormatTest {
 		assertEquals(ma, nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(0)));
 		assertEquals(mb, nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(1)));
 		assertSame(nm.getBaseline(nm.getCriteria().get(0)), 
-				((RelativeLogitNormalMeasurement)nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(0))).getBaseline());
+				((RelativeGaussianMeasurementBase)nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(0))).getBaseline());
 		assertSame(nm.getBaseline(nm.getCriteria().get(0)), 
-				((RelativeLogitNormalMeasurement)nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(1))).getBaseline());
+				((RelativeGaussianMeasurementBase)nm.getMeasurement(nm.getCriteria().get(0), nm.getAlternatives().get(1))).getBaseline());
 	}
 }
