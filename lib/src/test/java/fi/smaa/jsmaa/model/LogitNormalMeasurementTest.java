@@ -23,8 +23,8 @@ public class LogitNormalMeasurementTest {
 	@Test
 	public void testGetRange() {
 		Interval rng = d_m.getRange();
-		assertEquals(0.4275161, rng.getStart(), 0.00001);		
-		assertEquals(0.6205758, rng.getEnd(), 0.00001);
+		assertEquals(0.0, rng.getStart(), 0.00001);		
+		assertEquals(1.0, rng.getEnd(), 0.00001);
 	}
 
 	@Test

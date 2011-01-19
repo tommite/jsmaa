@@ -19,8 +19,7 @@ public class LogitNormalMeasurement extends GaussianMeasurement {
 	
 	@Override
 	public Interval getRange() {
-		Interval r = super.getRange();
-		return new Interval(Statistics.ilogit(r.getStart()), Statistics.ilogit(r.getEnd()));
+		return new Interval(0.0, 1.0);
 	}
 	
 	@Override
