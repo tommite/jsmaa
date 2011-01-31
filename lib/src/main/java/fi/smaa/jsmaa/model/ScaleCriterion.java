@@ -60,7 +60,7 @@ public class ScaleCriterion extends CardinalCriterion {
 	private static final XMLFormat<ScaleCriterion> XML = new XMLFormat<ScaleCriterion>(ScaleCriterion.class) {
 		@Override
 		public ScaleCriterion newInstance(Class<ScaleCriterion> cls, InputElement ie) throws XMLStreamException {
-			return new ScaleCriterion(ie.<String>getAttribute("name", ""));
+			return new ScaleCriterion(ie.getAttribute("name", ""));
 		}		
 		@Override
 		public boolean isReferenceable() {

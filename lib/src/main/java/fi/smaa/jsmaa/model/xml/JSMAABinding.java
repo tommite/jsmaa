@@ -54,8 +54,8 @@ public class JSMAABinding extends XMLBinding {
 	
 	@SuppressWarnings({ "rawtypes"})
 	@Override
-	public XMLFormat getFormat(Class cls) throws XMLStreamException{
-		if (cls.equals(String.class)){ 
+	protected XMLFormat getFormat(Class cls) throws XMLStreamException{
+		if (String.class.equals(cls)){ 
 			return stringXMLFormat;
 		}
 		return super.getFormat(cls);
@@ -83,7 +83,7 @@ public class JSMAABinding extends XMLBinding {
 		setAlias(SMAATRIModel.class, "SMAA-TRI-model");
 	}		
 	
-	private static final XMLFormat<String> stringXMLFormat = new XMLFormat<String>(String.class) {
+	private XMLFormat<String> stringXMLFormat = new XMLFormat<String>(null) {
 		@Override
 		public boolean isReferenceable() {
 			return false;
@@ -101,8 +101,7 @@ public class JSMAABinding extends XMLBinding {
 		
 		@Override
 		public String newInstance(Class<String> cls, InputElement ie) throws XMLStreamException {
-			String s = ie.getText().toString();
-			return s;
+			return ie.getText().toString();
 		}		
 	};
 }
