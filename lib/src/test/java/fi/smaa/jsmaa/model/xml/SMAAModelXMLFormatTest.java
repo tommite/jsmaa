@@ -16,6 +16,7 @@ import javolution.xml.stream.XMLStreamException;
 import org.drugis.common.JUnitUtil;
 import org.junit.Test;
 
+import fi.smaa.common.XMLHelper;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.CardinalPreferenceInformation;
 import fi.smaa.jsmaa.model.Criterion;
@@ -41,6 +42,8 @@ public class SMAAModelXMLFormatTest {
 		pref.setMeasurement(c, new Interval(0.0, 1.0));
 		model.setPreferenceInformation(pref);
 		model.setMeasurement(c, a, new ExactMeasurement(2.0));
+		
+		System.out.println(XMLHelper.toXml(model, SMAAModel.class));
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		JSMAABinding.writeModel(model, bos);

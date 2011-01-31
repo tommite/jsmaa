@@ -132,10 +132,7 @@ public class BetaMeasurement extends CardinalMeasurement {
 	protected static final XMLFormat<BetaMeasurement> XML = new XMLFormat<BetaMeasurement>(BetaMeasurement.class) {
 		@Override
 		public BetaMeasurement newInstance(Class<BetaMeasurement> cls, InputElement ie) throws XMLStreamException {
-			return new BetaMeasurement(ie.getAttribute("alpha").toDouble(),
-					ie.getAttribute("beta").toDouble(),
-					ie.getAttribute("min").toDouble(),
-					ie.getAttribute("max").toDouble());
+			return new BetaMeasurement(0.0, 0.0, 0.0, 0.0);
 		}				
 		@Override
 		public boolean isReferenceable() {
@@ -143,17 +140,18 @@ public class BetaMeasurement extends CardinalMeasurement {
 		}
 		@Override
 		public void read(InputElement ie, BetaMeasurement meas) throws XMLStreamException {
-			meas.alpha = ie.getAttribute("alpha").toDouble();
-			meas.beta = ie.getAttribute("beta").toDouble();
-			meas.min = ie.getAttribute("min").toDouble();
-			meas.max = ie.getAttribute("max").toDouble();
+			meas.alpha = ie.get("alpha");
+			meas.beta = ie.get("beta");
+			Interval ival = ie.get("range");
+			meas.min = ival.getStart();
+			meas.max = ival.getEnd();
 		}
 		@Override
 		public void write(BetaMeasurement meas, OutputElement oe) throws XMLStreamException {
-			oe.setAttribute("alpha", meas.alpha);
-			oe.setAttribute("beta", meas.beta);
-			oe.setAttribute("min", meas.min);
-			oe.setAttribute("max", meas.max);
+			oe.add(meas.alpha, "alpha");
+			oe.add(meas.beta, "beta");	
+			Interval ival = new Interval(meas.getMin(), meas.getMax());
+			oe.add(ival, "range");
 		}
 	};
 }

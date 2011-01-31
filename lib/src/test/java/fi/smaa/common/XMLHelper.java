@@ -27,7 +27,12 @@ public class XMLHelper {
 		StringReader sreader = new StringReader(xml);
 		XMLObjectReader reader = new XMLObjectReader().setInput(sreader).setBinding(new JSMAABinding());
 		reader.setReferenceResolver(new XMLReferenceResolver());
-		return reader.<T>read();
+		try {
+			T t = reader.<T>read();
+			return t;
+		} finally {
+			reader.close();
+		}
 	}
 
 }

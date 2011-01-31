@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javolution.xml.XMLBinding;
+import javolution.xml.XMLFormat;
 import javolution.xml.XMLObjectReader;
 import javolution.xml.XMLObjectWriter;
 import javolution.xml.XMLReferenceResolver;
@@ -51,6 +52,15 @@ public class JSMAABinding extends XMLBinding {
 		writer.close();
 	}
 	
+	@SuppressWarnings({ "rawtypes"})
+	@Override
+	public XMLFormat getFormat(Class cls) throws XMLStreamException{
+		if (cls.equals(String.class)){ 
+			return stringXMLFormat;
+		}
+		return super.getFormat(cls);
+	}
+	
 	private void setAliases() {
 		setAlias(Rank.class, "rank");
 		setAlias(GaussianMeasurement.class, "gaussian");
@@ -72,4 +82,27 @@ public class JSMAABinding extends XMLBinding {
 		setAlias(SMAAModel.class, "SMAA-2-model");
 		setAlias(SMAATRIModel.class, "SMAA-TRI-model");
 	}		
+	
+	private static final XMLFormat<String> stringXMLFormat = new XMLFormat<String>(String.class) {
+		@Override
+		public boolean isReferenceable() {
+			return false;
+		}		
+
+		@Override
+		public void write(String obj, OutputElement xml) throws XMLStreamException {
+			xml.addText(obj.toString());
+		}
+
+		@Override
+		public void read(InputElement xml, String obj) throws XMLStreamException {
+			return;
+		}
+		
+		@Override
+		public String newInstance(Class<String> cls, InputElement ie) throws XMLStreamException {
+			String s = ie.getText().toString();
+			return s;
+		}		
+	};
 }

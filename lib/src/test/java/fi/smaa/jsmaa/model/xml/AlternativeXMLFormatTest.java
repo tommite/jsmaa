@@ -14,6 +14,7 @@ public class AlternativeXMLFormatTest {
 	public void testMarshalAlternative() throws XMLStreamException {
 		Alternative a = new Alternative("a");
 		String xml = XMLHelper.toXml(a, Alternative.class);
+		System.out.println(xml);
 		Alternative na = (Alternative) XMLHelper.fromXml(xml);
 		assertEquals("a", na.getName());
 	}
