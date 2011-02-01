@@ -12,26 +12,37 @@ import fi.smaa.jsmaa.model.xml.JSMAABinding;
 
 public class XMLHelper {
 
-	public static <T> String toXml(T obj, Class<T> cls) throws XMLStreamException {	     
-	    TextBuilder xml = TextBuilder.newInstance();
-	    AppendableWriter out = new AppendableWriter().setOutput(xml);
-		XMLObjectWriter writer = new XMLObjectWriter().setOutput(out).setBinding(new JSMAABinding());
-		writer.setReferenceResolver(new XMLReferenceResolver());		
-		writer.setIndentation("\t");
-		writer.write(obj, cls.getCanonicalName(), cls);
-		writer.close();
-		return xml.toString();
+	public static <T> String toXml(T obj, Class<T> cls) throws XMLStreamException {
+		XMLObjectWriter writer = null;
+		try {
+			TextBuilder xml = TextBuilder.newInstance();
+			AppendableWriter out = new AppendableWriter().setOutput(xml);
+			writer = XMLObjectWriter.newInstance(out);
+			writer.setBinding(new JSMAABinding());
+			writer.setReferenceResolver(new XMLReferenceResolver());		
+			writer.setIndentation("\t");
+			writer.write(obj, cls.getCanonicalName(), cls);
+			writer.flush();		
+			return xml.toString();
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
 	}
 
-	public static <T> T fromXml(String xml) throws XMLStreamException {	     
-		StringReader sreader = new StringReader(xml);
-		XMLObjectReader reader = new XMLObjectReader().setInput(sreader).setBinding(new JSMAABinding());
-		reader.setReferenceResolver(new XMLReferenceResolver());
+	public static <T> T fromXml(String xml) throws XMLStreamException {
+		XMLObjectReader reader = null;
 		try {
-			T t = reader.<T>read();
-			return t;
+			StringReader sreader = new StringReader(xml);
+			reader = XMLObjectReader.newInstance(sreader);
+			reader.setBinding(new JSMAABinding());
+			reader.setReferenceResolver(new XMLReferenceResolver());
+			return reader.<T>read();
 		} finally {
-			reader.close();
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 

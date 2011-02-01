@@ -52,7 +52,7 @@ public class JSMAABinding extends XMLBinding {
 		writer.close();
 	}
 	
-	@SuppressWarnings({ "rawtypes"})
+	@SuppressWarnings("unchecked")
 	@Override
 	protected XMLFormat getFormat(Class cls) throws XMLStreamException{
 		if (String.class.equals(cls)){ 
@@ -88,17 +88,13 @@ public class JSMAABinding extends XMLBinding {
 		public boolean isReferenceable() {
 			return false;
 		}		
-
 		@Override
 		public void write(String obj, OutputElement xml) throws XMLStreamException {
-			xml.addText(obj.toString());
+			xml.addText(obj);
 		}
-
 		@Override
 		public void read(InputElement xml, String obj) throws XMLStreamException {
-			return;
 		}
-		
 		@Override
 		public String newInstance(Class<String> cls, InputElement ie) throws XMLStreamException {
 			return ie.getText().toString();
