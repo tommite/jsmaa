@@ -7,7 +7,6 @@ import javolution.xml.XMLBinding;
 import javolution.xml.XMLFormat;
 import javolution.xml.XMLObjectReader;
 import javolution.xml.XMLObjectWriter;
-import javolution.xml.XMLReferenceResolver;
 import javolution.xml.stream.XMLStreamException;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.BetaMeasurement;
@@ -36,13 +35,13 @@ public class JSMAABinding extends XMLBinding {
 
 	public static SMAAModel readModel(InputStream is) throws XMLStreamException {
 		XMLObjectReader reader = new XMLObjectReader().setInput(is).setBinding(new JSMAABinding());
-		reader.setReferenceResolver(new XMLReferenceResolver());
+		reader.setReferenceResolver(new NonStringReferenceResolver());
 		return reader.read();
 	}
 	
 	public static void writeModel(SMAAModel model, OutputStream os) throws XMLStreamException {
 		XMLObjectWriter writer = new XMLObjectWriter().setOutput(os).setBinding(new JSMAABinding());
-		writer.setReferenceResolver(new XMLReferenceResolver());		
+		writer.setReferenceResolver(new NonStringReferenceResolver());		
 		writer.setIndentation("\t");
 		if (model instanceof SMAATRIModel) {
 			writer.write((SMAATRIModel) model, "SMAA-TRI-model", SMAATRIModel.class);
@@ -51,8 +50,8 @@ public class JSMAABinding extends XMLBinding {
 		}
 		writer.close();
 	}
-	
-	@SuppressWarnings("unchecked")
+		
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected XMLFormat getFormat(Class cls) throws XMLStreamException{
 		if (String.class.equals(cls)){ 

@@ -6,9 +6,9 @@ import javolution.io.AppendableWriter;
 import javolution.text.TextBuilder;
 import javolution.xml.XMLObjectReader;
 import javolution.xml.XMLObjectWriter;
-import javolution.xml.XMLReferenceResolver;
 import javolution.xml.stream.XMLStreamException;
 import fi.smaa.jsmaa.model.xml.JSMAABinding;
+import fi.smaa.jsmaa.model.xml.NonStringReferenceResolver;
 
 public class XMLHelper {
 
@@ -19,7 +19,7 @@ public class XMLHelper {
 			AppendableWriter out = new AppendableWriter().setOutput(xml);
 			writer = XMLObjectWriter.newInstance(out);
 			writer.setBinding(new JSMAABinding());
-			writer.setReferenceResolver(new XMLReferenceResolver());		
+			writer.setReferenceResolver(new NonStringReferenceResolver());		
 			writer.setIndentation("\t");
 			writer.write(obj, cls.getCanonicalName(), cls);
 			writer.flush();		
@@ -30,6 +30,7 @@ public class XMLHelper {
 			}
 		}
 	}
+	
 
 	public static <T> T fromXml(String xml) throws XMLStreamException {
 		XMLObjectReader reader = null;
@@ -37,7 +38,7 @@ public class XMLHelper {
 			StringReader sreader = new StringReader(xml);
 			reader = XMLObjectReader.newInstance(sreader);
 			reader.setBinding(new JSMAABinding());
-			reader.setReferenceResolver(new XMLReferenceResolver());
+			reader.setReferenceResolver(new NonStringReferenceResolver());
 			return reader.<T>read();
 		} finally {
 			if (reader != null) {
