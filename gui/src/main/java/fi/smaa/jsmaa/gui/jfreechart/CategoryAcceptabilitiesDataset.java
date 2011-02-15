@@ -1,6 +1,9 @@
 /*
-	This file is part of JSMAA.
-	(c) Tommi Tervonen, 2009	
+    This file is part of JSMAA.
+    JSMAA is distributed from http://smaa.fi/.
+
+    (c) Tommi Tervonen, 2009-2010.
+    (c) Tommi Tervonen, Gert van Valkenhoef 2011.
 
     JSMAA is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +18,6 @@
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 package fi.smaa.jsmaa.gui.jfreechart;
 
 import java.util.List;
