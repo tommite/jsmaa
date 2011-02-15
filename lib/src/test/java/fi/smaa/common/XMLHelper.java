@@ -8,7 +8,7 @@ import javolution.xml.XMLObjectReader;
 import javolution.xml.XMLObjectWriter;
 import javolution.xml.XMLReferenceResolver;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.javolution.JSMAABinding;
+import fi.smaa.jsmaa.model.xml.JSMAABinding;
 
 public class XMLHelper {
 

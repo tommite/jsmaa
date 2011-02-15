@@ -31,7 +31,7 @@ import java.util.Map;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.javolution.CriterionAlternativeMeasurement;
+import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
 
 public final class ImpactMatrix extends AbstractEntity {
 	

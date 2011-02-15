@@ -29,7 +29,7 @@ import java.util.List;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.javolution.AlternativeList;
+import fi.smaa.jsmaa.model.xml.AlternativeList;
 
 public class SMAATRIModel extends SMAAModel {
 	

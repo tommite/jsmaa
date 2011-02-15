@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileFilter;
 @SuppressWarnings("unchecked")
 public class MyFileFilter extends FileFilter {
 
+	@SuppressWarnings("rawtypes")
 	private Hashtable filters = null;
 	private String description = null;
 	private String fullDescription = null;
@@ -40,6 +41,7 @@ public class MyFileFilter extends FileFilter {
 	 *
 	 * @see #addExtension
 	 */
+	@SuppressWarnings("rawtypes")
 	public MyFileFilter() {
 		this.filters = new Hashtable();
 	}
@@ -150,6 +152,7 @@ public class MyFileFilter extends FileFilter {
 	 *
 	 * Note that the "." before the extension is not needed and will be ignored.
 	 */
+	@SuppressWarnings("rawtypes")
 	public void addExtension(String extension) {
 		if(filters == null) {
 			filters = new Hashtable(5);
@@ -168,6 +171,7 @@ public class MyFileFilter extends FileFilter {
 	 * @see isExtensionListInDescription
 	 * @see FileFilter#getDescription
 	 */
+	@SuppressWarnings("rawtypes")
 	public String getDescription() {
 		if(fullDescription == null) {
 			if(description == null || isExtensionListInDescription()) {
