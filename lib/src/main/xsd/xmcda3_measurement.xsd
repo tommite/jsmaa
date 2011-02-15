@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="measurementType" abstract="true"/>
+    <xs:complexType name="exactMeasurementType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="measurementType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="probabilisticMeasurementType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="measurementType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="probabilisticCardinalMeasurementType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="probabilisticMeasurementType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+
+</xs:schema>

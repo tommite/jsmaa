@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_piecewiseLinearFunction.xsd"></xs:include>
+
+    
+    <xs:complexType name="affineLinearFunctionType">
+        <xs:complexContent>
+            <xs:restriction base="piecewiseLinearFunctionType">
+                
+                <xs:sequence>
+                    <xs:element name="point" type="point2DType" minOccurs="2" maxOccurs="2"/>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

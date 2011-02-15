@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_measurement.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_category.xsd"></xs:include>
+    <xs:complexType name="nominalProbabilisticMeasurementType">
+        <xs:complexContent>
+            <xs:extension base="probabilisticMeasurementType">
+                <xs:sequence>
+                    <xs:element name="category" minOccurs="1" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:double">
+                                    <xs:attributeGroup ref="categoryReferenceAttribute"></xs:attributeGroup>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>    
+                    </xs:element>
+                    
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

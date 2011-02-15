@@ -56,8 +56,8 @@ import fi.smaa.jsmaa.model.NamedObject;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.SMAATRIModel;
-import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
-import fi.smaa.jsmaa.model.xml.JSMAABinding;
+import fi.smaa.jsmaa.model.xml.javolution.InvalidModelVersionException;
+import fi.smaa.jsmaa.model.xml.javolution.JSMAABinding;
 import fi.smaa.jsmaa.simulator.BuildQueue;
 
 @SuppressWarnings("serial")

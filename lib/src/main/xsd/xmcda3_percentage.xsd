@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"> 
+<xs:simpleType name="percentage">
+    <xs:restriction base="xs:decimal">
+        <xs:minInclusive value="0"></xs:minInclusive>
+        <xs:maxInclusive value="1"></xs:maxInclusive>
+    </xs:restriction>
+</xs:simpleType>
+    
+<xs:simpleType name="positivePercentage">
+    <xs:restriction base="percentage">
+        <xs:minExclusive value="0"></xs:minExclusive>
+    </xs:restriction>
+</xs:simpleType>
+
+</xs:schema>

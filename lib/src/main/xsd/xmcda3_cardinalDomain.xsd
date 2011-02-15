@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_domain.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_interval.xsd"></xs:include>
+    <xs:complexType name="cardinalDomainType">
+        <xs:complexContent>
+            <xs:extension base="domainType">
+                <xs:sequence>
+                    <xs:element name="scale" type="intervalType" minOccurs="0"/>
+                    <xs:element name="ascendingPreference" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+
+</xs:schema>

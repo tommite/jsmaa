@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"> 
+    <xs:include schemaLocation="xmcda3_impreciseAssignmentExample.xsd"></xs:include>
+    <xs:complexType name="assignmentExampleType">
+        <xs:complexContent>
+            <xs:restriction base="impreciseAssignmentExampleType">
+                <xs:sequence>
+                    <xs:element name="alternative" minOccurs="1" maxOccurs="1" type="alternativeReference">                    
+                    </xs:element>
+                    <xs:element name="category" type="categoryReference" minOccurs="1" maxOccurs="1">
+                    </xs:element>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+
+        
+    </xs:complexType>
+    
+</xs:schema>

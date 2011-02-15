@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_criterion.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_affineLinearFunction.xsd"></xs:include>
+    <xs:complexType name="outrankingCriterionType">
+        <xs:complexContent>
+            <xs:extension base="criterionType">
+                <xs:sequence>
+                    <xs:element name="indifferenceThreshold" type="affineLinearFunctionType"/>
+                    <xs:element name="preferenceThreshold" type="affineLinearFunctionType"/>
+                    <xs:element name="vetoThreshold" type="affineLinearFunctionType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+
+</xs:schema>

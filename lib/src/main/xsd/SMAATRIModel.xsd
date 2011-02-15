@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"> 
+    <xs:include schemaLocation="xmcda3_category.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_alternative.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_impreciseAssignmentExample.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_assignmentExample.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_exactValue.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_nominalMeasurement.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_nominalProbabilisticMeasurement.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_interval.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_gaussian.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_logNormal.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_deterministicValue.xsd"></xs:include> 
+    
+    <xs:include schemaLocation="xmcda3_cardinalDomain.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_stepDomain.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_nominalDomain.xsd"></xs:include>   
+    
+    <xs:include schemaLocation="xmcda3_exponentialFunction.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_piecewiseLinearFunction.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_affineLinearFunction.xsd"></xs:include> 
+    
+    <xs:include schemaLocation="xmcda3_utilityCriterion.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_outrankingCriterion.xsd"></xs:include> 
+    
+    <xs:include schemaLocation="xmcda3_performances.xsd"></xs:include> 
+    
+    <xs:include schemaLocation="xmcda3_alternativesValuedRelation.xsd"></xs:include> 
+    <xs:include schemaLocation="xmcda3_alternativesBinaryRelation.xsd"></xs:include> 
+
+    <xs:element name="SMAATRIModel">
+		<xs:complexType>
+			<xs:all>
+        		<xs:element name="Categories" minOccurs="1" maxOccurs="1">        		
+					<xs:complexType>
+						<xs:sequence>
+			        		<xs:element name="Category" minOccurs="1" maxOccurs="unbounded" type="categoryType"/>
+		        		</xs:sequence>
+		        	</xs:complexType>
+        		</xs:element>
+        		<xs:element name="Alternatives" minOccurs="1" maxOccurs="1">        		
+					<xs:complexType>
+						<xs:sequence>
+			        		<xs:element name="Alternative" minOccurs="1" maxOccurs="unbounded" type="alternativeType"/>
+		        		</xs:sequence>
+		        	</xs:complexType>
+        		</xs:element>
+        		<xs:element name="Criteria" minOccurs="1" maxOccurs="1">        		
+					<xs:complexType>
+						<xs:sequence>
+			        		<xs:element name="Criterion" minOccurs="1" maxOccurs="unbounded" type="outrankingCriterionType"/>
+		        		</xs:sequence>
+		        	</xs:complexType>
+        		</xs:element>
+        		<xs:element name="Profiles" minOccurs="1" maxOccurs="1">        		
+					<xs:complexType>
+						<xs:sequence>
+			        		<xs:element name="Profile" minOccurs="1" maxOccurs="unbounded" type="alternativeType"/>
+		        		</xs:sequence>
+		        	</xs:complexType>
+        		</xs:element>
+				<xs:element name="AlternativePerformances" minOccurs="1" maxOccurs="1" type="performancesType"/>
+				<xs:element name="ProfilePerformances" minOccurs="1" maxOccurs="1" type="performancesType"/>		
+			</xs:all>        	
+        </xs:complexType>
+        
+        <xs:key name="alternativeKey">
+            <xs:selector xpath="Alternatives/Alternative"/>
+            <xs:field xpath="name"/>
+        </xs:key>
+        <xs:key name="criterionKey">
+            <xs:selector xpath="Criteria/Criterion"/>
+            <xs:field xpath="name"/>
+        </xs:key>
+        <xs:key name="categoryKey">
+            <xs:selector xpath="Categories/Category"/>
+            <xs:field xpath="name"/>
+        </xs:key>
+        <xs:key name="profileKey">
+            <xs:selector xpath="Profiles/Profile"/>
+            <xs:field xpath="name"/>
+        </xs:key>        
+        
+        <xs:keyref name="alternativePerformanceAlternativeKeyRef" refer="alternativeKey">
+            <xs:selector xpath="AlternativePerformances"/>
+            <xs:field xpath="@alternative"/>
+        </xs:keyref>
+        
+        <xs:keyref name="alternativePerformanceCriterionKeyRef" refer="criterionKey">
+            <xs:selector xpath="AlternativePerformances"/>
+            <xs:field xpath="@alternative"/>
+        </xs:keyref>
+        
+        <xs:keyref name="profilePerformanceAlternativeKeyRef" refer="alternativeKey">
+            <xs:selector xpath="ProfilePerformances"/>
+            <xs:field xpath="@alternative"/>
+        </xs:keyref>
+        
+        <xs:keyref name="profilePerformanceCriterionKeyRef" refer="criterionKey">
+            <xs:selector xpath="ProfilePerformances"/>
+            <xs:field xpath="@alternative"/>
+        </xs:keyref>        
+                
+                
+        <xs:unique name="alternativePerformancesAlternativeCriterionUniqueness">
+            <xs:selector xpath="AlternativePerformances/Performance"></xs:selector>  
+            <xs:field xpath="alternative/@ref"></xs:field>
+            <xs:field xpath="criterion/@ref"></xs:field>
+        </xs:unique>
+        
+		<xs:unique name="profilePerformancesAlternativeCriterionUniqueness">
+            <xs:selector xpath="ProfilePerformances/Performance"></xs:selector>  
+            <xs:field xpath="alternative/@ref"></xs:field>
+            <xs:field xpath="criterion/@ref"></xs:field>
+        </xs:unique>        
+               
+	</xs:element>
+	
+</xs:schema>

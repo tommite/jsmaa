@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_criterion.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_measurement.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_alternative.xsd"></xs:include>
+    <xs:complexType name="performancesType">
+        <xs:sequence>
+            <xs:element name="Performance" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="alternative" type="alternativeReference"></xs:element>
+                        <xs:element name="criterion" type="criterionReference"></xs:element>
+                        <xs:element name="measurement" type="measurementType"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+                
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+
+</xs:schema>

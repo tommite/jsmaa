@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xmcda3_alternative.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_percentage.xsd"></xs:include>
+    <xs:include schemaLocation="xmcda3_alternativesValuedRelation.xsd"/>
+    
+    
+    <xs:complexType name="binaryAlternativesPair">
+        <xs:complexContent>
+            <xs:restriction base="valuedAlternativesPair">
+                <xs:sequence>
+                    <xs:element name="alternative1" type="alternativeReference"/>
+                    <xs:element name="alternative2" type="alternativeReference"/>
+                    <xs:element name="value">
+                        <xs:simpleType>
+                            <xs:restriction base="positivePercentage">
+                                <xs:minInclusive value="1"></xs:minInclusive>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    
+                </xs:sequence>
+            </xs:restriction>
+        
+        </xs:complexContent>
+        
+    </xs:complexType>
+    
+    <xs:complexType name="alternativesBinaryRelationType">
+        <xs:complexContent>
+            <xs:restriction base="alternativesValuedRelationType">
+                <xs:sequence>
+                    <xs:annotation><xs:documentation>
+                        Binary relation as a sparse matrix representation. 
+                        Value for missing alternatives pairs is interpreted as 0.
+                        Otherwise, value is 1.
+                    </xs:documentation></xs:annotation>
+                    <xs:element name="Entry" maxOccurs="unbounded" type="binaryAlternativesPair">
+                        
+                    </xs:element>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+        
+    </xs:complexType>
+    
+
+</xs:schema>

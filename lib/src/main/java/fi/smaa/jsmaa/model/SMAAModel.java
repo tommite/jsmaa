@@ -28,9 +28,9 @@ import java.util.List;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.AlternativeList;
-import fi.smaa.jsmaa.model.xml.CriterionList;
-import fi.smaa.jsmaa.model.xml.InvalidModelVersionException;
+import fi.smaa.jsmaa.model.xml.javolution.AlternativeList;
+import fi.smaa.jsmaa.model.xml.javolution.CriterionList;
+import fi.smaa.jsmaa.model.xml.javolution.InvalidModelVersionException;
 
 
 

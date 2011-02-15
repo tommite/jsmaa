@@ -21,18 +21,18 @@
       <url>http://download.java.net/maven/2/</url>
       <layout>default</layout>
     </repository>
-<repository>
-    <id>smaa.fi</id>
-    <name>smaa.fi mvn repository</name>
-    <layout>default</layout>
-    <url>http://smaa.fi/mvn</url>
-</repository>
-		<repository>
-  			<id>drugis.org</id>
-	  		<name>drugis.org Maven 2 Repository</name>
-  			<url>http://drugis.org/mvn</url>
-  			<layout>default</layout>
-		</repository>		
+    <repository>
+      <id>smaa.fi</id>
+      <name>smaa.fi mvn repository</name>
+      <layout>default</layout>
+      <url>http://smaa.fi/mvn</url>
+    </repository>
+    <repository>
+      <id>drugis.org</id>
+      <name>drugis.org Maven 2 Repository</name>
+      <url>http://drugis.org/mvn</url>
+      <layout>default</layout>
+    </repository>		
   </repositories>
 
   <build>
@@ -62,31 +62,46 @@
 	  <downloadSources>true</downloadSources>
 	</configuration>
       </plugin>
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>xmlbeans-maven-plugin</artifactId>
+	<version>2.3.3</version>
+	<executions>
+	  <execution>
+	    <goals>
+	      <goal>xmlbeans</goal>
+	    </goals>
+	  </execution>
+	</executions>
+	<configuration>
+	  <javaSource>1.5</javaSource>
+	</configuration>
+      </plugin>
     </plugins>		
   </build>
   <dependencies>
-    	<dependency>
-  		<groupId>org.drugis</groupId>
-  		<artifactId>common-lib</artifactId>
-  		<version>0.5-SNAPSHOT</version>
-	</dependency>
-    	<dependency>
-  		<groupId>org.drugis</groupId>
-  		<artifactId>common-test</artifactId>
-  		<version>0.5-SNAPSHOT</version>
-		<scope>test</scope>
-	</dependency>
- 
-  	<dependency>
-  		<groupId>colt</groupId>
-  		<artifactId>colt</artifactId>
-  		<version>1.2.0</version>
-  	</dependency>
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-math</artifactId>
-    <version>2.1</version>
-</dependency>
+    <dependency>
+      <groupId>org.drugis</groupId>
+      <artifactId>common-lib</artifactId>
+      <version>0.5-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.drugis</groupId>
+      <artifactId>common-test</artifactId>
+      <version>0.5-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>colt</groupId>
+      <artifactId>colt</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math</artifactId>
+      <version>2.1</version>
+    </dependency>
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>binding</artifactId>
@@ -109,5 +124,11 @@
       <artifactId>javolution</artifactId>
       <version>5.5.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+      <version>2.4.0</version>
+    </dependency>
+
   </dependencies>
 </project>

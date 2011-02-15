@@ -25,7 +25,7 @@ import java.util.List;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.CriterionMeasurementPair;
+import fi.smaa.jsmaa.model.xml.javolution.CriterionMeasurementPair;
 
 public class OrdinalPreferenceInformation extends AbstractPreferenceInformation<Rank> {
 	
