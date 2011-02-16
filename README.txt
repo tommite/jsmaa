@@ -8,7 +8,9 @@ Currently is implemented:
 
 Versions
 ========
-0.8.2:	Fixes: icons to work on Windows, negative interval calculation, slowness in simulations, chart style to 2d. Added tooltip for rank acceptability- and CW table headers, changed to not construct any charts for 20+ alternatives.
+0.8.3:	LogitNormal, RelativeNormal, and RelativeLogNormal measurements.
+0.8.2:	Fixes: icons to work on Windows, negative interval calculation, slowness in simulations, chart style to 2d.
+	Added tooltip for rank acceptability- and CW table headers, changed to not construct any charts for 20+ alternatives.
 0.8.1:	Better beta-sampler, value function graphs, refactoring.
 0.8:    Beta-distributed measurements, GUI improvements, heavy refactoring.
 0.6.4:	Changed to not showing acceptabilities graphs for 20+ alternatives. Added measurements to view of
@@ -25,7 +27,8 @@ Versions
 
 License
 =======
-JSMAA is (c) 2009-2010 Tommi Tervonen and licensed under GPL(3). See LICENSE.txt for more details.
+JSMAA is (c) 2009-2010 Tommi Tervonen, (c) 2011 Tommi Tervonen and Gert van Valkenhoef,
+and licensed under GPL(3). See LICENSE.txt for more details.
 Icons are taken from Eclipse, and are (c) Eclipse foundations and of their corresponding authors.
 
 Contact
@@ -34,5 +37,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-December 2010
+February 2011
 Tommi Tervonen
