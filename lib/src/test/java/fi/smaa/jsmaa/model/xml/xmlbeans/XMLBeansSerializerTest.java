@@ -2,6 +2,8 @@ package fi.smaa.jsmaa.model.xml.xmlbeans;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,10 +86,8 @@ public class XMLBeansSerializerTest {
 	}
 	
 	@Test
-	public void testSerializeProfilePerformances() throws Exception{
-		System.out.println(serializer.serialize(model));		
+	public void testSerializeProfilePerformances() throws Exception{		
 		OutrankingCriterion c1 = (OutrankingCriterion) newModel.getCriteria().get(0);
 		assertEquals(cat1crit1meas, newModel.getCategoryUpperBound(c1, newModel.getCategories().get(0)));
-	}	
-	
+	}		
 }

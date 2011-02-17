@@ -3,6 +3,7 @@ package fi.smaa.jsmaa.model.xml.xmlbeans;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 import noNamespace.AffineLinearFunctionType;
@@ -42,26 +43,37 @@ public class XMLBeansSerializer {
 	public XMLBeansSerializer() {
 	}
 	
-	public SMAATRIModel deSerialize(String xml) throws XmlException {
+	public SMAATRIModel deSerialize(String xml) throws XmlException, NonserializableModelException {
 		SMAATRIModelDocument doc = SMAATRIModelDocument.Factory.parse(xml);
 		SMAATRIModel model = new SMAATRIModel("from xmcda");
 		
 		addCategories(doc, model);
-		addAlternatives(doc, model);		
+		addAlternatives(doc, model);
+		List<Alternative> profiles = getProfiles(doc);
 		addCriteria(doc, model);
 		addAlternativePerformances(doc, model);
-		addProfilePerformances(doc, model);
+		addProfilePerformances(doc, model, profiles);
 		
 		return model;
 	}
 
-	private void addProfilePerformances(SMAATRIModelDocument doc, SMAATRIModel model) {
+	private List<Alternative> getProfiles(SMAATRIModelDocument doc) {
+		List<Alternative> profs = new LinkedList<Alternative>();
+		Profiles alts = doc.getSMAATRIModel().getProfiles();
+		for (AlternativeType a : alts.getProfileList()) {
+			profs.add(new Alternative(a.getName()));
+		}
+		return profs;
+	}
+
+	private void addProfilePerformances(SMAATRIModelDocument doc, SMAATRIModel model,
+			List<Alternative> profiles) throws NonserializableModelException {
 		PerformancesType perf = doc.getSMAATRIModel().getProfilePerformances();
-		List<Alternative> alts = model.getCategories();
 		List<Criterion> crit = model.getCriteria();
 		
 		for (Performance p : perf.getPerformanceList()) {
-			Alternative a = getCategoryFromProfileName(p.getAlternative().getRef());
+			Alternative prof = findAlternativeWithName(profiles, p.getAlternative().getRef());
+			Alternative a = model.getCategories().get(profiles.indexOf(prof));
 			Criterion c = findCriterionWithName(crit, p.getCriterion().getRef());
 			CardinalMeasurement meas = makeMeasurement(p.getMeasurement());
 			model.setCategoryUpperBound((OutrankingCriterion) c, a, meas);
@@ -83,7 +95,7 @@ public class XMLBeansSerializer {
 		
 	}
 
-	private Measurement makeMeasurement(MeasurementType measurement) {
+	private CardinalMeasurement makeMeasurement(MeasurementType measurement) {
 		if (measurement instanceof DeterministicValueType) {
 			DeterministicValueType dv = (DeterministicValueType) measurement;
 			return new ExactMeasurement(dv.getValue().doubleValue());
