@@ -8,7 +8,7 @@
             <xs:restriction base="piecewiseLinearFunctionType">
                 
                 <xs:sequence>
-                    <xs:element name="point" type="point2DType" minOccurs="2" maxOccurs="2"/>
+                    <xs:element name="point" type="point2DType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:restriction>
         </xs:complexContent>
