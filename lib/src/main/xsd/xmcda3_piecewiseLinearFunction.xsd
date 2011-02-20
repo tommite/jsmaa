@@ -12,7 +12,7 @@
         <xs:complexContent>
             <xs:extension base="functionType">
                 <xs:sequence>
-                    <xs:element name="point" type="point2DType" minOccurs="2" maxOccurs="unbounded"/>
+                    <xs:element name="point" type="point2DType" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
