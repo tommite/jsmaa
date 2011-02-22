@@ -164,8 +164,18 @@ public class XMLBeansSerializer {
 	private ExactMeasurement getThreshold(AffineLinearFunctionType th) {
 		return new ExactMeasurement(th.getB());
 	}
-
+	
 	public String serialize(SMAATRIModel model) throws IOException, NonserializableModelException {
+		SMAATRIModelDocument doc = docFromModel(model);
+		StringWriter writer = new StringWriter();
+		doc.save(writer, new XmlOptions().setSavePrettyPrint());
+		String res =  writer.toString();
+		writer.close();
+		return res;
+	}
+
+	public SMAATRIModelDocument docFromModel(SMAATRIModel model)
+			throws NonserializableModelException {
 		SMAATRIModelDocument doc = SMAATRIModelDocument.Factory.newInstance();
 		doc.addNewSMAATRIModel();
 		noNamespace.SMAATRIModelDocument.SMAATRIModel dmod = doc.getSMAATRIModel();
@@ -175,11 +185,7 @@ public class XMLBeansSerializer {
 		addCriteria(model, dmod);
 		addAlternativePerformances(model, dmod);
 		addProfilePerformances(model, dmod);
-		StringWriter writer = new StringWriter();
-		doc.save(writer, new XmlOptions().setSavePrettyPrint());
-		String res =  writer.toString();
-		writer.close();
-		return res;
+		return doc;
 	}
 	
 	private void addProfilePerformances(SMAATRIModel model, noNamespace.SMAATRIModelDocument.SMAATRIModel dmod) throws NonserializableModelException {
