@@ -35,7 +35,7 @@ public class ScaleCriterion extends CardinalCriterion {
 	
 	public ScaleCriterion(String name) {
 		super(name, true);
-	}	
+	}
 
 	public Interval getScale() {
 		return scale;

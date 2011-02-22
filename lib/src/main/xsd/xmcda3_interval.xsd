@@ -5,8 +5,8 @@
         <xs:complexContent>
             <xs:extension base="probabilisticCardinalMeasurementType">
                 <xs:sequence>
-                    <xs:element name="begin" type="xs:decimal"/>
-                    <xs:element name="end" type="xs:decimal"/>
+                    <xs:element name="begin" type="xs:double"/>
+                    <xs:element name="end" type="xs:double"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

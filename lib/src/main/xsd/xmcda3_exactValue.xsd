@@ -5,7 +5,7 @@
         <xs:complexContent>
             <xs:extension base="exactMeasurementType">
                 <xs:sequence>
-                    <xs:element name="value" type="xs:decimal"/>
+                    <xs:element name="value" type="xs:double"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

@@ -2,7 +2,6 @@ package fi.smaa.jsmaa.model.xml.xmlbeans;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import noNamespace.MeasurementType;
 import noNamespace.OutrankingCriterionType;
 import noNamespace.PerformancesType;
 import noNamespace.PerformancesType.Performance;
-import noNamespace.Point2DType;
 import noNamespace.SMAATRIModelDocument;
 import noNamespace.SMAATRIModelDocument.SMAATRIModel.Alternatives;
 import noNamespace.SMAATRIModelDocument.SMAATRIModel.Categories;
@@ -44,7 +42,11 @@ public class XMLBeansSerializer {
 	}
 	
 	public SMAATRIModel deSerialize(String xml) throws XmlException, NonserializableModelException {
-		SMAATRIModelDocument doc = SMAATRIModelDocument.Factory.parse(xml);
+		return modelFromDoc(SMAATRIModelDocument.Factory.parse(xml));
+	}
+
+	private SMAATRIModel modelFromDoc(SMAATRIModelDocument doc)
+			throws NonserializableModelException {
 		SMAATRIModel model = new SMAATRIModel("from xmcda");
 		
 		addCategories(doc, model);
@@ -53,8 +55,11 @@ public class XMLBeansSerializer {
 		addCriteria(doc, model);
 		addAlternativePerformances(doc, model);
 		addProfilePerformances(doc, model, profiles);
-		
 		return model;
+	}
+	
+	public SMAATRIModel deSerialize(SMAATRIModelDocument doc) throws NonserializableModelException {
+		return modelFromDoc(doc);	
 	}
 
 	private List<Alternative> getProfiles(SMAATRIModelDocument doc) {
@@ -98,10 +103,10 @@ public class XMLBeansSerializer {
 	private CardinalMeasurement makeMeasurement(MeasurementType measurement) {
 		if (measurement instanceof DeterministicValueType) {
 			DeterministicValueType dv = (DeterministicValueType) measurement;
-			return new ExactMeasurement(dv.getValue().doubleValue());
+			return new ExactMeasurement(dv.getValue());
 		} else if (measurement instanceof IntervalType) {
 			IntervalType ival = (IntervalType) measurement;
-			return new Interval(ival.getBegin().doubleValue(), ival.getEnd().doubleValue());
+			return new Interval(ival.getBegin(), ival.getEnd());
 		} else if (measurement instanceof GaussianType) {
 			GaussianType g = (GaussianType) measurement;
 			return new GaussianMeasurement(g.getMu(), g.getSigma());
@@ -157,7 +162,7 @@ public class XMLBeansSerializer {
 	}
 	
 	private ExactMeasurement getThreshold(AffineLinearFunctionType th) {
-		return new ExactMeasurement(th.getPointList().get(0).getY().doubleValue());
+		return new ExactMeasurement(th.getB());
 	}
 
 	public String serialize(SMAATRIModel model) throws IOException, NonserializableModelException {
@@ -219,13 +224,13 @@ public class XMLBeansSerializer {
 		if (m instanceof ExactMeasurement) {
 			ExactMeasurement em = (ExactMeasurement) m;
 			DeterministicValueType dvt = DeterministicValueType.Factory.newInstance();
-			dvt.setValue(new BigDecimal(em.getValue()));
+			dvt.setValue(em.getValue());
 			return dvt;
 		} else if (m instanceof Interval) {
 			Interval i = (Interval) m;
 			IntervalType ival = IntervalType.Factory.newInstance();
-			ival.setBegin(new BigDecimal(i.getStart()));
-			ival.setEnd(new BigDecimal(i.getEnd()));
+			ival.setBegin(i.getStart());
+			ival.setEnd(i.getEnd());
 			return ival;
 		} else if (m instanceof GaussianMeasurement) {
 			GaussianMeasurement g = (GaussianMeasurement) m;
@@ -260,9 +265,8 @@ public class XMLBeansSerializer {
 			throw new NonserializableModelException("Only exact values allowed for thresholds");
 		}
 		ExactMeasurement ev = (ExactMeasurement) th;
-		Point2DType p1 = indifTh.addNewPoint();
-		p1.setX(new BigDecimal(0));
-		p1.setY(new BigDecimal(ev.getValue()));
+		indifTh.setA(0);
+		indifTh.setB(ev.getValue());
 	}
 
 	private void addProfiles(SMAATRIModel model, noNamespace.SMAATRIModelDocument.SMAATRIModel dmod) {

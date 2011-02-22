@@ -2,8 +2,6 @@ package fi.smaa.jsmaa.model.xml.xmlbeans;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 

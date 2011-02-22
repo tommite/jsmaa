@@ -5,12 +5,12 @@
     
     <xs:complexType name="affineLinearFunctionType">
         <xs:complexContent>
-            <xs:restriction base="piecewiseLinearFunctionType">
-                
+            <xs:extension base="functionType">
                 <xs:sequence>
-                    <xs:element name="point" type="point2DType" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="a" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="b" type="xs:double" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
-            </xs:restriction>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     
