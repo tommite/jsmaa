@@ -26,45 +26,60 @@ import javolution.xml.stream.XMLStreamException;
 /**
  * A Gaussian measurement that may be referenced from other parts of the XML. 
  */
-public class ReferenceableGaussianMeasurement extends GaussianMeasurement {
+public class BaselineGaussianMeasurement extends GaussianMeasurement {
 	private static final long serialVersionUID = 5221976399470534972L;
+	private Double d_sample = null;
 
-	public ReferenceableGaussianMeasurement(Double mean, Double stdDev) {
+	public BaselineGaussianMeasurement(Double mean, Double stdDev) {
 		super(mean, stdDev);
 	}
 	
-	public ReferenceableGaussianMeasurement() {
+	public BaselineGaussianMeasurement() {
 		super();
+	}
+	
+	/**
+	 * Advance to the next state.
+	 */
+	public void update() {
+		d_sample = super.sample();
+	}
+	
+	public double sample() {
+		if (d_sample == null) {
+			throw new IllegalStateException(getClass().getSimpleName() + " requires calling update() before sample()");
+		}
+		return d_sample;
 	}
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other.getClass().equals(ReferenceableGaussianMeasurement.class))) {
+		if (other == null || !(other.getClass().equals(BaselineGaussianMeasurement.class))) {
 			return false;
 		}
-		ReferenceableGaussianMeasurement go = (ReferenceableGaussianMeasurement) other;
+		BaselineGaussianMeasurement go = (BaselineGaussianMeasurement) other;
 		return valueEquals(go);
 	}
 	
-	public ReferenceableGaussianMeasurement deepCopy() {
-		return new ReferenceableGaussianMeasurement(getMean(), getStDev());
+	public BaselineGaussianMeasurement deepCopy() {
+		return new BaselineGaussianMeasurement(getMean(), getStDev());
 	}
 	
-	protected static final XMLFormat<ReferenceableGaussianMeasurement> XML = new XMLFormat<ReferenceableGaussianMeasurement>(ReferenceableGaussianMeasurement.class) {
+	protected static final XMLFormat<BaselineGaussianMeasurement> XML = new XMLFormat<BaselineGaussianMeasurement>(BaselineGaussianMeasurement.class) {
 		@Override
-		public ReferenceableGaussianMeasurement newInstance(Class<ReferenceableGaussianMeasurement> cls, InputElement ie) throws XMLStreamException {
-			return new ReferenceableGaussianMeasurement();
+		public BaselineGaussianMeasurement newInstance(Class<BaselineGaussianMeasurement> cls, InputElement ie) throws XMLStreamException {
+			return new BaselineGaussianMeasurement();
 		}				
 		@Override
 		public boolean isReferenceable() {
 			return true;
 		}
 		@Override
-		public void read(InputElement ie, ReferenceableGaussianMeasurement meas) throws XMLStreamException {
+		public void read(InputElement ie, BaselineGaussianMeasurement meas) throws XMLStreamException {
 			GaussianMeasurement.XML.read(ie, meas);	
 		}
 		@Override
-		public void write(ReferenceableGaussianMeasurement meas, OutputElement oe) throws XMLStreamException {
+		public void write(BaselineGaussianMeasurement meas, OutputElement oe) throws XMLStreamException {
 			GaussianMeasurement.XML.write(meas, oe);
 		}
 	};

@@ -32,7 +32,7 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 	public static final String PROPERTY_BASELINE = "baseline";
 
 	public static final String PROPERTY_RELATIVE = "relative";
-	private ReferenceableGaussianMeasurement d_baseline;
+	private BaselineGaussianMeasurement d_baseline;
 	private GaussianMeasurement d_relative;
 	private PropertyChangeListener nestedListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent event) {
@@ -45,7 +45,7 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 		};
 
 	public RelativeGaussianMeasurementBase(
-			ReferenceableGaussianMeasurement baseline,
+			BaselineGaussianMeasurement baseline,
 			GaussianMeasurement relative) {
 		d_baseline = baseline;
 		d_baseline.addPropertyChangeListener(nestedListener);
@@ -54,7 +54,6 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 	}
 
 	protected abstract RelativeGaussianMeasurementBase newInstance();
-	protected abstract CardinalMeasurement getAbsolute();
 
 	@Override
 	public boolean equals(Object obj) {
@@ -77,11 +76,6 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 		return "ilogit(" + d_baseline.toString() + " + " + d_relative.toString() + ")";
 	}
 
-	@Override
-	public Interval getRange() {
-		return getAbsolute().getRange();
-	}
-
 	protected Double getAbsoluteStdDev() {
 		double s1 = d_baseline.getStDev();
 		double s2 = d_relative.getStDev();
@@ -94,14 +88,14 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 
 	@Override
 	public double sample() {
-		return getAbsolute().sample();
+		return getBaseline().sample() + getRelative().sample();
 	}
 
-	public ReferenceableGaussianMeasurement getBaseline() {
+	public BaselineGaussianMeasurement getBaseline() {
 		return d_baseline;
 	}
 
-	private void setBaseline(ReferenceableGaussianMeasurement m) {
+	void setBaseline(BaselineGaussianMeasurement m) {
 		d_baseline.removePropertyChangeListener(nestedListener);
 		d_baseline = m;
 		d_relative.addPropertyChangeListener(nestedListener);
@@ -124,12 +118,12 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 		}
 		@Override
 		public void read(InputElement ie, RelativeGaussianMeasurementBase meas) throws XMLStreamException {
-			meas.setBaseline(ie.get(PROPERTY_BASELINE, ReferenceableGaussianMeasurement.class));
+			meas.setBaseline(ie.get(PROPERTY_BASELINE, BaselineGaussianMeasurement.class));
 			meas.setRelative(ie.get(PROPERTY_RELATIVE, GaussianMeasurement.class));
 		}
 		@Override
 		public void write(RelativeGaussianMeasurementBase meas, OutputElement oe) throws XMLStreamException {
-			oe.add(meas.getBaseline(), PROPERTY_BASELINE, ReferenceableGaussianMeasurement.class);
+			oe.add(meas.getBaseline(), PROPERTY_BASELINE, BaselineGaussianMeasurement.class);
 			oe.add(meas.getRelative(), PROPERTY_RELATIVE, GaussianMeasurement.class);
 		}
 	};

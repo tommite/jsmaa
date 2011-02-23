@@ -20,26 +20,37 @@
 */
 package fi.smaa.jsmaa.model;
 
+import org.drugis.common.stat.Statistics;
+
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
 public class RelativeLogitNormalMeasurement extends RelativeGaussianMeasurementBase {
 	private static final long serialVersionUID = 8466978166600150834L;
-	public RelativeLogitNormalMeasurement(ReferenceableGaussianMeasurement baseline, GaussianMeasurement relative) {
+	public RelativeLogitNormalMeasurement(BaselineGaussianMeasurement baseline, GaussianMeasurement relative) {
 		super(baseline, relative);
 	}
 	
-	public RelativeLogitNormalMeasurement(ReferenceableGaussianMeasurement baseline) {
+	public RelativeLogitNormalMeasurement(BaselineGaussianMeasurement baseline) {
 		this(baseline, new GaussianMeasurement());
 	}
 	
 	private RelativeLogitNormalMeasurement() {
-		this(new ReferenceableGaussianMeasurement());
+		this(new BaselineGaussianMeasurement());
 	}
 	
 	@Override
-	protected LogitNormalMeasurement getAbsolute() {
+	public double sample() {
+		return Statistics.ilogit(super.sample());
+	}
+	
+	private LogitNormalMeasurement getAbsolute() {
 		return (new LogitNormalMeasurement(getAbsoluteMean(), getAbsoluteStdDev()));
+	}
+
+	@Override
+	public Interval getRange() {
+		return getAbsolute().getRange();
 	}
 	
 	@Override

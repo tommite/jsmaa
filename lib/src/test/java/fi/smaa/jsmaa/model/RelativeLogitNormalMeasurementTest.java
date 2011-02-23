@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import javolution.xml.stream.XMLStreamException;
 
+import org.drugis.common.stat.Statistics;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class RelativeLogitNormalMeasurementTest {
 	@Before
 	public void setUp() {
 		d_m = new RelativeLogitNormalMeasurement(
-					new ReferenceableGaussianMeasurement(0.25, 0.4),
+					new BaselineGaussianMeasurement(0.25, 0.4),
 					new GaussianMeasurement(-0.1, 0.3)
 				);
 	}
@@ -53,17 +54,17 @@ public class RelativeLogitNormalMeasurementTest {
 	@Test
 	public void testEquals() {
 		RelativeGaussianMeasurementBase m2 = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(0.3, 0.4),
+				new BaselineGaussianMeasurement(0.3, 0.4),
 				new GaussianMeasurement(-0.1, 0.3)
 			);
 		assertFalse(d_m.equals(m2));
 		RelativeGaussianMeasurementBase m3 = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(0.25, 0.4),
+				new BaselineGaussianMeasurement(0.25, 0.4),
 				new GaussianMeasurement(-0.1, 0.35)
 			);
 		assertFalse(d_m.equals(m3));
 		RelativeGaussianMeasurementBase m4 = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(0.25, 0.4),
+				new BaselineGaussianMeasurement(0.25, 0.4),
 				new GaussianMeasurement(-0.1, 0.3)
 			);
 		assertTrue(d_m.equals(m4));
@@ -80,21 +81,28 @@ public class RelativeLogitNormalMeasurementTest {
 	
 	@Test
 	public void testSample() {
+		BaselineGaussianMeasurement baseline = new BaselineGaussianMeasurement(0.0, 1.0);
+		baseline.update();
 		RelativeGaussianMeasurementBase m = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(0.0, 0.0),
+				baseline,
 				new GaussianMeasurement(0.0, 0.0)
 			);
-		assertEquals(0.5, m.sample(), 0.0000001);
+		assertEquals(Statistics.ilogit(baseline.sample()), m.sample(), 0.0000001);
+		RelativeGaussianMeasurementBase m2 = new RelativeLogitNormalMeasurement(
+				baseline,
+				new GaussianMeasurement(1.0, 0.0)
+			);
+		assertEquals(Statistics.ilogit(baseline.sample() + 1.0), m2.sample(), 0.0000001);
 	}
 	
 	@Test
 	public void testConstructorBaselineOnly() {
 		RelativeGaussianMeasurementBase expected = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(2.0, 1.0),
+				new BaselineGaussianMeasurement(2.0, 1.0),
 				new GaussianMeasurement(0.0, 0.0)
 			);
 		RelativeGaussianMeasurementBase actual = new RelativeLogitNormalMeasurement(
-				new ReferenceableGaussianMeasurement(2.0, 1.0)
+				new BaselineGaussianMeasurement(2.0, 1.0)
 			);
 		assertEquals(expected, actual);
 	}

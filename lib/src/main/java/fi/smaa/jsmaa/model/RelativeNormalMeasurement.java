@@ -26,21 +26,25 @@ import javolution.xml.stream.XMLStreamException;
 public class RelativeNormalMeasurement extends RelativeGaussianMeasurementBase {
 	private static final long serialVersionUID = 4535236276314126215L;
 
-	public RelativeNormalMeasurement(ReferenceableGaussianMeasurement baseline, GaussianMeasurement relative) {
+	public RelativeNormalMeasurement(BaselineGaussianMeasurement baseline, GaussianMeasurement relative) {
 		super(baseline, relative);
 	}
 	
-	public RelativeNormalMeasurement(ReferenceableGaussianMeasurement baseline) {
+	public RelativeNormalMeasurement(BaselineGaussianMeasurement baseline) {
 		this(baseline, new GaussianMeasurement());
 	}
 	
 	private RelativeNormalMeasurement() {
-		this(new ReferenceableGaussianMeasurement());
+		this(new BaselineGaussianMeasurement());
+	}
+	
+	private GaussianMeasurement getAbsolute() {
+		return (new GaussianMeasurement(getAbsoluteMean(), getAbsoluteStdDev()));
 	}
 	
 	@Override
-	protected GaussianMeasurement getAbsolute() {
-		return (new GaussianMeasurement(getAbsoluteMean(), getAbsoluteStdDev()));
+	public Interval getRange() {
+		return getAbsolute().getRange();
 	}
 
 	@Override

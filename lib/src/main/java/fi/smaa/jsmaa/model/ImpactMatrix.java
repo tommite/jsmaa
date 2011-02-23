@@ -40,7 +40,7 @@ public final class ImpactMatrix extends AbstractEntity {
 	private List<Criterion> criteria = new ArrayList<Criterion>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
 	private Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
-	private Map<Criterion, ReferenceableGaussianMeasurement> baselines = new HashMap<Criterion, ReferenceableGaussianMeasurement>();
+	private Map<Criterion, BaselineGaussianMeasurement> baselines = new HashMap<Criterion, BaselineGaussianMeasurement>();
 	private transient MeasurementListener measListener = new MeasurementListener();
 	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
 	private transient Map<Criterion, RankSet<Alternative>> ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
@@ -200,7 +200,7 @@ public final class ImpactMatrix extends AbstractEntity {
 			}
 			
 		} else if (c instanceof CardinalCriterion) {
-			baselines.put(c, new ReferenceableGaussianMeasurement());
+			baselines.put(c, new BaselineGaussianMeasurement());
 			for (Alternative a : alternatives) {
 				if (getMeasurement(c, a) == null) {
 					setMeasurementNoFires(c, a, new Interval());
@@ -322,10 +322,14 @@ public final class ImpactMatrix extends AbstractEntity {
 		for (Criterion c : getCriteria()) {
 			int aIndex = 0;
 			if (this.getBaseline(c) != null) {
-				other.setBaseline(c, this.getBaseline(c).deepCopy());
+				other.setBaseline(crit.get(cIndex), this.getBaseline(c).deepCopy());
 			}
 			for (Alternative a : getAlternatives()) {
 				Measurement m = getMeasurement(c, a).deepCopy();
+				// ensure measurements on the same criterion have the same baseline:
+				if (m instanceof RelativeGaussianMeasurementBase) {
+					((RelativeGaussianMeasurementBase)m).setBaseline(other.getBaseline(crit.get(cIndex)));
+				}
 				other.setMeasurement(crit.get(cIndex), alts.get(aIndex), m);
 				aIndex++;
 			}			
@@ -334,11 +338,11 @@ public final class ImpactMatrix extends AbstractEntity {
 		return other;		
 	}
 
-	public void setBaseline(Criterion c, ReferenceableGaussianMeasurement m) {
+	public void setBaseline(Criterion c, BaselineGaussianMeasurement m) {
 		baselines.put(c, m);		
 	}
 
-	public ReferenceableGaussianMeasurement getBaseline(Criterion c) {
+	public BaselineGaussianMeasurement getBaseline(Criterion c) {
 		return baselines.get(c);
 	}
 

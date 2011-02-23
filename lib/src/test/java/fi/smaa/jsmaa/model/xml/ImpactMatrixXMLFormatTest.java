@@ -30,7 +30,7 @@ import fi.smaa.common.XMLHelper;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
-import fi.smaa.jsmaa.model.ReferenceableGaussianMeasurement;
+import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
 import fi.smaa.jsmaa.model.RelativeGaussianMeasurementBase;
 import fi.smaa.jsmaa.model.RelativeLogitNormalMeasurement;
 import fi.smaa.jsmaa.model.ScaleCriterion;
@@ -67,7 +67,7 @@ public class ImpactMatrixXMLFormatTest {
 		mat.addAlternative(a);
 		mat.addAlternative(b);
 		mat.addCriterion(c);
-		ReferenceableGaussianMeasurement baseline = mat.getBaseline(c);
+		BaselineGaussianMeasurement baseline = mat.getBaseline(c);
 		baseline.setMean(1.0);
 		baseline.setStDev(0.3);
 		RelativeGaussianMeasurementBase ma = new RelativeLogitNormalMeasurement(baseline);

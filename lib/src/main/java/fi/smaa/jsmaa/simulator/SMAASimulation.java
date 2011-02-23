@@ -22,6 +22,8 @@ package fi.smaa.jsmaa.simulator;
 
 import org.drugis.common.threading.Task;
 
+import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
+import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class SMAASimulation<M extends SMAAModel> {
@@ -50,11 +52,21 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 	}
 	
 	protected void sampleCriteria() {
+		updateBaselines();
 		for (int i=0;i<model.getCriteria().size();i++) {
 			sampler.sample(model.getCriteria().get(i), measurements[i]);
 		}
 	}
 	
+	private void updateBaselines() {
+		for (Criterion c : model.getCriteria()) {
+			BaselineGaussianMeasurement baseline = model.getImpactMatrix().getBaseline(c);
+			if (baseline != null) {
+				baseline.update();
+			}
+		}
+	}
+
 	protected double[] getMeasurements(int critIndex) {
 		assert(critIndex >= 0 && critIndex < measurements.length);
 		return measurements[critIndex];

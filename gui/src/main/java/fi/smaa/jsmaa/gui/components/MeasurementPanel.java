@@ -47,7 +47,7 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.LogitNormalMeasurement;
-import fi.smaa.jsmaa.model.ReferenceableGaussianMeasurement;
+import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
 import fi.smaa.jsmaa.model.RelativeGaussianMeasurementBase;
 import fi.smaa.jsmaa.model.RelativeLogitNormalMeasurement;
 import fi.smaa.jsmaa.model.RelativeNormalMeasurement;
@@ -65,7 +65,7 @@ public class MeasurementPanel extends JPanel {
 
 	private JComboBox chooserComboBox;
 	
-	private ReferenceableGaussianMeasurement baselineMeasurement;
+	private BaselineGaussianMeasurement baselineMeasurement;
 	
 	public enum MeasurementType {
 		EXACT("Exact"),
@@ -93,11 +93,11 @@ public class MeasurementPanel extends JPanel {
 		}
 	}
 	
-	public MeasurementPanel(ValueModel measurementHolder, ReferenceableGaussianMeasurement baseline) {
+	public MeasurementPanel(ValueModel measurementHolder, BaselineGaussianMeasurement baseline) {
 		this(measurementHolder, MeasurementType.values(), baseline);
 	}
 	
-	public MeasurementPanel(ValueModel measurementHolder, MeasurementType[] allowedValues, ReferenceableGaussianMeasurement baseline) {
+	public MeasurementPanel(ValueModel measurementHolder, MeasurementType[] allowedValues, BaselineGaussianMeasurement baseline) {
 		this.allowedValues = allowedValues;
 		this.holder = measurementHolder;
 		
