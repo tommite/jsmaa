@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.smaa.jsmaa</groupId>
   <artifactId>gui</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.8.4</version>
   <name>jsmaa-gui</name>
 
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.8.4</version>
   </parent>
 
   <repositories>	
@@ -50,18 +50,18 @@
   	<dependency>
   		<groupId>org.drugis</groupId>
   		<artifactId>common-lib</artifactId>
-  		<version>0.5-SNAPSHOT</version>
+  		<version>0.4.2</version>
 	</dependency>
     	<dependency>
   		<groupId>org.drugis</groupId>
   		<artifactId>common-test</artifactId>
-  		<version>0.5-SNAPSHOT</version>
+  		<version>0.4.2</version>
 		<scope>test</scope>
 	</dependency>
   	<dependency>
   		<groupId>org.drugis</groupId>
   		<artifactId>common-gui</artifactId>
-  		<version>0.5-SNAPSHOT</version>
+  		<version>0.4.2</version>
 	</dependency>
     <dependency>
       <groupId>com.jidesoft</groupId>
