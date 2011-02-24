@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.8.4:	Fix sampling of baselines for relative measurements.
 0.8.3:	LogitNormal, RelativeNormal, and RelativeLogNormal measurements.
 0.8.2:	Fixes: icons to work on Windows, negative interval calculation, slowness in simulations, chart style to 2d.
 	Added tooltip for rank acceptability- and CW table headers, changed to not construct any charts for 20+ alternatives.
