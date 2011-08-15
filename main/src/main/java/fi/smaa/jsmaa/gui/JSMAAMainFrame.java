@@ -171,14 +171,15 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 	}
 
 	public boolean saveAs() {
+		final boolean[] success = new boolean[] { false };
 		FileSaveDialog d = new FileSaveDialog(this, "jsmaa", "JSMAA model files") {
 			public void doAction(String path, String extension) {
 				File file = checkFileExtension(new File(path));
-				setLastSuccess(trySaveModel(file));
+				success[0] = trySaveModel(file);
 				modelManager.setModelFile(file);
 			}
 		};
-		return d.getLastSuccess();
+		return success[0];
 	}
 
 	private boolean checkSaveCurrentModel() {
