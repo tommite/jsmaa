@@ -179,7 +179,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 				modelManager.setModelFile(file);
 			}
 		};
-		d.saveActions(this);
+		d.saveActions();
 		return success[0];
 	}
 
@@ -253,7 +253,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			}
 			}
 		};
-		dialog.loadActions(this);
+		dialog.loadActions();
 	}
 
 	private void showErrorIncompatibleModel(String file, String reason) {
