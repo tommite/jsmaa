@@ -172,7 +172,6 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 
 	public boolean saveAs() {
 		final boolean[] success = new boolean[] { false };
-		@SuppressWarnings("unused")
 		FileSaveDialog d = new FileSaveDialog(this, "jsmaa", "JSMAA model files") {
 			public void doAction(String path, String extension) {
 				File file = checkFileExtension(new File(path));
@@ -180,6 +179,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 				modelManager.setModelFile(file);
 			}
 		};
+		d.saveActions(this);
 		return success[0];
 	}
 
@@ -228,7 +228,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		if (!checkSaveCurrentModel()) {
 			return;
 		}
-		new FileLoadDialog(this, "jsmaa", "JSMAA model files") {
+		FileLoadDialog dialog = new FileLoadDialog(this, "jsmaa", "JSMAA model files") {
 			@Override
 			public void doAction(String path, String extension) {
 			try {		
@@ -253,6 +253,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			}
 			}
 		};
+		dialog.loadActions(this);
 	}
 
 	private void showErrorIncompatibleModel(String file, String reason) {
