@@ -156,7 +156,7 @@ public class SMAATRISimulationTest {
 		hand.scheduleTask(simulation.getTask());
 		do {
 			Thread.sleep(1);
-		} while (hand.getQueuedThreads() > 0);
+		} while (hand.getQueuedTasks() > 0);
 		verify(mock);
 	}
 
@@ -172,7 +172,7 @@ public class SMAATRISimulationTest {
 		hand.scheduleTask(simulation.getTask());
 		do {
 			Thread.sleep(1);
-		} while (hand.getQueuedThreads() > 0);
+		} while (hand.getQueuedTasks() > 0);
 		
 		SMAAResultsListener mock = createMock(SMAAResultsListener.class);
 		mock.resultsChanged((ResultsEvent) JUnitUtil.eqEventObject(new ResultsEvent(simulation.getResults(),
@@ -183,7 +183,7 @@ public class SMAATRISimulationTest {
 		hand.scheduleTask(simulation.getTask());
 		do {
 			Thread.sleep(1);
-		} while (hand.getQueuedThreads() > 0);		
+		} while (hand.getQueuedTasks() > 0);		
 		verify(mock);
 	}
 	

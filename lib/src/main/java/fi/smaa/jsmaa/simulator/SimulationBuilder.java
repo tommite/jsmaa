@@ -20,6 +20,7 @@
 */
 package fi.smaa.jsmaa.simulator;
 
+import org.drugis.common.threading.Task;
 import org.drugis.common.threading.ThreadHandler;
 
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -28,6 +29,7 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 
 	protected M model;
 	protected static ThreadHandler handler = ThreadHandler.getInstance();
+	private Task d_task;
 
 	@SuppressWarnings("unchecked")
 	protected SimulationBuilder(M model) {
@@ -37,10 +39,13 @@ public abstract class SimulationBuilder<M extends SMAAModel, R extends SMAAResul
 	@SuppressWarnings("unchecked")
 	public synchronized void run() {
 		T simul = generateSimulation();
-		handler.clear();
+		if (d_task != null) {
+			handler.abortTask(d_task);
+		}
 		R results = (R) simul.getResults();
 		prepareSimulation(simul, results);		
-		handler.scheduleTask(simul.getTask());
+		d_task = simul.getTask();
+		handler.scheduleTask(d_task);
 	}
 
 	protected abstract void prepareSimulation(T simulation, R results);

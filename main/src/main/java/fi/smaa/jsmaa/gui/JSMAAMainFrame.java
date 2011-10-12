@@ -172,6 +172,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 
 	public boolean saveAs() {
 		final boolean[] success = new boolean[] { false };
+		@SuppressWarnings("unused")
 		FileSaveDialog d = new FileSaveDialog(this, "jsmaa", "JSMAA model files") {
 			public void doAction(String path, String extension) {
 				File file = checkFileExtension(new File(path));
