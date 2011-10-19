@@ -24,11 +24,12 @@
   <build>
     <plugins>
       <plugin>
-	<artifactId>maven-eclipse-plugin</artifactId>
-	<configuration>
-	  <downloadJavadocs>true</downloadJavadocs>
-	  <downloadSources>true</downloadSources>
-	</configuration>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadJavadocs>true</downloadJavadocs>
+          <downloadSources>true</downloadSources>
+          <addGroupIdToProjectName>true</addGroupIdToProjectName>
+        </configuration>
       </plugin>
 			<!-- attach source to release -->
 			<plugin>
