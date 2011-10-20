@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.8.5:	Bug fixes.
 0.8.4:	Fix sampling of baselines for relative measurements.
 0.8.3:	LogitNormal, RelativeNormal, and RelativeLogNormal measurements.
 0.8.2:	Fixes: icons to work on Windows, negative interval calculation, slowness in simulations, chart style to 2d.
@@ -38,5 +39,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-February 2011
+October 2011
 Tommi Tervonen
