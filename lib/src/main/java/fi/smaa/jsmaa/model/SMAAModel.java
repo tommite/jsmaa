@@ -52,6 +52,7 @@ public class SMAAModel extends AbstractEntity {
 	transient private List<SMAAModelListener> modelListeners = new ArrayList<SMAAModelListener>();
 	transient protected ImpactMatrixListener impactListener = new ImpactListener();
 	transient private CriteriaListener critListener = new CriteriaListener();
+	transient private MyPreferenceListener prefListener = new MyPreferenceListener(); 
 	
 	public SMAAModel(String name) {
 		this.name = name;
@@ -62,7 +63,7 @@ public class SMAAModel extends AbstractEntity {
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
 		this.preferences = preferences;
-		preferences.addPropertyChangeListener(new MyPreferenceListener());
+		preferences.addPropertyChangeListener(prefListener);
 		fireModelChange(ModelChangeEvent.PREFERENCES_TYPE);
 	}
 	
@@ -119,12 +120,14 @@ public class SMAAModel extends AbstractEntity {
 
 	synchronized public void addCriterion(Criterion crit) {
 		criteria.add(crit);
+		preferences.removePropertyChangeListener(prefListener);
 		
+		preferences = new MissingPreferenceInformation(getCriteria().size());
+
 		impactMatrix.removeListener(impactListener);
 		impactMatrix.addCriterion(crit);
 		impactMatrix.addListener(impactListener);		
 
-		preferences = new MissingPreferenceInformation(getCriteria().size());
 		crit.addPropertyChangeListener(critListener);
 		
 		fireModelChange(ModelChangeEvent.CRITERIA);
@@ -228,11 +231,12 @@ public class SMAAModel extends AbstractEntity {
 		modelListeners = new ArrayList<SMAAModelListener>();
 		impactListener = new ImpactListener();
 		critListener = new CriteriaListener();
+		prefListener = new MyPreferenceListener();
 			
 		i.defaultReadObject();
 		impactMatrix.addListener(impactListener);
 		connectCriteriaListeners(getCriteria());
-		preferences.addPropertyChangeListener(new MyPreferenceListener());		
+		preferences.addPropertyChangeListener(prefListener);		
 	}	
 	
 	protected void fireModelChange(int type) {
