@@ -27,7 +27,7 @@ import org.jfree.data.UnknownKeyException;
 
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes"})
 public class RankAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAA2Results> {
 	
 	private List<Rank> ranks;

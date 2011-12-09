@@ -43,7 +43,7 @@ public class CentralWeightsDatasetTest {
 	private Alternative a2;
 	private List<Alternative> alts;
 	private double[] weights;
-	private Integer[] ranksHits;
+	private int[] ranksHits;
 	private ScaleCriterion c1;
 	private ScaleCriterion c2;
 	private List<Criterion> crit;
@@ -65,7 +65,7 @@ public class CentralWeightsDatasetTest {
 				
 		res = new SMAA2Results(alts, crit, 1);
 		weights = new double[]{0.2, 0.8};
-		ranksHits = new Integer[] { 1, 0 };
+		ranksHits = new int[] { 1, 0 };
 		
 		res.update(ranksHits, weights);
 		

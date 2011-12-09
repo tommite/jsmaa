@@ -52,7 +52,7 @@ public class RankAcceptabilitiesDataSetTest {
 	private List<Alternative> alts;
 	private List<Rank> ranks;
 	private double[] weights;
-	private Integer[] ranksHits;
+	private int[] ranksHits;
 
 	@Before
 	public void setUp() {
@@ -77,7 +77,7 @@ public class RankAcceptabilitiesDataSetTest {
 		
 		res = new SMAA2Results(alts, crit, 2);
 		weights = new double[]{0.2, 0.8};
-		ranksHits = new Integer[] { 1, 0 };
+		ranksHits = new int[] { 1, 0 };
 		
 		res.update(ranksHits, weights);
 		

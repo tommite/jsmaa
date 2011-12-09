@@ -27,12 +27,11 @@ import org.jfree.data.UnknownKeyException;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class CategoryAcceptabilitiesDataset extends AlternativeColumnCategoryDataset<SMAATRIResults> {
 	
 	// categories = alternatives
-	// series = categoryacceptabilities
-		
+	// series = categoryacceptabilities		
 	public CategoryAcceptabilitiesDataset(SMAATRIResults results) {
 		super(results);
 		

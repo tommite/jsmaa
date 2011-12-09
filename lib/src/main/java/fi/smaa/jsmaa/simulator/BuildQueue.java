@@ -23,7 +23,7 @@ package fi.smaa.jsmaa.simulator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class BuildQueue {
 	private Queue<SimulationBuilder> buildQueue = new LinkedList<SimulationBuilder>();
 	private BuilderThread buildSimulatorThread;

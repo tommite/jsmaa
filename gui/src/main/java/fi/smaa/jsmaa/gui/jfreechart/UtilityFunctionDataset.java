@@ -47,7 +47,7 @@ public class UtilityFunctionDataset extends AbstractXYDataset implements Propert
 		return 1;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public Comparable getSeriesKey(int index) {
 		if (index == 0) {

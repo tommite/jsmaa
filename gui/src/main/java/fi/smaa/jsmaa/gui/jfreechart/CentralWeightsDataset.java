@@ -33,7 +33,7 @@ import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class CentralWeightsDataset extends SMAADataSet<SMAA2Results> implements CategoryDataset{
 	
 	public CentralWeightsDataset(SMAA2Results res) {

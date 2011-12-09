@@ -51,7 +51,7 @@ public class SMAA2Results extends SMAAResults {
 	 * @param ranks an array, where [0] = altIndex of alternative in rank 0
 	 * @param weights
 	 */
-	public void update(Integer[] ranks, double[] weights) {
+	public void update(int[] ranks, double[] weights) {
 		assert(ranks.length == rankAcceptabilities.getLength());
 		assert(weights.length == centralWeightAdds[0].length);
 

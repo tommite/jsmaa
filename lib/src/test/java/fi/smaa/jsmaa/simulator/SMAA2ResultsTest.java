@@ -45,8 +45,8 @@ public class SMAA2ResultsTest {
 	
 	private double[] weights1;
 	private double[] weights2;
-	private Integer[] firstFirst;
-	private Integer[] secondFirst;
+	private int[] firstFirst;
+	private int[] secondFirst;
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
 	private ScaleCriterion c1 = new ScaleCriterion("c1");
@@ -59,8 +59,8 @@ public class SMAA2ResultsTest {
 	public void setUp()  {
 		weights1 = new double[]{0.0, 1.0, 0.0};	
 		weights2 = new double[]{1.0, 0.0, 0.0};
-		firstFirst = new Integer[]{0, 1};
-		secondFirst = new Integer[]{1, 0};
+		firstFirst = new int[]{0, 1};
+		secondFirst = new int[]{1, 0};
 		alts = new ArrayList<Alternative>();
 		crit = new ArrayList<Criterion>();
 		alts.add(alt1);
@@ -110,7 +110,7 @@ public class SMAA2ResultsTest {
 	
 	@Test
 	public void testEqualsCWs() {
-		Integer[] ranks = new Integer[]{0, 0};
+		int[] ranks = new int[]{0, 0};
 		
 		for (int i=0;i<=10;i++) {
 			double third = 1.0 / 3.0;
@@ -136,7 +136,7 @@ public class SMAA2ResultsTest {
 	
 	@Test
 	public void testCorrectRankAcceptabilities() {
-		secondFirst = new Integer[] { 0, 1 };
+		secondFirst = new int[] { 0, 1 };
 		do10Hits();
 
 		List<Double> ra1 = results.getRankAcceptabilities().get(alt1);

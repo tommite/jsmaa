@@ -34,7 +34,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAAModelListener;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LeftTreeModel implements TreeModel{
 	private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
 	

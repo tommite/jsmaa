@@ -46,7 +46,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 	private SMAA2Results results;
 	private boolean[] confidenceHits;
 	private double[] utilities;
-	private Integer[] ranks;
+	private int[] ranks;
 
 	private IterativeTask rankAccComputation;
 	private IterativeTask confFacComputation;
@@ -91,8 +91,6 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 	}
 
 	private void rankAlternatives() {
-		double[] utilities = this.utilities;
-		int[] ranks = new int[this.ranks.length];
 		ValueRanker.rankValues(utilities, ranks);
 	}
 
@@ -163,7 +161,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 		results.reset();
 		int numAlts = model.getAlternatives().size();
 		utilities = new double[numAlts];
-		ranks = new Integer[numAlts];
+		ranks = new int[numAlts];
 		confidenceHits = new boolean[numAlts];
 	}
 

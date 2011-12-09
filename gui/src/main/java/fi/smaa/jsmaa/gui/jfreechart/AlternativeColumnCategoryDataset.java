@@ -26,7 +26,7 @@ import org.jfree.data.category.CategoryDataset;
 
 import fi.smaa.jsmaa.simulator.SMAAResults;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public abstract class AlternativeColumnCategoryDataset<R extends SMAAResults> extends SMAADataSet<R> implements CategoryDataset {
 
 	protected AlternativeColumnCategoryDataset(R results) {

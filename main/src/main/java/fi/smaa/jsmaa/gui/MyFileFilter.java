@@ -26,7 +26,7 @@ import java.util.Hashtable;
 
 import javax.swing.filechooser.FileFilter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MyFileFilter extends FileFilter {
 
 	private Hashtable filters = null;
