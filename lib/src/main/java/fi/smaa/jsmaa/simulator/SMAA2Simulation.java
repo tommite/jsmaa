@@ -33,12 +33,12 @@ import org.drugis.common.threading.activity.ActivityTask;
 import org.drugis.common.threading.activity.DirectTransition;
 import org.drugis.common.threading.activity.Transition;
 
+import fi.smaa.common.ValueRanker;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.ScaleCriterion;
-import fi.smaa.jsmaa.model.maut.UtilIndexPair;
 import fi.smaa.jsmaa.model.maut.UtilityFunction;
 
 public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
@@ -91,20 +91,9 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 	}
 
 	private void rankAlternatives() {
-		UtilIndexPair[] pairs = new UtilIndexPair[utilities.length];
-		for (int i=0;i<utilities.length;i++) {
-			pairs[i] = new UtilIndexPair(i, utilities[i]);
-		}
-		Arrays.sort(pairs);
-		int rank = 0;
-		Double oldUtility = pairs.length > 0 ? pairs[0].util : 0.0;
-		for (int i=0;i<pairs.length;i++) {
-			if (!oldUtility.equals(pairs[i].util)) {
-				rank++;
-				oldUtility = pairs[i].util;
-			}			
-			ranks[pairs[i].altIndex] = rank;
-		}
+		double[] utilities = this.utilities;
+		int[] ranks = new int[this.ranks.length];
+		ValueRanker.rankValues(utilities, ranks);
 	}
 
 	private void aggregate() {

@@ -18,27 +18,27 @@
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
 */
-package fi.smaa.jsmaa.model.maut;
+package fi.smaa.common;
 
-import static org.junit.Assert.*;
+public class ValueIndexPair implements Comparable<ValueIndexPair> {
+	public double value;
+	public int altIndex;
 
+	public ValueIndexPair(int altIndex, double value) {
+		this.altIndex = altIndex;
+		this.value = value;
+	}
 
-import org.junit.Test;
+	public int compareTo(ValueIndexPair o) {
+		if (this.value < o.value) {
+			return 1;
+		} else if (this.value > o.value) {
+			return -1;
+		}
+		return 0;
+	}	
 
-import fi.smaa.jsmaa.model.maut.UtilIndexPair;
-
-
-public class UtilIndexPairTest {
-
-	@Test
-	public void testCompare() {
-		UtilIndexPair p1 = new UtilIndexPair(0, 0.0);
-		UtilIndexPair p2 = new UtilIndexPair(0, -1.0);
-		UtilIndexPair p3 = new UtilIndexPair(0, 1.0);
-		UtilIndexPair p4 = new UtilIndexPair(1, 0.0);
-		
-		assertEquals(-1, p1.compareTo(p2));
-		assertEquals(1, p1.compareTo(p3));
-		assertEquals(0, p1.compareTo(p4));
+	public String toString() {
+		return altIndex + ": " + value;
 	}
 }
