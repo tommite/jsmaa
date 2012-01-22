@@ -48,9 +48,9 @@ public class SMAATRIModelTest {
 	private OutrankingCriterion c1;
 	private ArrayList<Alternative> alts;
 	private ArrayList<Criterion> crit;
-	private Alternative cat1;
-	private ArrayList<Alternative> cats;
-	private Alternative cat2;
+	private Category cat1;
+	private ArrayList<Category> cats;
+	private Category cat2;
 	
 	@Before
 	public void setUp() {
@@ -59,11 +59,11 @@ public class SMAATRIModelTest {
 		a2 = new Alternative("a2");
 		c1 = new OutrankingCriterion("c1", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		c2 = new OutrankingCriterion("c2", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
-		cat1 = new Alternative("cat1");
-		cat2 = new Alternative("cat2");
+		cat1 = new Category("cat1");
+		cat2 = new Category("cat2");
 		alts = new ArrayList<Alternative>();
 		crit = new ArrayList<Criterion>();
-		cats = new ArrayList<Alternative>();
+		cats = new ArrayList<Category>();
 		alts.add(a1);
 		alts.add(a2);
 		crit.add(c1);
@@ -191,13 +191,15 @@ public class SMAATRIModelTest {
 	@Test
 	public void testReorderCategories() {
 		SMAATRIModel m = new SMAATRIModel("model");
-		m.addCategory(a1);
-		m.addCategory(a2);
-		assertEquals(Collections.singletonList(a1), m.getProfileImpactMatrix().getAlternatives());
+		Category nc1 = new Category("nc1");
+		Category nc2 = new Category("nc2");
+		m.addCategory(nc1);
+		m.addCategory(nc2);
+		assertEquals(Collections.singletonList(nc1), m.getProfileImpactMatrix().getAlternatives());
 		
-		List<Alternative> newList = new ArrayList<Alternative>();
-		newList.add(a2);
-		newList.add(a1);
+		List<Category> newList = new ArrayList<Category>();
+		newList.add(nc2);
+		newList.add(nc1);
 		SMAAModelListener l = createMock(SMAAModelListener.class);
 		m.addModelListener(l);
 		l.modelChanged((ModelChangeEvent) JUnitUtil.eqEventObject(new ModelChangeEvent(m, ModelChangeEvent.CATEGORIES)));					
@@ -205,7 +207,7 @@ public class SMAATRIModelTest {
 		m.reorderCategories(newList);
 		verify(l);
 		assertEquals(newList, m.getCategories());
-		assertEquals(Collections.singletonList(a2), m.getProfileImpactMatrix().getAlternatives());
+		assertEquals(Collections.singletonList(nc2), m.getProfileImpactMatrix().getAlternatives());
 	}
 	
 	@Test

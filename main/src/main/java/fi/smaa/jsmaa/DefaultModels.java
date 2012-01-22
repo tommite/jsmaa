@@ -21,6 +21,7 @@
 package fi.smaa.jsmaa;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
@@ -58,8 +59,8 @@ public class DefaultModels {
 		SMAATRIModel model = new SMAATRIModel("SMAA-TRI Model");
 		addDefaultAlternatives(model);				
 		addDefaultOutrankingCriteria(model);
-		model.addCategory(new Alternative("Category 1"));
-		model.addCategory(new Alternative("Category 2"));
+		model.addCategory(new Category("Category 1"));
+		model.addCategory(new Category("Category 2"));
 		
 		return model;
 	}

@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -41,7 +42,7 @@ public class LeftTreeModelSMAATRITest {
 	private Alternative alt2 = new Alternative("alt2");
 	private OutrankingCriterion crit1 = new OutrankingCriterion("crit1", true, 
 			new Interval(0.0, 0.0), new Interval(1.0, 1.0));
-	private Alternative cat1 = new Alternative("prof");
+	private Category cat1 = new Category("prof");
 	
 	@Before
 	public void setUp() {

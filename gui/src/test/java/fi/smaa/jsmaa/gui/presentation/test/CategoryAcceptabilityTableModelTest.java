@@ -35,6 +35,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.presentation.CategoryAcceptabilityTableModel;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class CategoryAcceptabilityTableModelTest {
@@ -43,9 +44,9 @@ public class CategoryAcceptabilityTableModelTest {
 	private CategoryAcceptabilityTableModel model;
 	private Alternative a1;
 	private Alternative a2;
-	private Alternative cat1;
+	private Category cat1;
 	private List<Alternative> alts;
-	private List<Alternative> cats;
+	private List<Category> cats;
 	
 	@Before
 	public void setUp() {
@@ -54,11 +55,11 @@ public class CategoryAcceptabilityTableModelTest {
 		a2 = new Alternative("a2");		
 		alts.add(a1);
 		alts.add(a2);
-		cats = new ArrayList<Alternative>();
-		cat1 = new Alternative("c1");
+		cats = new ArrayList<Category>();
+		cat1 = new Category("c1");
 		cats.add(cat1);
-		cats.add(new Alternative("c2"));
-		cats.add(new Alternative("c3"));
+		cats.add(new Category("c2"));
+		cats.add(new Category("c3"));
 		
 		res = new SMAATRIResults(alts, cats, 1);
 		

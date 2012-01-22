@@ -53,6 +53,7 @@ import fi.smaa.jsmaa.gui.views.ResultsView;
 import fi.smaa.jsmaa.gui.views.TechnicalParameterView;
 import fi.smaa.jsmaa.gui.views.ViewWithHeader;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -185,13 +186,13 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	}	
 
 	protected void addCategory() {
-		Collection<Alternative> cats = smaaModel.getCategories();
+		Collection<Category> cats = smaaModel.getCategories();
 
 		int index = 1;
 		while (true) {
-			Alternative newCat = new Alternative("Category " + index);
+			Category newCat = new Category("Category " + index);
 			boolean found = false; 
-			for (Alternative cat : cats) {
+			for (Category cat : cats) {
 				if (cat.getName().equals(newCat.getName())) {
 					found = true;
 					break;
@@ -223,7 +224,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 		return resultsMenu;
 	}
 
-	private void addCategoryAndStartRename(Alternative a) {
+	private void addCategoryAndStartRename(Category a) {
 		smaaModel.addCategory(a);
 		Focuser.focus(tree, treeModel, a);
 		tree.startEditingAtPath(treeModel.getPathForCategory(a));			

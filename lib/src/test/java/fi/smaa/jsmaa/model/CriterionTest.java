@@ -73,6 +73,6 @@ public class CriterionTest {
 	public void testequals() {
 		Criterion c2 = createInstance();
 		assertTrue(criterion.equals(criterion));
-		assertFalse(criterion.equals(c2));
+		assertTrue(criterion.equals(c2));
 	}	
 }

@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -41,15 +42,15 @@ public class ElectreTriTest {
 
 	private Alternative a1;
 	private Alternative a2;
-	private Alternative cat1;
-	private Alternative cat2;
-	private Alternative cat3;
+	private Category cat1;
+	private Category cat2;
+	private Category cat3;
 	private OutrankingCriterion c1;
 	private OutrankingCriterion c2;
 	private OutrankingCriterion c3;	
 	private List<Alternative> alts;
 	private List<OutrankingCriterion> crit;
-	private List<Alternative> cats;
+	private List<Category> cats;
 	private double[] weights;
 	private double lambda = 0.7;
 	private ElectreTri tri;
@@ -60,14 +61,14 @@ public class ElectreTriTest {
 	public void setUp() {
 		a1 = new Alternative("alt1");
 		a2 = new Alternative("alt2");
-		cat1 = new Alternative("cat1");
-		cat2 = new Alternative("cat2");
-		cat3 = new Alternative("cat3");
+		cat1 = new Category("cat1");
+		cat2 = new Category("cat2");
+		cat3 = new Category("cat3");
 		c1 = new OutrankingCriterion("c1", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		c2 = new OutrankingCriterion("c2", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		c3 = new OutrankingCriterion("c3", true, new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 		alts = new ArrayList<Alternative>();
-		cats = new ArrayList<Alternative>();
+		cats = new ArrayList<Category>();
 		crit = new ArrayList<OutrankingCriterion>();
 		alts.add(a1);
 		alts.add(a2);
@@ -160,10 +161,10 @@ public class ElectreTriTest {
 		OutrankingCriterion g23 = new OutrankingCriterion("g2.3", true, new ExactMeasurement(0.05), new ExactMeasurement(0.09));
 		OutrankingCriterion g24 = new OutrankingCriterion("g2.4", true, new ExactMeasurement(0.5), new ExactMeasurement(1.0));
 		OutrankingCriterion g251 = new OutrankingCriterion("g2.5.1", true, new ExactMeasurement(0.0), new ExactMeasurement(0.0));
-		Alternative cat4 = new Alternative("class 4");
-		Alternative cat3 = new Alternative("class 3");
-		Alternative cat2 = new Alternative("class 2");
-		Alternative cat1 = new Alternative("class 1");
+		Category cat4 = new Category("class 4");
+		Category cat3 = new Category("class 3");
+		Category cat2 = new Category("class 2");
+		Category cat1 = new Category("class 1");
 		
 		List<Alternative> alts = new ArrayList<Alternative>();
 		alts.add(z1);
@@ -188,7 +189,7 @@ public class ElectreTriTest {
 		crit.add(g24);
 		crit.add(g251);
 		
-		List<Alternative> cats = new ArrayList<Alternative>();
+		List<Category> cats = new ArrayList<Category>();
 		cats.add(cat4);
 		cats.add(cat3);
 		cats.add(cat2);

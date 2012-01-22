@@ -38,6 +38,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
@@ -53,17 +54,17 @@ public class SMAATRISimulationTest {
 			new Interval(0.0, 0.0), new Interval(1.0, 1.0));
 	private OutrankingCriterion c2 = new OutrankingCriterion("c2", true,
 			new Interval(0.0, 0.0), new Interval(1.0, 1.0));
-	private Alternative cat1 = new Alternative("cat1");
-	private Alternative cat2 = new Alternative("cat2");
+	private Category cat1 = new Category("cat1");
+	private Category cat2 = new Category("cat2");
 	private Set<Alternative> alts;
 	private Set<Criterion> crit;		
-	private List<Alternative> cats;
+	private List<Category> cats;
 	
 	@Before
 	public void setUp() {
 		alts = new HashSet<Alternative>();
 		crit = new HashSet<Criterion>();
-		cats = new ArrayList<Alternative>();
+		cats = new ArrayList<Category>();
 		alts.add(alt1);
 		alts.add(alt2);
 		crit.add(c1);
@@ -138,7 +139,7 @@ public class SMAATRISimulationTest {
 	@Test
 	@Ignore
 	public void testInvalidUpperBoundsFire() throws InterruptedException {
-		Alternative cat3 = new Alternative("cat3");
+		Category cat3 = new Category("cat3");
 		model.addCategory(cat3);
 		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(1.0));
 		model.setCategoryUpperBound(c1, cat2, new ExactMeasurement(0.0));	

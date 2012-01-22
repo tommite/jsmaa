@@ -30,8 +30,10 @@ import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
+import fi.smaa.jsmaa.model.SMAATRIModel;
 
 public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 
@@ -62,27 +64,23 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 			String newName = (String) getCellEditorValue();
 			//Object editObject = lastPath.getLastPathComponent();
 
-			if (editObject instanceof Alternative) {
-				if (!isValidName(newName)) {
-					showErrorAlternativeExists(newName);
-					tree.startEditingAtPath(lastPath);							
+			if (!isValidName(newName)) {
+				String objName = "object";
+				if (editObject instanceof Category) {
+					objName = "a category";
+				} else if (editObject instanceof Alternative) {
+					objName = "an alternative";
+				} else if (editObject instanceof Criterion) {
+					objName = "a criterion";
 				}
-			} else if (editObject instanceof Criterion) {
-				if (!isValidName(newName)) {
-					showErrorCriterionExists(newName);
-					tree.startEditingAtPath(lastPath);
-				}
+				showErrorObjectExists(newName, objName);
+				tree.startEditingAtPath(lastPath);							
 			}
 		}
 	}
-	
-	private void showErrorCriterionExists(String name) {
-		JOptionPane.showMessageDialog(tree, "There exists a criterion with name: " + name 
-				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);		
-	}					
-	
-	private void showErrorAlternativeExists(String name) {
-		JOptionPane.showMessageDialog(tree, "There exists an alternative with name: " + name 
+		
+	private void showErrorObjectExists(String name, String objName) {
+		JOptionPane.showMessageDialog(tree, "There exists " + objName + " with name: " + name 
 				+ ", input another one.", "Input error", JOptionPane.ERROR_MESSAGE);
 	}	
 
@@ -94,8 +92,15 @@ public class LeftTreeCellEditor extends DefaultTreeCellEditor {
 	public void prepareForEditing() {
 		oldNames.clear();
 		editObject = lastPath.getLastPathComponent();
-		if (editObject instanceof Alternative) {
-			oldName = ((Alternative) editObject).getName();
+		if (editObject instanceof Category) {
+			Category cat = (Category) editObject;
+			oldName = cat.getName();
+			for (Category a : ((SMAATRIModel) model).getCategories()) {
+				oldNames.add(a.getName());
+			}
+		} else if (editObject instanceof Alternative) {
+			Alternative alt = (Alternative) editObject;
+			oldName = alt.getName();
 			for (Alternative a : model.getAlternatives()) {
 				oldNames.add(a.getName());
 			}

@@ -28,6 +28,7 @@ import org.junit.Test;
 import fi.smaa.jsmaa.gui.LeftTreeTransferHandler;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -39,8 +40,8 @@ public class LeftTreeTransferHandlerTest {
 	private OutrankingCriterion crit2;
 	private Alternative a1;
 	private Alternative a2;
-	private Alternative cat1;
-	private Alternative cat2;
+	private Category cat1;
+	private Category cat2;
 	private LeftTreeTransferHandler handler;
 
 	@Before
@@ -50,8 +51,8 @@ public class LeftTreeTransferHandlerTest {
 		crit2 = new OutrankingCriterion("o2", true, new ExactMeasurement(0.0), new ExactMeasurement(1.0));
 		a1 = new Alternative("a1");
 		a2 = new Alternative("a2");
-		cat1 = new Alternative("c1");
-		cat2 = new Alternative("c2");
+		cat1 = new Category("c1");
+		cat2 = new Category("c2");
 		
 		smaaModel.addAlternative(a1);
 		smaaModel.addAlternative(a2);

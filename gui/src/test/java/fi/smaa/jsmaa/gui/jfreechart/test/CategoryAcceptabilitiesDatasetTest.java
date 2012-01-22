@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import fi.smaa.jsmaa.gui.jfreechart.CategoryAcceptabilitiesDataset;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 
 public class CategoryAcceptabilitiesDatasetTest {
@@ -45,10 +46,10 @@ public class CategoryAcceptabilitiesDatasetTest {
 	private CategoryAcceptabilitiesDataset data;
 	private Alternative a1;
 	private Alternative a2;
-	private Alternative c1;
-	private Alternative c2;
+	private Category c1;
+	private Category c2;
 	private List<Alternative> alts;
-	private List<Alternative> cats;
+	private List<Category> cats;
 	private Integer[] categoryHits;
 	
 
@@ -60,9 +61,9 @@ public class CategoryAcceptabilitiesDatasetTest {
 		alts.add(a1);
 		alts.add(a2);
 		
-		c1 = new Alternative("c1");
-		c2 = new Alternative("c2");
-		cats = new ArrayList<Alternative>();
+		c1 = new Category("c1");
+		c2 = new Category("c2");
+		cats = new ArrayList<Category>();
 		cats.add(c1);
 		cats.add(c2);
 		

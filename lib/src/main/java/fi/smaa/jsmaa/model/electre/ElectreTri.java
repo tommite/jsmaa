@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 
 public class ElectreTri {
@@ -36,10 +37,10 @@ public class ElectreTri {
 	private boolean optimistic;
 	private double lambda;
 	private double[] weights;
-	private List<Alternative> categories;
+	private List<Category> categories;
 
 	public ElectreTri(List<Alternative> alts, List<OutrankingCriterion> crit,
-			List<Alternative> categories,
+			List<Category> categories,
 			Map<Alternative, Map<OutrankingCriterion, Double>> measurements,
 			Map<Alternative, Map<OutrankingCriterion, Double>> categoryUpperBounds,
 			double[] weights,

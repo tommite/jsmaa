@@ -24,7 +24,7 @@ import javolution.xml.XMLFormat;
 import javolution.xml.XMLSerializable;
 import javolution.xml.stream.XMLStreamException;
 
-public final class Alternative extends AbstractEntity implements Comparable<Alternative>, NamedObject, DeepCopiable<Alternative>, XMLSerializable {
+public class Alternative extends AbstractEntity implements Comparable<Alternative>, NamedObject, DeepCopiable<Alternative>, XMLSerializable {
 	private static final long serialVersionUID = -3443177440566082791L;
 	private String name;
 	public final static String PROPERTY_MEASUREMENTS = "measurements";
@@ -51,6 +51,16 @@ public final class Alternative extends AbstractEntity implements Comparable<Alte
 	public Alternative deepCopy() {
 		Alternative a = new Alternative(name);
 		return a;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Alternative) {
+			Alternative a2 = (Alternative) other;
+			return name.equals(a2.getName());
+		}
+		return false;
+			
 	}
 
 	public int compareTo(Alternative o) {

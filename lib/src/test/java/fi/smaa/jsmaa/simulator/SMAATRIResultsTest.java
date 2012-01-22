@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 
 public class SMAATRIResultsTest {
 
@@ -45,17 +46,17 @@ public class SMAATRIResultsTest {
 	private Alternative alt1 = new Alternative("alt1");
 	private Alternative alt2 = new Alternative("alt2");
 	private List<Alternative> alts;
-	private List<Alternative> cats;
+	private List<Category> cats;
 	
 	@Before
 	public void setUp()  {
 		firstSecondCat = new Integer[]{0, 1};
 		secondThirdCat = new Integer[]{1, 2};
 		alts = new ArrayList<Alternative>();
-		cats = new ArrayList<Alternative>();
-		cats.add(new Alternative("cat1"));
-		cats.add(new Alternative("cat2"));
-		cats.add(new Alternative("cat3"));
+		cats = new ArrayList<Category>();
+		cats.add(new Category("cat1"));
+		cats.add(new Category("cat2"));
+		cats.add(new Category("cat3"));
 		alts.add(alt1);
 		alts.add(alt2);
 		results = new SMAATRIResults(alts, cats, 10);

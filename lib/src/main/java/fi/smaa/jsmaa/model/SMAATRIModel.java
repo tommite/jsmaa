@@ -29,13 +29,13 @@ import java.util.List;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
-import fi.smaa.jsmaa.model.xml.AlternativeList;
+import fi.smaa.jsmaa.model.xml.CategoryList;
 
 public class SMAATRIModel extends SMAAModel {
 	
 	private static final long serialVersionUID = -739020656344899318L;
 	private ImpactMatrix profileMatrix;
-	private List<Alternative> categories = new ArrayList<Alternative>();
+	private List<Category> categories = new ArrayList<Category>();
 	private boolean optimistic;
 	private Interval lambda;
 	
@@ -64,7 +64,7 @@ public class SMAATRIModel extends SMAAModel {
 		return optimistic;
 	}
 	
-	synchronized public void addCategory(Alternative cat) {
+	synchronized public void addCategory(Category cat) {
 		categories.add(cat);
 		if (categories.size() > 1) {
 			profileMatrix.addAlternative(categories.get(categories.size()-2));
@@ -79,7 +79,7 @@ public class SMAATRIModel extends SMAAModel {
 		}
 	}
 	
-	public List<Alternative> getCategories() {
+	public List<Category> getCategories() {
 		return categories;
 	}
 	
@@ -144,8 +144,8 @@ public class SMAATRIModel extends SMAAModel {
 	synchronized public SMAATRIModel deepCopy() {
 		SMAATRIModel model = new SMAATRIModel(getName());
 		super.deepCopyContents(model);
-		List<Alternative> cats = new ArrayList<Alternative>();
-		for (Alternative cat : categories) {
+		List<Category> cats = new ArrayList<Category>();
+		for (Category cat : categories) {
 			cats.add(cat.deepCopy());
 		}
 		model.categories = cats;
@@ -162,13 +162,13 @@ public class SMAATRIModel extends SMAAModel {
 		return model;
 	}
 
-	public void reorderCategories(List<Alternative> newCats) {
+	public void reorderCategories(List<Category> newCats) {
 		assert(newCats.size() == categories.size());
 		if (categories.size() == 0) {
 			return;
 		}
-		Alternative oldLastCat = this.categories.get(this.categories.size()-1);
-		Alternative newLastCat = newCats.get(newCats.size()-1);
+		Category oldLastCat = this.categories.get(this.categories.size()-1);
+		Category newLastCat = newCats.get(newCats.size()-1);
 		
 		this.categories = newCats;
 		
@@ -216,9 +216,9 @@ public class SMAATRIModel extends SMAAModel {
 			model.lambda.setStart(nival.getStart());
 			model.lambda.setEnd(nival.getEnd());
 			
-			AlternativeList categories = ie.get("categories", AlternativeList.class);
+			CategoryList categories = ie.get("categories", CategoryList.class);
 			for (Alternative a : categories.getList()) {
-				model.addCategory(a);
+				model.addCategory((Category) a);
 			}
 			ImpactMatrix im = ie.get("upperBounds", ImpactMatrix.class);
 			model.profileMatrix = im;
@@ -229,7 +229,7 @@ public class SMAATRIModel extends SMAAModel {
 			oe.setAttribute("optimisticRule", model.getRule());			
 			SMAAModel.XML.write(model, oe);
 			oe.add(model.lambda, "lambda", Interval.class);
-			oe.add(new AlternativeList(model.categories), "categories", AlternativeList.class);			
+			oe.add(new CategoryList(model.categories), "categories", CategoryList.class);			
 			oe.add(model.profileMatrix, "upperBounds", ImpactMatrix.class);
 		}		
 	};	

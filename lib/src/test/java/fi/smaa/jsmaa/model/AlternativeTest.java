@@ -22,6 +22,7 @@ package fi.smaa.jsmaa.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.drugis.common.JUnitUtil;
 import org.junit.Before;
@@ -57,6 +58,7 @@ public class AlternativeTest {
 		assertEquals(a, a);
 		assertFalse(a.equals(a2));
 		assertFalse(a.equals("alt"));
+		assertTrue(a.equals(new Alternative(a.getName())));
 	}
 	
 	@Test
@@ -69,8 +71,6 @@ public class AlternativeTest {
 	@Test
 	public void testDeepCopy() {
 		Alternative a = new Alternative("a");
-		assertFalse(a.equals(a.deepCopy()));
-		assertEquals(a.getName(), a.deepCopy().getName());
-	}
-
+		assertTrue(a.equals(a.deepCopy()));
+	}	
 }

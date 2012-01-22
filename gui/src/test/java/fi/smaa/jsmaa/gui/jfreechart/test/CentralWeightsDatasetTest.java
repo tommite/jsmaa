@@ -57,7 +57,7 @@ public class CentralWeightsDatasetTest {
 		alts.add(a2);
 		
 		c1 = new ScaleCriterion("c1");
-		c2 = new ScaleCriterion("c1");
+		c2 = new ScaleCriterion("c2");
 		
 		crit = new ArrayList<Criterion>();
 		crit.add(c1);

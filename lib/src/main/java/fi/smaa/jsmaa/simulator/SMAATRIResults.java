@@ -24,13 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 
 public class SMAATRIResults extends SMAAResults {
 	
 	private Acceptabilities categoryAcceptabilities;
-	private List<Alternative> categories;
+	private List<Category> categories;
 		
-	public SMAATRIResults(List<Alternative> alts, List<Alternative> categories, int updateInterval) {
+	public SMAATRIResults(List<Alternative> alts, List<Category> categories, int updateInterval) {
 		super(alts, updateInterval);
 		this.categories = categories;
 		reset();
@@ -60,7 +61,7 @@ public class SMAATRIResults extends SMAAResults {
 		return categoryAcceptabilities.getResults();
 	}	
 	
-	public List<Alternative> getCategories() {
+	public List<Category> getCategories() {
 		return categories;
 	}
 }

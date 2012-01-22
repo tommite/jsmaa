@@ -33,6 +33,7 @@ import javax.swing.TransferHandler;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -179,7 +180,7 @@ public class LeftTreeTransferHandler extends TransferHandler {
 		if (oldIndex == newIndex) {
 			return;
 		}
-		List<Alternative> newAlts = new ArrayList<Alternative>(((SMAATRIModel)smaaModel).getCategories());
+		List<Category> newAlts = new ArrayList<Category>(((SMAATRIModel)smaaModel).getCategories());
 		swap(newAlts, newIndex, oldIndex);
 		((SMAATRIModel)smaaModel).reorderCategories(newAlts);
 	}

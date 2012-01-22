@@ -26,7 +26,7 @@ import javolution.xml.stream.XMLStreamException;
 import org.junit.Test;
 
 import fi.smaa.common.XMLHelper;
-import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -36,8 +36,8 @@ public class SMAATRIModelXMLFormatTest {
 
 	@Test
 	public void testMarshallSMAATRIModel() throws XMLStreamException {
-		Alternative cat1 = new Alternative("cat1");
-		Alternative cat2 = new Alternative("cat2");
+		Category cat1 = new Category("cat1");
+		Category cat2 = new Category("cat2");
 		OutrankingCriterion oc = new OutrankingCriterion("crit", false, new ExactMeasurement(1.0), new ExactMeasurement(2.0));
 		
 		SMAATRIModel mod = new SMAATRIModel("model");

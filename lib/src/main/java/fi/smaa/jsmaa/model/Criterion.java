@@ -48,6 +48,15 @@ public abstract class Criterion extends AbstractEntity implements Observable, De
 		this.name = name;
 		firePropertyChange(PROPERTY_NAME, oldVal, name);		
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Criterion) {
+			Criterion o = (Criterion) other;
+			return name.equals(o.getName());
+		}
+		return false;
+	}
 
 	public String getName() {
 		return name;

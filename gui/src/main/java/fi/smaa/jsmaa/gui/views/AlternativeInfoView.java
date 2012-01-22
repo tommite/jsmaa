@@ -37,9 +37,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.jsmaa.model.Alternative;
 
 public class AlternativeInfoView implements ViewBuilder {
-	private List<Alternative> alts;
+	private List<? extends Alternative> alts;
 	
-	public AlternativeInfoView(List<Alternative> alts) {
+	public AlternativeInfoView(List<? extends Alternative> alts) {
 		this.alts = alts;
 	}
 
