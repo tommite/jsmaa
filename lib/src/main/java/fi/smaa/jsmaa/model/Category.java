@@ -24,7 +24,7 @@ public class Category extends Alternative {
 		Category a = new Category(getName());
 		return a;
 	}
-	
+		
 	@SuppressWarnings("unused")
 	private static final XMLFormat<Category> XML = new XMLFormat<Category>(Category.class) {		
 		@Override

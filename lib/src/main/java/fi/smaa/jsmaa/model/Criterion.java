@@ -43,6 +43,11 @@ public abstract class Criterion extends AbstractEntity implements Observable, De
 		return name;
 	}
 	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 	public void setName(String name) {
 		Object oldVal = this.name;
 		this.name = name;

@@ -62,6 +62,11 @@ public class Alternative extends AbstractEntity implements Comparable<Alternativ
 		return false;
 			
 	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 
 	public int compareTo(Alternative o) {
 		return (name.compareTo(o.getName()));
