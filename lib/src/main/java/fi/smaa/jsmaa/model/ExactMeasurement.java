@@ -49,6 +49,11 @@ public final class ExactMeasurement extends CardinalMeasurement {
 	public Interval getRange() {
 		return new Interval(val, val);
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + val + "]";
+	}
 
 	@Override
 	public double sample() {
