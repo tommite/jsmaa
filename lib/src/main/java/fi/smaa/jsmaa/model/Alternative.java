@@ -52,21 +52,6 @@ public class Alternative extends AbstractEntity implements Comparable<Alternativ
 		Alternative a = new Alternative(name);
 		return a;
 	}
-	
-	@Override
-	public boolean equals(Object other) {
-		if (other instanceof Alternative) {
-			Alternative a2 = (Alternative) other;
-			return name.equals(a2.getName());
-		}
-		return false;
-			
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
 
 	public int compareTo(Alternative o) {
 		return (name.compareTo(o.getName()));

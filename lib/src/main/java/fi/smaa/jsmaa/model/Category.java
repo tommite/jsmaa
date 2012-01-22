@@ -12,14 +12,6 @@ public class Category extends Alternative {
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if (other instanceof Category) {
-			return super.equals(other);
-		}
-		return false;
-	}
-	
-	@Override
 	public Category deepCopy() {
 		Category a = new Category(getName());
 		return a;
