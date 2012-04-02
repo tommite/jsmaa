@@ -12,13 +12,13 @@
   </properties>
 
   <distributionManagement>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>smaa.fi</id>
-      <name>smaa.fi repository</name>
-      <url>scp://tommi@medusa.tutka.net/home/tommi/smaa_html/mvn</url>
-      <layout>default</layout>
-    </repository>
+		<repository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>ssh-drugis.org</id>
+			<name>drugis.org repository</name>
+			<url>scpexe://drugis.org/var/www/drugis.org/mvn</url>
+			<layout>default</layout>
+		</repository>
   </distributionManagement>	
 
   <build>
