@@ -30,13 +30,16 @@ import org.drugis.common.stat.Statistics;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.common.XMLHelper;
 
 public class RelativeLogitNormalMeasurementTest {
 	private RelativeLogitNormalMeasurement d_m;
+	private RandomUtil random;
 	
 	@Before
 	public void setUp() {
+		random = new RandomUtil();
 		d_m = new RelativeLogitNormalMeasurement(
 					new BaselineGaussianMeasurement(0.25, 0.4),
 					new GaussianMeasurement(-0.1, 0.3)
@@ -82,17 +85,17 @@ public class RelativeLogitNormalMeasurementTest {
 	@Test
 	public void testSample() {
 		BaselineGaussianMeasurement baseline = new BaselineGaussianMeasurement(0.0, 1.0);
-		baseline.update();
+		baseline.update(random);
 		RelativeGaussianMeasurementBase m = new RelativeLogitNormalMeasurement(
 				baseline,
 				new GaussianMeasurement(0.0, 0.0)
 			);
-		assertEquals(Statistics.ilogit(baseline.sample()), m.sample(), 0.0000001);
+		assertEquals(Statistics.ilogit(baseline.sample(random)), m.sample(random), 0.0000001);
 		RelativeGaussianMeasurementBase m2 = new RelativeLogitNormalMeasurement(
 				baseline,
 				new GaussianMeasurement(1.0, 0.0)
 			);
-		assertEquals(Statistics.ilogit(baseline.sample() + 1.0), m2.sample(), 0.0000001);
+		assertEquals(Statistics.ilogit(baseline.sample(random) + 1.0), m2.sample(random), 0.0000001);
 	}
 	
 	@Test

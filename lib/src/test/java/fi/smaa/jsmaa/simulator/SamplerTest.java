@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
@@ -34,6 +35,7 @@ public class SamplerTest {
 
 	private SMAAModel model;
 	private Sampler sampler;
+	private RandomUtil random;
 	private OrdinalCriterion c;
 	private Rank r1;
 	private Rank r2;
@@ -53,10 +55,12 @@ public class SamplerTest {
 		r1 = new Rank(2);
 		r2 = new Rank(1);
 		
+		random = new RandomUtil();
+		
 		model.setMeasurement(c, a1, r1);
 		model.setMeasurement(c, a2, r2);
 		
-		sampler = new Sampler(model);
+		sampler = new Sampler(model, random);
 	}
 	
 	@Test

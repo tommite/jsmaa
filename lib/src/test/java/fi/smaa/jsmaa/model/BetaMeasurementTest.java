@@ -24,10 +24,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.drugis.common.JUnitUtil;
+import org.junit.Before;
 import org.junit.Test;
 
-public class BetaMeasurementTest {
+import fi.smaa.common.RandomUtil;
 
+public class BetaMeasurementTest {
+	private RandomUtil random;
+	
+	@Before
+	public void setUp() { 
+		random = new RandomUtil();
+	}
+	
 	@Test
 	public void testNullConstructor() {
 		BetaMeasurement meas = new BetaMeasurement();				
@@ -91,7 +100,7 @@ public class BetaMeasurementTest {
 	@Test
 	public void testSample() {
 		BetaMeasurement m = new BetaMeasurement(10.0, 20.0, 2.0, 4.0);
-		assertEquals(3.0, m.sample(), 0.99);
+		assertEquals(3.0, m.sample(random), 0.99);
 	}	
 	
 	@Test

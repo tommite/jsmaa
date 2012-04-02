@@ -23,6 +23,7 @@ package fi.smaa.jsmaa.simulator;
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
@@ -33,9 +34,11 @@ import fi.smaa.jsmaa.model.SMAAModel;
 
 public class Sampler {
 	private SMAAModel m;
+	private final RandomUtil random;
 	
-	public Sampler(SMAAModel m) {
+	public Sampler(SMAAModel m, RandomUtil random) {
 		this.m = m;
+		this.random = random;
 	}
 	
 	public void sample(Criterion crit, double[] target) {
@@ -68,7 +71,7 @@ public class Sampler {
 
 		for (int i=0;i<target.length;i++) {
 			CardinalMeasurement meas = (CardinalMeasurement) m.getMeasurement(c, m.getAlternatives().get(i));
-			target[i] = meas.sample();
+			target[i] = meas.sample(random);
 		}
 	}
 

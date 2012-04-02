@@ -20,17 +20,25 @@ package fi.smaa.common;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fi.smaa.common.RandomUtil;
 
 public class RandomUtilTest {
 
+	private RandomUtil random;
+	
+	@Before
+	public void setUp() { 
+		random = new RandomUtil();
+	}
+	
 	@Test
 	public void testCreateSumToRand() {
 		double[] dest = new double[3];
 		
-		RandomUtil.createSumToRand(dest, 3.0);
+		random.createSumToRand(dest, 3.0);
 		
 		double sum = 0.0;
 		for (int i=0;i<dest.length;i++) {
@@ -47,7 +55,7 @@ public class RandomUtilTest {
 		
 		int iters = 10000;
 		for (int i=0;i<iters;i++) {
-			RandomUtil.createSumToRand(tgt, 1.0);
+			random.createSumToRand(tgt, 1.0);
 			destCount[0] += tgt[0];
 			destCount[1] += tgt[1];
 		}
@@ -60,18 +68,18 @@ public class RandomUtilTest {
 	
 	@Test
 	public void testCreateUnif01() {
-		double ran = RandomUtil.createUnif01();
+		double ran = random.createUnif01();
 		assertTrue(ran >= 0.0);
 		assertTrue(ran <= 1.0);
 	}
 	
 	@Test
 	public void testCreateGaussian() {
-		double gaus = RandomUtil.createGaussian(10000.0, 1.0);
+		double gaus = random.createGaussian(10000.0, 1.0);
 		// quite unlikely that it's 0.0
 		assertFalse(gaus == 0.0);
 		
-		gaus = RandomUtil.createGaussian(1.0, 0.0);
+		gaus = random.createGaussian(1.0, 0.0);
 		assertEquals(1.0, gaus, 0.0001);
 	}
 }

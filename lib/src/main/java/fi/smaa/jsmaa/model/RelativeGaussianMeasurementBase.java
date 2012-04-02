@@ -23,6 +23,8 @@ package fi.smaa.jsmaa.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import fi.smaa.common.RandomUtil;
+
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -87,8 +89,8 @@ public abstract class RelativeGaussianMeasurementBase extends CardinalMeasuremen
 	}
 
 	@Override
-	public double sample() {
-		return getBaseline().sample() + getRelative().sample();
+	public double sample(RandomUtil random) {
+		return getBaseline().sample(random) + getRelative().sample(random);
 	}
 
 	public BaselineGaussianMeasurement getBaseline() {

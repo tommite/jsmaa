@@ -117,7 +117,7 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 	}
 
 	private void sampleLambda() {
-		lambda = getModel().getLambda().sample();
+		lambda = getModel().getLambda().sample(random);
 	}
 
 	private void sampleCategoryUpperBounds() throws IterationException {
@@ -129,7 +129,7 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 				Map<OutrankingCriterion, Double> m = new HashMap<OutrankingCriterion, Double>();
 				for (int critIndex=0;critIndex<getModel().getCriteria().size();critIndex++) {
 					OutrankingCriterion oc = (OutrankingCriterion) getModel().getCriteria().get(critIndex);
-					m.put(oc, getModel().getCategoryUpperBound(oc, cat).sample());
+					m.put(oc, getModel().getCategoryUpperBound(oc, cat).sample(random));
 				}
 				categoryUpperBounds.put(cat, m);
 			}

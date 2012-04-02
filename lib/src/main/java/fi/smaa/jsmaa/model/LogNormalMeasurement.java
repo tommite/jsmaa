@@ -20,6 +20,7 @@
 */
 package fi.smaa.jsmaa.model;
 
+import fi.smaa.common.RandomUtil;
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -51,8 +52,8 @@ public class LogNormalMeasurement extends GaussianMeasurement {
 	}
 	
 	@Override
-	public double sample() {
-		return Math.exp(super.sample());
+	public double sample(RandomUtil random) {
+		return Math.exp(super.sample(random));
 	}
 	
 	@Override

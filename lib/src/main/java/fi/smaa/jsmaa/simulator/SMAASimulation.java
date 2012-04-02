@@ -22,12 +22,15 @@ package fi.smaa.jsmaa.simulator;
 
 import org.drugis.common.threading.Task;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class SMAASimulation<M extends SMAAModel> {
 
+
+	protected RandomUtil random;
 	protected double[][] measurements;
 	protected M model;
 	protected Sampler sampler;
@@ -42,7 +45,8 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 	
 	private void initialize() {
 		measurements = new double[model.getCriteria().size()][model.getAlternatives().size()];
-		sampler = new Sampler(model);		
+		random = new RandomUtil();
+		sampler = new Sampler(model, random);		
 	}
 	
 	public abstract SMAAResults getResults();
@@ -62,7 +66,7 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 		for (Criterion c : model.getCriteria()) {
 			BaselineGaussianMeasurement baseline = model.getImpactMatrix().getBaseline(c);
 			if (baseline != null) {
-				baseline.update();
+				baseline.update(random);
 			}
 		}
 	}
@@ -73,7 +77,7 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 	}
 
 	protected void generateWeights() throws IterationException {
-		weights = model.getPreferenceInformation().sampleWeights();
+		weights = model.getPreferenceInformation().sampleWeights(random);
 		
 		// hack until we can listen only to relevant events
 		if (weights.length != model.getCriteria().size()) {

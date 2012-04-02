@@ -24,9 +24,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.drugis.common.JUnitUtil;
+import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
+
 public class GaussianMeasurementTest {
+	
+	private RandomUtil random;
+	
+	@Before
+	public void setUp() { 
+		random = new RandomUtil();
+	}
 	
 	@Test
 	public void testNullConstructor() {
@@ -70,7 +80,7 @@ public class GaussianMeasurementTest {
 	@Test
 	public void testSample() {
 		GaussianMeasurement m = new GaussianMeasurement(1.0, 0.0);
-		assertEquals(1.0, m.sample(), 0.0001);
+		assertEquals(1.0, m.sample(random), 0.0001);
 	}	
 	
 	@Test

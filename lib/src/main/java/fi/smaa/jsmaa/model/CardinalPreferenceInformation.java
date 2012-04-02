@@ -64,7 +64,7 @@ public final class CardinalPreferenceInformation extends AbstractPreferenceInfor
 		return prefs.get(c);
 	}
 
-	public double[] sampleWeights() throws IterationException {
+	public double[] sampleWeights(RandomUtil random) throws IterationException {
 		double[] weights = new double[criteria.size()];
 
 		double lowerBounds = 0.0;
@@ -84,7 +84,7 @@ public final class CardinalPreferenceInformation extends AbstractPreferenceInfor
 
 		for (int iter=0;iter<MAXGENITERS;iter++) {
 			if (numIntervalCriteria > 0) {
-				RandomUtil.createSumToRand(tmpArr, 1.0 - lowerBounds);
+				random.createSumToRand(tmpArr, 1.0 - lowerBounds);
 			}
 
 			int currentInterval = 0;

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import org.drugis.common.threading.TaskUtil;
 import org.drugis.common.threading.ThreadHandler;
 import org.junit.Before;
 import org.junit.Test;
@@ -101,11 +102,8 @@ public class SMAA2SimulationTest {
 		setCriteriaMeasurements();
 		
 		SMAA2Simulation simulation = new SMAA2Simulation(model, 10000);
-		ThreadHandler hand = ThreadHandler.getInstance();
-		hand.scheduleTask(simulation.getTask());
-		do {
-			Thread.sleep(1);
-		} while (!simulation.getTask().isFinished());
+		TaskUtil.run(simulation.getTask());
+
 
 		SMAA2Results results = (SMAA2Results) simulation.getResults();		
 		Map<Criterion, Double> cw1 = results.getCentralWeightVectors().get(alt1);

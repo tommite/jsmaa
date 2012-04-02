@@ -23,9 +23,20 @@ package fi.smaa.jsmaa.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
+
 public class BaselineGaussianMeasurementTest {
+	
+	private RandomUtil random;
+	
+	@Before
+	public void setUp() { 
+		random = new RandomUtil();
+	}
+	
 	@Test
 	public void testDeepCopy() {
 		BaselineGaussianMeasurement m = new BaselineGaussianMeasurement(0.1, 0.2);
@@ -38,21 +49,21 @@ public class BaselineGaussianMeasurementTest {
 	@Test(expected=IllegalStateException.class)
 	public void testSampleBeforeUpdate() {
 		BaselineGaussianMeasurement m = new BaselineGaussianMeasurement(1.0, 0.0);
-		m.sample();
+		m.sample(random);
 	}
 	
 	@Test
 	public void testSample() {
 		BaselineGaussianMeasurement m = new BaselineGaussianMeasurement(1.0, 0.0);
-		m.update();
-		assertEquals(1.0, m.sample(), 0.0001);
+		m.update(random);
+		assertEquals(1.0, m.sample(random), 0.0001);
 	}
 	
 	@Test
 	public void testSample2() {
 		BaselineGaussianMeasurement m = new BaselineGaussianMeasurement(0.0, 1.0);
-		m.update();
-		assertEquals(m.sample(), m.sample(), 0.0001);
+		m.update(random);
+		assertEquals(m.sample(random), m.sample(random), 0.0001);
 	}
 	
 	@Test

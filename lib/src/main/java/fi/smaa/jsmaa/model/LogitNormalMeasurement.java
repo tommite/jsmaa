@@ -25,6 +25,8 @@ import javolution.xml.stream.XMLStreamException;
 
 import org.drugis.common.stat.Statistics;
 
+import fi.smaa.common.RandomUtil;
+
 public class LogitNormalMeasurement extends GaussianMeasurement {
 	private static final long serialVersionUID = -3227427739303388222L;
 	
@@ -33,8 +35,8 @@ public class LogitNormalMeasurement extends GaussianMeasurement {
 	}
 
 	@Override
-	public double sample() {
-		return Statistics.ilogit(super.sample());
+	public double sample(RandomUtil random) {
+		return Statistics.ilogit(super.sample(random));
 	}
 	
 	@Override

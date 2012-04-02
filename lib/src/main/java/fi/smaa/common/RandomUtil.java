@@ -20,15 +20,25 @@ package fi.smaa.common;
 
 import java.util.Arrays;
 
+import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Beta;
 import cern.jet.random.Normal;
 import cern.jet.random.engine.DRand;
 import cern.jet.random.engine.RandomEngine;
 
 public class RandomUtil {
-	private static RandomEngine random = new DRand(666);
-	private static Normal normal = new Normal(0, 1, random);
-	private static Beta betaGen = new Beta(1, 1, random);
+	
+	
+	private RandomEngine random;
+	private Normal normal;
+	private Beta betaGen;
+	
+	public RandomUtil() { 
+//		this.random =  AbstractDistribution.makeDefaultGenerator();
+		this.random = new DRand(666);
+		this.normal = new Normal(0, 1, random);
+		this.betaGen = new Beta(1, 1, random);
+	}
 	
 	/**
 	 * Generates a gaussian distributed number.
@@ -37,7 +47,7 @@ public class RandomUtil {
 	 * @param stdev standard deviation of the number
 	 * @return a value sampled from the gaussian distribution
 	 */
-	public static double createGaussian(double mean, double stdev) {
+	public double createGaussian(double mean, double stdev) {
 		return normal.nextDouble(mean, stdev);
 	}
 	
@@ -46,7 +56,7 @@ public class RandomUtil {
 	 * 
 	 * @return the sampled number
 	 */
-	public static double createUnif01() {
+	public double createUnif01() {
 		return random.nextDouble();
 	}
 	
@@ -57,7 +67,7 @@ public class RandomUtil {
 	 * @param sumTo The amount the numbers must sum to. Must be >= 0.0
 	 * @throws NullPointerException if dest == null
 	 */
-	public static void createSumToRand(double[] dest, double sumTo) throws NullPointerException {
+	public void createSumToRand(double[] dest, double sumTo) throws NullPointerException {
 		assert(sumTo >= 0.0);
 		if (dest == null) {
 			throw new NullPointerException("destination array null");
@@ -86,7 +96,7 @@ public class RandomUtil {
 	 * @param dest the destination array to create the random numbers to
 	 * @throws NullPointerException if dest == null
 	 */
-	public static void createSumToOneRand(double[] dest) throws NullPointerException {
+	public void createSumToOneRand(double[] dest) throws NullPointerException {
 		createSumToRand(dest, 1.0);
 	}
 
@@ -96,12 +106,12 @@ public class RandomUtil {
 	 * @param dest the destination array to create the random numbers to
 	 * @throws NullPointerException if dest == null
 	 */
-	public static void createSumToOneSorted(double[] dest) throws NullPointerException {
+	public void createSumToOneSorted(double[] dest) throws NullPointerException {
 		createSumToOneRand(dest);
 		Arrays.sort(dest);
 	}
 
-	public static double createBeta(Double min, Double max, Double alpha, Double beta) {
+	public double createBeta(Double min, Double max, Double alpha, Double beta) {
 		double r = betaGen.nextDouble(alpha, beta);
 		return r * (max - min) + min;
 	}

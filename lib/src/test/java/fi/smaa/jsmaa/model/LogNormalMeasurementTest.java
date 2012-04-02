@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
@@ -32,9 +33,11 @@ import fi.smaa.jsmaa.model.LogNormalMeasurement;
 public class LogNormalMeasurementTest {
 	
 	private LogNormalMeasurement m;
+	private RandomUtil random;
 	
 	@Before
 	public void setUp() {
+		random = new RandomUtil();
 		m = new LogNormalMeasurement(0.1, 0.2);
 	}
 	
@@ -64,6 +67,6 @@ public class LogNormalMeasurementTest {
 	@Test
 	public void testSample() {
 		LogNormalMeasurement m = new LogNormalMeasurement(0.5, 0.0);
-		assertEquals(Math.exp(0.5), m.sample(), 0.000001);
+		assertEquals(Math.exp(0.5), m.sample(random), 0.000001);
 	}
 }

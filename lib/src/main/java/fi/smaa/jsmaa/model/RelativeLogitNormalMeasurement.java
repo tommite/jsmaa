@@ -22,6 +22,8 @@ package fi.smaa.jsmaa.model;
 
 import org.drugis.common.stat.Statistics;
 
+import fi.smaa.common.RandomUtil;
+
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -40,8 +42,8 @@ public class RelativeLogitNormalMeasurement extends RelativeGaussianMeasurementB
 	}
 	
 	@Override
-	public double sample() {
-		return Statistics.ilogit(super.sample());
+	public double sample(RandomUtil random) {
+		return Statistics.ilogit(super.sample(random));
 	}
 	
 	private LogitNormalMeasurement getAbsolute() {

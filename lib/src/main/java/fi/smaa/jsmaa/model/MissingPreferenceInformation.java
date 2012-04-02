@@ -26,14 +26,14 @@ public final class MissingPreferenceInformation extends AbstractEntity implement
 	private static final long serialVersionUID = -8477410889345079220L;
 	transient private double[] tmparr;
 	private int numCrit;
-	
+
 	public MissingPreferenceInformation(int numCrit) {
 		this.numCrit = numCrit;
 	}
 
-	public double[] sampleWeights() {
+	public double[] sampleWeights(RandomUtil random) {
 		initArray();
-		RandomUtil.createSumToOneRand(tmparr);
+		random.createSumToOneRand(tmparr);
 		return tmparr;
 	}
 	

@@ -29,7 +29,7 @@ import javolution.xml.stream.XMLStreamException;
 import fi.smaa.common.RandomUtil;
 
 public final class Interval extends CardinalMeasurement {
-	
+
 	private static final long serialVersionUID = -4036986804177522602L;
 	public static final String PROPERTY_START = "start";
 	public static final String PROPERTY_END = "end";
@@ -130,8 +130,8 @@ public final class Interval extends CardinalMeasurement {
 	}
 
 	@Override
-	public double sample() {
-		return getStart() + RandomUtil.createUnif01() * (getEnd() - getStart());
+	public double sample(RandomUtil random) {
+		return getStart() + random.createUnif01() * (getEnd() - getStart());
 	}
 	
 	public boolean includes(Double val) {

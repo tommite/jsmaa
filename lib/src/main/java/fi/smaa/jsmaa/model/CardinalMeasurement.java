@@ -20,11 +20,13 @@
 */
 package fi.smaa.jsmaa.model;
 
+import fi.smaa.common.RandomUtil;
+
 
 public abstract class CardinalMeasurement extends Measurement {
 
 	private static final long serialVersionUID = -1805819804451450374L;
 
 	public abstract Interval getRange();
-	public abstract double sample();
+	public abstract double sample(RandomUtil random);
 }

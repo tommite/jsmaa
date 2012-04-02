@@ -26,6 +26,8 @@ import org.drugis.common.threading.AbortedException;
 
 import com.jgoodies.binding.beans.Observable;
 
+import fi.smaa.common.RandomUtil;
+
 public interface PreferenceInformation extends DeepCopiable<PreferenceInformation>, Serializable, Observable {
-	public abstract double[] sampleWeights() throws AbortedException;	
+	public abstract double[] sampleWeights(RandomUtil random) throws AbortedException;	
 }

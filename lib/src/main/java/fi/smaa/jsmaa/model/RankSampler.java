@@ -29,14 +29,15 @@ public class RankSampler {
 	transient private double[] tmparr;
 	transient private double[] samplearr;
 	private List<Integer> ranks;
-	
+	private RandomUtil random = new RandomUtil();
+
 	public RankSampler(List<Integer> ranks) {
 		this.ranks = ranks;
 	}
 
 	public double[] sampleWeights() {
 		initArrays();
-		RandomUtil.createSumToOneSorted(tmparr);
+		random.createSumToOneSorted(tmparr);
 		
 		for (int i=0;i<samplearr.length;i++) {
 			Integer r = ranks.get(i);

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.simulator.IterationException;
 
 import javolution.xml.XMLFormat;
@@ -48,14 +49,16 @@ public final class OutrankingCriterion extends CardinalCriterion {
 		super(name, ascending);
 		setIndifMeasurement(indifMeasurement);
 		setPrefMeasurement(prefMeasurement);
-		indifferenceThreshold = indifMeasurement.sample();
-		preferenceThreshold = prefMeasurement.sample();		
+		RandomUtil random = new RandomUtil();
+		indifferenceThreshold = indifMeasurement.sample(random);
+		preferenceThreshold = prefMeasurement.sample(random);		
 	}
 		
 	public void sampleThresholds() throws IterationException {
+		RandomUtil random = new RandomUtil();
 		for (int i=0;i<1000;i++) {
-			indifferenceThreshold = indifMeasurement.sample();
-			preferenceThreshold = prefMeasurement.sample();
+			indifferenceThreshold = indifMeasurement.sample(random);
+			preferenceThreshold = prefMeasurement.sample(random);
 			if (indifferenceThreshold <= preferenceThreshold) {
 				return;
 			}

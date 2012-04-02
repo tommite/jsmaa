@@ -27,6 +27,7 @@ import java.util.List;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.CriterionMeasurementPair;
 
 public class OrdinalPreferenceInformation extends AbstractPreferenceInformation<Rank> {
@@ -67,7 +68,7 @@ public class OrdinalPreferenceInformation extends AbstractPreferenceInformation<
 		}
 	}
 	
-	public double[] sampleWeights() {
+	public double[] sampleWeights(RandomUtil random) {
 		initArrays();
 		List<Integer> rankList = new ArrayList<Integer>();
 		for (Criterion c : criteria) {

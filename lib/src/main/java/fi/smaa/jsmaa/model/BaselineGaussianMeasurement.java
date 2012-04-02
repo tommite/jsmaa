@@ -20,6 +20,7 @@
 */
 package fi.smaa.jsmaa.model;
 
+import fi.smaa.common.RandomUtil;
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -41,11 +42,11 @@ public class BaselineGaussianMeasurement extends GaussianMeasurement {
 	/**
 	 * Advance to the next state.
 	 */
-	public void update() {
-		d_sample = super.sample();
+	public void update(RandomUtil random) {
+		d_sample = super.sample(random);
 	}
 	
-	public double sample() {
+	public double sample(RandomUtil random) {
 		if (d_sample == null) {
 			throw new IllegalStateException(getClass().getSimpleName() + " requires calling update() before sample()");
 		}

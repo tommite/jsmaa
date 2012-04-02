@@ -28,9 +28,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drugis.common.JUnitUtil;
+import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
+
 public class IntervalTest {
+	
+	private RandomUtil random;
+	
+	@Before
+	public void setUp() { 
+		random = new RandomUtil();
+	}
 	
 	@Test
 	public void testNullConstructor() {
@@ -112,8 +122,8 @@ public class IntervalTest {
 	public void testSample() {
 		Interval in = new Interval(0.0, 0.1);
 		for (int i=0;i<10;i++) {
-			assertTrue(in.sample() <= 0.1);
-			assertTrue(in.sample() >= 0.0);
+			assertTrue(in.sample(random) <= 0.1);
+			assertTrue(in.sample(random) >= 0.0);
 		}
 	}
 	

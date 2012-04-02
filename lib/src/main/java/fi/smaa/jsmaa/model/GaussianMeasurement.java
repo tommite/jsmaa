@@ -25,7 +25,6 @@ import javolution.xml.stream.XMLStreamException;
 import fi.smaa.common.RandomUtil;
 
 public class GaussianMeasurement extends CardinalMeasurement {
-	
 	private static final long serialVersionUID = 1821014379633287612L;
 	public final static String PROPERTY_MEAN = "mean";
 	public final static String PROPERTY_STDEV = "stDev";
@@ -81,8 +80,8 @@ public class GaussianMeasurement extends CardinalMeasurement {
 		return new Interval((mean - (stDev * 1.96)), (mean + (stDev * 1.96)));
 	}	
 	
-	public double sample() {
-		return RandomUtil.createGaussian(mean, stDev);
+	public double sample(RandomUtil random) {
+		return random.createGaussian(mean, stDev);
 	}
 	
 	@Override

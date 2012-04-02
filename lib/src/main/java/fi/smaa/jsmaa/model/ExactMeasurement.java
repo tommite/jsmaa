@@ -20,6 +20,7 @@
 */
 package fi.smaa.jsmaa.model;
 
+import fi.smaa.common.RandomUtil;
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
@@ -56,7 +57,7 @@ public final class ExactMeasurement extends CardinalMeasurement {
 	}
 
 	@Override
-	public double sample() {
+	public double sample(RandomUtil random) {
 		return val;
 	}
 
