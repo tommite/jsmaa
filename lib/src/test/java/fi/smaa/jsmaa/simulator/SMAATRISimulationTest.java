@@ -79,10 +79,10 @@ public class SMAATRISimulationTest {
 		model.addCriterion(c2);
 		model.addCategory(cat1);
 		model.addCategory(cat2);
-		model.setMeasurement(c1, alt1, new ExactMeasurement(2.0));
-		model.setMeasurement(c2, alt1, new ExactMeasurement(2.0));
-		model.setMeasurement(c1, alt2, new ExactMeasurement(0.0));
-		model.setMeasurement(c2, alt2, new ExactMeasurement(0.0));
+		model.getImpactMatrix().setMeasurement(c1, alt1, new ExactMeasurement(2.0));
+		model.getImpactMatrix().setMeasurement(c2, alt1, new ExactMeasurement(2.0));
+		model.getImpactMatrix().setMeasurement(c1, alt2, new ExactMeasurement(0.0));
+		model.getImpactMatrix().setMeasurement(c2, alt2, new ExactMeasurement(0.0));
 		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(1.0));
 		model.setCategoryUpperBound(c2, cat1, new ExactMeasurement(1.0));
 		model.setRule(true);

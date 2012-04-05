@@ -101,24 +101,6 @@ public class SMAATRIModel extends SMAAModel {
 		super.deleteCriterion(c);
 	}
 	
-	@Override
-	public void setMeasurement(Criterion crit, Alternative alt, Measurement meas) {
-		if (profileMatrix.getAlternatives().contains(alt)) {
-			setCategoryUpperBound((OutrankingCriterion) crit, alt, (CardinalMeasurement) meas);
-		} else {
-			super.setMeasurement(crit, alt, meas);
-		}
-	}
-	
-	@Override
-	public CardinalMeasurement getMeasurement(Criterion crit, Alternative alt) {
-		if (profileMatrix.getAlternatives().contains(alt)) {
-			return getCategoryUpperBound((OutrankingCriterion) crit, alt);
-		} else {
-			return (CardinalMeasurement) super.getMeasurement(crit, alt);
-		}		
-	}
-		
 	public void setCategoryUpperBound(OutrankingCriterion crit, 
 			Alternative category, CardinalMeasurement meas) {
 		profileMatrix.setMeasurement(crit, category, meas);
@@ -193,7 +175,7 @@ public class SMAATRIModel extends SMAAModel {
 		super.reorderCriteria(newCrit);
 	}
 
-	public ImpactMatrix getProfileImpactMatrix() {
+	public FullJointMeasurement getProfileImpactMatrix() {
 		return profileMatrix;
 	}
 	

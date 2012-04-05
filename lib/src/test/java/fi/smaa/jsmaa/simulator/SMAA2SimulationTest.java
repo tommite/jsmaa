@@ -65,15 +65,15 @@ public class SMAA2SimulationTest {
 	@Test
 	public void testEqualRanks() throws InterruptedException {
 		// set intervals for cardinal criterion
-		model.setMeasurement(c1, alt1, new Interval(0.0, 0.0));
-		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c1, alt1, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
 		// set measurements for gaussian criterion
-		model.setMeasurement(c2, alt1, new GaussianMeasurement(0.0, 0.0));
-		model.setMeasurement(c2, alt2, new GaussianMeasurement(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c2, alt1, new GaussianMeasurement(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c2, alt2, new GaussianMeasurement(0.0, 0.0));
 		
-		model.setMeasurement(c3, alt1, new Interval(0.0, 0.0));
-		model.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c3, alt1, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c3, alt2, new Interval(0.0, 0.0));
 				
 		
 		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10000);
@@ -118,16 +118,16 @@ public class SMAA2SimulationTest {
 
 	private void setCriteriaMeasurements() {
 		// set interval measurements
-		model.setMeasurement(c1, alt1, new Interval(1.0, 1.0));
-		model.setMeasurement(c1, alt2, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c1, alt1, new Interval(1.0, 1.0));
+		model.getImpactMatrix().setMeasurement(c1, alt2, new Interval(0.0, 0.0));
 		
 		// set interval measurements
-		model.setMeasurement(c2, alt1, new Interval(0.0, 0.0));
-		model.setMeasurement(c2, alt2, new Interval(1.0, 1.0));
+		model.getImpactMatrix().setMeasurement(c2, alt1, new Interval(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c2, alt2, new Interval(1.0, 1.0));
 		
 		// set gaussian measurements
-		model.setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
-		model.setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c3, alt1, new GaussianMeasurement(1.0, 0.0));
+		model.getImpactMatrix().setMeasurement(c3, alt2, new GaussianMeasurement(0.0, 0.0));
 	}
 	
 	@Test
@@ -156,35 +156,35 @@ public class SMAA2SimulationTest {
 		model.addCriterion(insomnia);
 		model.addCriterion(nausea);
 		
-		model.setMeasurement(efficacy, fluox, new LogNormalMeasurement(0.0, 0.0));
-		model.setMeasurement(efficacy, parox, new LogNormalMeasurement(0.086, 0.056));
-		model.setMeasurement(efficacy, sert, new LogNormalMeasurement(0.095, 0.044));
-		model.setMeasurement(efficacy, ven, new LogNormalMeasurement(0.113, 0.048));
+		model.getImpactMatrix().setMeasurement(efficacy, fluox, new LogNormalMeasurement(0.0, 0.0));
+		model.getImpactMatrix().setMeasurement(efficacy, parox, new LogNormalMeasurement(0.086, 0.056));
+		model.getImpactMatrix().setMeasurement(efficacy, sert, new LogNormalMeasurement(0.095, 0.044));
+		model.getImpactMatrix().setMeasurement(efficacy, ven, new LogNormalMeasurement(0.113, 0.048));
 		
-		model.setMeasurement(diarrhea, fluox, new GaussianMeasurement(11.7, 2.5));
-		model.setMeasurement(diarrhea, parox, new GaussianMeasurement(9.2, 1.86));
-		model.setMeasurement(diarrhea, sert, new GaussianMeasurement(15.4, 2.65));
-		model.setMeasurement(diarrhea, ven, new GaussianMeasurement(5.5, 2.32));
+		model.getImpactMatrix().setMeasurement(diarrhea, fluox, new GaussianMeasurement(11.7, 2.5));
+		model.getImpactMatrix().setMeasurement(diarrhea, parox, new GaussianMeasurement(9.2, 1.86));
+		model.getImpactMatrix().setMeasurement(diarrhea, sert, new GaussianMeasurement(15.4, 2.65));
+		model.getImpactMatrix().setMeasurement(diarrhea, ven, new GaussianMeasurement(5.5, 2.32));
 
-		model.setMeasurement(dizziness, fluox, new GaussianMeasurement(7.2, 1.45));
-		model.setMeasurement(dizziness, parox, new GaussianMeasurement(10.6, 1.58));
-		model.setMeasurement(dizziness, sert, new GaussianMeasurement(7.5, 1.48));
-		model.setMeasurement(dizziness, ven, new GaussianMeasurement(15.7, 4.44));
+		model.getImpactMatrix().setMeasurement(dizziness, fluox, new GaussianMeasurement(7.2, 1.45));
+		model.getImpactMatrix().setMeasurement(dizziness, parox, new GaussianMeasurement(10.6, 1.58));
+		model.getImpactMatrix().setMeasurement(dizziness, sert, new GaussianMeasurement(7.5, 1.48));
+		model.getImpactMatrix().setMeasurement(dizziness, ven, new GaussianMeasurement(15.7, 4.44));
 		
-		model.setMeasurement(headache, fluox, new GaussianMeasurement(16.6, 3.27));
-		model.setMeasurement(headache, parox, new GaussianMeasurement(21.2, 5.15));
-		model.setMeasurement(headache, sert, new GaussianMeasurement(20.2, 3.78));
-		model.setMeasurement(headache, ven, new GaussianMeasurement(12.8, 2.45));
+		model.getImpactMatrix().setMeasurement(headache, fluox, new GaussianMeasurement(16.6, 3.27));
+		model.getImpactMatrix().setMeasurement(headache, parox, new GaussianMeasurement(21.2, 5.15));
+		model.getImpactMatrix().setMeasurement(headache, sert, new GaussianMeasurement(20.2, 3.78));
+		model.getImpactMatrix().setMeasurement(headache, ven, new GaussianMeasurement(12.8, 2.45));
 		
-		model.setMeasurement(insomnia, fluox, new GaussianMeasurement(13.7, 1.89));
-		model.setMeasurement(insomnia, parox, new GaussianMeasurement(14.3, 2.93));
-		model.setMeasurement(insomnia, sert, new GaussianMeasurement(15.0, 3.21));
-		model.setMeasurement(insomnia, ven, new GaussianMeasurement(11.2, 3.98));
+		model.getImpactMatrix().setMeasurement(insomnia, fluox, new GaussianMeasurement(13.7, 1.89));
+		model.getImpactMatrix().setMeasurement(insomnia, parox, new GaussianMeasurement(14.3, 2.93));
+		model.getImpactMatrix().setMeasurement(insomnia, sert, new GaussianMeasurement(15.0, 3.21));
+		model.getImpactMatrix().setMeasurement(insomnia, ven, new GaussianMeasurement(11.2, 3.98));
 		
-		model.setMeasurement(nausea, fluox, new GaussianMeasurement(18.6, 1.79));
-		model.setMeasurement(nausea, parox, new GaussianMeasurement(18.3, 3.7));
-		model.setMeasurement(nausea, sert, new GaussianMeasurement(19.5, 2.6));
-		model.setMeasurement(nausea, ven, new GaussianMeasurement(31.0, 1.68));
+		model.getImpactMatrix().setMeasurement(nausea, fluox, new GaussianMeasurement(18.6, 1.79));
+		model.getImpactMatrix().setMeasurement(nausea, parox, new GaussianMeasurement(18.3, 3.7));
+		model.getImpactMatrix().setMeasurement(nausea, sert, new GaussianMeasurement(19.5, 2.6));
+		model.getImpactMatrix().setMeasurement(nausea, ven, new GaussianMeasurement(31.0, 1.68));
 		
 		assertEquals(0.98, efficacy.getScale().getStart(), 0.01);
 		assertEquals(1.23, efficacy.getScale().getEnd(), 0.01);
@@ -279,8 +279,8 @@ public class SMAA2SimulationTest {
 		model.addAlternative(alt2);		
 		model.addCriterion(o);
 		
-		model.setMeasurement(o, alt1, new Rank(2));
-		model.setMeasurement(o, alt2, new Rank(1));
+		model.getImpactMatrix().setMeasurement(o, alt1, new Rank(2));
+		model.getImpactMatrix().setMeasurement(o, alt2, new Rank(1));
 		
 		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10);
 		ThreadHandler hand = ThreadHandler.getInstance();

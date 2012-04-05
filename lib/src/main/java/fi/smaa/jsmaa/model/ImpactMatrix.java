@@ -31,9 +31,11 @@ import java.util.Map;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
+import fi.smaa.jsmaa.simulator.Sampler;
 
-public final class ImpactMatrix extends AbstractEntity {
+public final class ImpactMatrix extends AbstractEntity implements FullJointMeasurement {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	
@@ -92,6 +94,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addListener(fi.smaa.jsmaa.model.ImpactMatrixListener)
+	 */
+	@Override
 	public void addListener(ImpactMatrixListener l) {
 		if (thisListeners.contains(l)) {
 			return;
@@ -99,6 +105,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		thisListeners.add(l);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#removeListener(fi.smaa.jsmaa.model.ImpactMatrixListener)
+	 */
+	@Override
 	public void removeListener(ImpactMatrixListener l) {
 		thisListeners.remove(l);
 	}	
@@ -126,10 +136,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		return measurements.get(crit).get(alt);
 	}
 	
-	/**
-	 * Deletes an alternative. If alternative doesn't exist, does nothing.
-	 * @param alt Alternative to delete.
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deleteAlternative(fi.smaa.jsmaa.model.Alternative)
 	 */
+	@Override
 	public void deleteAlternative(Alternative alt) {
 		if (!alternatives.contains(alt)) {
 			return;
@@ -141,10 +151,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		updateScales();
 	}
 	
-	/**
-	 * Adds an alternative. If alternative already exists, does nothing.
-	 * @param alt Alternative to add.
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addAlternative(fi.smaa.jsmaa.model.Alternative)
 	 */
+	@Override
 	public void addAlternative(Alternative alt) {
 		if (alternatives.contains(alt)) {
 			return;
@@ -165,10 +175,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		updateScales();
 	}
 	
-	/**
-	 * Deletes a criterion. If criterion doesn't exist, does nothing.
-	 * @param c Criterion to delete
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deleteCriterion(fi.smaa.jsmaa.model.Criterion)
 	 */
+	@Override
 	public void deleteCriterion(Criterion c) {
 		if (!criteria.contains(c)) {
 			return;
@@ -179,10 +189,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		baselines.remove(c);
 	}
 	
-	/**
-	 * Adds an alternative. If alternative already exists, does nothing.
-	 * @param c
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addCriterion(fi.smaa.jsmaa.model.Criterion)
 	 */
+	@Override
 	public void addCriterion(Criterion c) {
 		if (criteria.contains(c)) {
 			return;
@@ -212,18 +222,18 @@ public final class ImpactMatrix extends AbstractEntity {
 		}
 	}
 	
-	/**
-	 * Gets the alternatives.
-	 * @return the alternatives. Never a null.
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#getAlternatives()
 	 */
+	@Override
 	public List<Alternative> getAlternatives() {
 		return alternatives;
 	}
 	
-	/**
-	 * Gets the criteria.
-	 * @return the criteria. Never a null.
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#getCriteria()
 	 */
+	@Override
 	public List<Criterion> getCriteria() {
 		return criteria;
 	}
@@ -308,6 +318,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		}
 	}	
 
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deepCopy(java.util.List, java.util.List)
+	 */
+	@Override
 	public ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
 		if (getAlternatives().size() != alts.size()) {
 			throw new IllegalArgumentException("ImpactMatrix.deepCopy() : getAlternatives().size() != alts.size()");
@@ -346,10 +360,18 @@ public final class ImpactMatrix extends AbstractEntity {
 		return baselines.get(c);
 	}
 
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#reorderAlternatives(java.util.List)
+	 */
+	@Override
 	public void reorderAlternatives(List<Alternative> newAlts) {
 		this.alternatives = newAlts;
 	}
 	
+	/* (non-Javadoc)
+	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#reorderCriteria(java.util.List)
+	 */
+	@Override
 	public void reorderCriteria(List<Criterion> newCrit) {
 		this.criteria = newCrit;
 	}
@@ -386,5 +408,22 @@ public final class ImpactMatrix extends AbstractEntity {
 				}
 			}
 		}		
-	};	
+	};
+
+	@Override
+	public void sample(RandomUtil random, double[][] target) {
+		Sampler sampler = new Sampler(this, random);
+		updateBaselines(random);
+		for (int i = 0; i < getCriteria().size(); i++) {
+			sampler.sample(getCriteria().get(i), target[i]);
+		}
+	}	
+	
+	private void updateBaselines(RandomUtil random) {
+		for (Criterion c : getCriteria()) {
+			if (getBaseline(c) != null) {
+				getBaseline(c).update(random);
+			}
+		}
+	}
 }

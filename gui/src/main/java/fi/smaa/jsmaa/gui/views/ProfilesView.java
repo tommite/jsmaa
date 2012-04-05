@@ -95,7 +95,7 @@ public class ProfilesView implements ViewBuilder {
 			this.profile = profile;
 		}
 		public void propertyChange(PropertyChangeEvent evt) {
-			model.setMeasurement(crit, profile, (CardinalMeasurement)evt.getNewValue());
+			model.setCategoryUpperBound(crit, profile, (CardinalMeasurement)evt.getNewValue());
 		}
 	}
 }

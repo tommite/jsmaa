@@ -58,7 +58,7 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 				}
 				generateWeights();
 				sampleThresholds();
-				sampleCriteria();
+				sampleMeasurements();
 				sampleCategoryUpperBounds();
 				sampleLambda();				
 				sortAlternatives();
@@ -88,8 +88,8 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 		results.update(cats);
 	}
 	
-	protected void sampleCriteria() {
-		super.sampleCriteria();
+	protected void sampleMeasurements() {
+		super.sampleMeasurements();
 		
 		criteriaMeasurements = new HashMap<Alternative, Map<OutrankingCriterion, Double>>();
 		

@@ -30,6 +30,7 @@ import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.gui.RankSelectorGroup;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.FullJointMeasurement;
 import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
@@ -37,7 +38,7 @@ import fi.smaa.jsmaa.model.Rank;
 public class OrdinalCriterionMeasurementsPM {
 	
 	private RankSelectorGroup selectorGroup;
-	private ImpactMatrix matrix;
+	private FullJointMeasurement matrix;
 
 	public OrdinalCriterionMeasurementsPM(OrdinalCriterion c, ImpactMatrix matrix) {
 		this.matrix = matrix;

@@ -133,14 +133,6 @@ public class SMAAModel extends AbstractEntity {
 		fireModelChange(ModelChangeEvent.CRITERIA);
 	}
 
-	public void setMeasurement(Criterion crit, Alternative alt, Measurement meas) {
-		impactMatrix.setMeasurement(crit, alt, meas);
-	}
-	
-	public Measurement getMeasurement(Criterion crit, Alternative alt) {
-		return impactMatrix.getMeasurement(crit, alt);
-	}
-	
 	@Override
 	public String toString() {
 		return name;

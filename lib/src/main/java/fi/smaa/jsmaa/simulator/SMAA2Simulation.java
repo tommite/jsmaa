@@ -62,7 +62,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 			@Override
 			public void doStep() {
 				generateWeights();
-				sampleCriteria();
+				sampleMeasurements();
 				aggregate();
 				rankAlternatives();
 				results.update(ranks, weights);
@@ -73,7 +73,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 		confFacComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
 			@Override
 			public void doStep() {
-				sampleCriteria();
+				sampleMeasurements();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);
 			}

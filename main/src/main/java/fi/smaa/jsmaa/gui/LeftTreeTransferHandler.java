@@ -40,7 +40,6 @@ import fi.smaa.jsmaa.model.SMAATRIModel;
 
 @SuppressWarnings("serial")
 public class LeftTreeTransferHandler extends TransferHandler {
-	
 	private LeftTreeModel model;
 	private SMAAModel smaaModel;
 
@@ -170,7 +169,6 @@ public class LeftTreeTransferHandler extends TransferHandler {
 		swap(newAlts, newIndex, oldIndex);
 		smaaModel.reorderAlternatives(newAlts);
 	}	
-
 	
 	public void moveCategory(Alternative toMove, int newIndex) {
 		if (!(smaaModel instanceof SMAATRIModel)) {

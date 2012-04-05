@@ -27,20 +27,20 @@ import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.RankSampler;
-import fi.smaa.jsmaa.model.SMAAModel;
 
 public class Sampler {
-	private SMAAModel m;
+	private ImpactMatrix m;
 	private final RandomUtil random;
 	
-	public Sampler(SMAAModel m, RandomUtil random) {
-		this.m = m;
+	public Sampler(ImpactMatrix impactMatrix, RandomUtil random) {
+		this.m = impactMatrix;
 		this.random = random;
 	}
-	
+
 	public void sample(Criterion crit, double[] target) {
 		assert(target.length == m.getAlternatives().size());
 		

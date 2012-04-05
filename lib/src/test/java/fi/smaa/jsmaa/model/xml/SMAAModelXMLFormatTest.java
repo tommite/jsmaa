@@ -60,7 +60,7 @@ public class SMAAModelXMLFormatTest {
 		CardinalPreferenceInformation pref = new CardinalPreferenceInformation(model.getCriteria());
 		pref.setMeasurement(c, new Interval(0.0, 1.0));
 		model.setPreferenceInformation(pref);
-		model.setMeasurement(c, a, new ExactMeasurement(2.0));
+		model.getImpactMatrix().setMeasurement(c, a, new ExactMeasurement(2.0));
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		JSMAABinding.writeModel(model, bos);
@@ -75,7 +75,7 @@ public class SMAAModelXMLFormatTest {
 		assertEquals(c.getName(), nCrit.getName());
 		assertEquals(a.getName(), nAlt.getName());
 	
-		assertEquals(model.getMeasurement(c, a), nmodel.getMeasurement(nCrit, nAlt));
+		assertEquals(model.getImpactMatrix().getMeasurement(c, a), nmodel.getImpactMatrix().getMeasurement(nCrit, nAlt));
 		CardinalPreferenceInformation npref = (CardinalPreferenceInformation) nmodel.getPreferenceInformation();
 		assertEquals(new Interval(0.0, 1.0), npref.getMeasurement(nCrit));
 	}

@@ -57,10 +57,10 @@ public class SamplerTest {
 		
 		random = RandomUtil.createWithFixedSeed();
 		
-		model.setMeasurement(c, a1, r1);
-		model.setMeasurement(c, a2, r2);
+		model.getImpactMatrix().setMeasurement(c, a1, r1);
+		model.getImpactMatrix().setMeasurement(c, a2, r2);
 		
-		sampler = new Sampler(model, random);
+		sampler = new Sampler(model.getImpactMatrix(), random);
 	}
 	
 	@Test
