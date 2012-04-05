@@ -29,6 +29,7 @@ import org.drugis.common.threading.AbstractIterativeComputation;
 import org.drugis.common.threading.IterativeTask;
 import org.drugis.common.threading.Task;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -45,8 +46,8 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 	private double lambda;
 	private IterativeTask catAccComputation;
 
-	public SMAATRISimulation(SMAATRIModel triModel, int iterations) {
-		super(triModel);
+	public SMAATRISimulation(SMAATRIModel triModel, RandomUtil random, int iterations) {
+		super(triModel, random);
 		results = new SMAATRIResults(model.getAlternatives(), model.getCategories(), REPORTING_INTERVAL);
 		
 		catAccComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {

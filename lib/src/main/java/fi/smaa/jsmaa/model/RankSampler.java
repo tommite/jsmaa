@@ -29,7 +29,7 @@ public class RankSampler {
 	transient private double[] tmparr;
 	transient private double[] samplearr;
 	private List<Integer> ranks;
-	private RandomUtil random = new RandomUtil();
+	private RandomUtil random = RandomUtil.createWithFixedSeed();
 
 	public RankSampler(List<Integer> ranks) {
 		this.ranks = ranks;

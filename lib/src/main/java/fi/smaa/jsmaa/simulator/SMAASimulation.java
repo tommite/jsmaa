@@ -28,8 +28,6 @@ import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class SMAASimulation<M extends SMAAModel> {
-
-
 	protected RandomUtil random;
 	protected double[][] measurements;
 	protected M model;
@@ -38,14 +36,14 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 	
 	public static int REPORTING_INTERVAL = 100;
 
-	public SMAASimulation(M model) {
+	public SMAASimulation(M model, RandomUtil random) {
 		this.model = model;
+		this.random = random;
 		initialize();
 	}
 	
 	private void initialize() {
 		measurements = new double[model.getCriteria().size()][model.getAlternatives().size()];
-		random = new RandomUtil();
 		sampler = new Sampler(model, random);		
 	}
 	

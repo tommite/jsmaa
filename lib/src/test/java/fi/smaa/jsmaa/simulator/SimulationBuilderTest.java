@@ -10,6 +10,7 @@ import org.drugis.common.threading.TaskUtil;
 import org.drugis.common.threading.ThreadHandler;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public class SimulationBuilderTest {
@@ -45,7 +46,7 @@ public class SimulationBuilderTest {
 		}
 
 		protected SMAA2Simulation generateSimulation() {
-			return new SMAA2Simulation(model, 10000);
+			return new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		}
 		
 		protected void prepareSimulation(SMAA2Simulation simulation, SMAAResults results) {

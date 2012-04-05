@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Criterion;
@@ -99,7 +100,7 @@ public class SMAATRISimulationTest {
 	}
 
 	private SMAATRIResults runModel(SMAATRIModel model) throws InterruptedException {
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {
@@ -146,7 +147,7 @@ public class SMAATRISimulationTest {
 		
 		SMAAResultsListener mock = createMock(SMAAResultsListener.class);
 		
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		
 		mock.resultsChanged((ResultsEvent) JUnitUtil.eqEventObject(new ResultsEvent(simulation.getResults(),
@@ -168,7 +169,7 @@ public class SMAATRISimulationTest {
 		c1.setIndifMeasurement(new ExactMeasurement(3.0));
 		c1.setPrefMeasurement(new ExactMeasurement(2.0));
 		
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {

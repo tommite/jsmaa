@@ -55,7 +55,7 @@ public class SamplerTest {
 		r1 = new Rank(2);
 		r2 = new Rank(1);
 		
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 		
 		model.setMeasurement(c, a1, r1);
 		model.setMeasurement(c, a2, r2);

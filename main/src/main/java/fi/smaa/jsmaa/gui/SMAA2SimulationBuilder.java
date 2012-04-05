@@ -22,6 +22,7 @@ package fi.smaa.jsmaa.gui;
 
 import javax.swing.JFrame;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.SMAAModel;
 import fi.smaa.jsmaa.simulator.SMAA2Results;
 import fi.smaa.jsmaa.simulator.SMAA2Simulation;
@@ -34,7 +35,7 @@ public class SMAA2SimulationBuilder extends BasicSimulationBuilder<SMAAModel, SM
 
 	@Override
 	protected SMAA2Simulation generateSimulation() {
-		return new SMAA2Simulation(model, ITERATIONS );
+		return new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), ITERATIONS );
 	}
 
 }

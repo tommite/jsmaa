@@ -31,6 +31,7 @@ import org.drugis.common.threading.ThreadHandler;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
@@ -75,7 +76,7 @@ public class SMAA2SimulationTest {
 		model.setMeasurement(c3, alt2, new Interval(0.0, 0.0));
 				
 		
-		SMAA2Simulation simulation = new SMAA2Simulation(model, 10000);
+		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {
@@ -101,7 +102,7 @@ public class SMAA2SimulationTest {
 	public void testCorrectResults() throws InterruptedException {
 		setCriteriaMeasurements();
 		
-		SMAA2Simulation simulation = new SMAA2Simulation(model, 10000);
+		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		TaskUtil.run(simulation.getTask());
 
 
@@ -203,7 +204,7 @@ public class SMAA2SimulationTest {
 		assertEquals(11.1, nausea.getScale().getStart(), 1.0);
 		assertEquals(34.0, nausea.getScale().getEnd(), 1.0);
 	
-		SMAA2Simulation simulation = new SMAA2Simulation(model, 10000);
+		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {
@@ -281,7 +282,7 @@ public class SMAA2SimulationTest {
 		model.setMeasurement(o, alt1, new Rank(2));
 		model.setMeasurement(o, alt2, new Rank(1));
 		
-		SMAA2Simulation simulation = new SMAA2Simulation(model, 10);
+		SMAA2Simulation simulation = new SMAA2Simulation(model, RandomUtil.createWithFixedSeed(), 10);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {

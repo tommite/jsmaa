@@ -27,21 +27,26 @@ import cern.jet.random.engine.DRand;
 import cern.jet.random.engine.RandomEngine;
 
 public class RandomUtil {
+	public static RandomUtil createWithFixedSeed() {
+		return new RandomUtil(new DRand(666));
+	}
 	
-	
+	public static RandomUtil createWithRandomSeed() {
+		return new RandomUtil(AbstractDistribution.makeDefaultGenerator());
+	}
+
 	private RandomEngine random;
 	private Normal normal;
 	private Beta betaGen;
 	
-	public RandomUtil() { 
-//		this.random =  AbstractDistribution.makeDefaultGenerator();
-		this.random = new DRand(666);
+	private RandomUtil(RandomEngine engine) {
+		this.random = engine;
 		this.normal = new Normal(0, 1, random);
 		this.betaGen = new Beta(1, 1, random);
 	}
 	
 	/**
-	 * Generates a gaussian distributed number.
+	 * Generates a Gaussian distributed number.
 	 * 
 	 * @param mean mean of the number
 	 * @param stdev standard deviation of the number
