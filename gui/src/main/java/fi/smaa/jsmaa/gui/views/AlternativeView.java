@@ -22,6 +22,7 @@ package fi.smaa.jsmaa.gui.views;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.drugis.common.gui.LayoutUtil;
 import org.drugis.common.gui.ViewBuilder;
@@ -36,15 +37,16 @@ import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.FullJointMeasurements;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 
 public class AlternativeView implements ViewBuilder {
 	
 	private Alternative alt;
-	private ImpactMatrix impactMatrix;
+	private FullJointMeasurements impactMatrix;
 
-	public AlternativeView(Alternative a, ImpactMatrix m) {
+	public AlternativeView(Alternative a, FullJointMeasurements m) {
 		this.alt = a;
 		this.impactMatrix =  m;
 	}
@@ -67,7 +69,11 @@ public class AlternativeView implements ViewBuilder {
 		
 		builder.addSeparator("Measurements", cc.xyw(1, 3, fullwidth));
 		
-		builder.add(buildMeasurementsPart(), cc.xyw(1, 5, fullwidth));
+		if (impactMatrix instanceof IndependentMeasurements) {
+			builder.add(buildMeasurementsPart(), cc.xyw(1, 5, fullwidth));
+		} else {
+			builder.add(new JLabel("Measurements are not independent."));
+		}
 
 		return builder.getPanel();
 	}
@@ -85,14 +91,15 @@ public class AlternativeView implements ViewBuilder {
 		builder.addLabel("Criterion", cc.xy(1, 1));
 		builder.addLabel("Measurement", cc.xy(3, 1));
 		
-		ImpactMatrixPresentationModel model = new ImpactMatrixPresentationModel(impactMatrix);
+		IndependentMeasurements measurements = (IndependentMeasurements)impactMatrix;
+		ImpactMatrixPresentationModel model = new ImpactMatrixPresentationModel(measurements);
 
-		for (int i=0;i<impactMatrix.getCriteria().size();i++) {
+		for (int i=0;i<measurements.getCriteria().size();i++) {
 			LayoutUtil.addRow(layout);
 			
 			int row = 1 + (i+1) * 2;
 			
-			Criterion c = impactMatrix.getCriteria().get(i);
+			Criterion c = measurements.getCriteria().get(i);
 			
 			builder.add(BasicComponentFactory.createLabel(new PresentationModel<Criterion>(c).getModel(Criterion.PROPERTY_NAME)),
 					cc.xy(1, row));
@@ -100,7 +107,7 @@ public class AlternativeView implements ViewBuilder {
 			if (c instanceof OrdinalCriterion) {
 				builder.addLabel("Ordinal criterion, set measurements in the criterion view", cc.xy(3, row));
 			} else {
-				builder.add(new MeasurementPanel(model.getMeasurementHolder(alt, c), impactMatrix.getBaseline(c)), cc.xy(3, row));
+				builder.add(new MeasurementPanel(model.getMeasurementHolder(alt, c)), cc.xy(3, row));
 			}
 		}
 		return builder.getPanel();

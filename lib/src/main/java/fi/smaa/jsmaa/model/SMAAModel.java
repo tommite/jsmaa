@@ -265,7 +265,7 @@ public class SMAAModel extends AbstractEntity {
 		}		
 	}
 	
-	public ImpactMatrix getImpactMatrix() {
+	public IndependentMeasurements getImpactMatrix() {
 		return impactMatrix;
 	}
 

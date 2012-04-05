@@ -175,7 +175,7 @@ public class SMAATRIModel extends SMAAModel {
 		super.reorderCriteria(newCrit);
 	}
 
-	public FullJointMeasurement getProfileImpactMatrix() {
+	public FullJointMeasurements getProfileImpactMatrix() {
 		return profileMatrix;
 	}
 	

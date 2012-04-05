@@ -35,16 +35,13 @@ import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
 import fi.smaa.jsmaa.simulator.Sampler;
 
-public final class ImpactMatrix extends AbstractEntity implements FullJointMeasurement {
+public final class ImpactMatrix extends AbstractMeasurements implements IndependentMeasurements {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	
-	private List<Criterion> criteria = new ArrayList<Criterion>();
-	private List<Alternative> alternatives = new ArrayList<Alternative>();
-	private Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
+	Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
 	private Map<Criterion, BaselineGaussianMeasurement> baselines = new HashMap<Criterion, BaselineGaussianMeasurement>();
-	private transient MeasurementListener measListener = new MeasurementListener();
-	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
+	transient MeasurementListener measListener = new MeasurementListener();
 	private transient Map<Criterion, RankSet<Alternative>> ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
 
 	/**
@@ -94,25 +91,7 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addListener(fi.smaa.jsmaa.model.ImpactMatrixListener)
-	 */
 	@Override
-	public void addListener(ImpactMatrixListener l) {
-		if (thisListeners.contains(l)) {
-			return;
-		}
-		thisListeners.add(l);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#removeListener(fi.smaa.jsmaa.model.ImpactMatrixListener)
-	 */
-	@Override
-	public void removeListener(ImpactMatrixListener l) {
-		thisListeners.remove(l);
-	}	
-	
 	public void setMeasurement(Criterion crit, Alternative alt, Measurement meas) {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
@@ -131,14 +110,12 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		measurements.get(crit).put(alt, meas);
 	}
 	
+	@Override
 	public Measurement getMeasurement(Criterion crit, Alternative alt) {
 		assertExistAlternativeAndCriterion(crit, alt);
 		return measurements.get(crit).get(alt);
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deleteAlternative(fi.smaa.jsmaa.model.Alternative)
-	 */
 	@Override
 	public void deleteAlternative(Alternative alt) {
 		if (!alternatives.contains(alt)) {
@@ -151,9 +128,6 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		updateScales();
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addAlternative(fi.smaa.jsmaa.model.Alternative)
-	 */
 	@Override
 	public void addAlternative(Alternative alt) {
 		if (alternatives.contains(alt)) {
@@ -175,9 +149,6 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		updateScales();
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deleteCriterion(fi.smaa.jsmaa.model.Criterion)
-	 */
 	@Override
 	public void deleteCriterion(Criterion c) {
 		if (!criteria.contains(c)) {
@@ -189,9 +160,6 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		baselines.remove(c);
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#addCriterion(fi.smaa.jsmaa.model.Criterion)
-	 */
 	@Override
 	public void addCriterion(Criterion c) {
 		if (criteria.contains(c)) {
@@ -222,22 +190,6 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#getAlternatives()
-	 */
-	@Override
-	public List<Alternative> getAlternatives() {
-		return alternatives;
-	}
-	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#getCriteria()
-	 */
-	@Override
-	public List<Criterion> getCriteria() {
-		return criteria;
-	}
-
 	private void updateScales() {
 		for (Criterion c : criteria) {
 			if (c instanceof ScaleCriterion) {
@@ -255,16 +207,11 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		}
 	}
 	
-	private void assertExistAlternativeAndCriterion(Criterion crit, Alternative alt)  {
-		assert(criteria.contains(crit));
-		assert(alternatives.contains(alt));
-	}	
-		
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		i.defaultReadObject();
 		
 		measListener = new MeasurementListener();
-		thisListeners = new ArrayList<ImpactMatrixListener>();
+//		thisListeners = new ArrayList<ImpactMatrixListener>();
 		ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
 		
 		for (Criterion c : criteria) {
@@ -286,7 +233,16 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		}
 	}
 
-	private void disconnectConnectMeasurementListener(Criterion crit, Alternative alt, Measurement meas) {
+	private class MeasurementListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getSource() instanceof CardinalMeasurement) {
+				updateScales();
+			}
+			fireMeasurementChanged();
+		}
+	}
+	
+	protected void disconnectConnectMeasurementListener(Criterion crit, Alternative alt, Measurement meas) {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
 		}
@@ -297,30 +253,6 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		meas.addPropertyChangeListener(measListener);
 	}
 	
-	private class MeasurementListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof CardinalMeasurement) {
-				updateScales();
-			}
-			fireMeasurementChanged();
-		}
-	}
-	
-	private void fireMeasurementChanged() {
-		for (ImpactMatrixListener l : thisListeners) {
-			l.measurementChanged();
-		}
-	}
-	
-	private void fireMeasurementTypeChanged() {
-		for (ImpactMatrixListener l : thisListeners) {
-			l.measurementTypeChanged();
-		}
-	}	
-
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#deepCopy(java.util.List, java.util.List)
-	 */
 	@Override
 	public ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
 		if (getAlternatives().size() != alts.size()) {
@@ -360,20 +292,16 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 		return baselines.get(c);
 	}
 
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#reorderAlternatives(java.util.List)
-	 */
 	@Override
 	public void reorderAlternatives(List<Alternative> newAlts) {
-		this.alternatives = newAlts;
+		this.alternatives.clear();
+		this.alternatives.addAll(newAlts);
 	}
-	
-	/* (non-Javadoc)
-	 * @see fi.smaa.jsmaa.model.FullJointMeasurement#reorderCriteria(java.util.List)
-	 */
+
 	@Override
 	public void reorderCriteria(List<Criterion> newCrit) {
-		this.criteria = newCrit;
+		this.criteria.clear();
+		this.criteria.addAll(newCrit);
 	}
 	
 	@SuppressWarnings("unused")
@@ -425,5 +353,13 @@ public final class ImpactMatrix extends AbstractEntity implements FullJointMeasu
 				getBaseline(c).update(random);
 			}
 		}
+	}
+
+	@Override
+	public Interval getRange(Criterion crit) {
+		if (crit instanceof ScaleCriterion) {
+			return ((ScaleCriterion) crit).getScale();
+		}
+		return null;
 	}
 }

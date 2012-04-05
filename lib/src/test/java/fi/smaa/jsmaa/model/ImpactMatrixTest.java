@@ -61,7 +61,7 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testNullConstructor() {
-		FullJointMeasurement m = new ImpactMatrix();
+		FullJointMeasurements m = new ImpactMatrix();
 		assertTrue(m.getAlternatives().isEmpty());
 		assertTrue(m.getCriteria().isEmpty());
 	}
@@ -71,7 +71,7 @@ public class ImpactMatrixTest {
 		List<Alternative> alts = Collections.singletonList(new Alternative("a"));
 		List<Criterion> crit = Collections.singletonList((Criterion) new ScaleCriterion("c"));
 		
-		FullJointMeasurement m = new ImpactMatrix(alts, crit);
+		FullJointMeasurements m = new ImpactMatrix(alts, crit);
 		assertEquals(alts, m.getAlternatives());
 		assertEquals(crit, m.getCriteria());
 	}
@@ -252,11 +252,11 @@ public class ImpactMatrixTest {
 		assertFalse(m.equals("a"));
 		List<Criterion> s = new ArrayList<Criterion>();
 		s.add(c1);
-		FullJointMeasurement m3 = new ImpactMatrix(alts, s);
+		FullJointMeasurements m3 = new ImpactMatrix(alts, s);
 		assertFalse(m.equals(m3));
 		List<Alternative> s2 = new ArrayList<Alternative>();
 		s2.add(a2);
-		FullJointMeasurement m4 = new ImpactMatrix(s2, crit);
+		FullJointMeasurements m4 = new ImpactMatrix(s2, crit);
 		assertFalse(m.equals(m4));
 		
 		m2.setMeasurement(c1, a1, new Interval(0.2, 0.3));

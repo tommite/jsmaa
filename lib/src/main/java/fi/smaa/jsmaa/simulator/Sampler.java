@@ -27,16 +27,16 @@ import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.RankSampler;
 
 public class Sampler {
-	private ImpactMatrix m;
+	private IndependentMeasurements m;
 	private final RandomUtil random;
 	
-	public Sampler(ImpactMatrix impactMatrix, RandomUtil random) {
+	public Sampler(IndependentMeasurements impactMatrix, RandomUtil random) {
 		this.m = impactMatrix;
 		this.random = random;
 	}
