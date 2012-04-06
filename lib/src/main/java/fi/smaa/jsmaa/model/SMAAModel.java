@@ -209,7 +209,7 @@ public class SMAAModel extends AbstractEntity {
 		for (Criterion c : criteria) {
 			model.addCriterion(c.deepCopy());
 		}
-		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(model.getAlternatives(), model.getCriteria());		
+		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());		
 		model.impactMatrix.addListener(model.impactListener);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 	}

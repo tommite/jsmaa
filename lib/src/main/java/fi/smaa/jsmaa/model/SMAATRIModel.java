@@ -137,7 +137,7 @@ public class SMAATRIModel extends SMAAModel {
 		for (int i=0;i<model.categories.size()-1;i++) {
 			catsMinusLastOne.add(model.categories.get(i));
 		}
-		model.profileMatrix = profileMatrix.deepCopy(catsMinusLastOne, model.getCriteria());
+		model.profileMatrix = profileMatrix.deepCopy(model.getCriteria(), catsMinusLastOne);
 		model.setRule(optimistic);		
 		model.getLambda().setStart(getLambda().getStart());
 		model.getLambda().setEnd(getLambda().getEnd());

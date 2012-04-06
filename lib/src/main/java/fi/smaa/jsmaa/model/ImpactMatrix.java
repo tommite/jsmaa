@@ -253,7 +253,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 	}
 	
 	@Override
-	public ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
+	public ImpactMatrix deepCopy(List<Criterion> crit, List<Alternative> alts) {
 		if (getAlternatives().size() != alts.size()) {
 			throw new IllegalArgumentException("ImpactMatrix.deepCopy() : getAlternatives().size() != alts.size()");
 		}

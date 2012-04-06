@@ -162,4 +162,16 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 		return meanVector.getEntry(index) + z * Math.sqrt(covarianceMatrix.getEntry(index, index));
 	}
 
+	@Override
+	public MultivariateGaussianCriterionMeasurement deepCopy(List<Alternative> alts) {
+		if (getAlternatives().size() != alts.size()) {
+			throw new IllegalArgumentException("getAlternatives().size() != alts.size()");
+		}
+		
+		MultivariateGaussianCriterionMeasurement m = new MultivariateGaussianCriterionMeasurement(alts);
+		m.setCovarianceMatrix(covarianceMatrix.copy());
+		m.setMeanVector(meanVector.copy());
+		return m;
+	}
+
 }

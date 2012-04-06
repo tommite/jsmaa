@@ -277,7 +277,7 @@ public class ImpactMatrixTest {
 		BaselineGaussianMeasurement base = new BaselineGaussianMeasurement(1.0, 0.5);
 		m.setBaseline(c1, base);
 		
-		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy(m.getAlternatives(), m.getCriteria());
+		ImpactMatrix m2 = (ImpactMatrix) m.deepCopy(m.getCriteria(), m.getAlternatives());
 		
 		assertTrue(m.getAlternatives().size() == m2.getAlternatives().size());
 		assertTrue(m.getCriteria().size() == m2.getCriteria().size());

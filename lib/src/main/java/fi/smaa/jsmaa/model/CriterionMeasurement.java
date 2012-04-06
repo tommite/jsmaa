@@ -43,4 +43,6 @@ public interface CriterionMeasurement {
 	 * @see CardinalMeasurement
 	 */
 	public abstract Interval getRange();
+	
+	public CriterionMeasurement deepCopy(List<Alternative> alts);
 }

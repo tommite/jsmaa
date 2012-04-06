@@ -1,17 +1,112 @@
 package fi.smaa.jsmaa.model;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import fi.smaa.common.RandomUtil;
+
 /**
  * Measurements that are independent between criteria, but dependent between alternatives.
  * @see Measurement. 
  */
-public interface PerCriterionMeasurements extends FullJointMeasurements {
-	/**
-	 * Set the measurement for this criterion.
-	 */
-	public CriterionMeasurement getCriterionMeasurement(Criterion c);
+public class PerCriterionMeasurements extends AbstractMeasurements implements FullJointMeasurements {
+	private static final long serialVersionUID = -6733139577051452519L;
+	private final Map<Criterion, CriterionMeasurement> critMeas = new HashMap<Criterion, CriterionMeasurement>();
+	
+	public PerCriterionMeasurements(List<Criterion> criteria, List<Alternative> alternatives) {
+		super(criteria, alternatives);
+		for (Criterion c : criteria) {
+			critMeas.put(c, createDefaultMeasurement());
+		}
+	}
+
+	private MultivariateGaussianCriterionMeasurement createDefaultMeasurement() {
+		return new MultivariateGaussianCriterionMeasurement(this.alternatives);
+	}
 	
 	/**
 	 * Get the measurement for this criterion.
 	 */
-	public void setCriterionMeasurement(Criterion c, CriterionMeasurement m);
+	public CriterionMeasurement getCriterionMeasurement(Criterion c) {
+		return critMeas.get(c);
+	}
+	
+	/**
+	 * Set the measurement for this criterion.
+	 */
+	public void setCriterionMeasurement(Criterion c, CriterionMeasurement m) {
+		critMeas.put(c, m);
+	}
+
+	@Override
+	public void addAlternative(Alternative alt) {
+		alternatives.add(alt);
+		for (Criterion c : criteria) {
+			critMeas.get(c).addAlternative(alt);
+		}
+	}
+
+	@Override
+	public void deleteAlternative(Alternative alt) {
+		alternatives.remove(alt);
+		for (Criterion c : criteria) {
+			critMeas.get(c).deleteAlternative(alt);
+		}		
+	}
+
+	@Override
+	public void reorderAlternatives(List<Alternative> alts) {
+		alternatives.clear();
+		alternatives.addAll(alts);
+		for (Criterion c : criteria) {
+			critMeas.get(c).reorderAlternatives(alts);
+		}				
+	}
+
+	@Override
+	public void addCriterion(Criterion c) {
+		criteria.add(c);
+		critMeas.put(c, createDefaultMeasurement());
+	}
+
+	@Override
+	public void deleteCriterion(Criterion c) {
+		criteria.remove(c);
+		critMeas.remove(c);
+	}
+
+	@Override
+	public void reorderCriteria(List<Criterion> crits) {
+		criteria.clear();
+		criteria.addAll(crits);
+	}
+
+	@Override
+	public void sample(RandomUtil random, double[][] target) {
+		for(int i = 0; i < criteria.size(); ++i) { 
+			getCriterionMeasurement(criteria.get(i)).sample(random, target, i);
+		}
+	}
+
+	@Override
+	public Interval getRange(Criterion crit) {
+		return getCriterionMeasurement(crit).getRange();
+	}
+
+	@Override
+	public PerCriterionMeasurements deepCopy(List<Criterion> crit, List<Alternative> alts) {
+		if (getAlternatives().size() != alts.size()) {
+			throw new IllegalArgumentException("getAlternatives().size() != alts.size()");
+		}
+		if (getCriteria().size() != crit.size()) {
+			throw new IllegalArgumentException("getCriteria().size() != crit.size()");
+		}
+		
+		PerCriterionMeasurements m = new PerCriterionMeasurements(crit, alts);
+		for (int i = 0; i < crit.size(); ++i) { 
+			m.setCriterionMeasurement(crit.get(i), this.getCriterionMeasurement(criteria.get(i)).deepCopy(alts));
+		}
+		return m;
+	}
 }

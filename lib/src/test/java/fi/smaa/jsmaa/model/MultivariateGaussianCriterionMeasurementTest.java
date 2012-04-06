@@ -1,8 +1,10 @@
 package fi.smaa.jsmaa.model;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,5 +163,24 @@ public class MultivariateGaussianCriterionMeasurementTest {
 		Interval interval = m.getRange();
 		assertEquals(25.3 + 1.96 * Math.sqrt(2), interval.getEnd(), 10e-7);
 		assertEquals(-3 - 1.96 * Math.sqrt(3.0), interval.getStart(), 10e-7);
+	}
+	
+	@Test
+	public void testDeepCopy() {
+		List<Alternative> newAlts = new ArrayList<Alternative>();
+		for (Alternative a : alternatives) {
+			newAlts.add(a.deepCopy());
+		}
+		m.setMeanVector(new ArrayRealVector(new double[] { 666, 8, 665 }));
+		m.setCovarianceMatrix(MatrixUtils.createRealDiagonalMatrix(new double[] { 4, 3, 2 }));
+		
+		MultivariateGaussianCriterionMeasurement clone = m.deepCopy(newAlts);
+		assertNotSame(m, clone);
+		assertEquals(newAlts, clone.getAlternatives());
+		assertSame(newAlts.get(0), clone.getAlternatives().get(0));
+		assertEquals(m.getMeanVector(), clone.getMeanVector());
+		assertNotSame(m.getMeanVector(), clone.getMeanVector());
+		assertEquals(m.getCovarianceMatrix(), clone.getCovarianceMatrix());
+		assertNotSame(m.getCovarianceMatrix(), clone.getCovarianceMatrix());
 	}
 }

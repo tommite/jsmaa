@@ -72,11 +72,11 @@ public interface FullJointMeasurements {
 
 	/**
 	 * Make a deep copy, replacing the alternatives and criteria with their equals in the given lists.
-	 * @param alts Alternatives to use in the copy.
 	 * @param crit Criteria to use in the copy.
+	 * @param alts Alternatives to use in the copy.
 	 * @return A deep copy.
 	 */
-	public FullJointMeasurements deepCopy(List<Alternative> alts, List<Criterion> crit);
+	public FullJointMeasurements deepCopy(List<Criterion> crit, List<Alternative> alts);
 
 	/**
 	 * Listen to changes in the structure and measurements.
