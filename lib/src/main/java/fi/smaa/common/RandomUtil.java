@@ -20,29 +20,31 @@ package fi.smaa.common;
 
 import java.util.Arrays;
 
-import cern.jet.random.AbstractDistribution;
-import cern.jet.random.Beta;
-import cern.jet.random.Normal;
-import cern.jet.random.engine.DRand;
-import cern.jet.random.engine.RandomEngine;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.MersenneTwister;
+import org.apache.commons.math3.random.RandomDataImpl;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.RandomVectorGenerator;
 
 public class RandomUtil {
 	public static RandomUtil createWithFixedSeed() {
-		return new RandomUtil(new DRand(666));
+		JDKRandomGenerator engine = new JDKRandomGenerator();
+		engine.setSeed(666);
+		return new RandomUtil(engine);
 	}
 	
 	public static RandomUtil createWithRandomSeed() {
-		return new RandomUtil(AbstractDistribution.makeDefaultGenerator());
+		return new RandomUtil(new MersenneTwister());
 	}
 
-	private RandomEngine random;
-	private Normal normal;
-	private Beta betaGen;
+	private RandomDataImpl random;
+	private RandomGenerator engine;
 	
-	private RandomUtil(RandomEngine engine) {
-		this.random = engine;
-		this.normal = new Normal(0, 1, random);
-		this.betaGen = new Beta(1, 1, random);
+	private RandomUtil(RandomGenerator engine) {
+		this.random = new RandomDataImpl(engine);
+		this.engine = engine;
 	}
 	
 	/**
@@ -52,8 +54,8 @@ public class RandomUtil {
 	 * @param stdev standard deviation of the number
 	 * @return a value sampled from the gaussian distribution
 	 */
-	public double createGaussian(double mean, double stdev) {
-		return normal.nextDouble(mean, stdev);
+	public double createGaussian(double mean, double stddev) {
+		return stddev == 0 ? mean : random.nextGaussian(mean, stddev);
 	}
 	
 	/**
@@ -62,7 +64,7 @@ public class RandomUtil {
 	 * @return the sampled number
 	 */
 	public double createUnif01() {
-		return random.nextDouble();
+		return random.nextUniform(0.0, 1.0);
 	}
 	
 	/**
@@ -117,8 +119,11 @@ public class RandomUtil {
 	}
 
 	public double createBeta(Double min, Double max, Double alpha, Double beta) {
-		double r = betaGen.nextDouble(alpha, beta);
+		double r = random.nextBeta(alpha, beta);
 		return r * (max - min) + min;
 	}
 	
+	public RandomVectorGenerator createMultivariateGaussian(RealVector mean, RealMatrix covariance) {
+		return new MultivariateGaussianGenerator(mean, covariance, this.engine);
+	}
 }

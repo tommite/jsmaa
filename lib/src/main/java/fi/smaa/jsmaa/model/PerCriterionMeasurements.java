@@ -4,7 +4,7 @@ package fi.smaa.jsmaa.model;
  * Measurements that are independent between criteria, but dependent between alternatives.
  * @see Measurement. 
  */
-public interface PerCriterionMeasurements {
+public interface PerCriterionMeasurements extends FullJointMeasurements {
 	/**
 	 * Set the measurement for this criterion.
 	 */

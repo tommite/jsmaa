@@ -211,7 +211,6 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 		i.defaultReadObject();
 		
 		measListener = new MeasurementListener();
-//		thisListeners = new ArrayList<ImpactMatrixListener>();
 		ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
 		
 		for (Criterion c : criteria) {

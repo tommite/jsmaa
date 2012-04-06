@@ -23,8 +23,7 @@ package fi.smaa.jsmaa.model;
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
 
-import org.apache.commons.math.MathException;
-import org.apache.commons.math.distribution.BetaDistributionImpl;
+import org.apache.commons.math3.distribution.BetaDistribution;
 
 import fi.smaa.common.RandomUtil;
 
@@ -112,14 +111,10 @@ public class BetaMeasurement extends CardinalMeasurement {
 	
 	@Override
 	public Interval getRange() {
-		BetaDistributionImpl dist = new BetaDistributionImpl(alpha, beta);
-		try {
-			double lowEnd = convertToRange(dist.inverseCumulativeProbability(0.025));
-			double highEnd = convertToRange(dist.inverseCumulativeProbability(0.975));
-			return new Interval(lowEnd, highEnd);			
-		} catch (MathException e) {
-			throw new IllegalStateException("MathException in BetaMeasurement.getRange(): " + e.getMessage()); 
-		}
+		BetaDistribution dist = new BetaDistribution(alpha, beta);
+		double lowEnd = convertToRange(dist.inverseCumulativeProbability(0.025));
+		double highEnd = convertToRange(dist.inverseCumulativeProbability(0.975));
+		return new Interval(lowEnd, highEnd);			
 	}
 	
 	private double convertToRange(double val) {

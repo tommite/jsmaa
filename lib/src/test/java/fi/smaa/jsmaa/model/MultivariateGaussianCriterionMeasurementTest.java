@@ -1,19 +1,23 @@
 package fi.smaa.jsmaa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.math.linear.Array2DRowRealMatrix;
-import org.apache.commons.math.linear.ArrayRealVector;
-import org.apache.commons.math.linear.MatrixUtils;
-import org.apache.commons.math.linear.RealMatrix;
-import org.apache.commons.math.linear.RealVector;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
 import org.drugis.common.JUnitUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import fi.smaa.common.RandomUtil;
 
 public class MultivariateGaussianCriterionMeasurementTest {
 	private List<Alternative> alternatives;
@@ -24,6 +28,7 @@ public class MultivariateGaussianCriterionMeasurementTest {
 		alternatives = new ArrayList<Alternative>(
 				Arrays.asList(new Alternative("Ubuntu"), new Alternative("Debian"), new Alternative("Fedora")));
 		m = new MultivariateGaussianCriterionMeasurement(alternatives);
+		
 	}
 	
 	@Test
@@ -114,5 +119,47 @@ public class MultivariateGaussianCriterionMeasurementTest {
 		assertEquals(sigma, m.getCovarianceMatrix());
 		
 		// FIXME: define what events should be fired and when.
+	}
+	
+	@Test
+	public void testRandomSampling() {
+		RandomUtil random = RandomUtil.createWithRandomSeed();
+		m.setCovarianceMatrix(new Array2DRowRealMatrix(new double[][] { {2.0, 0.5, 0.0}, {0.5, 2.0, 0.0}, {0.0, 0.0, 2.0} }));
+		double[] mean = new double[] { 25.3, 2.1, -3 };
+		m.setMeanVector(new ArrayRealVector(mean));
+		double[][] target = new double[5][3];
+		int index = 1;
+		m.sample(random, target, index);
+
+		// The sampler should only write to the target row.
+		assertArrayEquals(new double[3], target[0], 0.0);
+		assertArrayEquals(new double[3], target[2], 0.0);
+		assertArrayEquals(new double[3], target[3], 0.0);
+		assertArrayEquals(new double[3], target[4], 0.0);
+
+		// We expect non-zero values at least somewhere.
+		assertFalse(new Array2DRowRealMatrix(target).getNorm() == 0);
+
+		// We expect the generated values to be random, hence different.
+		double[][] target2 = new double[5][3];
+		m.sample(random, target2, index);
+		assertFalse(target[index][0] == target2[index][0]);
+		assertFalse(target[index][1] == target2[index][1]);
+		assertFalse(target[index][2] == target2[index][2]);
+		
+		// With zero variance, we expect to get the mean.
+		m.setCovarianceMatrix(new Array2DRowRealMatrix(new double[3][3]));
+		m.sample(random, target, index);
+		assertArrayEquals(mean, target[index], 0.0);
+	}
+	
+	@Test
+	public void testGetRange() {
+		m.setCovarianceMatrix(new Array2DRowRealMatrix(new double[][] { {2.0, 0.5, 0.0}, {0.5, 2.0, 0.0}, {0.0, 0.0, 3.0} }));
+		m.setMeanVector(new ArrayRealVector(new double[] { 25.3, 2.1, -3 }));
+		
+		Interval interval = m.getRange();
+		assertEquals(25.3 + 1.96 * Math.sqrt(2), interval.getEnd(), 10e-7);
+		assertEquals(-3 - 1.96 * Math.sqrt(3.0), interval.getStart(), 10e-7);
 	}
 }
