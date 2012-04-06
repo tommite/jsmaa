@@ -31,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.GUIHelper;
 import org.drugis.common.gui.ViewBuilder;
 import org.jfree.chart.ChartPanel;
@@ -44,6 +43,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideButton;
 
 import fi.smaa.jsmaa.gui.GNUPlotDialog;
+import fi.smaa.jsmaa.gui.ImageFactory;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverter;
 import fi.smaa.jsmaa.gui.jfreechart.PlotConverterFactory;
 import fi.smaa.jsmaa.gui.jfreechart.SMAADataSet;
@@ -94,7 +94,7 @@ public class ResultsView implements ViewBuilder {
 
 	@SuppressWarnings("serial")
 	private Component buildExportButton() {
-		JButton exportButton = new JideButton("Export figure dataset as GNUPlot script", ImageLoader.getIcon(scriptIcon));
+		JButton exportButton = new JideButton("Export figure dataset as GNUPlot script", ImageFactory.IMAGELOADER.getIcon(scriptIcon));
 		exportButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
 				PlotConverter c = PlotConverterFactory.getConverter((SMAADataSet<?>) ((CategoryPlot) chart.getPlot()).getDataset());

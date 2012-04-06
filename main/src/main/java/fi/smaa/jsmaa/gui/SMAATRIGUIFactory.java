@@ -36,7 +36,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.ViewBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -93,7 +92,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	protected JToolBar buildTopToolBar() {
 		JToolBar bar = super.buildTopToolBar();
 
-		JButton addCatButton = new JButton(ImageLoader.getIcon(FileNames.ICON_ADD));
+		JButton addCatButton = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADD));
 		addCatButton.setToolTipText("Add category");
 		addCatButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,14 +133,14 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	@Override
 	protected JMenuItem buildAddCriterionItem() {
 		JMenuItem item = new JMenuItem("Add new");
-		item.setIcon(ImageLoader.getIcon(FileNames.ICON_ADDCRITERION));
+		item.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDCRITERION));
 		item.addActionListener(new AddOutrankingCriterionAction());				
 		return item;
 	}
 	
 	@Override
 	protected JButton buildToolBarAddCriterionButton() {
-		JButton button = new JButton(ImageLoader.getIcon(FileNames.ICON_ADDCRITERION));
+		JButton button = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDCRITERION));
 		button.setToolTipText("Add criterion");
 		button.addActionListener(new AddOutrankingCriterionAction());
 		return button;
@@ -176,7 +175,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 	private JMenuItem createAddCatMenuItem() {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setMnemonic('n');
-		item.setIcon(ImageLoader.getIcon(FileNames.ICON_ADD));
+		item.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADD));
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				addCategory();
@@ -211,7 +210,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 		JMenu resultsMenu = new JMenu("Results");
 		resultsMenu.setMnemonic('r');
 		JMenuItem racsItem = new JMenuItem("Category acceptability indices", 
-				ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+				ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 		racsItem.setMnemonic('r');
 				
 		racsItem.addActionListener(new AbstractAction() {
@@ -240,7 +239,7 @@ public class SMAATRIGUIFactory extends AbstractGUIFactory<LeftTreeModelSMAATRI, 
 					"Do you really want to delete " + typeName + " " + alternative + "?",
 					"Confirm deletion",					
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-					ImageLoader.getIcon(FileNames.ICON_DELETE));
+					ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_DELETE));
 			if (conf == JOptionPane.YES_OPTION) {
 				smaaModel.deleteCategory(alternative);
 			}
