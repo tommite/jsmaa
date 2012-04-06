@@ -118,7 +118,7 @@ public class SMAAModelTest {
 		verify(mock);
 		
 		assertEquals(alts2, model.getAlternatives());		
-		assertNotNull(model.getImpactMatrix().getMeasurement(c1, alt2));
+		assertNotNull(((IndependentMeasurements) model.getMeasurements()).getMeasurement(c1, alt2));
 	}
 	
 	@Test
@@ -187,7 +187,7 @@ public class SMAAModelTest {
 		model.addAlternative(a2);
 		model.addCriterion(c1);
 		model.addCriterion(c2);
-		model.getImpactMatrix().setMeasurement(c1, a1, new Interval(0.0, 6.0));
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c1, a1, new Interval(0.0, 6.0));
 	}
 	
 	@Test
@@ -282,10 +282,10 @@ public class SMAAModelTest {
 		m.addAlternative(a1);
 		m.addCriterion(c1);
 		LogNormalMeasurement meas = new LogNormalMeasurement(0.0, 0.2);
-		m.getImpactMatrix().setMeasurement(c1, a1, meas);
+		((IndependentMeasurements) m.getMeasurements()).setMeasurement(c1, a1, meas);
 		m.addCriterion(c2);
 		assertEquals(meas,
-				m.getImpactMatrix().getMeasurement(c1, a1));
+				((IndependentMeasurements) m.getMeasurements()).getMeasurement(c1, a1));
 	}
 	
 	@Test
@@ -320,6 +320,6 @@ public class SMAAModelTest {
 		m.reorderCriteria(newList);
 		verify(l);
 		assertEquals(newList, m.getCriteria());
-		assertEquals(newList, m.getImpactMatrix().getCriteria());
+		assertEquals(newList, ((IndependentMeasurements) m.getMeasurements()).getCriteria());
 	}
 }

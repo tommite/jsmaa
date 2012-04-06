@@ -50,7 +50,7 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 	}
 	
 	protected void sampleMeasurements() {
-		this.model.getImpactMatrix().sample(random, measurements);
+		this.model.getMeasurements().sample(random, measurements);
 	}
 
 	protected double[] getMeasurements(int critIndex) {

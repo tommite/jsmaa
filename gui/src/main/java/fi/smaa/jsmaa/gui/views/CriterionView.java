@@ -50,6 +50,7 @@ import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
 import fi.smaa.jsmaa.model.CardinalCriterion;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
 import fi.smaa.jsmaa.model.Criterion;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -87,11 +88,11 @@ public class CriterionView implements ViewBuilder {
 		builder.addSeparator("Measurements", cc.xy(1, row));
 		
 		JComponent measPanel = null;
-		if (criterion instanceof CardinalCriterion) {
-			ImpactMatrixPresentationModel iModel = new ImpactMatrixPresentationModel(model.getImpactMatrix());
+		if (criterion instanceof CardinalCriterion && model.getMeasurements() instanceof IndependentMeasurements) {
+			ImpactMatrixPresentationModel iModel = new ImpactMatrixPresentationModel((IndependentMeasurements) model.getMeasurements());
 			measPanel = new CardinalCriterionMeasurementsView((CardinalCriterion) criterion, iModel).buildPanel();			
-		} else if (criterion instanceof OrdinalCriterion) {
-			OrdinalCriterionMeasurementsPM pm = new OrdinalCriterionMeasurementsPM((OrdinalCriterion) criterion, model.getImpactMatrix());
+		} else if (criterion instanceof OrdinalCriterion && model.getMeasurements() instanceof IndependentMeasurements) {
+			OrdinalCriterionMeasurementsPM pm = new OrdinalCriterionMeasurementsPM((OrdinalCriterion) criterion, (IndependentMeasurements) model.getMeasurements());
 			measPanel = new OrdinalCriterionMeasurementsView(pm).buildPanel();
 		}
 		builder.add(measPanel, cc.xy(1, row+2));

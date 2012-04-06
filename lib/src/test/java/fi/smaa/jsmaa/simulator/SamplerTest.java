@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
 import fi.smaa.jsmaa.model.SMAAModel;
@@ -57,10 +58,10 @@ public class SamplerTest {
 		
 		random = RandomUtil.createWithFixedSeed();
 		
-		model.getImpactMatrix().setMeasurement(c, a1, r1);
-		model.getImpactMatrix().setMeasurement(c, a2, r2);
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c, a1, r1);
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c, a2, r2);
 		
-		sampler = new Sampler(model.getImpactMatrix(), random);
+		sampler = new Sampler((IndependentMeasurements) model.getMeasurements(), random);
 	}
 	
 	@Test

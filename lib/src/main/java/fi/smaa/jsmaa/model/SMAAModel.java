@@ -42,7 +42,7 @@ public class SMAAModel extends AbstractEntity {
 	
 	private String name;
 	protected PreferenceInformation preferences;
-	protected ImpactMatrix impactMatrix;
+	protected FullJointMeasurements impactMatrix;
 	
 	private static final long serialVersionUID = 6100076809211865658L;
 	
@@ -59,6 +59,10 @@ public class SMAAModel extends AbstractEntity {
 		setPreferenceInformation(new MissingPreferenceInformation(0));
 		impactMatrix = new ImpactMatrix(alternatives, criteria);
 		impactMatrix.addListener(impactListener);		
+	}
+	
+	public SMAAModel(String model, FullJointMeasurements measurements) {
+		impactMatrix = measurements;
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
@@ -265,7 +269,7 @@ public class SMAAModel extends AbstractEntity {
 		}		
 	}
 	
-	public IndependentMeasurements getImpactMatrix() {
+	public FullJointMeasurements getMeasurements() {
 		return impactMatrix;
 	}
 
@@ -320,7 +324,9 @@ public class SMAAModel extends AbstractEntity {
 			oe.setAttribute("modelVersion", MODELVERSION);
 			oe.add(new AlternativeList(model.alternatives), "alternatives", AlternativeList.class);			
 			oe.add(new CriterionList(model.criteria), "criteria", CriterionList.class);
-			oe.add(model.impactMatrix, "measurements", ImpactMatrix.class);
+			if (model.impactMatrix instanceof ImpactMatrix) {
+				oe.add((ImpactMatrix)model.impactMatrix, "measurements", ImpactMatrix.class);
+			}
 			if (!(model.getPreferenceInformation() instanceof MissingPreferenceInformation)) {
 				oe.add(model.preferences, "preferences");
 			}
