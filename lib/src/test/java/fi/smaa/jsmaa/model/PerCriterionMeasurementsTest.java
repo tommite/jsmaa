@@ -38,32 +38,44 @@ public class PerCriterionMeasurementsTest {
 		assertNotNull(m.getCriterionMeasurement(criteria.get(0)));
 		assertEquals(alternatives, m.getCriterionMeasurement(criteria.get(0)).getAlternatives());
 		assertSame(m.getCriterionMeasurement(criteria.get(0)), m.getCriterionMeasurement(criteria.get(0)));
-		
+		assertEquals(m.getCriterionMeasurement(criteria.get(0)).getRange(), ((ScaleCriterion)criteria.get(0)).getScale());
 	}
 	
 	@Test 
 	public void testSetCriterionMeasurement() { 
 		MultivariateGaussianCriterionMeasurement m2 = new MultivariateGaussianCriterionMeasurement(alternatives);
+		m2.setMeanVector(new ArrayRealVector(new double[] {1.0, 1.0, 1.0}));
 		m.setCriterionMeasurement(criteria.get(1), m2);
 		assertSame(m.getCriterionMeasurement(criteria.get(1)), m2);
+		assertEquals(m.getCriterionMeasurement(criteria.get(0)).getRange(), ((ScaleCriterion)criteria.get(0)).getScale());
+		assertEquals(m.getCriterionMeasurement(criteria.get(1)).getRange(), ((ScaleCriterion)criteria.get(1)).getScale());
+	}
+	
+	@Test
+	public void testChangeMeasurement() {
+		((MultivariateGaussianCriterionMeasurement) m.getCriterionMeasurement(criteria.get(0))).setMeanVector(new ArrayRealVector(new double[] {1.0, 1.0, 1.0}));
+		assertEquals(m.getCriterionMeasurement(criteria.get(0)).getRange(), ((ScaleCriterion)criteria.get(0)).getScale());
 	}
 	
 	@Test
 	public void testAddAlternatives() { 
+		((MultivariateGaussianCriterionMeasurement) m.getCriterionMeasurement(criteria.get(0))).setMeanVector(new ArrayRealVector(new double[] {1.0, 1.0, 1.0}));
 		Alternative newAlt = new Alternative("redhat");
 		m.addAlternative(newAlt);
 		alternatives.add(newAlt);
 		assertEquals(alternatives, m.getAlternatives());
 		assertEquals(alternatives, m.getCriterionMeasurement(criteria.get(0)).getAlternatives());
+		assertEquals(m.getCriterionMeasurement(criteria.get(0)).getRange(), ((ScaleCriterion)criteria.get(0)).getScale());
 	}
 	
 	@Test
-	public void testDeleteAlternatives() { 
+	public void testDeleteAlternatives() {
+		((MultivariateGaussianCriterionMeasurement) m.getCriterionMeasurement(criteria.get(0))).setMeanVector(new ArrayRealVector(new double[] {1.0, -1.0, -1.0}));
 		m.deleteAlternative(alternatives.get(0));
 		alternatives.remove(0);
 		assertEquals(alternatives, m.getAlternatives());
 		assertEquals(alternatives, m.getCriterionMeasurement(criteria.get(0)).getAlternatives());
-		
+		assertEquals(m.getCriterionMeasurement(criteria.get(0)).getRange(), ((ScaleCriterion)criteria.get(0)).getScale());
 	}
 	
 	@Test 
@@ -87,6 +99,7 @@ public class PerCriterionMeasurementsTest {
 	@Test 
 	public void testDeleteCriterion() { 
 		Criterion c = m.getCriteria().get(0);
+		
 		m.deleteCriterion(criteria.get(0));
 		criteria.remove(0);
 		

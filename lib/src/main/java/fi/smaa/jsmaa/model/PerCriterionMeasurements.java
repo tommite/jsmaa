@@ -1,5 +1,7 @@
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,18 +13,30 @@ import fi.smaa.common.RandomUtil;
  * @see Measurement. 
  */
 public class PerCriterionMeasurements extends AbstractMeasurements implements FullJointMeasurements {
+	private class MeasurementListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			updateScales();
+			fireMeasurementChanged();
+		}
+	}
+		
+	
 	private static final long serialVersionUID = -6733139577051452519L;
 	private final Map<Criterion, CriterionMeasurement> critMeas = new HashMap<Criterion, CriterionMeasurement>();
+	private final MeasurementListener listener = new MeasurementListener();
 	
 	public PerCriterionMeasurements(List<Criterion> criteria, List<Alternative> alternatives) {
 		super(criteria, alternatives);
 		for (Criterion c : criteria) {
 			critMeas.put(c, createDefaultMeasurement());
 		}
+		updateScales();
 	}
 
 	private MultivariateGaussianCriterionMeasurement createDefaultMeasurement() {
-		return new MultivariateGaussianCriterionMeasurement(this.alternatives);
+		final MultivariateGaussianCriterionMeasurement m = new MultivariateGaussianCriterionMeasurement(this.alternatives);
+		m.addPropertyChangeListener(listener);
+		return m;
 	}
 	
 	/**
@@ -36,7 +50,12 @@ public class PerCriterionMeasurements extends AbstractMeasurements implements Fu
 	 * Set the measurement for this criterion.
 	 */
 	public void setCriterionMeasurement(Criterion c, CriterionMeasurement m) {
+		if (critMeas.containsKey(c)) {
+			critMeas.get(c).removePropertyChangeListener(listener);
+		}
 		critMeas.put(c, m);
+		m.addPropertyChangeListener(listener);
+		updateScales();
 	}
 
 	@Override
@@ -73,6 +92,7 @@ public class PerCriterionMeasurements extends AbstractMeasurements implements Fu
 	@Override
 	public void deleteCriterion(Criterion c) {
 		criteria.remove(c);
+		critMeas.get(c).removePropertyChangeListener(listener);
 		critMeas.remove(c);
 	}
 
@@ -109,4 +129,13 @@ public class PerCriterionMeasurements extends AbstractMeasurements implements Fu
 		}
 		return m;
 	}
+	
+
+	private void updateScales() {
+		for(Criterion c : this.criteria) { 
+			if(c instanceof ScaleCriterion) { 
+				((ScaleCriterion)c).setScale(getRange(c));
+			}
+		}
+	}	
 }

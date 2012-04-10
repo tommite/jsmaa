@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javolution.xml.XMLFormat;
@@ -55,14 +56,14 @@ public class SMAAModel extends AbstractEntity {
 	transient private MyPreferenceListener prefListener = new MyPreferenceListener(); 
 	
 	public SMAAModel(String name) {
-		this.name = name;
-		setPreferenceInformation(new MissingPreferenceInformation(0));
-		impactMatrix = new ImpactMatrix(alternatives, criteria);
-		impactMatrix.addListener(impactListener);		
+		this(name, new ImpactMatrix(Collections.<Alternative>emptyList(), Collections.<Criterion>emptyList()));
 	}
 	
-	public SMAAModel(String model, FullJointMeasurements measurements) {
+	public SMAAModel(String name, FullJointMeasurements measurements) {
+		this.name = name;
+		setPreferenceInformation(new MissingPreferenceInformation(0));
 		impactMatrix = measurements;
+		impactMatrix.addListener(impactListener);
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
@@ -213,7 +214,7 @@ public class SMAAModel extends AbstractEntity {
 		for (Criterion c : criteria) {
 			model.addCriterion(c.deepCopy());
 		}
-		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());		
+		model.impactMatrix = impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());		
 		model.impactMatrix.addListener(model.impactListener);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 	}

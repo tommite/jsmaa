@@ -1,16 +1,26 @@
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import org.drugis.common.beans.AbstractObservable;
 import org.drugis.common.stat.Statistics;
 
 import fi.smaa.common.RandomUtil;
 
-public class RelativeLogitGaussianCriterionMeasurement implements CriterionMeasurement {
+public class RelativeLogitGaussianCriterionMeasurement extends AbstractObservable implements CriterionMeasurement {
+	private static final String PROPERTY_NESTED_MEASUREMENT = "gaussianMeasurement";
+	
 	private final RelativeGaussianCriterionMeasurement nested;
 
 	public RelativeLogitGaussianCriterionMeasurement(RelativeGaussianCriterionMeasurement m) {
 		this.nested = m;	
+		nested.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				firePropertyChange(PROPERTY_NESTED_MEASUREMENT, null, RelativeLogitGaussianCriterionMeasurement.this.nested);
+			}
+		});
 	}
 	
 	public RelativeGaussianCriterionMeasurement getGaussianMeasurement() {

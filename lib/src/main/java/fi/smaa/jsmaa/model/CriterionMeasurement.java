@@ -2,9 +2,11 @@ package fi.smaa.jsmaa.model;
 
 import java.util.List;
 
+import com.jgoodies.binding.beans.Observable;
+
 import fi.smaa.common.RandomUtil;
 
-public interface CriterionMeasurement {
+public interface CriterionMeasurement extends Observable {
 	/**
 	 * Gets the alternatives.
 	 * @return the alternatives. Never a null.

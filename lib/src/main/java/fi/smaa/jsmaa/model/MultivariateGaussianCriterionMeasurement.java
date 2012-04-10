@@ -46,10 +46,11 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 	@Override
 	public void addAlternative(Alternative alt) {
 		alternatives.add(alt);
-		setMeanVector(meanVector.append(0));
 		RealMatrix matrix = MatrixUtils.createRealIdentityMatrix(alternatives.size());
-		matrix.setSubMatrix(covarianceMatrix.getData(), 0, 0);
-		setCovarianceMatrix(matrix);
+		final RealMatrix newCovarianceMatrix = matrix;
+		newCovarianceMatrix.setSubMatrix(covarianceMatrix.getData(), 0, 0);
+		final RealVector newMeanVector = meanVector.append(0);
+		fireEvents(setMeanVectorInternal(newMeanVector), setCovarianceMatrixInternal(newCovarianceMatrix));
 	}
 
 	@Override
@@ -68,8 +69,9 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 		}
 		Array2DRowRealMatrix m = new Array2DRowRealMatrix(select);
 		
-		setMeanVector(m.operate(meanVector));
-		setCovarianceMatrix(covarianceMatrix.multiply(m.transpose()).preMultiply(m));
+		final RealVector newMeanVector = m.operate(meanVector);
+		final RealMatrix newCovarianceMatrix = covarianceMatrix.multiply(m.transpose()).preMultiply(m);
+		fireEvents(setMeanVectorInternal(newMeanVector), setCovarianceMatrixInternal(newCovarianceMatrix));
 	}
 
 	@Override
@@ -86,17 +88,29 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 		alternatives.clear();
 		alternatives.addAll(alts);
 		
-		setMeanVector(m.operate(meanVector));
-		setCovarianceMatrix(covarianceMatrix.multiply(m.transpose()).preMultiply(m));
+		final RealVector newMeanVector = m.operate(meanVector);
+		final RealMatrix newCovarianceMatrix = covarianceMatrix.multiply(m.transpose()).preMultiply(m);
+		fireEvents(setMeanVectorInternal(newMeanVector), setCovarianceMatrixInternal(newCovarianceMatrix));
+	}
+
+	public void fireEvents(RealVector oldMeanVector, RealMatrix oldCovMatrix) {
+		firePropertyChange(PROPERTY_ALTERNATIVES, null, alternatives);
+		firePropertyChange(PROPERTY_MEAN_VECTOR, oldMeanVector, meanVector);
+		firePropertyChange(PROPERTY_COVARIANCE_MATRIX, oldCovMatrix, covarianceMatrix);
 	}
 	
 	public void setMeanVector(RealVector newValue) {
+		RealVector oldValue = setMeanVectorInternal(newValue);
+		firePropertyChange(PROPERTY_MEAN_VECTOR, oldValue, newValue);
+	}
+
+	private RealVector setMeanVectorInternal(RealVector newValue) {
 		if (newValue.getDimension() != alternatives.size()) {
 			throw new IllegalArgumentException("Incorrect vector size " + newValue.getDimension() + ", expected " + alternatives.size());
 		}
 		RealVector oldValue = meanVector;
 		meanVector = newValue;
-		firePropertyChange(PROPERTY_MEAN_VECTOR, oldValue, newValue);
+		return oldValue;
 	}
 	
 	public RealVector getMeanVector() {
@@ -104,6 +118,11 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 	}
 	
 	public void setCovarianceMatrix(RealMatrix newValue) {
+		RealMatrix oldValue = setCovarianceMatrixInternal(newValue);
+		firePropertyChange(PROPERTY_COVARIANCE_MATRIX, oldValue, newValue);		
+	}
+
+	private RealMatrix setCovarianceMatrixInternal(RealMatrix newValue) {
 		if (newValue.getRowDimension() != alternatives.size() || newValue.getColumnDimension() != alternatives.size() ) {
 			throw new IllegalArgumentException("Incorrect matrix size " + newValue.getRowDimension() 
 					+ "x" + newValue.getColumnDimension() + ", expected " + alternatives.size() + "x" + alternatives.size());
@@ -117,7 +136,7 @@ public class MultivariateGaussianCriterionMeasurement extends AbstractEntity imp
 		}
 		RealMatrix oldValue = covarianceMatrix;
 		covarianceMatrix = newValue;
-		firePropertyChange(PROPERTY_COVARIANCE_MATRIX, oldValue, newValue);		
+		return oldValue;
 	}
 	
 	public RealMatrix getCovarianceMatrix() {

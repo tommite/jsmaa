@@ -1,17 +1,33 @@
 package fi.smaa.jsmaa.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
+
+import org.drugis.common.beans.AbstractObservable;
 
 import fi.smaa.common.RandomUtil;
 
-public class RelativeGaussianCriterionMeasurement implements CriterionMeasurement {
+public class RelativeGaussianCriterionMeasurement extends AbstractObservable implements CriterionMeasurement {
+	private static final String PROPERTY_RELATIVE_MEASUREMENT = "relativeMeasurement";
+	private static final String PROPERTY_BASELINE_MEASUREMENT = "baselineMeasurement";
+	
 	private final MultivariateGaussianCriterionMeasurement relative;
 	private final GaussianMeasurement baseline;
 
 	public RelativeGaussianCriterionMeasurement(MultivariateGaussianCriterionMeasurement relative, GaussianMeasurement baseline) {
 		this.relative = relative;
 		this.baseline = baseline;
-	
+		relative.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				firePropertyChange(PROPERTY_RELATIVE_MEASUREMENT, null, RelativeGaussianCriterionMeasurement.this.relative);
+			}
+		});
+		baseline.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				firePropertyChange(PROPERTY_BASELINE_MEASUREMENT, null, RelativeGaussianCriterionMeasurement.this.baseline);
+			}
+		});
 	}
 	
 	public MultivariateGaussianCriterionMeasurement getRelativeMeasurement() {
