@@ -75,7 +75,7 @@ public class OrdinalPreferenceInformation extends AbstractPreferenceInformation<
 			rankList.add(ranks.getRank(c).getRank());
 		}
 		RankSampler r = new RankSampler(rankList);
-		return r.sampleWeights();
+		return r.sampleWeights(random);
 	}
 	
 	@Override

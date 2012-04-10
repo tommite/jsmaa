@@ -75,7 +75,7 @@ public class SMAATRISimulation extends SMAASimulation<SMAATRIModel> {
 	
 	protected void sampleThresholds() throws IterationException {
 		for (Criterion c : model.getCriteria()) {
-			((OutrankingCriterion)c).sampleThresholds();
+			((OutrankingCriterion)c).sampleThresholds(random);
 		}
 	}
 

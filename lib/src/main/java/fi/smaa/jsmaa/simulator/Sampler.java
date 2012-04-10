@@ -59,8 +59,9 @@ public class Sampler {
 			Integer r = ((Rank) m.getMeasurement(o, m.getAlternatives().get(i))).getRank();
 			ranks.add(r);
 		}
+		
 		RankSampler rs = new RankSampler(ranks);
-		double[] w = rs.sampleWeights();
+		double[] w = rs.sampleWeights(random);
 				
 		for (int i=0;i<w.length;i++) {
 			target[i] = w[i];

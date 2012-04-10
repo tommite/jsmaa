@@ -25,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
@@ -38,7 +39,7 @@ public class OutrankingFunctionTest {
 	public void setUp() throws IterationException {
 		c = new OutrankingCriterion("crit", true, new Interval(1.0, 1.0), 
 				new Interval(2.0, 2.0));
-		c.sampleThresholds();
+		c.sampleThresholds(RandomUtil.createWithFixedSeed());
 	}
 	
 
