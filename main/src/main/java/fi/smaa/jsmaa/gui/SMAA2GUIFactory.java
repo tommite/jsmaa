@@ -34,7 +34,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.ViewBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -123,14 +122,14 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	@Override
 	protected JMenuItem buildAddCriterionItem() {
 		JMenu menu = new JMenu("Add new");
-		menu.setIcon(ImageLoader.getIcon(FileNames.ICON_ADDCRITERION));
+		menu.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDCRITERION));
 		addUtilityAddItemsToMenu(menu);
 		return menu;
 	}
 	
 	@Override
 	protected JButton buildToolBarAddCriterionButton() {
-		JButton button = new JButton(ImageLoader.getIcon(FileNames.ICON_ADDCRITERION));
+		JButton button = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDCRITERION));
 		button.setToolTipText("Add criterion");		
 		final JPopupMenu addMenu = new JPopupMenu();
 		addUtilityAddItemsToMenu(addMenu);
@@ -153,7 +152,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	
 	private JMenuItem createAddScaleCriterionItem() {
 		JMenuItem cardCrit = new JMenuItem("Cardinal");		
-		cardCrit.setIcon(ImageLoader.getIcon(FileNames.ICON_CARDINALCRITERION));		
+		cardCrit.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_CARDINALCRITERION));		
 
 		cardCrit.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -165,7 +164,7 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 	
 	private JMenuItem createAddOrdinalCriterionItem() {
 		JMenuItem ordCrit = new JMenuItem("Ordinal");
-		ordCrit.setIcon(ImageLoader.getIcon(FileNames.ICON_ORDINALCRITERION));		
+		ordCrit.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ORDINALCRITERION));		
 
 		ordCrit.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -180,10 +179,10 @@ public class SMAA2GUIFactory extends AbstractGUIFactory<LeftTreeModel, SMAAModel
 		JMenu resultsMenu = new JMenu("Results");
 		resultsMenu.setMnemonic('r');
 		JMenuItem cwItem = new JMenuItem("Central weight vectors", 
-				ImageLoader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
+				ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_CENTRALWEIGHTS));
 		cwItem.setMnemonic('c');
 		JMenuItem racsItem = new JMenuItem("Rank acceptability indices", 
-				ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+				ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 		racsItem.setMnemonic('r');
 		
 		cwItem.addActionListener(new AbstractAction() {

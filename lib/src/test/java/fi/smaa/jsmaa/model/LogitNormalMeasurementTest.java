@@ -40,7 +40,7 @@ public class LogitNormalMeasurementTest {
 	@Before
 	public void setUp() {
 		d_m = new LogitNormalMeasurement(0.1, 0.2);
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 
 	}
 	

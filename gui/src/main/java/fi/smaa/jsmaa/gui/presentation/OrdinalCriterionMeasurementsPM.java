@@ -30,16 +30,16 @@ import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.gui.RankSelectorGroup;
 import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.Rank;
 
 public class OrdinalCriterionMeasurementsPM {
 	
 	private RankSelectorGroup selectorGroup;
-	private ImpactMatrix matrix;
+	private IndependentMeasurements matrix;
 
-	public OrdinalCriterionMeasurementsPM(OrdinalCriterion c, ImpactMatrix matrix) {
+	public OrdinalCriterionMeasurementsPM(OrdinalCriterion c, IndependentMeasurements matrix) {
 		this.matrix = matrix;
 		List<Rank> ranks = new ArrayList<Rank>();
 		for (Alternative a : matrix.getAlternatives()) {

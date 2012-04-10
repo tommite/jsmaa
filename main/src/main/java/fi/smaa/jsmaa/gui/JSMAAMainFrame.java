@@ -42,7 +42,6 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.FileLoadDialog;
 import org.drugis.common.gui.FileSaveDialog;
 import org.drugis.common.gui.ViewBuilder;
@@ -80,7 +79,6 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());		
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
-		ImageLoader.setImagePath("/fi/smaa/jsmaa/gui/");		
 		setPreferredSize(new Dimension(1000, 800));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
@@ -189,7 +187,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 					"Current model not saved. Do you want do save changes?",
 					"Save changed",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-					ImageLoader.getIcon(FileNames.ICON_STOP));
+					ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_STOP));
 			if (conf == JOptionPane.CANCEL_OPTION) {
 				return false;
 			} else if (conf == JOptionPane.YES_OPTION) {

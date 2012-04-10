@@ -30,14 +30,14 @@ import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
-import fi.smaa.jsmaa.model.ImpactMatrix;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.Measurement;
 
 @SuppressWarnings("serial")
-public class ImpactMatrixPresentationModel extends PresentationModel<ImpactMatrix> {
+public class ImpactMatrixPresentationModel extends PresentationModel<IndependentMeasurements> {
 
-	public ImpactMatrixPresentationModel(ImpactMatrix bean) {
-		super(bean);
+	public ImpactMatrixPresentationModel(IndependentMeasurements measurements) {
+		super(measurements);
 	}
 	
 	public List<Alternative> getAlternatives() {

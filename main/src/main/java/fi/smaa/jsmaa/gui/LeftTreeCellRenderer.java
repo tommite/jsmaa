@@ -25,8 +25,6 @@ import java.awt.Component;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.drugis.common.ImageLoader;
-
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModel;
 import fi.smaa.jsmaa.gui.presentation.LeftTreeModelSMAATRI;
 import fi.smaa.jsmaa.model.Alternative;
@@ -48,31 +46,31 @@ public class LeftTreeCellRenderer extends DefaultTreeCellRenderer {
 			boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		if (leaf && value instanceof Alternative) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_ALTERNATIVE));
+			setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ALTERNATIVE));
 			setToolTipText("Alternative");
 		} else if (leaf && value instanceof Criterion) {
 			if (value instanceof ScaleCriterion) {
-				setIcon(ImageLoader.getIcon(FileNames.ICON_CARDINALCRITERION));
+				setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_CARDINALCRITERION));
 				setToolTipText("Cardinal criterion");
 			} else if (value instanceof OutrankingCriterion) {
-				setIcon(ImageLoader.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
+				setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_OUTRANKINGCRITERION));
 				setToolTipText("Outranking criterion");					
 			} else if (value instanceof OrdinalCriterion) {
-				setIcon(ImageLoader.getIcon(FileNames.ICON_ORDINALCRITERION));
+				setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ORDINALCRITERION));
 				setToolTipText("Ordinal criterion");						
 			}
 		} else if (value == model.getCentralWeightsNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_CENTRALWEIGHTS));
+			setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_CENTRALWEIGHTS));
 			setToolTipText("Central weights");									
 		} else if (value == model.getRankAcceptabilitiesNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 			setToolTipText("Rank acceptability indices");									
 		} else if (value == model.getPreferencesNode()) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_PREFERENCES));
+			setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_PREFERENCES));
 			setToolTipText("Preference information");
 		} else if (model instanceof LeftTreeModelSMAATRI &&
 				((LeftTreeModelSMAATRI) model).getCatAccNode() == value) {
-			setIcon(ImageLoader.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
+			setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_RANKACCEPTABILITIES));
 			setToolTipText("Category acceptability indices");													
 		} else {
 			setToolTipText(null); //no tool tip

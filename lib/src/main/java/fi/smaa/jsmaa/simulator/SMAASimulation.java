@@ -23,30 +23,24 @@ package fi.smaa.jsmaa.simulator;
 import org.drugis.common.threading.Task;
 
 import fi.smaa.common.RandomUtil;
-import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
-import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.SMAAModel;
 
 public abstract class SMAASimulation<M extends SMAAModel> {
-
-
 	protected RandomUtil random;
 	protected double[][] measurements;
 	protected M model;
-	protected Sampler sampler;
 	protected double[] weights;
 	
 	public static int REPORTING_INTERVAL = 100;
 
-	public SMAASimulation(M model) {
+	public SMAASimulation(M model, RandomUtil random) {
 		this.model = model;
+		this.random = random;
 		initialize();
 	}
 	
 	private void initialize() {
 		measurements = new double[model.getCriteria().size()][model.getAlternatives().size()];
-		random = new RandomUtil();
-		sampler = new Sampler(model, random);		
 	}
 	
 	public abstract SMAAResults getResults();
@@ -55,20 +49,8 @@ public abstract class SMAASimulation<M extends SMAAModel> {
 		initialize();
 	}
 	
-	protected void sampleCriteria() {
-		updateBaselines();
-		for (int i=0;i<model.getCriteria().size();i++) {
-			sampler.sample(model.getCriteria().get(i), measurements[i]);
-		}
-	}
-	
-	private void updateBaselines() {
-		for (Criterion c : model.getCriteria()) {
-			BaselineGaussianMeasurement baseline = model.getImpactMatrix().getBaseline(c);
-			if (baseline != null) {
-				baseline.update(random);
-			}
-		}
+	protected void sampleMeasurements() {
+		this.model.getMeasurements().sample(random, measurements);
 	}
 
 	protected double[] getMeasurements(int critIndex) {

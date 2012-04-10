@@ -39,7 +39,7 @@ public class RelativeLogitNormalMeasurementTest {
 	
 	@Before
 	public void setUp() {
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 		d_m = new RelativeLogitNormalMeasurement(
 					new BaselineGaussianMeasurement(0.25, 0.4),
 					new GaussianMeasurement(-0.1, 0.3)

@@ -28,6 +28,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
+
 public class RankSamplerTest {
 
 	private RankSampler rs;
@@ -46,7 +48,8 @@ public class RankSamplerTest {
 	
 	@Test
 	public void testSampleWeights() {
-		double[] w = rs.sampleWeights();
+		RandomUtil random = RandomUtil.createWithFixedSeed();
+		double[] w = rs.sampleWeights(random);
 		
 		assertEquals(2, w.length);
 		assertTrue(w[0] > w[1]);
@@ -58,7 +61,7 @@ public class RankSamplerTest {
 		list.add(r2);
 		rs = new RankSampler(list);
 		
-		w = rs.sampleWeights();
+		w = rs.sampleWeights(random);
 		assertTrue(w[0] < w[1]);
 	}
 }

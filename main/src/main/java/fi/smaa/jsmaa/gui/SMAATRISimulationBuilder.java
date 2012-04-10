@@ -22,6 +22,7 @@ package fi.smaa.jsmaa.gui;
 
 import javax.swing.JFrame;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.SMAATRIModel;
 import fi.smaa.jsmaa.simulator.SMAATRIResults;
 import fi.smaa.jsmaa.simulator.SMAATRISimulation;
@@ -36,6 +37,6 @@ public class SMAATRISimulationBuilder extends BasicSimulationBuilder<SMAATRIMode
 	
 	@Override
 	public SMAATRISimulation generateSimulation() {
-		return new SMAATRISimulation(model, ITERATIONS);	
+		return new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), ITERATIONS);	
 	}
 }

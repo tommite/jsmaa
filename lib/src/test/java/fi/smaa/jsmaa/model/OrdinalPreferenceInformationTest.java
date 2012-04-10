@@ -44,7 +44,7 @@ public class OrdinalPreferenceInformationTest {
 	
 	@Before
 	public void setUp() {
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 		c1 = new ScaleCriterion("c1");
 		c2 = new ScaleCriterion("c2");
 		Criterion c3 = new ScaleCriterion("c3");

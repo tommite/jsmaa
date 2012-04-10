@@ -43,7 +43,7 @@ public class CardinalPreferenceInformationTest {
 	private RandomUtil random;
 	@Before
 	public void setUp() {
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 		crit = new ScaleCriterion("c");
 		List<Criterion> list = new ArrayList<Criterion>();
 		list.add(crit);

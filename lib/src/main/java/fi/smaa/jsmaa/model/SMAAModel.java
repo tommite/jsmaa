@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javolution.xml.XMLFormat;
@@ -42,7 +43,7 @@ public class SMAAModel extends AbstractEntity {
 	
 	private String name;
 	protected PreferenceInformation preferences;
-	protected ImpactMatrix impactMatrix;
+	protected FullJointMeasurements impactMatrix;
 	
 	private static final long serialVersionUID = 6100076809211865658L;
 	
@@ -55,10 +56,14 @@ public class SMAAModel extends AbstractEntity {
 	transient private MyPreferenceListener prefListener = new MyPreferenceListener(); 
 	
 	public SMAAModel(String name) {
+		this(name, new ImpactMatrix(Collections.<Alternative>emptyList(), Collections.<Criterion>emptyList()));
+	}
+	
+	public SMAAModel(String name, FullJointMeasurements measurements) {
 		this.name = name;
 		setPreferenceInformation(new MissingPreferenceInformation(0));
-		impactMatrix = new ImpactMatrix(alternatives, criteria);
-		impactMatrix.addListener(impactListener);		
+		impactMatrix = measurements;
+		impactMatrix.addListener(impactListener);
 	}
 
 	public void setPreferenceInformation(PreferenceInformation preferences) {
@@ -133,14 +138,6 @@ public class SMAAModel extends AbstractEntity {
 		fireModelChange(ModelChangeEvent.CRITERIA);
 	}
 
-	public void setMeasurement(Criterion crit, Alternative alt, Measurement meas) {
-		impactMatrix.setMeasurement(crit, alt, meas);
-	}
-	
-	public Measurement getMeasurement(Criterion crit, Alternative alt) {
-		return impactMatrix.getMeasurement(crit, alt);
-	}
-	
 	@Override
 	public String toString() {
 		return name;
@@ -217,7 +214,7 @@ public class SMAAModel extends AbstractEntity {
 		for (Criterion c : criteria) {
 			model.addCriterion(c.deepCopy());
 		}
-		model.impactMatrix = (ImpactMatrix) impactMatrix.deepCopy(model.getAlternatives(), model.getCriteria());		
+		model.impactMatrix = impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());		
 		model.impactMatrix.addListener(model.impactListener);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 	}
@@ -273,7 +270,7 @@ public class SMAAModel extends AbstractEntity {
 		}		
 	}
 	
-	public ImpactMatrix getImpactMatrix() {
+	public FullJointMeasurements getMeasurements() {
 		return impactMatrix;
 	}
 
@@ -328,7 +325,9 @@ public class SMAAModel extends AbstractEntity {
 			oe.setAttribute("modelVersion", MODELVERSION);
 			oe.add(new AlternativeList(model.alternatives), "alternatives", AlternativeList.class);			
 			oe.add(new CriterionList(model.criteria), "criteria", CriterionList.class);
-			oe.add(model.impactMatrix, "measurements", ImpactMatrix.class);
+			if (model.impactMatrix instanceof ImpactMatrix) {
+				oe.add((ImpactMatrix)model.impactMatrix, "measurements", ImpactMatrix.class);
+			}
 			if (!(model.getPreferenceInformation() instanceof MissingPreferenceInformation)) {
 				oe.add(model.preferences, "preferences");
 			}

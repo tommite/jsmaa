@@ -48,7 +48,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.ViewBuilder;
 import org.drugis.common.gui.task.TaskProgressBar;
 import org.drugis.common.gui.task.TaskProgressModel;
@@ -75,7 +74,7 @@ import fi.smaa.jsmaa.model.SMAAModel;
 
 
 @SuppressWarnings("serial")
-public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAAModel> implements GUIFactory{
+public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAAModel> implements GUIFactory {
 
 	protected T treeModel;
 	protected M smaaModel;
@@ -139,7 +138,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		JToolBar bar = new JToolBar();
 		bar.setFloatable(false);
 
-		JButton topBarOpenButton = new JButton(ImageLoader.getIcon(FileNames.ICON_OPENFILE));
+		JButton topBarOpenButton = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_OPENFILE));
 		topBarOpenButton.setToolTipText("Open");
 		topBarOpenButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -148,7 +147,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		});
 		bar.add(topBarOpenButton);
 		
-		JButton topBarSaveButton = new JButton(ImageLoader.getIcon(FileNames.ICON_SAVEFILE));
+		JButton topBarSaveButton = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_SAVEFILE));
 		topBarSaveButton.setToolTipText("Save");
 		topBarSaveButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,7 +158,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		Bindings.bind(topBarSaveButton, "enabled", fileManagerPM.getUnsavedModel());
 		bar.addSeparator();
 
-		JButton addButton = new JButton(ImageLoader.getIcon(FileNames.ICON_ADDALTERNATIVE));
+		JButton addButton = new JButton(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDALTERNATIVE));
 		addButton.setToolTipText("Add alternative");
 		addButton.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -185,7 +184,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		} else if (o instanceof Criterion) {
 			return new ViewWithHeader("Criterion", new CriterionView(((Criterion)o), smaaModel));
 		} else if (o instanceof Alternative) {
-			return new ViewWithHeader("Alternative", new AlternativeView((Alternative) o, smaaModel.getImpactMatrix()));
+			return new ViewWithHeader("Alternative", new AlternativeView((Alternative) o, smaaModel.getMeasurements()));
 		} else if (o == treeModel.getPreferencesNode()) {
 			return new ViewWithHeader("Preferences", new PreferenceInformationView(new PreferencePresentationModel(smaaModel, true)));
 		} else if (o == treeModel.getResultsNode()) {
@@ -309,7 +308,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	private JMenu buildHelpMenu() {
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic('h');
-		JMenuItem aboutItem = new JMenuItem("About", ImageLoader.getIcon(FileNames.ICON_HOME));
+		JMenuItem aboutItem = new JMenuItem("About", ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_HOME));
 		aboutItem.setMnemonic('a');
 		aboutItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -329,7 +328,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		msg += "(c) 2011 Tommi Tervonen and Gert van Valkenhoef\n";
 		msg += "http://smaa.fi";
 		JOptionPane.showMessageDialog(parent, msg, title,
-				JOptionPane.INFORMATION_MESSAGE, ImageLoader.getIcon(FileNames.ICON_HOME));
+				JOptionPane.INFORMATION_MESSAGE, ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_HOME));
 	}
 
 	private JMenu buildAlternativeMenu() {
@@ -352,7 +351,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	private JMenuItem buildAddAlternativeItem() {
 		JMenuItem item = new JMenuItem("Add new");
 		item.setMnemonic('n');
-		item.setIcon(ImageLoader.getIcon(FileNames.ICON_ADDALTERNATIVE));
+		item.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_ADDALTERNATIVE));
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));		
 		item.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -367,7 +366,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		criteriaMenu.setMnemonic('c');
 		JMenuItem showItem = new JMenuItem("Show");
 		showItem.setMnemonic('s');
-		showItem.setIcon(ImageLoader.getIcon(FileNames.ICON_CRITERIALIST));
+		showItem.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_CRITERIALIST));
 		showItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				Focuser.focus(tree, treeModel, treeModel.getCriteriaNode());
@@ -395,7 +394,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	}
 	
 	private JMenuItem buildDeleteItem() {
-		JMenuItem item = new JMenuItem("Delete", ImageLoader.getIcon(FileNames.ICON_DELETE));
+		JMenuItem item = new JMenuItem("Delete", ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_DELETE));
 		item.setMnemonic('d');
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		item.addActionListener(new AbstractAction() {
@@ -407,7 +406,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 	}
 	
 	private JMenuItem buildRenameItem() {
-		JMenuItem item = new JMenuItem("Rename", ImageLoader.getIcon(FileNames.ICON_RENAME));
+		JMenuItem item = new JMenuItem("Rename", ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_RENAME));
 		item.setMnemonic('r');
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		item.addActionListener(new AbstractAction() {
@@ -423,7 +422,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		fileMenu.setMnemonic('f');
 		JMenu newMenu = new JMenu("New model");
 		newMenu.setMnemonic('n');
-		newMenu.setIcon(ImageLoader.getIcon(FileNames.ICON_FILENEW));
+		newMenu.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_FILENEW));
 		
 		JMenuItem newSMAA2Item = new JMenuItem("SMAA-2");
 		newSMAA2Item.setMnemonic('2');
@@ -446,20 +445,20 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.setMnemonic('s');
-		saveItem.setIcon(ImageLoader.getIcon(FileNames.ICON_SAVEFILE));
+		saveItem.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_SAVEFILE));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		Bindings.bind(saveItem, "enabled", fileManagerPM.getUnsavedModel());
 		JMenuItem saveAsItem = new JMenuItem("Save As");
 		saveAsItem.setMnemonic('a');
-		saveAsItem.setIcon(ImageLoader.getIcon(FileNames.ICON_SAVEAS));
+		saveAsItem.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_SAVEAS));
 		
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.setMnemonic('o');
-		openItem.setIcon(ImageLoader.getIcon(FileNames.ICON_OPENFILE));
+		openItem.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_OPENFILE));
 		openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.setMnemonic('q');
-		quitItem.setIcon(ImageLoader.getIcon(FileNames.ICON_STOP));
+		quitItem.setIcon(ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_STOP));
 		quitItem.addActionListener(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				director.quit();
@@ -537,7 +536,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 				"Do you really want to delete criterion " + criterion + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-				ImageLoader.getIcon(FileNames.ICON_DELETE));
+				ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			smaaModel.deleteCriterion(criterion);
 		}
@@ -549,7 +548,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 				"Do you really want to delete " + typeName + " " + alternative + "?",
 				"Confirm deletion",					
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-				ImageLoader.getIcon(FileNames.ICON_DELETE));
+				ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_DELETE));
 		if (conf == JOptionPane.YES_OPTION) {
 			smaaModel.deleteAlternative(alternative);
 		}

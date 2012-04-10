@@ -49,13 +49,12 @@ public final class OutrankingCriterion extends CardinalCriterion {
 		super(name, ascending);
 		setIndifMeasurement(indifMeasurement);
 		setPrefMeasurement(prefMeasurement);
-		RandomUtil random = new RandomUtil();
+		RandomUtil random = RandomUtil.createWithFixedSeed(); // FIXME: hack
 		indifferenceThreshold = indifMeasurement.sample(random);
-		preferenceThreshold = prefMeasurement.sample(random);		
+		preferenceThreshold = prefMeasurement.sample(random);
 	}
 		
-	public void sampleThresholds() throws IterationException {
-		RandomUtil random = new RandomUtil();
+	public void sampleThresholds(RandomUtil random) throws IterationException {
 		for (int i=0;i<1000;i++) {
 			indifferenceThreshold = indifMeasurement.sample(random);
 			preferenceThreshold = prefMeasurement.sample(random);

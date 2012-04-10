@@ -31,18 +31,17 @@ import java.util.Map;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.CriterionAlternativeMeasurement;
+import fi.smaa.jsmaa.simulator.Sampler;
 
-public final class ImpactMatrix extends AbstractEntity {
+public final class ImpactMatrix extends AbstractMeasurements implements IndependentMeasurements {
 	
 	private static final long serialVersionUID = -5524839710856011441L;
 	
-	private List<Criterion> criteria = new ArrayList<Criterion>();
-	private List<Alternative> alternatives = new ArrayList<Alternative>();
-	private Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
+	Map<Criterion, Map<Alternative, Measurement>> measurements = new HashMap<Criterion, Map<Alternative, Measurement>>();
 	private Map<Criterion, BaselineGaussianMeasurement> baselines = new HashMap<Criterion, BaselineGaussianMeasurement>();
-	private transient MeasurementListener measListener = new MeasurementListener();
-	private transient List<ImpactMatrixListener> thisListeners = new ArrayList<ImpactMatrixListener>();
+	transient MeasurementListener measListener = new MeasurementListener();
 	private transient Map<Criterion, RankSet<Alternative>> ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
 
 	/**
@@ -92,17 +91,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		return true;
 	}
 	
-	public void addListener(ImpactMatrixListener l) {
-		if (thisListeners.contains(l)) {
-			return;
-		}
-		thisListeners.add(l);
-	}
-	
-	public void removeListener(ImpactMatrixListener l) {
-		thisListeners.remove(l);
-	}	
-	
+	@Override
 	public void setMeasurement(Criterion crit, Alternative alt, Measurement meas) {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
@@ -121,15 +110,13 @@ public final class ImpactMatrix extends AbstractEntity {
 		measurements.get(crit).put(alt, meas);
 	}
 	
+	@Override
 	public Measurement getMeasurement(Criterion crit, Alternative alt) {
 		assertExistAlternativeAndCriterion(crit, alt);
 		return measurements.get(crit).get(alt);
 	}
 	
-	/**
-	 * Deletes an alternative. If alternative doesn't exist, does nothing.
-	 * @param alt Alternative to delete.
-	 */
+	@Override
 	public void deleteAlternative(Alternative alt) {
 		if (!alternatives.contains(alt)) {
 			return;
@@ -141,10 +128,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		updateScales();
 	}
 	
-	/**
-	 * Adds an alternative. If alternative already exists, does nothing.
-	 * @param alt Alternative to add.
-	 */
+	@Override
 	public void addAlternative(Alternative alt) {
 		if (alternatives.contains(alt)) {
 			return;
@@ -165,10 +149,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		updateScales();
 	}
 	
-	/**
-	 * Deletes a criterion. If criterion doesn't exist, does nothing.
-	 * @param c Criterion to delete
-	 */
+	@Override
 	public void deleteCriterion(Criterion c) {
 		if (!criteria.contains(c)) {
 			return;
@@ -179,10 +160,7 @@ public final class ImpactMatrix extends AbstractEntity {
 		baselines.remove(c);
 	}
 	
-	/**
-	 * Adds an alternative. If alternative already exists, does nothing.
-	 * @param c
-	 */
+	@Override
 	public void addCriterion(Criterion c) {
 		if (criteria.contains(c)) {
 			return;
@@ -212,22 +190,6 @@ public final class ImpactMatrix extends AbstractEntity {
 		}
 	}
 	
-	/**
-	 * Gets the alternatives.
-	 * @return the alternatives. Never a null.
-	 */
-	public List<Alternative> getAlternatives() {
-		return alternatives;
-	}
-	
-	/**
-	 * Gets the criteria.
-	 * @return the criteria. Never a null.
-	 */
-	public List<Criterion> getCriteria() {
-		return criteria;
-	}
-
 	private void updateScales() {
 		for (Criterion c : criteria) {
 			if (c instanceof ScaleCriterion) {
@@ -245,16 +207,10 @@ public final class ImpactMatrix extends AbstractEntity {
 		}
 	}
 	
-	private void assertExistAlternativeAndCriterion(Criterion crit, Alternative alt)  {
-		assert(criteria.contains(crit));
-		assert(alternatives.contains(alt));
-	}	
-		
 	private void readObject(ObjectInputStream i) throws IOException, ClassNotFoundException {
 		i.defaultReadObject();
 		
 		measListener = new MeasurementListener();
-		thisListeners = new ArrayList<ImpactMatrixListener>();
 		ordinalCriteriaRanksSets = new HashMap<Criterion, RankSet<Alternative>>();
 		
 		for (Criterion c : criteria) {
@@ -276,7 +232,16 @@ public final class ImpactMatrix extends AbstractEntity {
 		}
 	}
 
-	private void disconnectConnectMeasurementListener(Criterion crit, Alternative alt, Measurement meas) {
+	private class MeasurementListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getSource() instanceof CardinalMeasurement) {
+				updateScales();
+			}
+			fireMeasurementChanged();
+		}
+	}
+	
+	protected void disconnectConnectMeasurementListener(Criterion crit, Alternative alt, Measurement meas) {
 		if (meas == null) {
 			throw new NullPointerException("null measurement");
 		}
@@ -287,28 +252,8 @@ public final class ImpactMatrix extends AbstractEntity {
 		meas.addPropertyChangeListener(measListener);
 	}
 	
-	private class MeasurementListener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof CardinalMeasurement) {
-				updateScales();
-			}
-			fireMeasurementChanged();
-		}
-	}
-	
-	private void fireMeasurementChanged() {
-		for (ImpactMatrixListener l : thisListeners) {
-			l.measurementChanged();
-		}
-	}
-	
-	private void fireMeasurementTypeChanged() {
-		for (ImpactMatrixListener l : thisListeners) {
-			l.measurementTypeChanged();
-		}
-	}	
-
-	public ImpactMatrix deepCopy(List<Alternative> alts, List<Criterion> crit) {
+	@Override
+	public ImpactMatrix deepCopy(List<Criterion> crit, List<Alternative> alts) {
 		if (getAlternatives().size() != alts.size()) {
 			throw new IllegalArgumentException("ImpactMatrix.deepCopy() : getAlternatives().size() != alts.size()");
 		}
@@ -346,12 +291,16 @@ public final class ImpactMatrix extends AbstractEntity {
 		return baselines.get(c);
 	}
 
+	@Override
 	public void reorderAlternatives(List<Alternative> newAlts) {
-		this.alternatives = newAlts;
+		this.alternatives.clear();
+		this.alternatives.addAll(newAlts);
 	}
-	
+
+	@Override
 	public void reorderCriteria(List<Criterion> newCrit) {
-		this.criteria = newCrit;
+		this.criteria.clear();
+		this.criteria.addAll(newCrit);
 	}
 	
 	@SuppressWarnings("unused")
@@ -386,5 +335,30 @@ public final class ImpactMatrix extends AbstractEntity {
 				}
 			}
 		}		
-	};	
+	};
+
+	@Override
+	public void sample(RandomUtil random, double[][] target) {
+		Sampler sampler = new Sampler(this, random);
+		updateBaselines(random);
+		for (int i = 0; i < getCriteria().size(); i++) {
+			sampler.sample(getCriteria().get(i), target[i]);
+		}
+	}	
+	
+	private void updateBaselines(RandomUtil random) {
+		for (Criterion c : getCriteria()) {
+			if (getBaseline(c) != null) {
+				getBaseline(c).update(random);
+			}
+		}
+	}
+
+	@Override
+	public Interval getRange(Criterion crit) {
+		if (crit instanceof ScaleCriterion) {
+			return ((ScaleCriterion) crit).getScale();
+		}
+		return null;
+	}
 }

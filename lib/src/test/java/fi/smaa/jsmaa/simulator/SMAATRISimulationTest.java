@@ -37,10 +37,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Category;
 import fi.smaa.jsmaa.model.Criterion;
 import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.IndependentMeasurements;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.SMAATRIModel;
@@ -78,10 +80,10 @@ public class SMAATRISimulationTest {
 		model.addCriterion(c2);
 		model.addCategory(cat1);
 		model.addCategory(cat2);
-		model.setMeasurement(c1, alt1, new ExactMeasurement(2.0));
-		model.setMeasurement(c2, alt1, new ExactMeasurement(2.0));
-		model.setMeasurement(c1, alt2, new ExactMeasurement(0.0));
-		model.setMeasurement(c2, alt2, new ExactMeasurement(0.0));
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c1, alt1, new ExactMeasurement(2.0));
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c2, alt1, new ExactMeasurement(2.0));
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c1, alt2, new ExactMeasurement(0.0));
+		((IndependentMeasurements) model.getMeasurements()).setMeasurement(c2, alt2, new ExactMeasurement(0.0));
 		model.setCategoryUpperBound(c1, cat1, new ExactMeasurement(1.0));
 		model.setCategoryUpperBound(c2, cat1, new ExactMeasurement(1.0));
 		model.setRule(true);
@@ -99,7 +101,7 @@ public class SMAATRISimulationTest {
 	}
 
 	private SMAATRIResults runModel(SMAATRIModel model) throws InterruptedException {
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {
@@ -146,7 +148,7 @@ public class SMAATRISimulationTest {
 		
 		SMAAResultsListener mock = createMock(SMAAResultsListener.class);
 		
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		
 		mock.resultsChanged((ResultsEvent) JUnitUtil.eqEventObject(new ResultsEvent(simulation.getResults(),
@@ -168,7 +170,7 @@ public class SMAATRISimulationTest {
 		c1.setIndifMeasurement(new ExactMeasurement(3.0));
 		c1.setPrefMeasurement(new ExactMeasurement(2.0));
 		
-		SMAATRISimulation simulation = new SMAATRISimulation(model, 10000);
+		SMAATRISimulation simulation = new SMAATRISimulation(model, RandomUtil.createWithFixedSeed(), 10000);
 		ThreadHandler hand = ThreadHandler.getInstance();
 		hand.scheduleTask(simulation.getTask());
 		do {

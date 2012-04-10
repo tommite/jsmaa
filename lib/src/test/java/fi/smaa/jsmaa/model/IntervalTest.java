@@ -39,7 +39,7 @@ public class IntervalTest {
 	
 	@Before
 	public void setUp() { 
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 	}
 	
 	@Test

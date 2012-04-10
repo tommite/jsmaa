@@ -37,7 +37,7 @@ public class LogNormalMeasurementTest {
 	
 	@Before
 	public void setUp() {
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 		m = new LogNormalMeasurement(0.1, 0.2);
 	}
 	

@@ -35,7 +35,7 @@ public class GaussianMeasurementTest {
 	
 	@Before
 	public void setUp() { 
-		random = new RandomUtil();
+		random = RandomUtil.createWithFixedSeed();
 	}
 	
 	@Test

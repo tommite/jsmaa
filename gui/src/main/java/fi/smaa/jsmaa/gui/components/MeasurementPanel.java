@@ -47,10 +47,7 @@ import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.LogitNormalMeasurement;
-import fi.smaa.jsmaa.model.BaselineGaussianMeasurement;
 import fi.smaa.jsmaa.model.RelativeGaussianMeasurementBase;
-import fi.smaa.jsmaa.model.RelativeLogitNormalMeasurement;
-import fi.smaa.jsmaa.model.RelativeNormalMeasurement;
 
 @SuppressWarnings("serial")
 public class MeasurementPanel extends JPanel {
@@ -65,16 +62,12 @@ public class MeasurementPanel extends JPanel {
 
 	private JComboBox chooserComboBox;
 	
-	private BaselineGaussianMeasurement baselineMeasurement;
-	
 	public enum MeasurementType {
 		EXACT("Exact"),
 		INTERVAL("Interval"),
 		GAUSSIAN("Gaussian"),
 		LOGNORMAL("LogNormal"),
 		LOGITNORMAL("LogitNormal"),
-		RELATIVENORMAL("RelativeNormal"),
-		RELATIVELOGITNORMAL("RelativeLogit"),
 		BETA("Beta");
 		
 		private String label;
@@ -93,15 +86,14 @@ public class MeasurementPanel extends JPanel {
 		}
 	}
 	
-	public MeasurementPanel(ValueModel measurementHolder, BaselineGaussianMeasurement baseline) {
-		this(measurementHolder, MeasurementType.values(), baseline);
+	public MeasurementPanel(ValueModel measurementHolder) {
+		this(measurementHolder, MeasurementType.values());
 	}
 	
-	public MeasurementPanel(ValueModel measurementHolder, MeasurementType[] allowedValues, BaselineGaussianMeasurement baseline) {
+	public MeasurementPanel(ValueModel measurementHolder, MeasurementType[] allowedValues) {
 		this.allowedValues = allowedValues;
 		this.holder = measurementHolder;
 		
-		this.baselineMeasurement = baseline;
 		init();
 		rebuildPanel();
 	}	
@@ -196,10 +188,6 @@ public class MeasurementPanel extends JPanel {
 				return MeasurementType.LOGNORMAL;
 			} else if (m instanceof LogitNormalMeasurement) {
 				return MeasurementType.LOGITNORMAL;
-			} else if (m instanceof RelativeLogitNormalMeasurement) {
-				return MeasurementType.RELATIVELOGITNORMAL;
-			} else if (m instanceof RelativeNormalMeasurement) {
-				return MeasurementType.RELATIVENORMAL;
 			} else if (m instanceof GaussianMeasurement) {
 				return MeasurementType.GAUSSIAN;
 			} else if (m instanceof BetaMeasurement) {
@@ -249,10 +237,6 @@ public class MeasurementPanel extends JPanel {
 				} else {
 					holder.setValue(new GaussianMeasurement(1.0, 0.0));
 				}
-			} else if (type == MeasurementType.RELATIVENORMAL) {
-				holder.setValue(new RelativeNormalMeasurement(baselineMeasurement));
-			} else if (type == MeasurementType.RELATIVELOGITNORMAL) {
-				holder.setValue(new RelativeLogitNormalMeasurement(baselineMeasurement));
 			}  else if (type == MeasurementType.BETA) {
 				holder.setValue(new BetaMeasurement(2.0, 2.0, 0.0, 1.0));
 			} else {

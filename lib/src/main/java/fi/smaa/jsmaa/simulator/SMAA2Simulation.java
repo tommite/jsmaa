@@ -33,6 +33,7 @@ import org.drugis.common.threading.activity.ActivityTask;
 import org.drugis.common.threading.activity.DirectTransition;
 import org.drugis.common.threading.activity.Transition;
 
+import fi.smaa.common.RandomUtil;
 import fi.smaa.common.ValueRanker;
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Criterion;
@@ -52,8 +53,8 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 	private IterativeTask confFacComputation;
 	private ActivityTask activityTask;
 
-	public SMAA2Simulation(SMAAModel amodel, int iterations) {
-		super(amodel);
+	public SMAA2Simulation(SMAAModel amodel, RandomUtil random, int iterations) {
+		super(amodel, random);
 		results = new SMAA2Results(model.getAlternatives(), model.getCriteria(), REPORTING_INTERVAL);		
 		reset();
 
@@ -61,7 +62,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 			@Override
 			public void doStep() {
 				generateWeights();
-				sampleCriteria();
+				sampleMeasurements();
 				aggregate();
 				rankAlternatives();
 				results.update(ranks, weights);
@@ -72,7 +73,7 @@ public class SMAA2Simulation extends SMAASimulation<SMAAModel> {
 		confFacComputation = new IterativeTask(new AbstractIterativeComputation(iterations) {
 			@Override
 			public void doStep() {
-				sampleCriteria();
+				sampleMeasurements();
 				aggregateWithCentralWeights();
 				results.confidenceUpdate(confidenceHits);
 			}

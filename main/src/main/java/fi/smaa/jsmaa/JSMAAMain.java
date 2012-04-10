@@ -25,10 +25,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
-import org.drugis.common.ImageLoader;
 import org.drugis.common.gui.GUIHelper;
 
 import fi.smaa.jsmaa.gui.FileNames;
+import fi.smaa.jsmaa.gui.ImageFactory;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 
 public class JSMAAMain {
@@ -61,7 +61,7 @@ public class JSMAAMain {
 					"Model not saved. Do you want do save changes before quitting JSMAA?",
 					"Save changed",					
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-					ImageLoader.getIcon(FileNames.ICON_STOP));
+					ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_STOP));
 			if (conf == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (conf == JOptionPane.YES_OPTION) {
