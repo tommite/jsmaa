@@ -194,10 +194,9 @@ public class SMAAModel extends AbstractEntity {
 				return false;
 			}
 		}
-		if (!m.preferences.equals(preferences)) {
+		if (m.preferences != null && !m.preferences.equals(preferences)) {
 			return false;
 		}
-		
 		return true;
 	}
 	
