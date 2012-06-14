@@ -8,6 +8,7 @@ Currently is implemented:
 
 Versions
 ========
+0.8.6:	Bug fixes.
 0.8.5:	Bug fixes.
 0.8.4:	Fix sampling of baselines for relative measurements.
 0.8.3:	LogitNormal, RelativeNormal, and RelativeLogNormal measurements.
@@ -30,8 +31,9 @@ Versions
 License
 =======
 JSMAA is (c) 2009-2010 Tommi Tervonen, (c) 2011 Tommi Tervonen and Gert van Valkenhoef,
-and licensed under GPL(3). See LICENSE.txt for more details.
-Icons are taken from Eclipse, and are (c) Eclipse foundations and of their corresponding authors.
+(c) 2012 Tommi Tervonen, Gert van Valkenhoef and Joel Kuiper, and licensed under GPL(3).
+See LICENSE.txt for more details. Icons are taken from Eclipse, and are (c) Eclipse
+foundations and of their corresponding authors.
 
 Contact
 =======
@@ -39,5 +41,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-October 2011
+June 2012
 Tommi Tervonen
