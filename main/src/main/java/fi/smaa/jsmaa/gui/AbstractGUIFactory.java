@@ -4,7 +4,7 @@
 
     (c) Tommi Tervonen, 2009-2010.
     (c) Tommi Tervonen, Gert van Valkenhoef 2011.
-    (c) Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper 2012.
+    (c) Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid 2012.
 
     JSMAA is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -327,7 +327,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		msg += "\t- and can be distributed freely!\n";
 		msg += "(c) 2009-2010 Tommi Tervonen\n";
 		msg += "(c) 2011 Tommi Tervonen and Gert van Valkenhoef\n";
-		msg += "(c) 2012 Tommi Tervonen, Gert van Valkenhoef and Joel Kuiper\n";
+		msg += "(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid\n";
 		msg += "http://smaa.fi";
 		JOptionPane.showMessageDialog(parent, msg, title,
 				JOptionPane.INFORMATION_MESSAGE, ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_HOME));

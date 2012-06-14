@@ -31,9 +31,9 @@ Versions
 License
 =======
 JSMAA is (c) 2009-2010 Tommi Tervonen, (c) 2011 Tommi Tervonen and Gert van Valkenhoef,
-(c) 2012 Tommi Tervonen, Gert van Valkenhoef and Joel Kuiper, and licensed under GPL(3).
-See LICENSE.txt for more details. Icons are taken from Eclipse, and are (c) Eclipse
-foundations and of their corresponding authors.
+(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid, and licensed 
+under GPL(3). See LICENSE.txt for more details. Icons are taken from Eclipse, 
+and are (c) Eclipse foundations and of their corresponding authors.
 
 Contact
 =======
