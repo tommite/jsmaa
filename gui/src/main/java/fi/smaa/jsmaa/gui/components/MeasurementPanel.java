@@ -4,6 +4,7 @@
 
     (c) Tommi Tervonen, 2009-2010.
     (c) Tommi Tervonen, Gert van Valkenhoef 2011.
+    (c) Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper 2012.
 
     JSMAA is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
