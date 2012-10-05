@@ -610,10 +610,10 @@
 	</preferences>
 	<lambda start="0.65" end="0.85"/>
 	<categories>
-		<alternative id="21" name="Class 4"/>
-		<alternative id="22" name="Class 3"/>
-		<alternative id="23" name="Class 2"/>
-		<alternative id="24" name="Class 1"/>
+		<category id="21" name="Class 4"/>
+		<category id="22" name="Class 3"/>
+		<category id="23" name="Class 2"/>
+		<category id="24" name="Class 1"/>
 	</categories>
 	<upperBounds>
 		<measurement>
