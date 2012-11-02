@@ -112,7 +112,7 @@ public class PerCriterionMeasurementsTest {
 	public void testAddCriterion() {
 		Criterion newCrit = new ScaleCriterion("LOC");
 		criteria.add(newCrit);
-		m.addCriterion(newCrit);
+		m.addCriterion(newCrit, true);
 		assertEquals(criteria, m.getCriteria());
 		assertNotNull(m.getCriterionMeasurement(newCrit));
 	}

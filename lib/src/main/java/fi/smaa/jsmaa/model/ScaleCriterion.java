@@ -108,6 +108,13 @@ public class ScaleCriterion extends CardinalCriterion {
 	public ScaleCriterion deepCopy() {
 		ScaleCriterion c = new ScaleCriterion(name, ascending);
 		c.setScale(scale);
+		for (Point2D p : addedPoints) {
+			try {
+				c.addValuePoint(p);
+			} catch (InvalidValuePointException e) {
+				throw new RuntimeException("should never happen");
+			}
+		}
 		return c;
 	}
 	

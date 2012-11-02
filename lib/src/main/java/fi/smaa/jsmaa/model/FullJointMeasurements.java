@@ -62,8 +62,9 @@ public interface FullJointMeasurements {
 	/**
 	 * Adds an alternative. If alternative already exists, does nothing.
 	 * @param c
+	 * @param updateScales if true, tried to update scales
 	 */
-	public void addCriterion(Criterion c);
+	public void addCriterion(Criterion c, boolean updateScales);
 
 	/**
 	 * Deletes a criterion. If criterion doesn't exist, does nothing.

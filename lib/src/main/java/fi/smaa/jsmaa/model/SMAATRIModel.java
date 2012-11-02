@@ -92,7 +92,7 @@ public class SMAATRIModel extends SMAAModel {
 		if (!(c instanceof OutrankingCriterion)) {
 			throw new IllegalArgumentException("All criteria should be outranking-criteria");
 		}
-		profileMatrix.addCriterion(c);		
+		profileMatrix.addCriterion(c, true);		
 		super.addCriterion(c);
 	}
 	

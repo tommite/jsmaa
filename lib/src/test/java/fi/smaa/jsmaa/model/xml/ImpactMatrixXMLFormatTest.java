@@ -46,7 +46,7 @@ public class ImpactMatrixXMLFormatTest {
 		
 		ImpactMatrix mat = new ImpactMatrix();
 		mat.addAlternative(a);
-		mat.addCriterion(c);
+		mat.addCriterion(c, true);
 		mat.setMeasurement(c, a, m);
 		
 		ImpactMatrix nm = XMLHelper.fromXml(XMLHelper.toXml(mat, ImpactMatrix.class));
@@ -67,7 +67,7 @@ public class ImpactMatrixXMLFormatTest {
 		ImpactMatrix mat = new ImpactMatrix();
 		mat.addAlternative(a);
 		mat.addAlternative(b);
-		mat.addCriterion(c);
+		mat.addCriterion(c, true);
 		BaselineGaussianMeasurement baseline = mat.getBaseline(c);
 		baseline.setMean(1.0);
 		baseline.setStDev(0.3);

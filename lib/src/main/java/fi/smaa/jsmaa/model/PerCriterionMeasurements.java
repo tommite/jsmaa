@@ -105,7 +105,7 @@ public class PerCriterionMeasurements extends AbstractMeasurements implements Fu
 	}
 
 	@Override
-	public void addCriterion(Criterion c) {
+	public void addCriterion(Criterion c, boolean updateScales) {
 		criteria.add(c);
 		critMeas.put(c, createDefaultMeasurement());
 	}

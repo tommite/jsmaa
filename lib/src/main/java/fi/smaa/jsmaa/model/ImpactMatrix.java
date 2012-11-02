@@ -64,7 +64,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 	 */
 	public ImpactMatrix(List<Alternative> alternatives, List<Criterion> criteria) {
 		for (Criterion c : criteria) {
-			addCriterion(c);
+			addCriterion(c, true);
 		}
 		for (Alternative a : alternatives) {
 			addAlternative(a);
@@ -129,8 +129,12 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 		updateScales();
 	}
 	
-	@Override
+	@Override	
 	public void addAlternative(Alternative alt) {
+		addAlternative(alt, true);
+	}
+	
+	private void addAlternative(Alternative alt, boolean updateScales) {
 		if (alternatives.contains(alt)) {
 			return;
 		}
@@ -147,7 +151,9 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 				}
 			}
 		}
-		updateScales();
+		if (updateScales) {
+			updateScales();
+		}
 	}
 	
 	@Override
@@ -162,7 +168,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 	}
 	
 	@Override
-	public void addCriterion(Criterion c) {
+	public void addCriterion(Criterion c, boolean updateScales) {
 		if (criteria.contains(c)) {
 			return;
 		}
@@ -177,7 +183,6 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 				Rank r = rs.getRank(a);
 				setMeasurementNoFires(c, a, r);
 			}
-			
 		} else if (c instanceof CardinalCriterion) {
 			baselines.put(c, new BaselineGaussianMeasurement());
 			for (Alternative a : alternatives) {
@@ -186,7 +191,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 				}
 			}
 		}
-		if (c instanceof ScaleCriterion) {
+		if (c instanceof ScaleCriterion && updateScales) {
 			updateScales();
 		}
 	}
@@ -318,9 +323,9 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 		public void read(InputElement ie, ImpactMatrix mat) throws XMLStreamException {
 			while (ie.hasNext()) {
 				CriterionAlternativeMeasurement m = ie.get("measurement", CriterionAlternativeMeasurement.class);
-				mat.addAlternative(m.getAlternative());
-				mat.addCriterion(m.getCriterion());
-				mat.setMeasurement(m.getCriterion(), m.getAlternative(), m.getMeasurement());
+				mat.addAlternative(m.getAlternative(), false);
+				mat.addCriterion(m.getCriterion(), false);
+				mat.setMeasurementNoFires(m.getCriterion(), m.getAlternative(), m.getMeasurement());
 				if (m.getMeasurement() instanceof RelativeGaussianMeasurementBase) {
 					RelativeGaussianMeasurementBase rm = (RelativeGaussianMeasurementBase)m.getMeasurement();
 					mat.setBaseline(m.getCriterion(), rm.getBaseline());

@@ -131,7 +131,7 @@ public class SMAAModel extends AbstractEntity {
 		preferences = new MissingPreferenceInformation(getCriteria().size());
 
 		impactMatrix.removeListener(impactListener);
-		impactMatrix.addCriterion(crit);
+		impactMatrix.addCriterion(crit, false);
 		impactMatrix.addListener(impactListener);		
 
 		crit.addPropertyChangeListener(critListener);

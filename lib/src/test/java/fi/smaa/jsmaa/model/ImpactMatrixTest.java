@@ -102,9 +102,9 @@ public class ImpactMatrixTest {
 	@Test
 	public void testAddCriterion() {
 		Criterion c = new ScaleCriterion("c");
-		m.addCriterion(c);
+		m.addCriterion(c, true);
 		assertEquals(Collections.singletonList(c), m.getCriteria());
-		m.addCriterion(c);
+		m.addCriterion(c, true);
 		assertEquals(Collections.singletonList(c), m.getCriteria());			
 	}
 	
@@ -112,19 +112,19 @@ public class ImpactMatrixTest {
 	public void testAddCriterionSetsMeasurements() {
 		ScaleCriterion c = new ScaleCriterion("cx");
 		m.addAlternative(a1);
-		m.addCriterion(c);
+		m.addCriterion(c, true);
 		assertEquals(new Interval(), m.getMeasurement(c, a1));
 	}
 	
 	@Test
 	public void testDeleteCriterion() {
 		Criterion c = new ScaleCriterion("c");
-		m.addCriterion(c);
+		m.addCriterion(c, true);
 		m.deleteCriterion(c);
 		assertEquals(Collections.EMPTY_LIST, m.getCriteria());
 		m.deleteCriterion(c);
 		assertEquals(Collections.EMPTY_LIST, m.getCriteria());		
-		m.addCriterion(new ScaleCriterion("b"));
+		m.addCriterion(new ScaleCriterion("b"), true);
 		m.deleteCriterion(c);
 		assertEquals(1, m.getCriteria().size());		
 	}
@@ -177,7 +177,7 @@ public class ImpactMatrixTest {
 	@Test
 	public void testCriterionNameChangePropagates() {
 		m.addAlternative(a1);
-		m.addCriterion(c1);
+		m.addCriterion(c1, true);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		c1.setName("cccc");
 		assertEquals(new Interval(0.0, 1.0), m.getMeasurement(c1, a1));
@@ -186,8 +186,8 @@ public class ImpactMatrixTest {
 	@Test
 	public void testCriterionNameChangeDoesntFire() {
 		ImpactMatrixListener l = EasyMock.createMock(ImpactMatrixListener.class);
-		m.addCriterion(c1);
-		m.addCriterion(c2);
+		m.addCriterion(c1, true);
+		m.addCriterion(c2, true);
 		m.addListener(l);
 		EasyMock.replay(l);
 		c1.setName("xxx");
@@ -199,8 +199,8 @@ public class ImpactMatrixTest {
 	public void testCriterionNameChangeMaintainsMeasurements() {
 		m.addAlternative(a1);
 		m.addAlternative(a2);
-		m.addCriterion(c1);
-		m.addCriterion(c2);
+		m.addCriterion(c1, true);
+		m.addCriterion(c2, true);
 		
 		m.setMeasurement(c1, a1, new Interval());
 		m.setMeasurement(c1, a2, new Interval());
@@ -215,7 +215,7 @@ public class ImpactMatrixTest {
 	
 	@Test
 	public void testAlternativeNameChangePropagates() {
-		m.addCriterion(c1);
+		m.addCriterion(c1, true);
 		m.addAlternative(a1);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		a1.setName("aaaa");
@@ -273,7 +273,7 @@ public class ImpactMatrixTest {
 		m = new ImpactMatrix(alts, crit);
 		m.setMeasurement(c1, a1, new Interval(0.0, 1.0));
 		OrdinalCriterion ordCrit = new OrdinalCriterion("ord");
-		m.addCriterion(ordCrit);
+		m.addCriterion(ordCrit, true);
 		m.setMeasurement(ordCrit, a1, new Rank(2));
 		BaselineGaussianMeasurement base = new BaselineGaussianMeasurement(1.0, 0.5);
 		m.setBaseline(c1, base);
@@ -314,7 +314,7 @@ public class ImpactMatrixTest {
 		m = new ImpactMatrix(alts, crit);
 		LogNormalMeasurement meas = new LogNormalMeasurement(1.0, 0.2);
 		m.setMeasurement(c1, a1, meas);
-		m.addCriterion(c2);
+		m.addCriterion(c2, true);
 		assertEquals(meas, m.getMeasurement(c1, a1));
 	}
 
@@ -323,7 +323,7 @@ public class ImpactMatrixTest {
 		m.addAlternative(a1);
 		m.addAlternative(a2);
 		OrdinalCriterion o = new OrdinalCriterion("ord");
-		m.addCriterion(o);
+		m.addCriterion(o, true);
 		assertEquals(new Rank(1), m.getMeasurement(o, a1));
 		assertEquals(new Rank(2), m.getMeasurement(o, a2));
 	}
@@ -333,7 +333,7 @@ public class ImpactMatrixTest {
 		m.addAlternative(a1);
 		m.addAlternative(a2);
 		OrdinalCriterion o = new OrdinalCriterion("ord");
-		m.addCriterion(o);
+		m.addCriterion(o, true);
 		Alternative a3 = new Alternative("a3");
 		m.addAlternative(a3);
 		assertEquals(new Rank(3), m.getMeasurement(o, a3));
@@ -344,7 +344,7 @@ public class ImpactMatrixTest {
 		m.addAlternative(a1);
 		m.addAlternative(a2);
 		OrdinalCriterion o = new OrdinalCriterion("ord");
-		m.addCriterion(o);
+		m.addCriterion(o, true);
 		Rank r = (Rank) m.getMeasurement(o, a2);
 		assertEquals(new Integer(2), r.getRank());		
 		m.deleteAlternative(a1);
@@ -356,7 +356,7 @@ public class ImpactMatrixTest {
 		m.addAlternative(a1);
 		m.addAlternative(a2);
 		OrdinalCriterion o = new OrdinalCriterion("ord");
-		m.addCriterion(o);
+		m.addCriterion(o, true);
 		
 		Rank oldR1 = (Rank) m.getMeasurement(o, a1);
 		oldR1.setRank(1);
