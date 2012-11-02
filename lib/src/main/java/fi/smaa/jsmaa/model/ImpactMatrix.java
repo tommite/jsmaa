@@ -330,6 +330,12 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 					RelativeGaussianMeasurementBase rm = (RelativeGaussianMeasurementBase)m.getMeasurement();
 					mat.setBaseline(m.getCriterion(), rm.getBaseline());
 				}
+				if (m.getCriterion() instanceof ScaleCriterion) {
+					ScaleCriterion sc = (ScaleCriterion) m.getCriterion();
+					if (sc.getScale() == null) {
+						mat.updateScales();
+					}
+				}
 			}
 		}
 		@Override

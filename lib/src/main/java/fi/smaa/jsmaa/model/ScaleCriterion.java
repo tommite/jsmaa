@@ -135,11 +135,13 @@ public class ScaleCriterion extends CardinalCriterion {
 			Interval scale = ie.get("scale", Interval.class);
 			crit.setScale(scale);
 			Point2DList pts = ie.get("points", Point2DList.class);
-			for (Point2D p : pts.getList()) {
-				try {
-					crit.addValuePoint(p);
-				} catch (InvalidValuePointException e) {
-					throw new XMLStreamException(e);
+			if (pts != null) {
+				for (Point2D p : pts.getList()) {
+					try {
+						crit.addValuePoint(p);
+					} catch (InvalidValuePointException e) {
+						throw new XMLStreamException(e);
+					}
 				}
 			}
 		}
