@@ -18,22 +18,26 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package fi.smaa.jsmaa;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.drugis.common.gui.GUIHelper;
+
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
 import fi.smaa.jsmaa.gui.FileNames;
 import fi.smaa.jsmaa.gui.ImageFactory;
 import fi.smaa.jsmaa.gui.JSMAAMainFrame;
 
 public class JSMAAMain {
-	
+
 	private JSMAAMainFrame app;
 
 	/**
@@ -43,9 +47,25 @@ public class JSMAAMain {
 		JSMAAMain main = new JSMAAMain();
 		main.start();
 	}
-	
+
 	private void start() {
-		GUIHelper.initializeLookAndFeel();		
+		try {
+			String osName = System.getProperty("os.name");
+
+			if (osName.startsWith("Windows")) {
+				UIManager.setLookAndFeel(new WindowsLookAndFeel());
+			} else  if (osName.startsWith("Mac")) {
+				// do nothing, use the Mac Aqua L&f
+			} else {
+				try {
+					UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+				} catch (Exception e) {
+					UIManager.setLookAndFeel(new PlasticLookAndFeel());
+				}
+			}
+		} catch (Exception e) {
+			// Likely the Looks library is not in the class path; ignore.
+		}
 		app = new JSMAAMainFrame(DefaultModels.getSMAA2Model());
 		app.addWindowListener(new WindowAdapter() {
 			@Override
@@ -53,9 +73,10 @@ public class JSMAAMain {
 				quitApplication();
 			}
 		});		
-		app.setVisible(true);			
+		app.setVisible(true);
+		GUIHelper.centerWindow(app);
 	}
-	
+
 	private void quitApplication() {
 		if (!app.modelManager.getSaved()) {
 			int conf = JOptionPane.showConfirmDialog(app, 
