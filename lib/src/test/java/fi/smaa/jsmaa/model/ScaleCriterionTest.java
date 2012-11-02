@@ -21,8 +21,10 @@
 */
 package fi.smaa.jsmaa.model;
 
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.drugis.common.JUnitUtil;
@@ -145,4 +147,14 @@ public class ScaleCriterionTest {
 		assertEquals(new Point2D(0.55, 1.0), points.get(2));
 	}
 	
+	@Test
+	public void testAddPointFires() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.0, 1.0));
+		criterion.setAscending(true);
+		Point2D newPt = new Point2D(0.4, 0.7);
+		PropertyChangeListener mock = JUnitUtil.mockListener(criterion, ScaleCriterion.PROPERTY_VALUEPOINTS, null, null);
+		criterion.addPropertyChangeListener(mock);
+		criterion.addValuePoint(newPt);
+		verify(mock);
+	}
 }

@@ -12,6 +12,8 @@ import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.ui.RectangleEdge;
 
+import fi.smaa.jsmaa.model.InvalidValuePointException;
+import fi.smaa.jsmaa.model.Point2D;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class ValueFunctionMouseListener implements ChartMouseListener {
@@ -44,6 +46,11 @@ public class ValueFunctionMouseListener implements ChartMouseListener {
 			RectangleEdge edge = plot.getDomainAxisEdge();
 			double realX = plot.getDomainAxis().java2DToValue(relativeX, dataArea, edge);
 			double realY = plot.getRangeAxis().java2DToValue(relativeY, dataArea, edge);
+			try {
+				crit.addValuePoint(new Point2D(realX, realY));
+			} catch (InvalidValuePointException e) {
+				System.out.println("error");
+			}
 		}
 	}
 }

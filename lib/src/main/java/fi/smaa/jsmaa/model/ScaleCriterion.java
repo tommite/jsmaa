@@ -59,8 +59,8 @@ public class ScaleCriterion extends CardinalCriterion {
 		this.scale = scale;
 		removePointsOutsideScale();
 		firePropertyChange(PROPERTY_SCALE, oldVal, this.scale);
+		firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
 	}
-
 	
 	private void removePointsOutsideScale() {
 		Iterator<Point2D> it = addedPoints.iterator();
@@ -78,7 +78,7 @@ public class ScaleCriterion extends CardinalCriterion {
 		if (getAscending()) {
 			Collections.sort(addedPoints, new PointsComparator(true));
 		} else {
-			
+			Collections.sort(addedPoints, new PointsComparator(false));
 		}
 	}
 	
@@ -168,6 +168,7 @@ public class ScaleCriterion extends CardinalCriterion {
 		}
 		addedPoints.add(valuePoint);
 		sortAddedPoints();
+		firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
 	}
 
 	private Point2D getStartPoint() {
@@ -197,9 +198,13 @@ public class ScaleCriterion extends CardinalCriterion {
 	
 	@Override
 	public void setAscending(Boolean asc) {
-		if (asc != getAscending()) {
+		boolean changePts = asc != getAscending();
+		if (changePts) {
 			addedPoints.clear();
 		}
 		super.setAscending(asc);
+		if (changePts) {
+			firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
+		}
 	}
 }

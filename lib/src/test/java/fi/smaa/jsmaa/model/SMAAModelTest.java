@@ -256,6 +256,8 @@ public class SMAAModelTest {
 		
 		SMAAModelListener l = createMock(SMAAModelListener.class);
 		newModel.addModelListener(l);
+		// gets called twice because both the scale and the valuepoints change
+		l.modelChanged((ModelChangeEvent) JUnitUtil.eqEventObject(new ModelChangeEvent(newModel, ModelChangeEvent.MEASUREMENT)));				
 		l.modelChanged((ModelChangeEvent) JUnitUtil.eqEventObject(new ModelChangeEvent(newModel, ModelChangeEvent.MEASUREMENT)));				
 		replay(l);
 		ScaleCriterion c = (ScaleCriterion) newModel.getCriteria().get(0);
