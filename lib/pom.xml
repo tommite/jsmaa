@@ -5,7 +5,7 @@
   <parent>
     <groupId>fi.smaa</groupId>
     <artifactId>jsmaa</artifactId>
-    <version>0.8.6</version>
+    <version>0.9-SNAPSHOT</version>
   </parent>
 
   <groupId>fi.smaa.jsmaa</groupId>
