@@ -18,22 +18,40 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package fi.smaa.jsmaa.model.maut;
 
+import java.util.Iterator;
+import java.util.List;
+
+import fi.smaa.jsmaa.model.Point2D;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 
 public class UtilityFunction {
-	
+
 	public static double utility(ScaleCriterion crit, double val) {
-		boolean asc = crit.getAscending();
-		double overMin = val - crit.getScale().getStart();
-		
-		double utility = overMin / crit.getScale().getLength();
-		if (!asc) {
-			utility = 1.0 - utility;
+
+		List<Point2D> pts = crit.getValuePoints();
+		Iterator<Point2D> it = pts.iterator();
+		Point2D prevPt = it.next();
+		while(it.hasNext()) {
+			Point2D nextPt = it.next();
+			if (nextPt.getX() >= val || !it.hasNext()) {
+				return interpolate(prevPt, nextPt, val);
+			}
+
+			prevPt = nextPt;
 		}
-		return utility;
+		throw new IllegalArgumentException("outside scale");
+	}
+
+	private static double interpolate(Point2D prevPt, Point2D nextPt, double val) {
+		double ivalX = nextPt.getX() - prevPt.getX();
+		double ivalY = nextPt.getY() - prevPt.getY();
+
+		double over = val - prevPt.getX();
+
+		return prevPt.getY() + ((over / ivalX) * ivalY);
 	}
 }

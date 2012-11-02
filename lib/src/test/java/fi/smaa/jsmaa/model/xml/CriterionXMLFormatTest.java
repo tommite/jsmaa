@@ -29,8 +29,10 @@ import org.junit.Test;
 import fi.smaa.common.XMLHelper;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.Interval;
+import fi.smaa.jsmaa.model.InvalidValuePointException;
 import fi.smaa.jsmaa.model.OrdinalCriterion;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
+import fi.smaa.jsmaa.model.Point2D;
 import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class CriterionXMLFormatTest {
@@ -60,5 +62,21 @@ public class CriterionXMLFormatTest {
 		
 		assertEquals(crit.getName(), nCrit.getName());
 		assertEquals(crit.getAscending(), nCrit.getAscending());
+	}
+	
+	
+	@Test
+	public void testMarshallCardinalCriterionWithValuePoints() throws InvalidValuePointException, XMLStreamException {
+		ScaleCriterion crit = new ScaleCriterion("crit", false);
+		crit.setScale(new Interval(0.0, 1.0));
+		crit.addValuePoint(new Point2D(0.5, 0.5));
+		ScaleCriterion nCrit = (ScaleCriterion) XMLHelper.fromXml(XMLHelper.toXml(crit, ScaleCriterion.class));
+		
+		assertEquals(crit.getName(), nCrit.getName());
+		assertEquals(crit.getAscending(), nCrit.getAscending());
+		assertEquals(3, nCrit.getValuePoints().size());
+		assertEquals(new Point2D(0.0, 1.0), nCrit.getValuePoints().get(0));
+		assertEquals(new Point2D(0.5, 0.5), nCrit.getValuePoints().get(1));
+		assertEquals(new Point2D(1.0, 0.0), nCrit.getValuePoints().get(2));
 	}
 }

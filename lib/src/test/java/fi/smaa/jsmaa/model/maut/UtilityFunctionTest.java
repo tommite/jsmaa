@@ -23,15 +23,13 @@ package fi.smaa.jsmaa.model.maut;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.smaa.jsmaa.model.Alternative;
-import fi.smaa.jsmaa.model.ScaleCriterion;
 import fi.smaa.jsmaa.model.Interval;
-import fi.smaa.jsmaa.model.maut.UtilityFunction;
+import fi.smaa.jsmaa.model.InvalidValuePointException;
+import fi.smaa.jsmaa.model.Point2D;
+import fi.smaa.jsmaa.model.ScaleCriterion;
 
 public class UtilityFunctionTest {
 	
@@ -39,11 +37,7 @@ public class UtilityFunctionTest {
 	
 	@Before
 	public void setUp() {
-		crit = new ScaleCriterion("crit");
-		ArrayList<Alternative> alts = new ArrayList<Alternative>();
-		alts.add(new Alternative ("alt1"));
-		alts.add(new Alternative ("alt2"));
-		
+		crit = new ScaleCriterion("crit");		
 		crit.setScale(new Interval(1.0, 2.0));
 	}
 	
@@ -71,6 +65,18 @@ public class UtilityFunctionTest {
 		double u = UtilityFunction.utility(crit, 0.0);
 		assertEquals(-1.0, u, 0.0001);
 	}
-
+	
+	@Test
+	public void testPiecewiseLinearUtilityWithinScale() throws InvalidValuePointException {
+		crit.addValuePoint(new Point2D(1.2, 0.5));
+		assertEquals(0.25, UtilityFunction.utility(crit, 1.1), 0.0001);
+	}
+	
+	@Test
+	public void testPiecewiseLinearUtilityWithinScaleDescending() throws InvalidValuePointException {
+		crit.setAscending(false);
+		crit.addValuePoint(new Point2D(1.2, 0.5));
+		assertEquals(0.75, UtilityFunction.utility(crit, 1.1), 0.0001);
+	}
 	
 }

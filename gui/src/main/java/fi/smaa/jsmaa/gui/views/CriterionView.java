@@ -21,6 +21,7 @@
 */
 package fi.smaa.jsmaa.gui.views;
 
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -34,6 +35,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -45,6 +48,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
+import fi.smaa.jsmaa.gui.components.ValueFunctionMouseListener;
 import fi.smaa.jsmaa.gui.jfreechart.UtilityFunctionDataset;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
@@ -104,11 +108,22 @@ public class CriterionView implements ViewBuilder {
 			builder.addSeparator("Value function", cc.xy(1, row));
 			LayoutUtil.addRow(layout);
 			
+			UtilityFunctionDataset dataset = new UtilityFunctionDataset((ScaleCriterion) criterion);
+			
 			JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
-					new UtilityFunctionDataset((ScaleCriterion) criterion), PlotOrientation.VERTICAL,
+					dataset, PlotOrientation.VERTICAL,
 					true, true, false);
 			chart.removeLegend();
-			ChartPanel chartPanel = new ChartPanel(chart);
+			
+			final XYPlot plot = chart.getXYPlot();
+			plot.setDomainCrosshairVisible(true);
+			plot.setRangeCrosshairVisible(true);
+			XYItemRenderer renderer = plot.getRenderer();
+	        renderer.setSeriesPaint(0, Color.blue);
+	        	        
+			final ChartPanel chartPanel = new ChartPanel(chart);
+			chartPanel.addChartMouseListener(new ValueFunctionMouseListener(chartPanel, (ScaleCriterion) criterion));
+			
 			builder.add(chartPanel, cc.xy(1, row+2));
 			row += 4;
 		}
