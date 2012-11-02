@@ -33,8 +33,8 @@ import fi.smaa.jsmaa.model.xml.Point2DList;
 
 public class ScaleCriterion extends CardinalCriterion {
 	
-	public static final double DOMAIN_MAX = 1.0;
-	public static final double DOMAIN_MIN = 0.0;
+	public static final double RANGE_MAX = 1.0;
+	public static final double RANGE_MIN = 0.0;
 	private static final long serialVersionUID = 306783908162696324L;
 	public final static String PROPERTY_SCALE = "scale";
 	public final static String PROPERTY_VALUEPOINTS = "valuePoints";
@@ -91,7 +91,7 @@ public class ScaleCriterion extends CardinalCriterion {
 		
 		@Override
 		public int compare(Point2D p1, Point2D p2) {
-			int val = Double.compare(p1.getX(), p2.getX());
+			int val = Double.compare(p1.getY(), p2.getY());
 			if (asc) {
 				return val;
 			} else {
@@ -147,22 +147,24 @@ public class ScaleCriterion extends CardinalCriterion {
 
 	public void addValuePoint(Point2D valuePoint) throws InvalidValuePointException {
 		if (valuePoint.getX() <= scale.getStart() || valuePoint.getX() >= scale.getEnd()) {
-			throw new PointOutsideIntervalException();
+			throw new PointOutsideIntervalException("Point not within the domain (x-interval) " + scale);
 		}
-		if (valuePoint.getY() <= DOMAIN_MIN || valuePoint.getY() >= DOMAIN_MAX) {
-			throw new PointOutsideIntervalException();
+		if (valuePoint.getY() <= RANGE_MIN || valuePoint.getY() >= RANGE_MAX) {
+			throw new PointOutsideIntervalException("Point not within the range (y-interval) " + new Interval(RANGE_MIN, RANGE_MAX));
 		}
 		for (Point2D p : addedPoints) {
 			if (p.getX() == valuePoint.getX()) {
-				throw new PointAlreadyExistsException();
+				throw new PointAlreadyExistsException("Point with the given x value already exists in the value function");
 			}
 			if (getAscending()) {
-				if (p.getX() < valuePoint.getX() && p.getY() > valuePoint.getY()) {
-					throw new FunctionNotMonotonousException();
+				if (p.getX() < valuePoint.getX() && p.getY() > valuePoint.getY() ||
+						p.getX() > valuePoint.getX() && p.getY() < valuePoint.getY()) {
+					throw new FunctionNotMonotonousException("Ascending value function has to be non-decreasing");
 				}
 			} else { // descending
-				if (p.getX() > valuePoint.getX() && p.getY() > valuePoint.getY()) {
-					throw new FunctionNotMonotonousException();
+				if (p.getX() < valuePoint.getX() && p.getY() < valuePoint.getY() ||
+						p.getX() > valuePoint.getX() && p.getY() > valuePoint.getY()) {
+					throw new FunctionNotMonotonousException("Descending value function has to be non-increasing");
 				}
 			}
 		}
@@ -173,9 +175,9 @@ public class ScaleCriterion extends CardinalCriterion {
 
 	private Point2D getStartPoint() {
 		if (getAscending()) {
-			return new Point2D(scale.getStart(), DOMAIN_MIN);
+			return new Point2D(scale.getStart(), RANGE_MIN);
 		} else {
-			return new Point2D(scale.getStart(), DOMAIN_MAX);
+			return new Point2D(scale.getStart(), RANGE_MAX);
 		}
 	}
 
@@ -190,9 +192,9 @@ public class ScaleCriterion extends CardinalCriterion {
 
 	private Point2D getEndPoint() {
 		if (getAscending()) {
-			return new Point2D(scale.getEnd(), DOMAIN_MAX);
+			return new Point2D(scale.getEnd(), RANGE_MAX);
 		} else {
-			return new Point2D(scale.getEnd(), DOMAIN_MIN);
+			return new Point2D(scale.getEnd(), RANGE_MIN);
 		}
 	}
 	
@@ -206,5 +208,13 @@ public class ScaleCriterion extends CardinalCriterion {
 		if (changePts) {
 			firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
 		}
+	}
+
+	public void deleteValuePoint(int idx) {
+		if (idx < 1 || idx > addedPoints.size()) {
+			throw new IndexOutOfBoundsException("index out of allowed bounds");
+		}
+		addedPoints.remove(idx-1);
+		firePropertyChange(PROPERTY_VALUEPOINTS, null, null);		
 	}
 }

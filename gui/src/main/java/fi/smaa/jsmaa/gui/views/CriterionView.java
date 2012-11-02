@@ -22,6 +22,7 @@
 package fi.smaa.jsmaa.gui.views;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -34,9 +35,12 @@ import org.drugis.common.gui.ViewBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.Range;
+import org.jfree.util.ShapeUtilities;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -65,10 +69,12 @@ import fi.smaa.jsmaa.model.ScaleCriterion;
 public class CriterionView implements ViewBuilder {
 	protected Criterion criterion;
 	protected SMAAModel model;
+	private Component parent;
 	
-	public CriterionView(Criterion crit, SMAAModel model) {
+	public CriterionView(Criterion crit, SMAAModel model, Component parent) {
 		this.criterion = crit;
 		this.model = model;
+		this.parent = parent;
 	}
 
 	public JComponent buildPanel() {
@@ -108,21 +114,7 @@ public class CriterionView implements ViewBuilder {
 			builder.addSeparator("Value function", cc.xy(1, row));
 			LayoutUtil.addRow(layout);
 			
-			UtilityFunctionDataset dataset = new UtilityFunctionDataset((ScaleCriterion) criterion);
-			
-			JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
-					dataset, PlotOrientation.VERTICAL,
-					true, true, false);
-			chart.removeLegend();
-			
-			final XYPlot plot = chart.getXYPlot();
-			plot.setDomainCrosshairVisible(true);
-			plot.setRangeCrosshairVisible(true);
-			XYItemRenderer renderer = plot.getRenderer();
-	        renderer.setSeriesPaint(0, Color.blue);
-	        	        
-			final ChartPanel chartPanel = new ChartPanel(chart);
-			chartPanel.addChartMouseListener(new ValueFunctionMouseListener(chartPanel, (ScaleCriterion) criterion));
+			final ChartPanel chartPanel = buildValueFunctionChartPanel((ScaleCriterion) criterion);
 			
 			builder.add(chartPanel, cc.xy(1, row+2));
 			row += 4;
@@ -136,6 +128,35 @@ public class CriterionView implements ViewBuilder {
 		}
 			
 		return builder.getPanel();
+	}
+
+	private ChartPanel buildValueFunctionChartPanel(ScaleCriterion criterion) {
+		UtilityFunctionDataset dataset = new UtilityFunctionDataset(criterion);
+		
+		JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
+				dataset, PlotOrientation.VERTICAL,
+				false, true, true);
+		
+		final XYPlot plot = chart.getXYPlot();
+		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+		plot.setRenderer(0, renderer);
+		renderer.setSeriesPaint(0, Color.black);
+		renderer.setSeriesShape(0, ShapeUtilities.createDiamond(3.0f));
+		
+		ValueAxis rAxis = plot.getRangeAxis();
+		rAxis.setAutoRange(false);
+		rAxis.setRange(new Range(-0.03, 1.03));
+		ValueAxis dAxis = plot.getDomainAxis();
+		dAxis.setLowerMargin(0.03);
+		dAxis.setUpperMargin(0.03);
+			        
+		ChartPanel chartPanel = new ChartPanel(chart);
+		chartPanel.addChartMouseListener(new ValueFunctionMouseListener(chartPanel, criterion, parent));
+		
+		chartPanel.setDomainZoomable(false);
+		chartPanel.setRangeZoomable(false);
+		
+		return chartPanel;
 	}
 
 	private JComponent buildOverviewPart() {

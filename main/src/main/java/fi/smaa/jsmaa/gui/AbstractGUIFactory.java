@@ -183,7 +183,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		} else if (o == treeModel.getCriteriaNode()){
 			return new ViewWithHeader("Criteria", new CriteriaListView(smaaModel));
 		} else if (o instanceof Criterion) {
-			return new ViewWithHeader("Criterion", new CriterionView(((Criterion)o), smaaModel));
+			return new ViewWithHeader("Criterion", new CriterionView(((Criterion)o), smaaModel, parent));
 		} else if (o instanceof Alternative) {
 			return new ViewWithHeader("Alternative", new AlternativeView((Alternative) o, smaaModel.getMeasurements()));
 		} else if (o == treeModel.getPreferencesNode()) {

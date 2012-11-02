@@ -59,31 +59,21 @@ public class UtilityFunctionDataset extends AbstractXYDataset implements Propert
 
 	public int getItemCount(int index) {
 		if (index == 0) {
-			return 2;
+			return crit.getValuePoints().size();
 		}
 		throw new IndexOutOfBoundsException("index " + index);
 	}
 
 	public Number getX(int series, int item) {
 		if (series == 0) {
-			if (item == 0) {
-				return crit.getScale().getStart();
-			} else if (item == 1) {
-				return crit.getScale().getEnd();
-			}
+			return crit.getValuePoints().get(item).getX();
 		}
 		throw new IndexOutOfBoundsException("series " + series + " item " + item);
 	}
 
 	public Number getY(int series, int item) {
 		if (series == 0) {
-			if ((item == 0 && crit.getAscending()) ||
-					(item == 1 && !crit.getAscending())) {
-				return new Double(0.0);
-			} else 	if ((item == 1 && crit.getAscending()) ||
-					(item == 0 && !crit.getAscending())) {
-				return new Double(1.0);
-			}
+			return crit.getValuePoints().get(item).getY();
 		}
 		throw new IndexOutOfBoundsException("series " + series + " item " + item);
 	}

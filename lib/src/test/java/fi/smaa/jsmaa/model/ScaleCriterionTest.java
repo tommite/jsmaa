@@ -86,14 +86,24 @@ public class ScaleCriterionTest {
 		assertEquals(new Point2D(0.8, 1.0), points.get(2));
 	}
 	
+	@Test
+	public void testDeleteValuePoint() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.1, 0.8));
+		criterion.addValuePoint(new Point2D(0.5, 0.7));
+		List<Point2D> points = criterion.getValuePoints();
+		assertEquals(3, points.size());
+		criterion.deleteValuePoint(1);
+		assertEquals(2, criterion.getValuePoints().size());
+	}	
+	
 	@Test(expected=PointOutsideIntervalException.class)
-	public void testAddValuePointOutsideRangeThrowsException() throws InvalidValuePointException {
+	public void testAddValuePointOutsideDomainThrowsException() throws InvalidValuePointException {
 		criterion.setScale(new Interval(0.0, 1.0));
 		criterion.addValuePoint(new Point2D(1.1, 0.7));		
 	}
 	
 	@Test(expected=PointOutsideIntervalException.class)
-	public void testAddValuePointOutsideDomainThrowsException() throws InvalidValuePointException {
+	public void testAddValuePointOutsideRangeThrowsException() throws InvalidValuePointException {
 		criterion.setScale(new Interval(0.0, 1.0));
 		criterion.addValuePoint(new Point2D(0.7, 1.1));		
 	}
@@ -104,6 +114,30 @@ public class ScaleCriterionTest {
 		criterion.addValuePoint(new Point2D(0.8, 0.7));
 		criterion.addValuePoint(new Point2D(0.9, 0.6));
 	}
+	
+	@Test(expected=FunctionNotMonotonousException.class)
+	public void testAddValuePointNonMonotonous2() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.0, 1.0));
+		criterion.addValuePoint(new Point2D(0.8, 0.7));
+		criterion.addValuePoint(new Point2D(0.7, 0.9));
+	}
+	
+	@Test(expected=FunctionNotMonotonousException.class)
+	public void testAddValuePointNonMonotonous3() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.0, 1.0));
+		criterion.setAscending(false);
+		criterion.addValuePoint(new Point2D(0.8, 0.7));
+		criterion.addValuePoint(new Point2D(0.9, 0.8));
+	}
+	
+	@Test(expected=FunctionNotMonotonousException.class)
+	public void testAddValuePointNonMonotonous4() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.0, 1.0));
+		criterion.setAscending(false);
+		criterion.addValuePoint(new Point2D(0.8, 0.7));
+		criterion.addValuePoint(new Point2D(0.7, 0.5));
+	}		
+
 	
 	@Test(expected=PointAlreadyExistsException.class)
 	public void testAddPointTwiceThrows() throws InvalidValuePointException {
@@ -130,6 +164,19 @@ public class ScaleCriterionTest {
 		List<Point2D> pts = criterion.getValuePoints();
 		assertEquals(new Point2D(0.0, 1.0), pts.get(0));
 		assertEquals(new Point2D(1.0, 0.0), pts.get(1));
+	}
+	
+	@Test
+	public void testDescendingPointsSort() throws InvalidValuePointException {
+		criterion.setAscending(false);
+		criterion.setScale(new Interval(0.0, 1.0));
+		Point2D pt2 = new Point2D(0.4, 0.5);
+		criterion.addValuePoint(pt2);
+		Point2D pt1 = new Point2D(0.2, 0.7);
+		criterion.addValuePoint(pt1);
+		List<Point2D> pts = criterion.getValuePoints();
+		assertEquals(pt1, pts.get(1));
+		assertEquals(pt2, pts.get(2));
 	}
 	
 	@Test

@@ -23,6 +23,9 @@ package fi.smaa.jsmaa;
 
 import fi.smaa.jsmaa.model.Alternative;
 import fi.smaa.jsmaa.model.Category;
+import fi.smaa.jsmaa.model.ExactMeasurement;
+import fi.smaa.jsmaa.model.GaussianMeasurement;
+import fi.smaa.jsmaa.model.ImpactMatrix;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.OutrankingCriterion;
 import fi.smaa.jsmaa.model.ScaleCriterion;
@@ -51,15 +54,26 @@ public class DefaultModels {
 	}	
 
 	private static void addDefaultAlternatives(SMAAModel model) {
-		model.addAlternative(new Alternative("Alternative 1"));
-		model.addAlternative(new Alternative("Alternative 2"));			
-		model.addAlternative(new Alternative("Alternative 3"));
+		Alternative a1 = new Alternative("Alternative 1");
+		model.addAlternative(a1);
+		Alternative a2 = new Alternative("Alternative 2");
+		model.addAlternative(a2);			
+		Alternative a3 = new Alternative("Alternative 3");
+		model.addAlternative(a3);
+		
+		ImpactMatrix meas = (ImpactMatrix) model.getMeasurements();
+		meas.setMeasurement(model.getCriteria().get(0), a1, new ExactMeasurement(10.0));
+		meas.setMeasurement(model.getCriteria().get(1), a1, new ExactMeasurement(5.0));
+		meas.setMeasurement(model.getCriteria().get(0), a2, new ExactMeasurement(7.0));
+		meas.setMeasurement(model.getCriteria().get(1), a2, new Interval(3.0, 6.0));
+		meas.setMeasurement(model.getCriteria().get(0), a3, new GaussianMeasurement(2.0, 0.3));
+		meas.setMeasurement(model.getCriteria().get(1), a3, new Interval(3.0, 6.0));				
 	}
 
 	public static SMAATRIModel getSMAATRIModel() {
 		SMAATRIModel model = new SMAATRIModel("SMAA-TRI Model");
-		addDefaultAlternatives(model);				
 		addDefaultOutrankingCriteria(model);
+		addDefaultAlternatives(model);				
 		model.addCategory(new Category("Category 1"));
 		model.addCategory(new Category("Category 2"));
 		

@@ -80,7 +80,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 		
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());		
 		ToolTipManager.sharedInstance().setInitialDelay(0);		
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(950, 700));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		modelManager = new ModelFileManager();
