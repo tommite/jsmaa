@@ -36,6 +36,10 @@ public class ValueFunctionMouseListener implements ChartMouseListener {
 
 	@Override
 	public void chartMouseMoved(ChartMouseEvent ev) {
+		double realX = getRealX(ev);
+		double realY = getRealY(ev);
+		plot.setDomainCrosshairValue(realX);
+		plot.setRangeCrosshairValue(realY);
 	}
 
 	@Override
@@ -49,13 +53,8 @@ public class ValueFunctionMouseListener implements ChartMouseListener {
 				crit.deleteValuePoint(idx);
 			}
 		} else if (ent instanceof PlotEntity) { // add a new point
-			int relativeX = ev.getTrigger().getX();
-			int relativeY = ev.getTrigger().getY();
-			Rectangle2D dataArea = chartPanel.getScreenDataArea();
-			RectangleEdge dedge = plot.getDomainAxisEdge();
-			RectangleEdge redge = plot.getRangeAxisEdge();
-			double realX = plot.getDomainAxis().java2DToValue(relativeX, dataArea, dedge);
-			double realY = plot.getRangeAxis().java2DToValue(relativeY, dataArea, redge);
+			double realX = getRealX(ev);
+			double realY = getRealY(ev);
 			try {
 				crit.addValuePoint(new Point2D(realX, realY));
 			} catch (InvalidValuePointException e) {
@@ -64,5 +63,19 @@ public class ValueFunctionMouseListener implements ChartMouseListener {
 						"Unable to add point to the partial value function", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+
+	private double getRealY(ChartMouseEvent ev) {
+		int relativeY = ev.getTrigger().getY();
+		Rectangle2D dataArea = chartPanel.getScreenDataArea();
+		RectangleEdge redge = plot.getRangeAxisEdge();
+		return plot.getRangeAxis().java2DToValue(relativeY, dataArea, redge);
+	}
+
+	private double getRealX(ChartMouseEvent ev) {
+		int relativeX = ev.getTrigger().getX();
+		Rectangle2D dataArea = chartPanel.getScreenDataArea();		
+		RectangleEdge dedge = plot.getDomainAxisEdge();
+		return plot.getDomainAxis().java2DToValue(relativeX, dataArea, dedge);
 	}
 }

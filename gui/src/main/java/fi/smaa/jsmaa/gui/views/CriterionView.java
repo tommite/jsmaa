@@ -36,6 +36,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -142,6 +143,7 @@ public class CriterionView implements ViewBuilder {
 		plot.setRenderer(0, renderer);
 		renderer.setSeriesPaint(0, Color.black);
 		renderer.setSeriesShape(0, ShapeUtilities.createDiamond(3.0f));
+		renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
 		
 		ValueAxis rAxis = plot.getRangeAxis();
 		rAxis.setAutoRange(false);
@@ -150,12 +152,21 @@ public class CriterionView implements ViewBuilder {
 		dAxis.setLowerMargin(0.03);
 		dAxis.setUpperMargin(0.03);
 			        
-		ChartPanel chartPanel = new ChartPanel(chart);
+		ChartPanel chartPanel = new ChartPanel(chart, false, true, true, false, true);
 		chartPanel.addChartMouseListener(new ValueFunctionMouseListener(chartPanel, criterion, parent));
 		
 		chartPanel.setDomainZoomable(false);
 		chartPanel.setRangeZoomable(false);
+		chartPanel.setDisplayToolTips(true);
+		chartPanel.setToolTipText("Click to add/remove partial value function points");
+		chartPanel.setMouseWheelEnabled(false);
+		chartPanel.setMouseZoomable(false);
 		
+		plot.setDomainCrosshairLockedOnData(false);
+		plot.setRangeCrosshairLockedOnData(false);
+		plot.setDomainCrosshairVisible(true);
+		plot.setRangeCrosshairVisible(true);
+				
 		return chartPanel;
 	}
 
