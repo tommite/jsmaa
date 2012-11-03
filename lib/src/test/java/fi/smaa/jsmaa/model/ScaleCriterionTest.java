@@ -204,4 +204,17 @@ public class ScaleCriterionTest {
 		criterion.addValuePoint(newPt);
 		verify(mock);
 	}
+	
+	@Test
+	public void testDeepCopy() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.1, 0.5));
+		criterion.setAscending(false);	
+		Point2D newPt = new Point2D(0.4, 0.7);
+		criterion.addValuePoint(newPt);
+		ScaleCriterion newc = criterion.deepCopy();
+		assertEquals(3, newc.getValuePoints().size());
+		assertEquals(newPt, newc.getValuePoints().get(1));
+		assertEquals(false, newc.getAscending());
+		assertEquals(new Interval(0.1, 0.5), newc.getScale()); 
+	}
 }
