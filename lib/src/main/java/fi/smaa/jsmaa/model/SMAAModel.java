@@ -131,6 +131,7 @@ public class SMAAModel extends AbstractEntity {
 		preferences = new MissingPreferenceInformation(getCriteria().size());
 
 		impactMatrix.removeListener(impactListener);
+		
 		impactMatrix.addCriterion(crit, false);
 		impactMatrix.addListener(impactListener);		
 
@@ -214,7 +215,7 @@ public class SMAAModel extends AbstractEntity {
 		for (Criterion c : criteria) {
 			model.addCriterion(c.deepCopy());
 		}
-		model.impactMatrix = impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());		
+		model.impactMatrix = impactMatrix.deepCopy(model.getCriteria(), model.getAlternatives());
 		model.impactMatrix.addListener(model.impactListener);
 		model.setPreferenceInformation((PreferenceInformation) preferences.deepCopy());
 	}

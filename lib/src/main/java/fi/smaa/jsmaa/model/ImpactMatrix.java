@@ -63,12 +63,12 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 	 * @param criteria the criteria.
 	 */
 	public ImpactMatrix(List<Alternative> alternatives, List<Criterion> criteria) {
-		for (Criterion c : criteria) {
-			addCriterion(c, true);
-		}
 		for (Alternative a : alternatives) {
 			addAlternative(a);
 		}
+		for (Criterion c : criteria) {
+			addCriterion(c, false);
+		}		
 	}
 	
 	@Override
@@ -272,6 +272,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 		int cIndex = 0;
 		for (Criterion c : getCriteria()) {
 			int aIndex = 0;
+
 			if (this.getBaseline(c) != null) {
 				other.setBaseline(crit.get(cIndex), this.getBaseline(c).deepCopy());
 			}
@@ -283,7 +284,7 @@ public final class ImpactMatrix extends AbstractMeasurements implements Independ
 				}
 				other.setMeasurement(crit.get(cIndex), alts.get(aIndex), m);
 				aIndex++;
-			}			
+			}
 			cIndex++;
 		}
 		return other;		

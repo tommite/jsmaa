@@ -105,6 +105,7 @@ public class ScaleCriterion extends CardinalCriterion {
 		return "Cardinal";
 	}
 
+	@Override
 	public ScaleCriterion deepCopy() {
 		ScaleCriterion c = new ScaleCriterion(name, ascending);
 		c.setScale(scale);
