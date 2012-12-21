@@ -95,7 +95,7 @@ public class ScaleCriterion extends CardinalCriterion {
 			if (asc) {
 				return val;
 			} else {
-				return 1 - val;
+				return -1 * val;
 			}
 		}
 	}

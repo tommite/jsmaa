@@ -6,20 +6,24 @@ import javolution.xml.stream.XMLStreamException;
 public class Point2D {
 	private double x;
 	private double y;
-	
+
 	public Point2D(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public double getX() {
 		return x;
 	}
-	
+
 	public double getY() {
 		return y;
 	}
-	
+
+	public Point2D deepCopy() {
+		return new Point2D(this.x, this.y);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Point2D) {
@@ -28,14 +32,14 @@ public class Point2D {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "[" + x + "," + y + "]";				
+		return "[" + x + "," + y + "]";
 	}
-	
+
 	@SuppressWarnings("unused")
-	private static final XMLFormat<Point2D> XML = new XMLFormat<Point2D>(Point2D.class) {		
+	private static final XMLFormat<Point2D> XML = new XMLFormat<Point2D>(Point2D.class) {
 		@Override
 		public boolean isReferenceable() {
 			return false;
@@ -49,12 +53,11 @@ public class Point2D {
 			pt.x = ie.getAttribute("x", 0.0);
 			pt.y = ie.getAttribute("y", 0.0);
 		}
+
 		@Override
 		public void write(Point2D pt, OutputElement oe) throws XMLStreamException {
 			oe.setAttribute("x", pt.getX());
 			oe.setAttribute("y", pt.getY());
-		}		
-	};	
-
-	
+		}
+	};
 }
