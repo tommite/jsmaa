@@ -65,7 +65,7 @@ public abstract class Criterion extends AbstractEntity implements Observable, De
 		}
 		@Override
 		public void read(InputElement ie, Criterion crit) throws XMLStreamException {
-			crit.name = ie.<String>getAttribute("name", "");
+			crit.name = ie.getAttribute("name", "");
 		}
 		@Override
 		public void write(Criterion crit, OutputElement oe) throws XMLStreamException {

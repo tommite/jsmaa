@@ -23,9 +23,15 @@ package fi.smaa.jsmaa.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import javax.swing.ListModel;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import javolution.xml.XMLFormat;
 import javolution.xml.stream.XMLStreamException;
@@ -33,10 +39,10 @@ import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.Point2DList;
 
 public class DiscreteMeasurement extends CardinalMeasurement implements
-		List<Point2D> {
+		List<Point2D>, ListModel<Point2D> {
 
-	private final String PROPERTY_DISCRETEPOINTS = "discretepoints";
 	private static final long serialVersionUID = -1319270048369903772L;
+	protected EventListenerList listenerList = new EventListenerList();
 
 	private List<Point2D> discretePoints;
 	private double totalProbability;
@@ -51,6 +57,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		totalProbability = total;
 		if (totalProbability > 1.0)
 			throw new PointOutsideIntervalException("Point outside interval!");
+		fireIntervalAdded(this, 0, this.size()-1);
 	}
 
 	public DiscreteMeasurement() {
@@ -123,7 +130,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 			return false;
 		discretePoints.add(point);
 		totalProbability += point.getY();
-		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+		fireIntervalAdded(this, this.size()-2, this.size()-1);
 		return true;
 	}
 
@@ -138,9 +145,10 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 	@Override
 	public void clear() {
+		int oldsize = this.size()-1;
 		discretePoints = new ArrayList<Point2D>();
 		this.totalProbability = 0.0;
-
+		fireIntervalRemoved(this, 0, oldsize);
 	}
 
 	@Override
@@ -165,9 +173,10 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 	@Override
 	public boolean remove(Object o) {
+		int point = this.indexOf(o);
 		if (discretePoints.remove(o)) {
 			totalProbability -= ((Point2D) o).getX();
-			firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+			fireIntervalRemoved(this, point, point);
 			return true;
 		}
 		return false;
@@ -213,7 +222,8 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		if (checkFeasibility(element)) {
 			discretePoints.add(index, element);
 			totalProbability += element.getY();
-			firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+			fireIntervalAdded(this, index, index);
+			fireContentsChanged(this, index, this.size());
 		}
 
 	}
@@ -255,7 +265,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	public Point2D remove(int index) {
 		Point2D point = discretePoints.remove(index);
 		totalProbability -= point.getY();
-		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+		fireIntervalRemoved(this, index, index);
 		return point;
 	}
 
@@ -265,7 +275,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		if (totalProbability - old.getY() + element.getY() > 1.0)
 			return null;
 		totalProbability = totalProbability - old.getY() + element.getY();
-		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+		fireContentsChanged(this, index, index);
 		return discretePoints.set(index, element);
 	}
 
@@ -330,4 +340,63 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 			oe.add(new Point2DList(meas.getList()), "points", Point2DList.class);
 		}
 	};
+
+	@Override
+	public int getSize() {
+		return this.size();
+	}
+
+	@Override
+	public Point2D getElementAt(int index) {
+		return this.get(index);
+	}
+
+	@Override
+	public void addListDataListener(ListDataListener l) {
+		listenerList.add(ListDataListener.class, l);
+
+	}
+
+	@Override
+	public void removeListDataListener(ListDataListener l) {
+		listenerList.remove(ListDataListener.class, l);
+	}
+
+	public ListDataListener[] getListDataListeners() {
+		return (ListDataListener[]) listenerList
+				.getListeners(ListDataListener.class);
+	}
+
+	protected void fireContentsChanged(Object source, int startIndex,
+			int endIndex) {
+		ListDataEvent event = new ListDataEvent(source,
+				ListDataEvent.CONTENTS_CHANGED, startIndex, endIndex);
+		ListDataListener[] listeners = getListDataListeners();
+
+		for (int index = 0; index < listeners.length; index++)
+			listeners[index].contentsChanged(event);
+	}
+
+	protected void fireIntervalAdded(Object source, int startIndex, int endIndex) {
+		ListDataEvent event = new ListDataEvent(source,
+				ListDataEvent.INTERVAL_ADDED, startIndex, endIndex);
+		ListDataListener[] listeners = getListDataListeners();
+
+		for (int index = 0; index < listeners.length; index++)
+			listeners[index].intervalAdded(event);
+	}
+
+	protected void fireIntervalRemoved(Object source, int startIndex,
+			int endIndex) {
+		ListDataEvent event = new ListDataEvent(source,
+				ListDataEvent.INTERVAL_REMOVED, startIndex, endIndex);
+		ListDataListener[] listeners = getListDataListeners();
+
+		for (int index = 0; index < listeners.length; index++)
+			listeners[index].intervalRemoved(event);
+	}
+
+	public EventListener[] getListeners(Class listenerType) {
+		return listenerList.getListeners(listenerType);
+	}
 }
