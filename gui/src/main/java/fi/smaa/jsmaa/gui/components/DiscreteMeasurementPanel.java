@@ -21,6 +21,7 @@
 */
 package fi.smaa.jsmaa.gui.components;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -54,11 +55,9 @@ public class DiscreteMeasurementPanel extends JPanel implements
 
 	private JButton addButton;
 	private JButton deleteButton;
-	private JTextField value;
-	private JTextField probability;
-
-	private static final String addString = "+";
-	private static final String deleteString = "-";
+	private JTextField valueText;
+	private JTextField probabilityText;
+	private JLabel sumProbabilityLabel;
 
 	public DiscreteMeasurementPanel(JComponent parent,
 			PresentationModel<DiscreteMeasurement> m) {
@@ -72,39 +71,52 @@ public class DiscreteMeasurementPanel extends JPanel implements
 		jlist.addListSelectionListener(this);
 		add("Discrete points: ", new JScrollPane(jlist));
 
-		value = new JTextField();
-		value.addActionListener(new AddButtonListener());
+		valueText = new JTextField();
+		valueText.addActionListener(new AddButtonListener());
 		String strvalue = "" + dm.getElementAt(jlist.getSelectedIndex()).getX();
-		value.setText(strvalue);
-		value.setHorizontalAlignment(JTextField.CENTER);
-		value.setColumns(5);
+		valueText.setText(strvalue);
+		valueText.setHorizontalAlignment(JTextField.CENTER);
+		valueText.setColumns(5);
 		add(new JLabel("P(X="));
-		add("Value:", value);
+		add("Value:", valueText);
 		add(new JLabel(") = "));
 
-		probability = new JTextField();
-		probability.addActionListener(new AddButtonListener());
+		probabilityText = new JTextField();
+		probabilityText.addActionListener(new AddButtonListener());
 		String strprobability = ""
 				+ dm.getElementAt(jlist.getSelectedIndex()).getY();
-		probability.setText(strprobability);
-		probability.setHorizontalAlignment(JTextField.CENTER);
-		probability.setColumns(5);
-		add("Probability:", probability);
+		probabilityText.setText(strprobability);
+		probabilityText.setHorizontalAlignment(JTextField.CENTER);
+		probabilityText.setColumns(5);
+		add("Probability:", probabilityText);
 		
-		addButton = new JButton(addString);
-		addButton.setActionCommand(addString);
+		addButton = new JButton("+");
 		addButton.addActionListener(new AddButtonListener());
 		add(addButton);
 		
-		deleteButton = new JButton(deleteString);
-		deleteButton.setActionCommand(deleteString);
+		deleteButton = new JButton("-");
 		deleteButton.addActionListener(new DeleteButtonListener());
 		add(deleteButton);
+		
+		add(new JLabel("P(\u2126) = "));
+		sumProbabilityLabel = new JLabel("1.0");
+		refreshSummedProbability();
+		add(sumProbabilityLabel);
 
-		addFocusListener(new FocusTransferrer(value));
+		addFocusListener(new FocusTransferrer(valueText));
 		setFocusTraversalPolicyProvider(true);
-		setFocusTraversalPolicy(new TwoComponentFocusTraversalPolicy(value,
-				probability));
+		setFocusTraversalPolicy(new TwoComponentFocusTraversalPolicy(valueText,
+				probabilityText));
+	}
+
+	private void refreshSummedProbability() {
+		double totalprob = dm.getTotalProbability();
+		if (totalprob != 1.0) {
+			sumProbabilityLabel.setForeground(Color.red);
+		} else {
+			sumProbabilityLabel.setForeground(Color.black);
+		}
+		sumProbabilityLabel.setText(""+totalprob);
 	}
 
 	@Override
@@ -114,26 +126,27 @@ public class DiscreteMeasurementPanel extends JPanel implements
 	            if (jlist.getSelectedIndex() == -1) {
 	            //No selection: disable delete, up, and down buttons.
 	                deleteButton.setEnabled(false);
-	                value.setText("");
-	                probability.setText("");
+	                valueText.setText("");
+	                probabilityText.setText("");
 	 
 	            } else {
 	            //Single selection: permit all operations.
 	                deleteButton.setEnabled(true);
-	                value.setText(""+jlist.getSelectedValue().getX());
-	                probability.setText(""+jlist.getSelectedValue().getY());
+	                valueText.setText(""+jlist.getSelectedValue().getX());
+	                probabilityText.setText(""+jlist.getSelectedValue().getY());
 	            }
 		 }
 
 	}
 
-	class DeleteButtonListener implements ActionListener {
+	private class DeleteButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			ListSelectionModel lsm = jlist.getSelectionModel();
 			int selected = lsm.getMinSelectionIndex();
 			dm.remove(selected);
-
+			refreshSummedProbability();
+			
 			int size = dm.size();
 
 			if (size == 0) {
@@ -151,9 +164,9 @@ public class DiscreteMeasurementPanel extends JPanel implements
 	}
 
 	/** A listener shared by the text field and add button. */
-	class AddButtonListener implements ActionListener {
+	private class AddButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (value.getText().equals("") || probability.getText().equals("")) {
+			if (valueText.getText().equals("") || probabilityText.getText().equals("")) {
 				Toolkit.getDefaultToolkit().beep();
 				return;
 			}
@@ -161,10 +174,18 @@ public class DiscreteMeasurementPanel extends JPanel implements
 			double val = 0;
 			double prob = 0;
 			try {
-				val = Double.parseDouble(value.getText());
-				prob = Double.parseDouble(probability.getText());
+				val = Double.parseDouble(valueText.getText());
+				prob = Double.parseDouble(probabilityText.getText());
 			} catch (NumberFormatException ex) {
 				Toolkit.getDefaultToolkit().beep();
+				return;
+			}
+			
+			if(prob <= 0.0 || prob > 1.0) {
+				JOptionPane.showMessageDialog(parent,
+					    "The probability has to be between 0.0 and 1.0!",
+					    "Point not added!",
+					    JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -177,6 +198,7 @@ public class DiscreteMeasurementPanel extends JPanel implements
 					    JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			refreshSummedProbability();
 			jlist.setSelectedIndex(size);
 		}
 	}
