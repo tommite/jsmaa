@@ -23,7 +23,6 @@ package fi.smaa.jsmaa.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -42,6 +41,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		List<Point2D>, ListModel<Point2D> {
 
 	private static final long serialVersionUID = -1319270048369903772L;
+	public static final String PROPERTY_DISCRETEPOINTS = "discretePoints"; 
 	protected EventListenerList listenerList = new EventListenerList();
 
 	private List<Point2D> discretePoints;
@@ -76,6 +76,9 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 	@Override
 	public Interval getRange() {
+		if(this.size() == 0) {
+			return new Interval(0.0, 0.0);
+		}
 		double min = Double.MAX_VALUE;
 		double max = Double.MIN_VALUE;
 		for (Point2D point : discretePoints) {
@@ -130,7 +133,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 			return false;
 		discretePoints.add(point);
 		totalProbability += point.getY();
-		fireIntervalAdded(this, this.size()-2, this.size()-1);
+		fireIntervalAdded(this, this.size()-1, this.size()-1);
 		return true;
 	}
 
@@ -375,6 +378,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 		for (int index = 0; index < listeners.length; index++)
 			listeners[index].contentsChanged(event);
+		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
 	}
 
 	protected void fireIntervalAdded(Object source, int startIndex, int endIndex) {
@@ -384,6 +388,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 		for (int index = 0; index < listeners.length; index++)
 			listeners[index].intervalAdded(event);
+		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
 	}
 
 	protected void fireIntervalRemoved(Object source, int startIndex,
@@ -394,9 +399,6 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 		for (int index = 0; index < listeners.length; index++)
 			listeners[index].intervalRemoved(event);
-	}
-
-	public EventListener[] getListeners(Class listenerType) {
-		return listenerList.getListeners(listenerType);
+		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
 	}
 }

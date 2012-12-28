@@ -25,6 +25,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
@@ -43,11 +45,14 @@ import com.jgoodies.binding.value.ValueModel;
 
 import fi.smaa.jsmaa.model.BetaMeasurement;
 import fi.smaa.jsmaa.model.CardinalMeasurement;
+import fi.smaa.jsmaa.model.DiscreteMeasurement;
 import fi.smaa.jsmaa.model.ExactMeasurement;
 import fi.smaa.jsmaa.model.GaussianMeasurement;
 import fi.smaa.jsmaa.model.Interval;
 import fi.smaa.jsmaa.model.LogNormalMeasurement;
 import fi.smaa.jsmaa.model.LogitNormalMeasurement;
+import fi.smaa.jsmaa.model.Point2D;
+import fi.smaa.jsmaa.model.PointOutsideIntervalException;
 import fi.smaa.jsmaa.model.RelativeGaussianMeasurementBase;
 
 @SuppressWarnings("serial")
@@ -69,7 +74,8 @@ public class MeasurementPanel extends JPanel {
 		GAUSSIAN("Gaussian"),
 		LOGNORMAL("LogNormal"),
 		LOGITNORMAL("LogitNormal"),
-		BETA("Beta");
+		BETA("Beta"),
+		DISCRETE("Discrete");
 		
 		private String label;
 		
@@ -145,6 +151,8 @@ public class MeasurementPanel extends JPanel {
 			text = "Gaussian distributed measurement is input as mean \u00B1 stdev";
 		} else if (holder.getValue() instanceof BetaMeasurement) {
 			text = "Beta distributed measurement is input as alpha, beta, min, max";
+		} else if (holder.getValue() instanceof DiscreteMeasurement) {
+			text = "Discrete distributed measurement is input as multiple values and propabilities (adding up to 1.0)";
 		}
 		chooserComboBox.setToolTipText(text);
 	}
@@ -172,6 +180,9 @@ public class MeasurementPanel extends JPanel {
 		} else if (m instanceof RelativeGaussianMeasurementBase) {
 			RelativeGaussianMeasurementBase gm = (RelativeGaussianMeasurementBase) m;
 		    measComp = new RelativMeasurementPanel(this, gm);
+		} else if (m instanceof DiscreteMeasurement) {
+			DiscreteMeasurement dm = (DiscreteMeasurement) m;
+		    measComp = new DiscreteMeasurementPanel(this, new PresentationModel<DiscreteMeasurement>(dm));
 		} else {
 			throw new RuntimeException("unknown measurement type");
 		}
@@ -193,6 +204,8 @@ public class MeasurementPanel extends JPanel {
 				return MeasurementType.GAUSSIAN;
 			} else if (m instanceof BetaMeasurement) {
 				return MeasurementType.BETA;
+			} else if (m instanceof DiscreteMeasurement) {
+				return MeasurementType.DISCRETE;
 			} else {
 				throw new RuntimeException("unknown measurement type");
 			}
@@ -240,6 +253,14 @@ public class MeasurementPanel extends JPanel {
 				}
 			}  else if (type == MeasurementType.BETA) {
 				holder.setValue(new BetaMeasurement(2.0, 2.0, 0.0, 1.0));
+			}  else if (type == MeasurementType.DISCRETE) {
+				Point2D[] pointsArray = new Point2D[]{new Point2D(1,1)};
+				ArrayList<Point2D> points = new ArrayList<Point2D>(Arrays.asList(pointsArray));
+				try {
+					holder.setValue(new DiscreteMeasurement(points));
+				} catch (PointOutsideIntervalException e) {
+					e.printStackTrace();
+				}
 			} else {
 				throw new RuntimeException("unknown measurement type");
 			}
