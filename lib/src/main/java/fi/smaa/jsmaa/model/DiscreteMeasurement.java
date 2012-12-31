@@ -45,24 +45,19 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	protected EventListenerList listenerList = new EventListenerList();
 
 	private List<Point2D> discretePoints;
-	private double totalProbability;
+	private TotalProbability totalProbability;
 
 	public DiscreteMeasurement(List<Point2D> discretePoints)
 			throws PointOutsideIntervalException {
-		this.discretePoints = discretePoints;
-		double total = 0.0;
+		this();
 		for (Point2D point : discretePoints) {
-			total += point.getY();
+			if(!this.add(point)) throw new PointOutsideIntervalException("Point outside interval!");
 		}
-		totalProbability = total;
-		if (totalProbability > 1.0)
-			throw new PointOutsideIntervalException("Point outside interval!");
-		fireIntervalAdded(this, 0, this.size()-1);
 	}
 
 	public DiscreteMeasurement() {
-		discretePoints = new ArrayList<Point2D>();
-		this.totalProbability = 0.0;
+		this.discretePoints = new ArrayList<Point2D>();
+		totalProbability = new TotalProbability();
 	}
 
 	@Override
@@ -90,7 +85,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 
 	@Override
 	public double sample(RandomUtil random) {
-		if (totalProbability < 1.0) {
+		if (totalProbability.doubleValue() < 1.0) {
 			throw new InvalidIntervalException();
 		}
 		double probability = random.createUnif01();
@@ -109,7 +104,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	}
 
 	public double getTotalProbability() {
-		return totalProbability;
+		return totalProbability.doubleValue();
 	}
 
 	private boolean checkFeasibility(Collection<? extends Point2D> points) {
@@ -121,7 +116,9 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	}
 
 	private boolean checkFeasibility(Point2D point) {
-		if (totalProbability + point.getY() > 1.0)
+		TotalProbability temp = new TotalProbability(totalProbability.doubleValue());
+		temp.add(point.getY());
+		if (temp.doubleValue() > 1.0d)
 			return false;
 		else
 			return true;
@@ -132,7 +129,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		if (!checkFeasibility(point))
 			return false;
 		discretePoints.add(point);
-		totalProbability += point.getY();
+		totalProbability.add(point.getY());
 		fireIntervalAdded(this, this.size()-1, this.size()-1);
 		return true;
 	}
@@ -150,7 +147,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	public void clear() {
 		int oldsize = this.size()-1;
 		discretePoints = new ArrayList<Point2D>();
-		this.totalProbability = 0.0;
+		this.totalProbability = new TotalProbability();
 		fireIntervalRemoved(this, 0, oldsize);
 	}
 
@@ -178,7 +175,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	public boolean remove(Object o) {
 		int point = this.indexOf(o);
 		if (discretePoints.remove(o)) {
-			totalProbability -= ((Point2D) o).getX();
+			totalProbability.min(((Point2D) o).getY());
 			fireIntervalRemoved(this, point, point);
 			return true;
 		}
@@ -224,7 +221,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	public void add(int index, Point2D element) {
 		if (checkFeasibility(element)) {
 			discretePoints.add(index, element);
-			totalProbability += element.getY();
+			totalProbability.add(element.getY());
 			fireIntervalAdded(this, index, index);
 			fireContentsChanged(this, index, this.size());
 		}
@@ -267,7 +264,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	@Override
 	public Point2D remove(int index) {
 		Point2D point = discretePoints.remove(index);
-		totalProbability -= point.getY();
+		totalProbability.min(point.getY());
 		fireIntervalRemoved(this, index, index);
 		return point;
 	}
@@ -275,9 +272,10 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	@Override
 	public Point2D set(int index, Point2D element) {
 		Point2D old = this.get(index);
-		if (totalProbability - old.getY() + element.getY() > 1.0)
+		if (!checkFeasibility(new Point2D(0, element.getY()- old.getY())))
 			return null;
-		totalProbability = totalProbability - old.getY() + element.getY();
+		totalProbability.min(old.getY());
+		totalProbability.add(element.getY());
 		fireContentsChanged(this, index, index);
 		return discretePoints.set(index, element);
 	}
@@ -301,7 +299,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 			return false;
 		if (!other.containsAll(discretePoints))
 			return false;
-		if (other.getTotalProbability() != totalProbability)
+		if (other.getTotalProbability() != totalProbability.doubleValue())
 			return false;
 		return true;
 	}
@@ -400,5 +398,30 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 		for (int index = 0; index < listeners.length; index++)
 			listeners[index].intervalRemoved(event);
 		firePropertyChange(PROPERTY_DISCRETEPOINTS, null, null);
+	}
+	
+	private class TotalProbability {
+		private long totalProbability;
+		private static final int MULTIPLIER=10000000;
+		
+		public TotalProbability(double probability){
+			this.totalProbability = Math.round(probability*MULTIPLIER);
+		}
+		
+		public TotalProbability(){
+			this.totalProbability=0;
+		}
+		
+		public void add(double value) {
+			totalProbability = Math.round(value*MULTIPLIER)+this.totalProbability;
+		}
+		
+		public void min(double value) {
+				totalProbability = this.totalProbability-Math.round(value*MULTIPLIER);
+		}
+		
+		public double doubleValue() {
+			return this.totalProbability/((double) MULTIPLIER);
+		}
 	}
 }
