@@ -49,7 +49,7 @@ public class DiscreteMeasurementPanel extends JPanel implements
 
 	private static final long serialVersionUID = 3084366501203897609L;
 
-	private JList<Point2D> jlist;
+	private JList jlist;
 	private DiscreteMeasurement dm;
 	private JComponent parent;
 
@@ -65,7 +65,7 @@ public class DiscreteMeasurementPanel extends JPanel implements
 		dm = m.getBean();
 		this.parent = parent;
 
-		jlist = new JList<Point2D>(dm);
+		jlist = new JList(dm);
 		jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jlist.setSelectedIndex(0);
 		jlist.addListSelectionListener(this);
@@ -132,8 +132,8 @@ public class DiscreteMeasurementPanel extends JPanel implements
 	            } else {
 	            //Single selection: permit all operations.
 	                deleteButton.setEnabled(true);
-	                valueText.setText(""+jlist.getSelectedValue().getX());
-	                probabilityText.setText(""+jlist.getSelectedValue().getY());
+	                valueText.setText(""+((Point2D) jlist.getSelectedValue()).getX());
+	                probabilityText.setText(""+((Point2D) jlist.getSelectedValue()).getY());
 	            }
 		 }
 

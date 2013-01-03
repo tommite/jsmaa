@@ -38,7 +38,7 @@ import fi.smaa.common.RandomUtil;
 import fi.smaa.jsmaa.model.xml.Point2DList;
 
 public class DiscreteMeasurement extends CardinalMeasurement implements
-		List<Point2D>, ListModel<Point2D> {
+		List<Point2D>, ListModel {
 
 	private static final long serialVersionUID = -1319270048369903772L;
 	public static final String PROPERTY_DISCRETEPOINTS = "discretePoints"; 
