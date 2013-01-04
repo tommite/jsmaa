@@ -43,7 +43,9 @@ public class Sampler {
 	}
 
 	public void sample(Criterion crit, double[] target) {
-		assert(target.length == m.getAlternatives().size());
+		if (target.length != m.getAlternatives().size()) {
+			throw new IllegalArgumentException();
+		}
 		
 		if (crit instanceof CardinalCriterion) {
 			sample((CardinalCriterion) crit, target);
