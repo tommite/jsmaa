@@ -21,8 +21,13 @@
 */
 package fi.smaa.jsmaa.model;
 
+@SuppressWarnings("serial")
 public class InvalidIntervalException extends RuntimeException {
+	
+	public InvalidIntervalException() {
+	}
 
-	private static final long serialVersionUID = 7252916001644563411L;
-
+	public InvalidIntervalException(String reason) {
+		super(reason);
+	}
 }

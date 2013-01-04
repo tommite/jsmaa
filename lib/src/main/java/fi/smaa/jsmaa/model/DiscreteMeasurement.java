@@ -86,7 +86,7 @@ public class DiscreteMeasurement extends CardinalMeasurement implements
 	@Override
 	public double sample(RandomUtil random) {
 		if (totalProbability.doubleValue() < 1.0) {
-			throw new InvalidIntervalException();
+			throw new InvalidIntervalException("Discrete measurement probabilities sum to less than 1");
 		}
 		double probability = random.createUnif01();
 		double total = 0.0;
