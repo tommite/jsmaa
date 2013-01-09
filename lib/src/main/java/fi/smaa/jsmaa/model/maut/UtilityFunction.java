@@ -5,6 +5,7 @@
     (c) Tommi Tervonen, 2009-2010.
     (c) Tommi Tervonen, Gert van Valkenhoef 2011.
     (c) Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid 2012.
+    (c) Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid, Raymond Vermaas 2013.
 
     JSMAA is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 
     You should have received a copy of the GNU General Public License
     along with JSMAA.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 package fi.smaa.jsmaa.model.maut;
 
 import java.util.Iterator;
