@@ -219,6 +219,13 @@ public class ScaleCriterion extends CardinalCriterion {
 			firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
 		}
 	}
+	
+	public void deleteValuePoint(Point2D pt) {
+		if (addedPoints.contains(pt)) {
+			addedPoints.remove(pt);
+			firePropertyChange(PROPERTY_VALUEPOINTS, null, null);
+		}
+	}
 
 	public void deleteValuePoint(int idx) {
 		if (idx < 1 || idx > addedPoints.size()) {

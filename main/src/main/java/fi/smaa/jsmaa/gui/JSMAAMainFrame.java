@@ -300,6 +300,7 @@ public class JSMAAMainFrame extends JFrame implements MenuDirector {
 			case ModelChangeEvent.MEASUREMENT:
 			case ModelChangeEvent.MEASUREMENT_TYPE:
 			case ModelChangeEvent.PREFERENCES:
+			case ModelChangeEvent.PREFERENCE_FUNCTION:
 				break;
 			default:
 				rebuildRightPanel();

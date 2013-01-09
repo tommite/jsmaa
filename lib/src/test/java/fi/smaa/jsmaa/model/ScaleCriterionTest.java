@@ -94,6 +94,17 @@ public class ScaleCriterionTest {
 		assertEquals(3, points.size());
 		criterion.deleteValuePoint(1);
 		assertEquals(2, criterion.getValuePoints().size());
+	}
+	
+	@Test
+	public void testDeleteValuePointDirect() throws InvalidValuePointException {
+		criterion.setScale(new Interval(0.1, 0.8));
+		Point2D pt = new Point2D(0.5, 0.7);
+		criterion.addValuePoint(pt);
+		List<Point2D> points = criterion.getValuePoints();
+		assertEquals(3, points.size());
+		criterion.deleteValuePoint(pt);
+		assertEquals(2, criterion.getValuePoints().size());
 	}	
 	
 	@Test(expected=PointOutsideIntervalException.class)

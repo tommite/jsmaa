@@ -54,6 +54,7 @@ import fi.smaa.jsmaa.gui.IntervalFormat;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel;
 import fi.smaa.jsmaa.gui.components.MeasurementPanel.MeasurementType;
 import fi.smaa.jsmaa.gui.components.ValueFunctionMouseListener;
+import fi.smaa.jsmaa.gui.components.ValueFunctionPointsPanel;
 import fi.smaa.jsmaa.gui.jfreechart.UtilityFunctionDataset;
 import fi.smaa.jsmaa.gui.presentation.ImpactMatrixPresentationModel;
 import fi.smaa.jsmaa.gui.presentation.OrdinalCriterionMeasurementsPM;
@@ -115,7 +116,7 @@ public class CriterionView implements ViewBuilder {
 			builder.addSeparator("Value function", cc.xy(1, row));
 			LayoutUtil.addRow(layout);
 			
-			final ChartPanel chartPanel = buildValueFunctionChartPanel((ScaleCriterion) criterion);
+			final JPanel chartPanel = buildValueFunctionChartPanel((ScaleCriterion) criterion);
 			
 			builder.add(chartPanel, cc.xy(1, row+2));
 			row += 4;
@@ -131,7 +132,7 @@ public class CriterionView implements ViewBuilder {
 		return builder.getPanel();
 	}
 
-	private ChartPanel buildValueFunctionChartPanel(ScaleCriterion criterion) {
+	private JPanel buildValueFunctionChartPanel(ScaleCriterion criterion) {
 		UtilityFunctionDataset dataset = new UtilityFunctionDataset(criterion);
 		
 		JFreeChart chart = ChartFactory.createXYLineChart("", "x", "v(x)",
@@ -166,8 +167,17 @@ public class CriterionView implements ViewBuilder {
 		plot.setRangeCrosshairLockedOnData(false);
 		plot.setDomainCrosshairVisible(true);
 		plot.setRangeCrosshairVisible(true);
+		
+		FormLayout layout = new FormLayout(
+				"left:pref",
+				"p, 3dlu, p" );
+		
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		builder.add(chartPanel, cc.xy(1, 1));
+		builder.add(new ValueFunctionPointsPanel(criterion), cc.xy(1, 3));
 				
-		return chartPanel;
+		return builder.getPanel();
 	}
 
 	private JComponent buildOverviewPart() {

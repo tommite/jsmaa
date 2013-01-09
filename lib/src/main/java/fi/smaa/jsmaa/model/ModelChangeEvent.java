@@ -33,6 +33,7 @@ public class ModelChangeEvent extends EventObject {
 	public static final int MEASUREMENT = 6;
 	public static final int CATEGORIES = 7;
 	public static final int PARAMETER = 8;
+	public static final int PREFERENCE_FUNCTION = 9;
 
 	private int type;
 	

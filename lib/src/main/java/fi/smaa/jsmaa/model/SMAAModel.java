@@ -247,6 +247,9 @@ public class SMAAModel extends AbstractEntity {
 	
 	private class CriteriaListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(ScaleCriterion.PROPERTY_VALUEPOINTS)) {
+				fireModelChange(ModelChangeEvent.PREFERENCE_FUNCTION);
+			}
 			if (!evt.getPropertyName().equals(Criterion.PROPERTY_NAME)) {
 				fireModelChange(ModelChangeEvent.MEASUREMENT);
 			} 
