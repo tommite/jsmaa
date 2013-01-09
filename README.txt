@@ -1,13 +1,13 @@
 README for JSMAA
 ================
-JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) methodology.
-Currently is implemented:
--SMAA-2 for utility-theory based decision analysis (ranking / choosing problem statement).
+JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) MCDA methodology. Currently is implemented:
+-SMAA-2 for multi-attribute value/utility-theory based decision analysis (ranking / choosing problem statement).
 -SMAA-TRI for outranking based sorting problems.
 -SMAA-O for ordinal criteria measurements (part of SMAA-2-model).
 
 Versions
 ========
+1.0:	Discrete measurements, piecewise linear partial value functions
 0.8.6:	Bug fixes.
 0.8.5:	Bug fixes.
 0.8.4:	Fix sampling of baselines for relative measurements.
@@ -31,8 +31,9 @@ Versions
 License
 =======
 JSMAA is (c) 2009-2010 Tommi Tervonen, (c) 2011 Tommi Tervonen and Gert van Valkenhoef,
-(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid, and licensed 
-under GPL(3). See LICENSE.txt for more details. Icons are taken from Eclipse, 
+(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid, (c) 2013
+Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid, Raymond Vermaas 2013, and
+licensed under GPL(3). See LICENSE.txt for more details. Icons are taken from Eclipse, 
 and are (c) Eclipse foundations and of their corresponding authors.
 
 Contact
@@ -41,5 +42,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-June 2012
+January 2013
 Tommi Tervonen
