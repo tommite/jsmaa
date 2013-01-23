@@ -369,7 +369,7 @@ public class ElectreTriTest {
 		assertEquals(cat1, results.get(z2));
 		assertEquals(cat2, results.get(z3));
 		assertEquals(cat2, results.get(z4));	
-		assertEquals(cat3, results.get(z5));
+		assertEquals(cat4, results.get(z5)); // NOTE: the results in paper are incorrect, showing class 3y
 		assertEquals(cat1, results.get(z6));
 		assertEquals(cat3, results.get(z7));
 		assertEquals(cat4, results.get(z8));

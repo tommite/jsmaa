@@ -72,6 +72,13 @@ public class OutrankingFunctionTest {
 	}
 	
 	@Test
+	public void testHesitationAreaBug() {
+		assertEquals(0.8, OutrankingFunction.concordance(c, 2.0, 3.2), 0.0000001);
+		c.setAscending(false);
+		assertEquals(0.8, OutrankingFunction.concordance(c, 3.2, 2.0), 0.0000001);				
+	}
+	
+	@Test
 	public void testOutranksEqual() {
 		c = new OutrankingCriterion("crit", true, new ExactMeasurement(0.0), new ExactMeasurement(0.0));
 		assertEquals(1.0, OutrankingFunction.concordance(c, 10.0, 10.0), 0.000001);
