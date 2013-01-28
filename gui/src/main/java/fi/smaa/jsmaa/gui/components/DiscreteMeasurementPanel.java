@@ -74,8 +74,10 @@ public class DiscreteMeasurementPanel extends JPanel implements
 
 		valueText = new JTextField();
 		valueText.addActionListener(new AddButtonListener());
-		String strvalue = "" + dm.getElementAt(jlist.getSelectedIndex()).getX();
-		valueText.setText(strvalue);
+		if(dm.getSize() > 0) {
+			String strvalue = "" + dm.getElementAt(jlist.getSelectedIndex()).getX();
+			valueText.setText(strvalue);
+		}
 		valueText.setHorizontalAlignment(JTextField.CENTER);
 		valueText.setColumns(5);
 		add(new JLabel("P(X="));
@@ -84,9 +86,11 @@ public class DiscreteMeasurementPanel extends JPanel implements
 
 		probabilityText = new JTextField();
 		probabilityText.addActionListener(new AddButtonListener());
-		String strprobability = ""
+		if(dm.getSize() > 0) {
+			String strprobability = ""
 				+ dm.getElementAt(jlist.getSelectedIndex()).getY();
-		probabilityText.setText(strprobability);
+			probabilityText.setText(strprobability);
+		}
 		probabilityText.setHorizontalAlignment(JTextField.CENTER);
 		probabilityText.setColumns(5);
 		add("Probability:", probabilityText);
