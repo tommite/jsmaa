@@ -7,7 +7,8 @@ JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) MCDA met
 
 Versions
 ========
-1.0:	Discrete measurements, piecewise linear partial value functions
+1.0.1:	Big fixes.
+1.0:	Discrete measurements, piecewise linear partial value functions.
 0.8.6:	Bug fixes.
 0.8.5:	Bug fixes.
 0.8.4:	Fix sampling of baselines for relative measurements.
