@@ -132,8 +132,8 @@ public class SMAATRISimulationTest {
 		SMAATRIResults res = runModel(model);
 		Map<Alternative, List<Double>> accs = res.getCategoryAcceptabilities();
 		
-		assertEquals(1.0, accs.get(alt1).get(0), 0.00001);
-		assertEquals(0.0, accs.get(alt1).get(1), 0.00001);
+		assertEquals(0.0, accs.get(alt1).get(0), 0.00001);
+		assertEquals(1.0, accs.get(alt1).get(1), 0.00001);
 		
 		assertEquals(1.0, accs.get(alt2).get(0), 0.00001);
 		assertEquals(0.0, accs.get(alt2).get(1), 0.00001);	
