@@ -7,6 +7,7 @@ JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) MCDA met
 
 Versions
 ========
+1.0.2:	Fix incorrect pessimistic assignment rule implementation in SMAA-TRI.
 1.0.1:	Big fixes.
 1.0:	Discrete measurements, piecewise linear partial value functions.
 0.8.6:	Bug fixes.
