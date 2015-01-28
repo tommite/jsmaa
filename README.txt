@@ -7,6 +7,7 @@ JSMAA implements Stochastic Multicriteria Acceptability Analysis (SMAA) MCDA met
 
 Versions
 ========
+1.0.3:	Fix results screens not working on OS X Mavericks.
 1.0.2:	Fix incorrect pessimistic assignment rule implementation in SMAA-TRI.
 1.0.1:	Big fixes.
 1.0:	Discrete measurements, piecewise linear partial value functions.
@@ -33,8 +34,8 @@ Versions
 License
 =======
 JSMAA is (c) 2009-2010 Tommi Tervonen, (c) 2011 Tommi Tervonen and Gert van Valkenhoef,
-(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid, (c) 2013
-Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid, Raymond Vermaas 2013, and
+(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid, (c) 2013-2015
+Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid, Raymond Vermaas and
 licensed under GPL(3). See LICENSE.txt for more details. Icons are taken from Eclipse, 
 and are (c) Eclipse foundations and of their corresponding authors.
 
@@ -44,5 +45,5 @@ Contact me by email at tommi at smaa dot fi.
 
 More information can be found at http://www.smaa.fi.
 
-January 2013
+January 2015
 Tommi Tervonen
