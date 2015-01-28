@@ -329,7 +329,7 @@ public abstract class AbstractGUIFactory<T extends LeftTreeModel, M extends SMAA
 		msg += "(c) 2009-2010 Tommi Tervonen\n";
 		msg += "(c) 2011 Tommi Tervonen and Gert van Valkenhoef\n";
 		msg += "(c) 2012 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper and Daan Reid\n";
-		msg += "(c) 2013 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid and Raymond Vermaas\n";
+		msg += "(c) 2013-2015 Tommi Tervonen, Gert van Valkenhoef, Joel Kuiper, Daan Reid and Raymond Vermaas\n";
 		msg += "http://smaa.fi";
 		JOptionPane.showMessageDialog(parent, msg, title,
 				JOptionPane.INFORMATION_MESSAGE, ImageFactory.IMAGELOADER.getIcon(FileNames.ICON_HOME));
